@@ -4,7 +4,7 @@ import { colors, typography, componentStyles } from '@/lib/design-tokens';
 import type { Plan } from '@/lib/supabase/types';
 import BillingActions from '@/components/dashboard/BillingActions';
 
-const planOrder: Plan[] = ['starter', 'growth', 'enterprise'];
+const planOrder: Plan[] = ['starter', 'growth', 'scale', 'enterprise'];
 
 export default async function BillingPage() {
     const supabase = await createClient();
