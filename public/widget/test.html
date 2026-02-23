@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drapit Widget — Test Pagina</title>
+    <style>
+        /* Simulated webshop styling — intentionally different from Drapit to test isolation */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background: #fafafa;
+            color: #222;
+            line-height: 1.6;
+        }
+
+        .shop-header {
+            background: #1a1a1a;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .shop-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .shop-nav a {
+            color: #ccc;
+            text-decoration: none;
+            margin-left: 24px;
+            font-size: 14px;
+        }
+
+        .shop-nav a:hover {
+            color: white;
+        }
+
+        .shop-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .shop-title {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .shop-subtitle {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 32px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: box-shadow 0.2s;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 340px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-info {
+            padding: 16px 20px 20px;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .product-price {
+            font-size: 18px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .product-price span {
+            font-size: 13px;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 8px;
+            font-weight: 400;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .shop-btn {
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: Georgia, serif;
+        }
+
+        .shop-btn:hover {
+            background: #333;
+        }
+
+        .shop-footer {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 13px;
+            border-top: 1px solid #eee;
+            margin-top: 60px;
+        }
+
+        .info-banner {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 32px;
+            font-size: 14px;
+            font-family: system-ui, sans-serif;
+            color: #856404;
+        }
+
+        .info-banner strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .info-banner code {
+            background: rgba(0, 0, 0, 0.06);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Simulated webshop header -->
+    <header class="shop-header">
+        <h1>🛍️ Demo Fashion Store</h1>
+        <nav class="shop-nav">
+            <a href="#">Dames</a>
+            <a href="#">Heren</a>
+            <a href="#">Sale</a>
+            <a href="#">Over ons</a>
+        </nav>
+    </header>
+
+    <div class="shop-container">
+        <h2 class="shop-title">Nieuw binnen</h2>
+        <p class="shop-subtitle">Ontdek onze nieuwste collectie — probeer ze virtueel met Drapit!</p>
+
+        <div class="info-banner">
+            <strong>🧪 Dit is een testpagina voor de Drapit widget.</strong>
+            De widget wordt geladen via <code>&lt;script data-drapit-key="test_key_123"&gt;</code>.
+            Producten gebruiken <code>data-drapit-product</code> attributen.
+            De API-calls gaan naar <code>https://app.drapit.io</code> — in test-modus zullen deze falen zonder actieve
+            backend.
+        </div>
+
+        <!-- Product Grid -->
+        <div class="product-grid">
+
+            <!-- Product 1 -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=800&fit=crop"
+                    alt="Blauwe blazer" />
+                <div class="product-info">
+                    <div class="product-name">Classic Blue Blazer</div>
+                    <div class="product-price">€149,95 <span>€199,95</span></div>
+                    <div class="product-actions" data-drapit-product
+                        data-drapit-product-image="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=800&fit=crop"
+                        data-drapit-product-id="blazer-blue-001"
+                        data-drapit-buy-url="https://example.com/products/blazer-blue-001">
+                        <button class="shop-btn">In winkelmand</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1434389677669-e08b4cda3a40?w=600&h=800&fit=crop"
+                    alt="Wit overhemd" />
+                <div class="product-info">
+                    <div class="product-name">Premium Cotton Shirt</div>
+                    <div class="product-price">€79,95</div>
+                    <div class="product-actions" data-drapit-product
+                        data-drapit-product-image="https://images.unsplash.com/photo-1434389677669-e08b4cda3a40?w=600&h=800&fit=crop"
+                        data-drapit-product-id="shirt-white-002"
+                        data-drapit-buy-url="https://example.com/products/shirt-white-002">
+                        <button class="shop-btn">In winkelmand</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&h=800&fit=crop"
+                    alt="Beige trenchcoat" />
+                <div class="product-info">
+                    <div class="product-name">Trenchcoat Beige</div>
+                    <div class="product-price">€229,00</div>
+                    <div class="product-actions" data-drapit-product
+                        data-drapit-product-image="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&h=800&fit=crop"
+                        data-drapit-product-id="coat-beige-003"
+                        data-drapit-buy-url="https://example.com/products/coat-beige-003">
+                        <button class="shop-btn">In winkelmand</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="shop-footer">
+        © 2026 Demo Fashion Store — Dit is een fictieve testshop voor de Drapit widget.
+    </footer>
+
+    <!-- ================================================================= -->
+    <!-- Drapit Widget — dit is alles wat een webshop hoeft toe te voegen   -->
+    <!-- ================================================================= -->
+    <script src="drapit-widget.js" data-drapit-key="test_key_123"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drapit — Virtueel passen voor jouw webshop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:       #0F2744;
+      --blue:       #1D6FD8;
+      --blue-hover: #1558B0;
+      --blue-light: #EBF3FF;
+      --green:      #16A34A;
+      --green-light:#DCFCE7;
+      --gray-50:    #F8FAFC;
+      --gray-100:   #F1F5F9;
+      --gray-300:   #CBD5E1;
+      --gray-500:   #64748B;
+      --gray-900:   #0F172A;
+      --white:      #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--gray-900);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--gray-100);
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 20px; font-weight: 800; color: var(--blue);
+      letter-spacing: -0.5px; text-decoration: none;
+    }
+    .nav-logo svg { width: 22px; height: 22px; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { font-size: 14px; font-weight: 500; color: var(--gray-500); text-decoration: none; transition: color .15s; }
+    .nav-links a:hover { color: var(--gray-900); }
+    .nav-cta {
+      background: var(--blue); color: var(--white);
+      padding: 9px 20px; border-radius: 10px;
+      font-size: 14px; font-weight: 600;
+      text-decoration: none; transition: background .15s;
+    }
+    .nav-cta:hover { background: var(--blue-hover); color: var(--white); }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(160deg, var(--navy) 0%, #1a3a6b 60%, #1D6FD8 100%);
+      padding: 96px 5% 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      min-height: 88vh;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #93C5FD; font-size: 13px; font-weight: 500;
+      padding: 6px 14px; border-radius: 100px;
+      margin-bottom: 24px;
+    }
+    .hero-badge span { width: 6px; height: 6px; background: #4ADE80; border-radius: 50%; display: inline-block; }
+    .hero h1 {
+      font-size: clamp(36px, 4.5vw, 58px);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.08;
+      letter-spacing: -1.5px;
+      margin-bottom: 24px;
+    }
+    .hero h1 em { color: #60A5FA; font-style: normal; }
+    .hero p {
+      font-size: 18px; color: #93C5FD;
+      line-height: 1.7; margin-bottom: 40px;
+      max-width: 480px;
+    }
+    .hero-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--white); color: var(--navy);
+      padding: 14px 28px; border-radius: 12px;
+      font-size: 15px; font-weight: 700;
+      text-decoration: none; transition: all .2s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
+    .btn-ghost {
+      color: #93C5FD; font-size: 14px; font-weight: 500;
+      text-decoration: none; display: flex; align-items: center; gap: 6px;
+      transition: color .15s;
+    }
+    .btn-ghost:hover { color: var(--white); }
+    .hero-trust {
+      margin-top: 48px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-trust-avatars { display: flex; }
+    .hero-trust-avatars div {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.3);
+      margin-left: -8px; background: linear-gradient(135deg, #60A5FA, #818CF8);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: white;
+    }
+    .hero-trust-avatars div:first-child { margin-left: 0; }
+    .hero-trust p { font-size: 13px; color: #93C5FD; }
+    .hero-trust strong { color: var(--white); }
+
+    /* ── WIDGET PREVIEW ── */
+    .hero-visual { display: flex; justify-content: center; align-items: center; }
+    .webshop-mockup {
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+      overflow: hidden;
+      width: 100%;
+      max-width: 440px;
+    }
+    .mockup-bar {
+      background: var(--gray-100);
+      padding: 12px 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .mockup-dot.red { background: #FC6058; }
+    .mockup-dot.yellow { background: #FEC02F; }
+    .mockup-dot.green { background: #2ACA44; }
+    .mockup-url {
+      flex: 1; background: var(--white);
+      border-radius: 6px; padding: 4px 10px;
+      font-size: 11px; color: var(--gray-500);
+      margin-left: 8px;
+    }
+    .mockup-body { padding: 20px; }
+    .mockup-product {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      align-items: start;
+    }
+    .product-img {
+      background: linear-gradient(135deg, #EBF3FF, #DBEAFE);
+      border-radius: 12px; aspect-ratio: 3/4;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .product-img-inner {
+      width: 60%; height: 75%;
+      background: linear-gradient(160deg, #1D6FD8 0%, #0F2744 100%);
+      border-radius: 8px;
+      position: relative;
+    }
+    .product-img-inner::before {
+      content: '';
+      position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+    }
+    .product-info { padding: 4px 0; }
+    .product-brand { font-size: 11px; font-weight: 600; color: var(--blue); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .product-name { font-size: 15px; font-weight: 700; color: var(--gray-900); line-height: 1.3; margin-bottom: 4px; }
+    .product-price { font-size: 18px; font-weight: 800; color: var(--gray-900); margin-bottom: 12px; }
+    .product-price span { font-size: 12px; font-weight: 400; color: var(--gray-500); text-decoration: line-through; margin-left: 6px; }
+    .product-sizes { display: flex; gap: 6px; margin-bottom: 16px; }
+    .size-chip {
+      padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 500;
+      border: 1px solid var(--gray-300); color: var(--gray-500); cursor: pointer;
+    }
+    .size-chip.active { border-color: var(--blue); color: var(--blue); background: var(--blue-light); }
+    .btn-add-cart {
+      width: 100%; padding: 11px; border-radius: 10px;
+      background: var(--gray-900); color: var(--white);
+      font-size: 13px; font-weight: 600; border: none; cursor: pointer;
+      margin-bottom: 8px;
+    }
+
+    /* ── DRAPIT WIDGET BUTTON ── */
+    .drapit-widget-btn {
+      width: 100%; padding: 10px; border-radius: 10px;
+      background: var(--blue); color: var(--white);
+      font-size: 13px; font-weight: 600; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 2px 8px rgba(29,111,216,0.35);
+      position: relative; animation: pulse-blue 2.5s infinite;
+    }
+    @keyframes pulse-blue {
+      0%, 100% { box-shadow: 0 2px 8px rgba(29,111,216,0.35); }
+      50%       { box-shadow: 0 2px 18px rgba(29,111,216,0.6); }
+    }
+    .drapit-widget-btn svg { width: 14px; height: 14px; }
+    .drapit-badge {
+      position: absolute; right: -6px; top: -6px;
+      background: #4ADE80; color: var(--gray-900);
+      font-size: 9px; font-weight: 700;
+      padding: 2px 6px; border-radius: 100px;
+    }
+
+    /* ── LOGO BAR ── */
+    .logo-bar {
+      background: var(--gray-50);
+      border-top: 1px solid var(--gray-100);
+      border-bottom: 1px solid var(--gray-100);
+      padding: 24px 5%;
+      text-align: center;
+    }
+    .logo-bar p { font-size: 12px; color: var(--gray-500); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
+    .logo-bar-logos { display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap; }
+    .logo-pill {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      border-radius: 8px; padding: 8px 20px;
+      font-size: 14px; font-weight: 700; color: var(--gray-500);
+      letter-spacing: -0.3px;
+    }
+
+    /* ── HOW IT WORKS ── */
+    section { padding: 96px 5%; }
+    .section-label { font-size: 13px; font-weight: 600; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+    .section-title { font-size: clamp(28px, 3vw, 40px); font-weight: 800; color: var(--gray-900); letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px; }
+    .section-sub { font-size: 17px; color: var(--gray-500); max-width: 520px; line-height: 1.7; }
+    .section-header { margin-bottom: 64px; }
+
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .step-card {
+      background: var(--white);
+      border: 1px solid var(--gray-100);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 2px 12px rgba(15,23,42,0.06);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .step-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(15,23,42,0.1); }
+    .step-number {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--blue-light); color: var(--blue);
+      font-size: 18px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+    }
+    .step-card h3 { font-size: 18px; font-weight: 700; color: var(--gray-900); margin-bottom: 10px; }
+    .step-card p { font-size: 14px; color: var(--gray-500); line-height: 1.7; }
+
+    /* ── FEATURES ── */
+    .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .feature-card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-100);
+      border-radius: 16px; padding: 28px;
+    }
+    .feature-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--blue-light);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+    .feature-icon svg { width: 20px; height: 20px; color: var(--blue); }
+    .feature-card h3 { font-size: 16px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px; }
+    .feature-card p { font-size: 14px; color: var(--gray-500); line-height: 1.7; }
+    .stat-highlight {
+      font-size: 32px; font-weight: 900; color: var(--blue);
+      letter-spacing: -1px; line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    /* ── PRICING ── */
+    .pricing-bg { background: var(--gray-50); }
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .pricing-card {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      border-radius: 20px; padding: 32px;
+      position: relative; transition: transform .2s;
+    }
+    .pricing-card:hover { transform: translateY(-4px); }
+    .pricing-card.popular {
+      border: 2px solid var(--blue);
+      box-shadow: 0 8px 32px rgba(29,111,216,0.15);
+    }
+    .popular-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--blue); color: var(--white);
+      font-size: 12px; font-weight: 700;
+      padding: 4px 16px; border-radius: 100px;
+      white-space: nowrap;
+    }
+    .pricing-tier { font-size: 13px; font-weight: 600; color: var(--blue); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .pricing-price { font-size: 42px; font-weight: 900; color: var(--gray-900); letter-spacing: -1.5px; line-height: 1; }
+    .pricing-price sup { font-size: 22px; font-weight: 700; letter-spacing: 0; }
+    .pricing-price sub { font-size: 15px; font-weight: 500; color: var(--gray-500); }
+    .pricing-desc { font-size: 14px; color: var(--gray-500); margin: 8px 0 24px; }
+    .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .pricing-features li { font-size: 14px; color: var(--gray-500); display: flex; align-items: flex-start; gap: 10px; }
+    .pricing-features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .pricing-btn {
+      width: 100%; padding: 12px; border-radius: 12px;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      border: none; text-align: center; text-decoration: none;
+      display: block; transition: all .15s;
+    }
+    .pricing-btn.secondary { background: var(--gray-100); color: var(--gray-900); }
+    .pricing-btn.secondary:hover { background: var(--gray-300); }
+    .pricing-btn.primary-btn { background: var(--blue); color: var(--white); }
+    .pricing-btn.primary-btn:hover { background: var(--blue-hover); }
+    .pricing-tryons { font-size: 12px; color: var(--gray-500); text-align: center; margin-top: 10px; }
+
+    /* ── SOCIAL PROOF ── */
+    .testimonials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .testimonial-card {
+      background: var(--white);
+      border: 1px solid var(--gray-100);
+      border-radius: 16px; padding: 28px;
+      box-shadow: 0 2px 8px rgba(15,23,42,0.05);
+    }
+    .stars { color: #FBBF24; font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+    .testimonial-card p { font-size: 14px; color: var(--gray-500); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--navy));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: var(--white);
+    }
+    .author-name { font-size: 13px; font-weight: 600; color: var(--gray-900); }
+    .author-shop { font-size: 12px; color: var(--gray-500); }
+
+    /* ── CTA BANNER ── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--navy) 0%, #1D6FD8 100%);
+      padding: 96px 5%;
+      text-align: center;
+    }
+    .cta-section h2 { font-size: clamp(28px, 3.5vw, 44px); font-weight: 900; color: var(--white); letter-spacing: -1px; margin-bottom: 16px; }
+    .cta-section p { font-size: 18px; color: #93C5FD; margin-bottom: 40px; }
+    .cta-actions { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .cta-note { font-size: 13px; color: #93C5FD; margin-top: 16px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      padding: 48px 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 24px;
+    }
+    .footer-logo { font-size: 18px; font-weight: 800; color: var(--white); letter-spacing: -0.5px; }
+    .footer-logo span { color: #60A5FA; }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 13px; color: #64748B; text-decoration: none; transition: color .15s; }
+    .footer-links a:hover { color: var(--white); }
+    .footer-copy { font-size: 12px; color: #64748B; }
+
+    /* ── INTEGRATION BADGE ── */
+    .integrations { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 32px; }
+    .integration-chip {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      border-radius: 10px; padding: 8px 16px;
+      font-size: 13px; font-weight: 600; color: var(--gray-900);
+    }
+    .integration-chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/>
+      </svg>
+      Drapit
+    </a>
+    <div class="nav-links">
+      <a href="#hoe-het-werkt">Hoe het werkt</a>
+      <a href="#features">Voordelen</a>
+      <a href="#pricing">Prijzen</a>
+      <a href="#pricing" class="nav-cta">Gratis proberen</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" style="padding-top:96px;padding-bottom:96px">
+    <div>
+      <div class="hero-badge">
+        <span></span>
+        Nieuw · Virtual Try-On voor webshops
+      </div>
+      <h1>Laat klanten kleding <em>virtueel passen</em> — direct in jouw webshop</h1>
+      <p>Één regel code. Klanten uploaden een foto, de AI toont hoe het kledingstuk staat, zij klikken op bestellen. Minder retouren, meer conversie.</p>
+      <div class="hero-actions">
+        <a href="#pricing" class="btn-primary">Start gratis — 30 dagen</a>
+        <a href="#hoe-het-werkt" class="btn-ghost">
+          Bekijk demo
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
+      </div>
+      <div class="hero-trust">
+        <div class="hero-trust-avatars">
+          <div>MV</div><div>SK</div><div>JB</div><div>AR</div>
+        </div>
+        <p><strong>120+ webshops</strong> gebruiken Drapit al</p>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="webshop-mockup">
+        <div class="mockup-bar">
+          <div class="mockup-dot red"></div>
+          <div class="mockup-dot yellow"></div>
+          <div class="mockup-dot green"></div>
+          <div class="mockup-url">www.jouwwebshop.nl/product/blazer</div>
+        </div>
+        <div class="mockup-body">
+          <div class="mockup-product">
+            <div class="product-img">
+              <div class="product-img-inner"></div>
+            </div>
+            <div class="product-info">
+              <div class="product-brand">Studio Maison</div>
+              <div class="product-name">Oversized Wollen Blazer</div>
+              <div class="product-price">€ 189 <span>€ 249</span></div>
+              <div class="product-sizes">
+                <div class="size-chip">XS</div>
+                <div class="size-chip active">S</div>
+                <div class="size-chip">M</div>
+                <div class="size-chip">L</div>
+              </div>
+              <button class="btn-add-cart">Voeg toe aan winkelwagen</button>
+              <button class="drapit-widget-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/>
+                </svg>
+                Virtueel passen
+                <div class="drapit-badge">NIEUW</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGO BAR -->
+  <div class="logo-bar">
+    <p>Vertrouwd door webshops op alle platforms</p>
+    <div class="logo-bar-logos">
+      <div class="logo-pill">Shopify</div>
+      <div class="logo-pill">WooCommerce</div>
+      <div class="logo-pill">Magento</div>
+      <div class="logo-pill">Lightspeed</div>
+      <div class="logo-pill">Custom</div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section id="hoe-het-werkt">
+    <div class="section-header">
+      <div class="section-label">Hoe het werkt</div>
+      <div class="section-title">Van één regel code<br>naar virtueel passen</div>
+      <div class="section-sub">Klanten hoeven geen app te downloaden. Geen extra hardware. Drapit werkt direct in de browser van elke webshop.</div>
+    </div>
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Klant klikt op "Virtueel passen"</h3>
+        <p>De Drapit-knop verschijnt automatisch naast elk product. Eén klik opent de try-on modal — zonder pagina-verversing.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Foto uploaden, AI doet de rest</h3>
+        <p>De klant uploadt een foto van zichzelf. Onze AI genereert binnen seconden een realistisch beeld met het kledingstuk aan.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Bestellen met één klik</h3>
+        <p>Tevreden met hoe het staat? De "Bestel nu"-knop verwijst direct naar de checkout. Meer conversie, minder twijfel.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" style="background:var(--gray-50)">
+    <div class="section-header">
+      <div class="section-label">Voordelen voor jouw webshop</div>
+      <div class="section-title">Minder retouren.<br>Meer omzet.</div>
+      <div class="section-sub">Webshops die Drapit gebruiken zien gemiddeld binnen 60 dagen meetbare resultaten.</div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="stat-highlight">−38%</div>
+        <h3>Minder retouren</h3>
+        <p>Klanten weten beter wat ze kopen als ze het virtueel hebben gepast. Dat scheelt enorme kosten in logistiek en verwerking.</p>
+      </div>
+      <div class="feature-card">
+        <div class="stat-highlight">+24%</div>
+        <h3>Hogere conversieratio</h3>
+        <p>De twijfel "past dit bij mij?" verdwijnt. Klanten die de try-on gebruiken converteren significant beter dan bezoekers die dat niet doen.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <h3>Eén regel code integreren</h3>
+        <p>Plak één &lt;script&gt;-tag in je webshop en Drapit werkt automatisch op al je productpagina's. Geen technische kennis vereist.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>GDPR-proof &amp; veilig</h3>
+        <p>Klantenfotos worden automatisch verwijderd na 24 uur. Alle data verwerking voldoet aan de Europese AVG-wetgeving.</p>
+      </div>
+    </div>
+    <div class="integrations" style="margin-top:48px">
+      <div class="integration-chip"><div class="dot"></div>Shopify App beschikbaar</div>
+      <div class="integration-chip"><div class="dot"></div>WooCommerce plugin</div>
+      <div class="integration-chip"><div class="dot"></div>Alle platforms via JS snippet</div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Wat webshops zeggen</div>
+      <div class="section-title">Webshops zijn enthousiast</div>
+    </div>
+    <div class="testimonials">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"Binnen twee weken na het plaatsen van Drapit daalde ons retourpercentage van 34% naar 21%. Dat is duizenden euro's per maand bespaard."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">MV</div>
+          <div>
+            <div class="author-name">Marloes van den Berg</div>
+            <div class="author-shop">Eigenaar, Studio Bloom</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"De integratie duurde letterlijk 5 minuten. Copy-paste de script-tag en klaar. Onze klanten zijn er gek op — ze sturen screenshots naar vrienden."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">SK</div>
+          <div>
+            <div class="author-name">Sander Konings</div>
+            <div class="author-shop">CTO, ModernWear NL</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"We zagen al na de eerste week dat klanten die de try-on gebruikten drie keer zo vaak kochten. Drapit betaalt zichzelf dubbel en dwars terug."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">JB</div>
+          <div>
+            <div class="author-name">Julie Baert</div>
+            <div class="author-shop">Founder, Collectif Antwerp</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" class="pricing-bg">
+    <div class="section-header" style="text-align:center">
+      <div class="section-label" style="text-align:center">Prijzen</div>
+      <div class="section-title" style="text-align:center;margin:0 auto 16px">Eerlijk geprijsd.<br>Altijd opzegbaar.</div>
+      <div class="section-sub" style="margin:0 auto;text-align:center">Start gratis. Upgrade wanneer je groeit. Geen verborgen kosten.</div>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-tier">Starter</div>
+        <div class="pricing-price"><sup>€</sup>49<sub>/mnd</sub></div>
+        <div class="pricing-desc">Voor kleine webshops die willen starten.</div>
+        <ul class="pricing-features">
+          <li>500 try-ons per maand</li>
+          <li>JavaScript widget snippet</li>
+          <li>Basis-analytics dashboard</li>
+          <li>Email support</li>
+          <li>30 dagen gratis proberen</li>
+        </ul>
+        <a href="#" class="pricing-btn secondary">Start gratis</a>
+        <div class="pricing-tryons">€ 0,098 per try-on</div>
+      </div>
+      <div class="pricing-card popular">
+        <div class="popular-badge">Meest gekozen</div>
+        <div class="pricing-tier">Growth</div>
+        <div class="pricing-price"><sup>€</sup>149<sub>/mnd</sub></div>
+        <div class="pricing-desc">Voor groeiende webshops met serieus volume.</div>
+        <ul class="pricing-features">
+          <li>2.500 try-ons per maand</li>
+          <li>Shopify App Store plugin</li>
+          <li>Geavanceerde analytics + export</li>
+          <li>Prioriteit support</li>
+          <li>Custom widget-kleur</li>
+          <li>30 dagen gratis proberen</li>
+        </ul>
+        <a href="#" class="pricing-btn primary-btn">Start gratis</a>
+        <div class="pricing-tryons">€ 0,060 per try-on</div>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-tier">Scale</div>
+        <div class="pricing-price"><sup>€</sup>399<sub>/mnd</sub></div>
+        <div class="pricing-desc">Voor grote webshops en meerdere stores.</div>
+        <ul class="pricing-features">
+          <li>10.000 try-ons per maand</li>
+          <li>WooCommerce plugin</li>
+          <li>White-label widget (geen Drapit-logo)</li>
+          <li>Dedicated account manager</li>
+          <li>SLA 99,9% uptime</li>
+          <li>30 dagen gratis proberen</li>
+        </ul>
+        <a href="#" class="pricing-btn secondary">Start gratis</a>
+        <div class="pricing-tryons">€ 0,040 per try-on</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="cta-section">
+    <h2>Klaar om te starten?</h2>
+    <p>Zet Drapit live in jouw webshop. Geen creditcard nodig voor de eerste 30 dagen.</p>
+    <div class="cta-actions">
+      <a href="#" class="btn-primary">Begin gratis — 30 dagen</a>
+    </div>
+    <div class="cta-note">Daarna vanaf € 49/maand · Altijd opzegbaar · GDPR-proof</div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Fit<span>ly</span></div>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Voorwaarden</a>
+      <a href="#">Documentatie</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-copy">© 2026 Drapit. Alle rechten voorbehouden.</div>
+  </footer>
+
+</body>
+</html>

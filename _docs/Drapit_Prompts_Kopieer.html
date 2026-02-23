@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drapit — Antigravity Prompts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0F2744; --blue: #1D6FD8; --blue-light: #EBF3FF;
+      --green: #16A34A; --green-light: #DCFCE7;
+      --gray-50: #F8FAFC; --gray-100: #F1F5F9; --gray-300: #CBD5E1;
+      --gray-500: #64748B; --gray-900: #0F172A; --white: #FFFFFF;
+      --orange: #EA580C; --orange-light: #FFF7ED;
+      --purple: #7C3AED; --purple-light: #F5F3FF;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--gray-50); color: var(--gray-900); }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--navy); color: white;
+      padding: 32px 5%; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 4px 24px rgba(15,23,42,0.3);
+    }
+    .header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .logo { font-size: 22px; font-weight: 800; color: #60A5FA; letter-spacing: -0.5px; }
+    .header-sub { font-size: 14px; color: #94A3B8; }
+    .progress-bar-wrap { background: rgba(255,255,255,0.1); border-radius: 100px; height: 6px; width: 200px; margin-top: 8px; }
+    .progress-bar { background: #60A5FA; height: 6px; border-radius: 100px; width: 0%; transition: width .3s; }
+    .progress-label { font-size: 12px; color: #94A3B8; margin-top: 4px; }
+
+    /* ── NAV SIDEBAR ── */
+    .layout { max-width: 1100px; margin: 0 auto; padding: 32px 5%; display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: start; }
+    .sidebar { position: sticky; top: 100px; }
+    .sidebar-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-500); margin-bottom: 12px; }
+    .sidebar nav { display: flex; flex-direction: column; gap: 4px; }
+    .sidebar a {
+      font-size: 13px; font-weight: 500; color: var(--gray-500);
+      text-decoration: none; padding: 7px 12px; border-radius: 8px;
+      transition: all .15s; display: flex; align-items: center; gap: 8px;
+    }
+    .sidebar a:hover { background: var(--blue-light); color: var(--blue); }
+    .sidebar a.active { background: var(--blue-light); color: var(--blue); font-weight: 600; }
+    .sidebar a .step-num { width: 20px; height: 20px; border-radius: 5px; background: var(--blue); color: white; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .sidebar a.done .step-num { background: var(--green); }
+
+    /* ── MAIN CONTENT ── */
+    main { display: flex; flex-direction: column; gap: 28px; }
+
+    /* ── PROMPT CARD ── */
+    .prompt-card {
+      background: var(--white);
+      border: 1px solid var(--gray-100);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(15,23,42,0.06);
+    }
+    .card-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+    }
+    .card-header-left { display: flex; align-items: center; gap: 12px; }
+    .step-badge {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--navy); color: white;
+      font-size: 14px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-badge.done { background: var(--green); }
+    .card-title { font-size: 16px; font-weight: 700; color: var(--gray-900); }
+    .card-desc { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
+
+    /* ── COPY BUTTON ── */
+    .copy-btn {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--blue); color: white;
+      border: none; border-radius: 10px;
+      padding: 9px 16px; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all .2s; white-space: nowrap; flex-shrink: 0;
+    }
+    .copy-btn:hover { background: #1558B0; transform: translateY(-1px); }
+    .copy-btn.copied { background: var(--green); }
+    .copy-btn svg { width: 14px; height: 14px; }
+
+    /* ── PROMPT TEXT ── */
+    .prompt-body { padding: 0; }
+    .prompt-text {
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 13px; line-height: 1.75;
+      color: #CDD6F4;
+      background: #1E1E2E;
+      padding: 20px 24px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 400px;
+      overflow-y: auto;
+      border-top: none;
+      cursor: text;
+      user-select: all;
+    }
+    .prompt-text::-webkit-scrollbar { width: 6px; }
+    .prompt-text::-webkit-scrollbar-track { background: #2A2A3E; }
+    .prompt-text::-webkit-scrollbar-thumb { background: #3D3D5C; border-radius: 3px; }
+
+    /* ── TIP BOX ── */
+    .tip-box {
+      margin: 0; padding: 14px 24px;
+      border-top: 1px solid var(--gray-100);
+      background: var(--green-light);
+      font-size: 13px; color: #14532D;
+      display: flex; gap: 10px; align-items: flex-start;
+    }
+    .tip-box.orange { background: var(--orange-light); color: #7C2D12; }
+    .tip-box.blue { background: var(--blue-light); color: #1E3A5F; }
+    .tip-box.purple { background: var(--purple-light); color: #4C1D95; }
+    .tip-box-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .tip-box strong { font-weight: 600; display: block; margin-bottom: 3px; }
+
+    /* ── DONE TOGGLE ── */
+    .done-toggle {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 24px;
+      border-top: 1px solid var(--gray-100);
+      background: var(--gray-50);
+    }
+    .done-toggle label { font-size: 13px; font-weight: 500; color: var(--gray-500); cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .done-toggle input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--green); cursor: pointer; }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed; bottom: 32px; right: 32px;
+      background: var(--green); color: white;
+      padding: 12px 20px; border-radius: 12px;
+      font-size: 14px; font-weight: 600;
+      box-shadow: 0 8px 24px rgba(22,163,74,0.4);
+      opacity: 0; transform: translateY(8px);
+      transition: all .25s; pointer-events: none; z-index: 999;
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="logo">Drapit</div>
+      <div class="header-sub">Antigravity Prompt-Gids — klik op "Kopieer" en plak in Antigravity</div>
+    </div>
+    <div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+      <div class="progress-label" id="progressLabel">0 van 11 stappen voltooid</div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-title">Stappen</div>
+    <nav id="sidebarNav">
+      <a href="#stap0"><span class="step-num" data-step="0">0</span>Design & Huisstijl</a>
+      <a href="#stap1"><span class="step-num" data-step="1">1</span>Project Setup</a>
+      <a href="#stap2"><span class="step-num" data-step="2">2</span>Supabase Database</a>
+      <a href="#stap3"><span class="step-num" data-step="3">3</span>AI Try-On API</a>
+      <a href="#stap4"><span class="step-num" data-step="4">4</span>Embeddable Widget</a>
+      <a href="#stap5"><span class="step-num" data-step="5">5</span>Async Verwerking</a>
+      <a href="#stap6"><span class="step-num" data-step="6">6</span>Admin Dashboard</a>
+      <a href="#stap7"><span class="step-num" data-step="7">7</span>Analytics</a>
+      <a href="#stap8"><span class="step-num" data-step="8">8</span>Stripe Integratie</a>
+      <a href="#stap9"><span class="step-num" data-step="9">9</span>Netlify Deployment</a>
+      <a href="#stap10"><span class="step-num" data-step="10">10</span>Landingspagina</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- STAP 0 -->
+    <div class="prompt-card" id="stap0">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="step-badge" data-step="0">0</div>
+          <div>
+            <div class="card-title">Design & Huisstijl</div>
+            <div class="card-desc">Begin ALTIJD hiermee — vóór je ook maar één component laat bouwen.</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'prompt0')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Kopieer
+        </button>
+      </div>
+      <div class="prompt-body">
+        <pre class="prompt-text" id="prompt0">Ik ga een SaaS-product bouwen genaamd Drapit — een virtual try-on platform voor kledingwebshops. Voordat je code schrijft, wil ik dat je de volledige huisstijl definieert en vastlegt als design tokens. Gebruik deze huisstijl consequent in ALLE componenten die je daarna bouwt.
+
+MERK & GEVOEL:
+Drapit is modern, vertrouwd en professioneel. De uitstraling is clean en minimalistisch, vergelijkbaar met Stripe of Linear. Geen drukke layouts, geen felle kleuren. Het product moet vertrouwen uitstralen bij webshop-eigenaren én eindklanten.
+
+KLEURENPALET — maak lib/design-tokens.ts:
+  DRAPIT_NAVY        = #0F2744   (donkerblauw — sidebar, headers)
+  DRAPIT_BLUE        = #1D6FD8   (knoppen, links, accenten)
+  DRAPIT_BLUE_LIGHT  = #EBF3FF   (info-blokken, hover)
+  DRAPIT_WHITE       = #FFFFFF
+  DRAPIT_GRAY_50     = #F8FAFC   (pagina-achtergrond)
+  DRAPIT_GRAY_100    = #F1F5F9   (kaart-achtergrond)
+  DRAPIT_GRAY_300    = #CBD5E1   (borders)
+  DRAPIT_GRAY_500    = #64748B   (secundaire tekst)
+  DRAPIT_GRAY_900    = #0F172A   (primaire tekst)
+  DRAPIT_GREEN       = #16A34A   (succes, conversie)
+  DRAPIT_GREEN_LIGHT = #DCFCE7
+  DRAPIT_RED         = #DC2626   (fout)
+  DRAPIT_RED_LIGHT   = #FEE2E2
+  DRAPIT_AMBER       = #D97706   (waarschuwing)
+  DRAPIT_AMBER_LIGHT = #FEF3C7
+
+TYPOGRAFIE:
+  Lettertype: Inter (via next/font)
+  h1: text-2xl font-bold | h2: text-xl font-semibold
+  h3: text-base font-semibold | body: text-sm | caption: text-xs font-medium
+
+COMPONENT-STIJLEN (Tailwind classes in lib/design-tokens.ts):
+  Primaire knop:
+    bg-[#1D6FD8] hover:bg-[#1558B0] text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors duration-200 shadow-sm
+
+  Secundaire knop:
+    bg-white hover:bg-[#F1F5F9] text-[#0F172A] font-medium border border-[#CBD5E1] px-5 py-2.5 rounded-xl text-sm transition-colors duration-200
+
+  CTA-knop widget (bestelknop):
+    bg-[#16A34A] hover:bg-[#15803D] text-white font-bold px-6 py-3 rounded-xl text-base w-full transition-colors duration-200 shadow-md
+
+  Dashboard kaart:
+    bg-white rounded-2xl border border-[#F1F5F9] shadow-sm p-6
+
+  Sidebar:
+    bg-[#0F2744] text-white w-64 min-h-screen flex flex-col
+
+  Sidebar menu-item actief:
+    bg-[#1D6FD8] text-white rounded-lg px-4 py-2.5 text-sm font-medium
+
+  Sidebar menu-item inactief:
+    text-[#94A3B8] hover:bg-[#1A3A5C] hover:text-white rounded-lg px-4 py-2.5 text-sm font-medium transition-colors duration-150
+
+  Input veld:
+    border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D6FD8] focus:border-transparent placeholder:text-[#94A3B8] bg-white w-full
+
+WIDGET CSS (vanilla, geen Tailwind — prefix 'drapit-'):
+  .drapit-btn-trigger: background:#1D6FD8; color:white; border:none; border-radius:12px; padding:10px 20px; font-family:Inter,system-ui; font-size:14px; font-weight:600; cursor:pointer; box-shadow:0 2px 8px rgba(29,111,216,0.3); transition:background 0.2s;
+  .drapit-modal-overlay: position:fixed; inset:0; background:rgba(15,23,42,0.6); z-index:99999; backdrop-filter:blur(4px);
+  .drapit-modal: background:white; border-radius:24px; padding:32px; max-width:560px; width:calc(100% - 40px); box-shadow:0 24px 64px rgba(15,23,42,0.2);
+
+LOGO: tekst 'Drapit' in Inter Bold, kleur #1D6FD8, met SVG kleidingshanger-icoon (16x16px). Maak components/ui/Logo.tsx.
+
+ANIMATIES: subtiel. Loading spinner: roterende cirkel #1D6FD8, 32px. Voortgangsbalk: 0→100% over ~45 sec. Modal: fade-in + scale 0.96→1.0 over 200ms.
+
+Sla tokens op in lib/design-tokens.ts én als CSS custom properties in app/globals.css. Bevestig met lijst van aangemaakte bestanden.</pre>
+      </div>
+      <div class="tip-box">
+        <span class="tip-box-icon">💡</span>
+        <div><strong>Na deze stap:</strong> Voeg aan elke volgende prompt toe: "Gebruik de Drapit huisstijl uit lib/design-tokens.ts." Zo blijft de agent consistent.</div>
+      </div>
+      <div class="done-toggle">
+        <label><input type="checkbox" onchange="markDone(0, this)"> Stap 0 afgerond</label>
+      </div>
+    </div>
+
+    <!-- STAP 1 -->
+    <div class="prompt-card" id="stap1">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="step-badge" data-step="1">1</div>
+          <div>
+            <div class="card-title">Project Setup</div>
+            <div class="card-desc">Next.js project, mappenstructuur, packages en omgevingsvariabelen.</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'prompt1')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Kopieer
+        </button>
+      </div>
+      <div class="prompt-body">
+        <pre class="prompt-text" id="prompt1">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
+
+Ik ga een SaaS-product bouwen genaamd Drapit — een virtual try-on platform voor kledingwebshops. Maak een volledig nieuw Next.js 14 project met App Router en TypeScript.
+
+Installeer en configureer:
+- @supabase/supabase-js en @supabase/ssr
+- stripe en @stripe/stripe-js
+- tailwindcss en shadcn/ui
+- zod (validatie)
+- @netlify/plugin-nextjs
+
+Mappenstructuur:
+app/
+  (marketing)/          - publieke landingspagina
+  (dashboard)/          - beschermde admin-pagina's
+  api/
+    tryon/route.ts      - try-on endpoint
+    webhook/route.ts    - Stripe webhook
+lib/
+  supabase/             - Supabase clients (server + browser)
+  stripe.ts
+  replicate.ts
+  design-tokens.ts
+public/
+  widget/               - embeddable widget bestanden
+
+Maak .env.local met placeholders:
+  NEXT_PUBLIC_SUPABASE_URL=
+  SUPABASE_SERVICE_ROLE_KEY=
+  REPLICATE_API_TOKEN=
+  STRIPE_SECRET_KEY=
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+  STRIPE_WEBHOOK_SECRET=
+
+Bevestig met een overzicht van alle aangemaakte bestanden.</pre>
+      </div>
+      <div class="tip-box">
+        <span class="tip-box-icon">✅</span>
+        <div><strong>Verificatie:</strong> Vraag daarna: "Laat me de mappenstructuur zien die je hebt aangemaakt."</div>
+      </div>
+      <div class="done-toggle">
+        <label><input type="checkbox" onchange="markDone(1, this)"> Stap 1 afgerond</label>
+      </div>
+    </div>
+
+    <!-- STAP 2 -->
+    <div class="prompt-card" id="stap2">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="step-badge" data-step="2">2</div>
+          <div>
+            <div class="card-title">Supabase Database</div>
+            <div class="card-desc">Tabellen, relaties, RLS-policies en Supabase clients.</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'prompt2')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Kopieer
+        </button>
+      </div>
+      <div class="prompt-body">
+        <pre class="prompt-text" id="prompt2">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
+
+Schrijf het Supabase-databaseschema voor Drapit in supabase/migrations/001_initial.sql.
+
+Tabellen:
+
+1. shops (webshop-accounts):
+   id uuid PK, created_at, name text, email text unique,
+   plan text default 'starter', stripe_customer_id text,
+   stripe_subscription_id text, monthly_tryon_limit int default 500,
+   tryons_this_month int default 0
+
+2. api_keys:
+   id uuid PK, shop_id uuid FK→shops, key_hash text unique,
+   created_at, last_used_at, is_active bool default true
+
+3. tryons:
+   id uuid PK, shop_id uuid FK, product_id text,
+   product_image_url text, user_photo_url text,
+   result_image_url text, status text default 'pending',
+   replicate_prediction_id text, created_at, completed_at,
+   converted bool default false, converted_at
+
+4. products:
+   id uuid PK, shop_id uuid FK, external_id text,
+   name text, image_url text, price numeric, buy_url text, created_at
+
+Voeg RLS toe: elke shop ziet alleen eigen data.
+Index op tryons(shop_id, created_at).
+
+Schrijf daarna:
+- lib/supabase/server.ts met createServerClient
+- lib/supabase/client.ts met createBrowserClient
+- TypeScript types voor alle tabellen in lib/supabase/types.ts</pre>
+      </div>
+      <div class="tip-box blue">
+        <span class="tip-box-icon">🗄️</span>
+        <div><strong>Uitvoeren:</strong> Voer het SQL-bestand uit via Supabase Dashboard → SQL Editor, of via <code>supabase db push</code>.</div>
+      </div>
+      <div class="done-toggle">
+        <label><input type="checkbox" onchange="markDone(2, this)"> Stap 2 afgerond</label>
+      </div>
+    </div>
+
+    <!-- STAP 3 -->
+    <div class="prompt-card" id="stap3">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="step-badge" data-step="3">3</div>
+          <div>
+            <div class="card-title">AI Try-On API Route</div>
+            <div class="card-desc">De kern van Drapit — serverless functie die Replicate IDM-VTON aanroept.</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'prompt3')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Kopieer
+        </button>
+      </div>
+      <div class="prompt-body">
+        <pre class="prompt-text" id="prompt3">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
+
+Bouw app/api/tryon/route.ts — de centrale try-on API route.
+
+1. AUTHENTICATIE: Lees 'X-Drapit-Key' header. Hash met SHA-256, zoek op in api_keys tabel. Geef 401 bij ongeldig.
+
+2. LIMIET-CHECK: Controleer tryons_this_month < monthly_tryon_limit. Geef 429 bij overschrijding.
+
+3. VALIDATIE met Zod:
+   { product_image_url: string, user_photo_url: string, product_id: string, buy_url: string }
+
+4. SUPABASE STORAGE: Sla beide afbeeldingen op in bucket 'tryons' (pad: {shop_id}/{tryon_id}/). Auto-delete na 24 uur.
+
+5. DATABASE: Maak record aan in tryons tabel, status 'pending'.
+
+6. REPLICATE API — model viktorfa/idm-vton:
+   Input: { human_img: user_photo_url, garm_img: product_image_url,
+            garment_des: 'clothing item', is_checked: true,
+            is_checked_crop: false, denoise_steps: 30, seed: 42 }
+   Gebruik predictions.create (async). Sla replicate_prediction_id op.
+   Webhook: https://app.drapit.io/api/webhook/replicate
+   webhook_events_filter: ['completed', 'failed']
+
+7. RESPONSE: Geef direct { tryon_id, status: 'pending' } terug.
+
+8. Verhoog tryons_this_month met 1.
+
+Maak ook app/api/tryon/[id]/route.ts voor status-ophalen.
+Gebruik TypeScript. Voeg foutafhandeling toe.</pre>
+      </div>
+      <div class="tip-box orange">
+        <span class="tip-box-icon">⚡</span>
+        <div><strong>Waarom async?</strong> IDM-VTON duurt 20–60 sec. Direct een tryon_id teruggeven houdt de pagina responsive. Stap 5 bouwt het polling-systeem.</div>
+      </div>
+      <div class="done-toggle">
+        <label><input type="checkbox" onchange="markDone(3, this)"> Stap 3 afgerond</label>
+      </div>
+    </div>
+
+    <!-- STAP 4 -->
+    <div class="prompt-card" id="stap4">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="step-badge" data-step="4">4</div>
+          <div>
+            <div class="card-title">Embeddable Widget</div>
+            <div class="card-desc">Het JS-bestand dat webshops met één script-tag in hun site laden.</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'prompt4')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Kopieer
+        </button>
+      </div>
+      <div class="prompt-body">
+        <pre class="prompt-text" id="prompt4">Bouw de embeddable Drapit widget als standalone vanilla JavaScript (geen React, geen npm) in public/widget/drapit.js.
+
+Bij laden:
+1. Zoek elementen met data-drapit-product attribuut. Elk heeft: data-drapit-product-image, data-drapit-product-id, data-drapit-buy-url.
+2. Injecteer naast elk product een 'Virtueel passen' knop (stijl: .drapit-btn-trigger).
+3. Klik opent modal overlay (.drapit-modal-overlay) met:
+   - Upload-zone voor foto (drag & drop + klik)
+   - Preview geüploade foto
+   - 'Pas virtueel aan' knop
+   - Loading-animatie met voortgangsbalk ('AI is je outfit aan het genereren...')
+   - Resultaat: twee afbeeldingen naast elkaar (origineel + try-on)
+   - CTA-knop 'Bestel dit kledingstuk' → linkt naar buy_url
+   - Sluit-icoon rechtsboven
+
+4. API CALL: POST naar https://app.drapit.io/api/tryon met X-Drapit-Key header (sleutel staat in data-drapit-key op de script-tag). Ontvang { tryon_id }.
+
+5. Poll elke 3 sec /api/tryon/{tryon_id} tot status 'completed'. Stop na 120 sec (timeout).
+
+6. Integratie door webshop:
+   <script src="https://app.drapit.io/widget/drapit.js" data-drapit-key="sk_live_xxxx"></script>
+
+Gebruik shadow DOM of scoped 'drapit-' classnames. Geen CSS-conflicts met host-webshop.
+Schrijf ook public/widget/test.html als testpagina met nep product.
+Voeg TypeScript types toe in public/widget/drapit.d.ts.</pre>
+      </div>
+      <div class="tip-box">
+        <span class="tip-box-icon">🧪</span>
+        <div><strong>Testen:</strong> Open public/widget/test.html lokaal in je browser om de widget te testen zonder echte webshop.</div>
+      </div>
+      <div class="done-toggle">
+        <label><input type="checkbox" onchange="markDone(4, this)"> Stap 4 afgerond</label>
+      </div>
+    </div>
+
+    <!-- STAP 5 -->
+    <div class="prompt-card" id="stap5">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="step-badge" data-step="5">5</div>
+          <div>
+            <div class="card-title">Async Verwerking & Realtime</div>
+            <div class="card-desc">Replicate webhook + polling zodat de widget het try-on resultaat ontvangt.</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'prompt5')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Kopieer
+        </button>
+      </div>
+      <div class="prompt-body">
+        <pre class="prompt-text" id="prompt5">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
+
+Bouw het async verwerkingssysteem in twee delen:
+
+DEEL A — app/api/webhook/replicate/route.ts:
+1. Verifieer Replicate webhook-signature (REPLICATE_WEBHOOK_SECRET).
+2. Lees replicate_prediction_id en output URL.
+3. Download gegenereerd beeld en sla op in Supabase Storage (bucket 'results', pad: {shop_id}/{tryon_id}/result.jpg).
+4. Update tryons: status='completed', result_image_url=storage_url, completed_at=now().
+5. Geef 200 OK terug.
+
+DEEL B — polling in public/widget/drapit.js:
+Poll GET /api/tryon/{tryon_id} elke 3 seconden.
+Bij status 'completed': toon result_image_url in modal.
+Bij status 'failed': toon foutmelding met retry-knop.
+Stop na 120 seconden met timeout-melding.
+
+Schrijf ook docs/webhook-setup.md met instructies voor het instellen van de Replicate webhook in het Replicate dashboard.</pre>
+      </div>
+      <div class="tip-box purple" style="background:#F5F3FF;color:#4C1D95">
+        <span class="tip-box-icon">🔄</span>
+        <div><strong>Upgrade later:</strong> Vervang polling door Supabase Realtime (websockets) voor een nog soepelere UX zonder vertraging.</div>
+      </div>
+      <div class="done-toggle">
+        <label><input type="checkbox" onchange="markDone(5, this)"> Stap 5 afgerond</label>
+      </div>
+    </div>
+
+    <!-- STAP 6 -->
+    <div class="prompt-card" id="stap6">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="step-badge" data-step="6">6</div>
+          <div>
+            <div class="card-title">Admin Dashboard</div>
+            <div class="card-desc">Login + dashboard voor webshop-eigenaren — statistieken, widget-config, API-sleutels.</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'prompt6')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Kopieer
+        </button>
+      </div>
+      <div class="prompt-body">
+        <pre class="prompt-text" id="prompt6">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling. Sidebar: bg-[#0F2744], wit tekst, 256px breed.
+
+Bouw het admin dashboard met Next.js App Router, Supabase Auth en shadcn/ui.
+
+AUTHENTICATIE:
+- /dashboard/login — email + password + magic link optie
+- Middleware die alle /dashboard/* routes beschermt
+- Redirect naar /dashboard als al ingelogd
+
+PAGINA'S:
+
+/dashboard — Overzicht
+- 3 statistiek-kaarten: Try-ons deze maand / Conversieratio / Abonnement + verbruik
+- Lijndiagram try-ons per dag (recharts)
+- Progressiebalk: 234/500 try-ons gebruikt
+
+/dashboard/widget — Widget configuratie
+- Code-snippet om te kopiëren (installatie-instructies)
+- Toggle: primaire kleur + CTA-knoptekst aanpassen
+- 'Test integratie' knop
+
+/dashboard/api-keys — API-sleutels
+- Lijst actieve sleutels (gehashed weergegeven)
+- Nieuwe sleutel aanmaken (UUID genereren, hashen, opslaan)
+- Sleutel intrekken + kopieer-naar-clipboard
+
+/dashboard/billing — Abonnement
+- Huidig plan + Stripe Customer Portal link
+- Upgrade-knoppen
+
+Sidebar-navigatie met Logo, menu-items en uitlogknop.
+Gebruik server components voor data-fetch.</pre>
+      </div>
+      <div class="tip-box">
+        <span class="tip-box-icon">🎨</span>
+        <div><strong>Design tip:</strong> Voeg toe: "Donkerblauw sidebar #0F2744, lichtgrijze achtergrond #F8FAFC voor het hoofdgebied."</div>
+      </div>
+      <div class="done-toggle">
+        <label><input type="checkbox" onchange="markDone(6, this)"> Stap 6 afgerond</label>
+      </div>
+    </div>
+
+    <!-- STAP 7 -->
+    <div class="prompt-card" id="stap7">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="step-badge" data-step="7">7</div>
+          <div>
+            <div class="card-title">Analytics Module</div>
+            <div class="card-desc">Try-ons, conversies, top-producten en CSV-export per webshop.</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'prompt7')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Kopieer
+        </button>
+      </div>
+      <div class="prompt-body">
+        <pre class="prompt-text" id="prompt7">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
+
+Bouw de analytics-module voor het Drapit dashboard.
+
+BACKEND API routes:
+
+app/api/analytics/overview/route.ts
+- Geeft: tryons_this_month, tryons_last_month, conversie_rate, top_5_producten
+- Supabase query met GROUP BY op tryons tabel
+
+app/api/analytics/timeseries/route.ts
+- Try-ons per dag, laatste 30 dagen
+- SELECT date_trunc('day', created_at), count(*) FROM tryons WHERE shop_id=? AND created_at > now()-interval '30 days' GROUP BY 1 ORDER BY 1
+
+FRONTEND /dashboard/analytics:
+- Statistiek-kaarten met % verandering t.o.v. vorige maand
+- Lijndiagram: try-ons per dag (recharts LineChart)
+- Staafdiagram: top 5 producten (recharts BarChart)
+- Tabel: recente try-on sessies (product, datum, status, duur)
+- 'Exporteer als CSV' knop (laatste 30 dagen)
+- Date-range picker: 7 / 30 / 90 dagen
+
+Gebruik React Server Components voor initiële data-fetch.</pre>
+      </div>
+      <div class="tip-box blue">
+        <span class="tip-box-icon">📊</span>
+        <div><strong>Conversie meten:</strong> Voeg later toe: POST /api/tryon/{id}/convert — registreert wanneer klant op bestelknop klikt.</div>
+      </div>
+      <div class="done-toggle">
+        <label><input type="checkbox" onchange="markDone(7, this)"> Stap 7 afgerond</label>
+      </div>
+    </div>
+
+    <!-- STAP 8 -->
+    <div class="prompt-card" id="stap8">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="step-badge" data-step="8">8</div>
+          <div>
+            <div class="card-title">Stripe Integratie</div>
+            <div class="card-desc">Maandelijkse abonnementen, facturering en automatische usage-caps.</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'prompt8')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Kopieer
+        </button>
+      </div>
+      <div class="prompt-body">
+        <pre class="prompt-text" id="prompt8">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
+
+Integreer Stripe voor het SaaS-abonnementsmodel van Drapit.
+
+lib/stripe.ts — definieer:
+PLANS = {
+  starter: { price_id: 'price_xxx', limit: 500,   price: 49  },
+  growth:  { price_id: 'price_xxx', limit: 2500,  price: 149 },
+  scale:   { price_id: 'price_xxx', limit: 10000, price: 399 }
+}
+
+API ROUTES:
+
+app/api/stripe/checkout/route.ts
+- POST { plan }
+- Maak/haal Stripe Customer op via stripe_customer_id in shops
+- Maak Checkout Session aan (mode: 'subscription')
+- Geef { checkout_url } terug
+
+app/api/stripe/portal/route.ts
+- POST → Stripe Customer Portal sessie
+- Geef { portal_url } terug
+
+app/api/webhook/stripe/route.ts
+- Verifieer signature met STRIPE_WEBHOOK_SECRET
+- Events:
+  checkout.session.completed → update plan + stripe_subscription_id + reset monthly_tryon_limit
+  customer.subscription.updated → update plan bij upgrade/downgrade
+  customer.subscription.deleted → downgrade naar gratis, limit 0
+  invoice.payment_failed → stuur notificatie via Supabase Edge Function
+
+MAANDELIJKSE RESET:
+Supabase Edge Function (cron '0 0 1 * *') die tryons_this_month reset naar 0 voor alle shops.</pre>
+      </div>
+      <div class="tip-box orange">
+        <span class="tip-box-icon">🧪</span>
+        <div><strong>Lokaal testen:</strong> Voeg toe: "Configureer Stripe CLI: stripe listen --forward-to localhost:3000/api/webhook/stripe"</div>
+      </div>
+      <div class="done-toggle">
+        <label><input type="checkbox" onchange="markDone(8, this)"> Stap 8 afgerond</label>
+      </div>
+    </div>
+
+    <!-- STAP 9 -->
+    <div class="prompt-card" id="stap9">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="step-badge" data-step="9">9</div>
+          <div>
+            <div class="card-title">Netlify Deployment</div>
+            <div class="card-desc">CI/CD pipeline, preview-deploys en live-deployment checklist.</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'prompt9')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Kopieer
+        </button>
+      </div>
+      <div class="prompt-body">
+        <pre class="prompt-text" id="prompt9">Configureer Netlify deployment voor Drapit.
+
+1. netlify.toml:
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[functions]
+  included_files = ["**"]
+
+[[headers]]
+  for = "/widget/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+
+2. Try-on API timeout: voeg export const maxDuration = 60 toe aan app/api/tryon/route.ts.
+   Gebruik Netlify Background Function voor AI-verwerking (geen timeout-limiet).
+
+3. .github/workflows/ci.yml — bij elke push/PR: npm run build + lint + type-check.
+   Netlify maakt automatisch preview-deploys bij elke PR.
+
+4. .env.example met placeholders voor alle environment variables.
+
+5. package.json scripts: "test": "jest", "lint": "next lint", "type-check": "tsc --noEmit"
+
+Schrijf DEPLOYMENT.md met:
+- Environment variables instellen in Netlify Dashboard
+- GitHub-repo koppelen aan Netlify
+- Webhook-URLs configureren voor Supabase, Stripe en Replicate
+
+Geef een stap-voor-stap checklist voor de eerste live-deployment.</pre>
+      </div>
+      <div class="tip-box purple" style="background:#F5F3FF;color:#4C1D95">
+        <span class="tip-box-icon">🌐</span>
+        <div><strong>Custom domein:</strong> Netlify → Site settings → Domain management → Add custom domain. SSL-certificaat wordt automatisch aangemaakt.</div>
+      </div>
+      <div class="done-toggle">
+        <label><input type="checkbox" onchange="markDone(9, this)"> Stap 9 afgerond</label>
+      </div>
+    </div>
+
+    <!-- STAP 10 -->
+    <div class="prompt-card" id="stap10">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="step-badge" data-step="10">10</div>
+          <div>
+            <div class="card-title">Landingspagina</div>
+            <div class="card-desc">Publieke marketingpagina — hero, features, pricing en CTA.</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'prompt10')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Kopieer
+        </button>
+      </div>
+      <div class="prompt-body">
+        <pre class="prompt-text" id="prompt10">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
+
+Bouw de Drapit landingspagina in app/(marketing)/page.tsx (Next.js server component).
+
+SECTIES IN VOLGORDE:
+
+1. NAV (sticky, 64px hoog, glasmorphism bij scrollen):
+   Links: Drapit-logo | Midden: links naar #hoe-het-werkt #voordelen #pricing | Rechts: 'Gratis proberen' knop
+
+2. HERO (gradient #0F2744 → #1D6FD8):
+   Badge: 'Nieuw · Virtual Try-On voor webshops'
+   H1 (groot, wit, vet): 'Laat klanten kleding virtueel passen — direct in jouw webshop'
+   ('virtueel passen' in #60A5FA cursief)
+   Subtitel in #93C5FD | 2 knoppen: 'Start gratis — 30 dagen' (wit) + 'Bekijk demo →' (ghost)
+   Social proof: 4 avatars + '120+ webshops gebruiken Drapit al'
+   Rechts: browser-mockup van webshop met Drapit-widget knop (geanimeerd pulseren)
+
+3. LOGO-BAR (lichtgrijs): 'Vertrouwd door webshops op alle platforms'
+   Pills: Shopify · WooCommerce · Magento · Lightspeed · Custom
+
+4. HOE HET WERKT (id='hoe-het-werkt', wit):
+   3 kaarten: (1) Klant klikt op 'Virtueel passen' (2) Foto uploaden, AI doet de rest (3) Bestellen met één klik
+
+5. VOORDELEN (id='voordelen', #F8FAFC):
+   Stats: '-38% Minder retouren' en '+24% Hogere conversieratio' (cijfers in #1D6FD8)
+   Features: 'Eén regel code' + 'GDPR-proof'
+   Chips: Shopify App · WooCommerce plugin · Alle platforms via JS snippet
+
+6. TESTIMONIALS (wit): 3 kaarten met ★★★★★, quote, naam + webshopnaam
+
+7. PRICING (id='pricing', #F8FAFC):
+   Starter €49 / Growth €149 (Meest gekozen, blauwe border) / Scale €399
+   Elke kaart: features-lijst met ✓, CTA-knop, '€X per try-on' label
+
+8. CTA-BANNER (gradient navy→blue): 'Klaar om te starten?' + grote witte knop
+
+9. FOOTER (#0F2744): logo + links (Privacy/Voorwaarden/Docs/Contact) + copyright
+
+TECHNISCH:
+- Responsive (mobile-first, md:/lg: prefixes)
+- Smooth scroll op ankerlinks
+- CTA's linken naar /dashboard/register
+- Metadata: title + description + Open Graph tags
+- Gebruik next/image</pre>
+      </div>
+      <div class="tip-box">
+        <span class="tip-box-icon">🖼️</span>
+        <div><strong>Referentie:</strong> Gebruik Drapit_Landingspagina.html als visuele referentie — open het in je browser en toon het aan Antigravity als voorbeeld.</div>
+      </div>
+      <div class="done-toggle">
+        <label><input type="checkbox" onchange="markDone(10, this)"> Stap 10 afgerond</label>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- TOAST -->
+<div id="toast">✓ Gekopieerd naar klembord!</div>
+
+<script>
+  // ── COPY ──
+  function copyPrompt(btn, id) {
+    const text = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg> Gekopieerd!`;
+      btn.classList.add('copied');
+      showToast();
+      setTimeout(() => {
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Kopieer`;
+        btn.classList.remove('copied');
+      }, 2500);
+    });
+  }
+
+  function showToast() {
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+  }
+
+  // ── DONE TOGGLE ──
+  const done = JSON.parse(localStorage.getItem('drapit-done') || '{}');
+
+  function markDone(step, cb) {
+    done[step] = cb.checked;
+    localStorage.setItem('drapit-done', JSON.stringify(done));
+    updateUI();
+  }
+
+  function updateUI() {
+    const total = 11;
+    const count = Object.values(done).filter(Boolean).length;
+    document.getElementById('progressBar').style.width = (count / total * 100) + '%';
+    document.getElementById('progressLabel').textContent = `${count} van ${total} stappen voltooid`;
+
+    for (let i = 0; i <= 10; i++) {
+      const badge = document.querySelector(`.step-badge[data-step="${i}"]`);
+      const navBadge = document.querySelector(`.step-num[data-step="${i}"]`);
+      const navLink = navBadge?.closest('a');
+      const cb = document.querySelector(`#stap${i} input[type=checkbox]`);
+      if (done[i]) {
+        badge?.classList.add('done');
+        navBadge?.classList.add('done');
+        navLink?.classList.add('done');
+        if (cb) cb.checked = true;
+      } else {
+        badge?.classList.remove('done');
+        navBadge?.classList.remove('done');
+        navLink?.classList.remove('done');
+      }
+    }
+  }
+
+  // ── ACTIVE SIDEBAR LINK ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+        const id = e.target.id;
+        const link = document.querySelector(`.sidebar a[href="#${id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -40% 0px' });
+
+  document.querySelectorAll('.prompt-card').forEach(el => observer.observe(el));
+
+  // Init
+  updateUI();
+</script>
+</body>
+</html>

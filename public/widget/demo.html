@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drapit Widget Demo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #F8FAFC;
+            color: #0F172A;
+            padding: 40px 24px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #64748B;
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .product {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            border: 1px solid #F1F5F9;
+        }
+
+        .product img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 16px;
+        }
+
+        .product-name {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .product-price {
+            font-size: 14px;
+            color: #64748B;
+            margin-top: 4px;
+        }
+    </style>
+    <!-- Drapit Widget — replace YOUR_API_KEY with a real key to test -->
+    <script src="/widget/drapit-widget.js" data-drapit-key="YOUR_API_KEY" data-drapit-color="#1D6FD8"
+        data-drapit-cta="Virtueel passen" defer></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>👗 Demo Webshop</h1>
+        <p class="subtitle">Dit is een testpagina om het Drapit widget te demonstreren. Vervang YOUR_API_KEY met een
+            echte sleutel.</p>
+        <div class="products">
+            <div class="product"
+                data-drapit-product="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600"
+                data-drapit-product-id="DRESS-001" data-drapit-product-name="Elegante Avondjurk"
+                data-drapit-buy-url="https://example.com/product/dress-001">
+                <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600" alt="Avondjurk" />
+                <div class="product-info">
+                    <div class="product-name">Elegante Avondjurk</div>
+                    <div class="product-price">€129,99</div>
+                </div>
+            </div>
+
+            <div class="product"
+                data-drapit-product="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600"
+                data-drapit-product-id="JACKET-002" data-drapit-product-name="Leren Bikerjack"
+                data-drapit-buy-url="https://example.com/product/jacket-002">
+                <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600" alt="Bikerjack" />
+                <div class="product-info">
+                    <div class="product-name">Leren Bikerjack</div>
+                    <div class="product-price">€249,99</div>
+                </div>
+            </div>
+
+            <div class="product"
+                data-drapit-product="https://images.unsplash.com/photo-1434389677669-e08b4cda3a50?w=600"
+                data-drapit-product-id="SHIRT-003" data-drapit-product-name="Gestreept Overhemd"
+                data-drapit-buy-url="https://example.com/product/shirt-003">
+                <img src="https://images.unsplash.com/photo-1434389677669-e08b4cda3a50?w=600" alt="Overhemd" />
+                <div class="product-info">
+                    <div class="product-name">Gestreept Overhemd</div>
+                    <div class="product-price">€59,99</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
