@@ -60,6 +60,21 @@ export const PLANS: Record<Plan, PlanConfig> = {
             'Webhook integraties',
         ],
     },
+    scale: {
+        price_id: process.env.STRIPE_PRICE_SCALE || 'price_scale_xxx',
+        limit: 5000,
+        price: 249,
+        name: 'Scale',
+        features: [
+            '5.000 try-ons per maand',
+            'Onbeperkt API-sleutels',
+            'Prioriteit support',
+            'Custom branding',
+            'Analytics dashboard',
+            'Webhook integraties',
+            'SLA garantie',
+        ],
+    },
     enterprise: {
         price_id: process.env.STRIPE_PRICE_ENTERPRISE || 'price_enterprise_xxx',
         limit: 10_000,
