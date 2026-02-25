@@ -1,54 +1,185 @@
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Drapit — Antigravity Prompts</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --navy: #0F2744; --blue: #1D6FD8; --blue-light: #EBF3FF;
-      --green: #16A34A; --green-light: #DCFCE7;
-      --gray-50: #F8FAFC; --gray-100: #F1F5F9; --gray-300: #CBD5E1;
-      --gray-500: #64748B; --gray-900: #0F172A; --white: #FFFFFF;
-      --orange: #EA580C; --orange-light: #FFF7ED;
-      --purple: #7C3AED; --purple-light: #F5F3FF;
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', system-ui, sans-serif; background: var(--gray-50); color: var(--gray-900); }
+
+    :root {
+      --navy: #0F2744;
+      --blue: #1D6FD8;
+      --blue-light: #EBF3FF;
+      --green: #16A34A;
+      --green-light: #DCFCE7;
+      --gray-50: #F8FAFC;
+      --gray-100: #F1F5F9;
+      --gray-300: #CBD5E1;
+      --gray-500: #64748B;
+      --gray-900: #0F172A;
+      --white: #FFFFFF;
+      --orange: #EA580C;
+      --orange-light: #FFF7ED;
+      --purple: #7C3AED;
+      --purple-light: #F5F3FF;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+    }
 
     /* ── HEADER ── */
     header {
-      background: var(--navy); color: white;
-      padding: 32px 5%; position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 4px 24px rgba(15,23,42,0.3);
+      background: var(--navy);
+      color: white;
+      padding: 32px 5%;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 24px rgba(15, 23, 42, 0.3);
     }
-    .header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-    .logo { font-size: 22px; font-weight: 800; color: #60A5FA; letter-spacing: -0.5px; }
-    .header-sub { font-size: 14px; color: #94A3B8; }
-    .progress-bar-wrap { background: rgba(255,255,255,0.1); border-radius: 100px; height: 6px; width: 200px; margin-top: 8px; }
-    .progress-bar { background: #60A5FA; height: 6px; border-radius: 100px; width: 0%; transition: width .3s; }
-    .progress-label { font-size: 12px; color: #94A3B8; margin-top: 4px; }
+
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: #60A5FA;
+      letter-spacing: -0.5px;
+    }
+
+    .header-sub {
+      font-size: 14px;
+      color: #94A3B8;
+    }
+
+    .progress-bar-wrap {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 100px;
+      height: 6px;
+      width: 200px;
+      margin-top: 8px;
+    }
+
+    .progress-bar {
+      background: #60A5FA;
+      height: 6px;
+      border-radius: 100px;
+      width: 0%;
+      transition: width .3s;
+    }
+
+    .progress-label {
+      font-size: 12px;
+      color: #94A3B8;
+      margin-top: 4px;
+    }
 
     /* ── NAV SIDEBAR ── */
-    .layout { max-width: 1100px; margin: 0 auto; padding: 32px 5%; display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: start; }
-    .sidebar { position: sticky; top: 100px; }
-    .sidebar-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-500); margin-bottom: 12px; }
-    .sidebar nav { display: flex; flex-direction: column; gap: 4px; }
-    .sidebar a {
-      font-size: 13px; font-weight: 500; color: var(--gray-500);
-      text-decoration: none; padding: 7px 12px; border-radius: 8px;
-      transition: all .15s; display: flex; align-items: center; gap: 8px;
+    .layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 5%;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 32px;
+      align-items: start;
     }
-    .sidebar a:hover { background: var(--blue-light); color: var(--blue); }
-    .sidebar a.active { background: var(--blue-light); color: var(--blue); font-weight: 600; }
-    .sidebar a .step-num { width: 20px; height: 20px; border-radius: 5px; background: var(--blue); color: white; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .sidebar a.done .step-num { background: var(--green); }
+
+    .sidebar {
+      position: sticky;
+      top: 100px;
+    }
+
+    .sidebar-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-500);
+      margin-bottom: 12px;
+    }
+
+    .sidebar nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sidebar a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-500);
+      text-decoration: none;
+      padding: 7px 12px;
+      border-radius: 8px;
+      transition: all .15s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar a:hover {
+      background: var(--blue-light);
+      color: var(--blue);
+    }
+
+    .sidebar a.active {
+      background: var(--blue-light);
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    .sidebar a .step-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      background: var(--blue);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sidebar a.done .step-num {
+      background: var(--green);
+    }
 
     /* ── MAIN CONTENT ── */
-    main { display: flex; flex-direction: column; gap: 28px; }
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
 
     /* ── PROMPT CARD ── */
     .prompt-card {
@@ -56,42 +187,95 @@
       border: 1px solid var(--gray-100);
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 2px 12px rgba(15,23,42,0.06);
+      box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
     }
+
     .card-header {
       padding: 20px 24px 16px;
       border-bottom: 1px solid var(--gray-100);
-      display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
     }
-    .card-header-left { display: flex; align-items: center; gap: 12px; }
+
+    .card-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
     .step-badge {
-      width: 36px; height: 36px; border-radius: 10px;
-      background: var(--navy); color: white;
-      font-size: 14px; font-weight: 800;
-      display: flex; align-items: center; justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--navy);
+      color: white;
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
     }
-    .step-badge.done { background: var(--green); }
-    .card-title { font-size: 16px; font-weight: 700; color: var(--gray-900); }
-    .card-desc { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
+
+    .step-badge.done {
+      background: var(--green);
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--gray-500);
+      margin-top: 2px;
+    }
 
     /* ── COPY BUTTON ── */
     .copy-btn {
-      display: flex; align-items: center; gap: 6px;
-      background: var(--blue); color: white;
-      border: none; border-radius: 10px;
-      padding: 9px 16px; font-size: 13px; font-weight: 600;
-      cursor: pointer; transition: all .2s; white-space: nowrap; flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 9px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
-    .copy-btn:hover { background: #1558B0; transform: translateY(-1px); }
-    .copy-btn.copied { background: var(--green); }
-    .copy-btn svg { width: 14px; height: 14px; }
+
+    .copy-btn:hover {
+      background: #1558B0;
+      transform: translateY(-1px);
+    }
+
+    .copy-btn.copied {
+      background: var(--green);
+    }
+
+    .copy-btn svg {
+      width: 14px;
+      height: 14px;
+    }
 
     /* ── PROMPT TEXT ── */
-    .prompt-body { padding: 0; }
+    .prompt-body {
+      padding: 0;
+    }
+
     .prompt-text {
       font-family: 'JetBrains Mono', 'Courier New', monospace;
-      font-size: 13px; line-height: 1.75;
+      font-size: 13px;
+      line-height: 1.75;
       color: #CDD6F4;
       background: #1E1E2E;
       padding: 20px 24px;
@@ -103,107 +287,185 @@
       cursor: text;
       user-select: all;
     }
-    .prompt-text::-webkit-scrollbar { width: 6px; }
-    .prompt-text::-webkit-scrollbar-track { background: #2A2A3E; }
-    .prompt-text::-webkit-scrollbar-thumb { background: #3D3D5C; border-radius: 3px; }
+
+    .prompt-text::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .prompt-text::-webkit-scrollbar-track {
+      background: #2A2A3E;
+    }
+
+    .prompt-text::-webkit-scrollbar-thumb {
+      background: #3D3D5C;
+      border-radius: 3px;
+    }
 
     /* ── TIP BOX ── */
     .tip-box {
-      margin: 0; padding: 14px 24px;
+      margin: 0;
+      padding: 14px 24px;
       border-top: 1px solid var(--gray-100);
       background: var(--green-light);
-      font-size: 13px; color: #14532D;
-      display: flex; gap: 10px; align-items: flex-start;
+      font-size: 13px;
+      color: #14532D;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
     }
-    .tip-box.orange { background: var(--orange-light); color: #7C2D12; }
-    .tip-box.blue { background: var(--blue-light); color: #1E3A5F; }
-    .tip-box.purple { background: var(--purple-light); color: #4C1D95; }
-    .tip-box-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-    .tip-box strong { font-weight: 600; display: block; margin-bottom: 3px; }
+
+    .tip-box.orange {
+      background: var(--orange-light);
+      color: #7C2D12;
+    }
+
+    .tip-box.blue {
+      background: var(--blue-light);
+      color: #1E3A5F;
+    }
+
+    .tip-box.purple {
+      background: var(--purple-light);
+      color: #4C1D95;
+    }
+
+    .tip-box-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .tip-box strong {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 3px;
+    }
 
     /* ── DONE TOGGLE ── */
     .done-toggle {
-      display: flex; align-items: center; gap: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       padding: 12px 24px;
       border-top: 1px solid var(--gray-100);
       background: var(--gray-50);
     }
-    .done-toggle label { font-size: 13px; font-weight: 500; color: var(--gray-500); cursor: pointer; display: flex; align-items: center; gap: 8px; }
-    .done-toggle input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--green); cursor: pointer; }
+
+    .done-toggle label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-500);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .done-toggle input[type=checkbox] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--green);
+      cursor: pointer;
+    }
 
     /* ── TOAST ── */
     #toast {
-      position: fixed; bottom: 32px; right: 32px;
-      background: var(--green); color: white;
-      padding: 12px 20px; border-radius: 12px;
-      font-size: 14px; font-weight: 600;
-      box-shadow: 0 8px 24px rgba(22,163,74,0.4);
-      opacity: 0; transform: translateY(8px);
-      transition: all .25s; pointer-events: none; z-index: 999;
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: var(--green);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(22, 163, 74, 0.4);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all .25s;
+      pointer-events: none;
+      z-index: 999;
     }
-    #toast.show { opacity: 1; transform: translateY(0); }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
     @media (max-width: 768px) {
-      .layout { grid-template-columns: 1fr; }
-      .sidebar { position: static; }
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
     }
   </style>
 </head>
+
 <body>
 
-<header>
-  <div class="header-inner">
-    <div>
-      <div class="logo">Drapit</div>
-      <div class="header-sub">Antigravity Prompt-Gids — klik op "Kopieer" en plak in Antigravity</div>
-    </div>
-    <div>
-      <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
-      <div class="progress-label" id="progressLabel">0 van 11 stappen voltooid</div>
-    </div>
-  </div>
-</header>
-
-<div class="layout">
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sidebar-title">Stappen</div>
-    <nav id="sidebarNav">
-      <a href="#stap0"><span class="step-num" data-step="0">0</span>Design & Huisstijl</a>
-      <a href="#stap1"><span class="step-num" data-step="1">1</span>Project Setup</a>
-      <a href="#stap2"><span class="step-num" data-step="2">2</span>Supabase Database</a>
-      <a href="#stap3"><span class="step-num" data-step="3">3</span>AI Try-On API</a>
-      <a href="#stap4"><span class="step-num" data-step="4">4</span>Embeddable Widget</a>
-      <a href="#stap5"><span class="step-num" data-step="5">5</span>Async Verwerking</a>
-      <a href="#stap6"><span class="step-num" data-step="6">6</span>Admin Dashboard</a>
-      <a href="#stap7"><span class="step-num" data-step="7">7</span>Analytics</a>
-      <a href="#stap8"><span class="step-num" data-step="8">8</span>Stripe Integratie</a>
-      <a href="#stap9"><span class="step-num" data-step="9">9</span>Netlify Deployment</a>
-      <a href="#stap10"><span class="step-num" data-step="10">10</span>Landingspagina</a>
-    </nav>
-  </aside>
-
-  <!-- MAIN -->
-  <main>
-
-    <!-- STAP 0 -->
-    <div class="prompt-card" id="stap0">
-      <div class="card-header">
-        <div class="card-header-left">
-          <div class="step-badge" data-step="0">0</div>
-          <div>
-            <div class="card-title">Design & Huisstijl</div>
-            <div class="card-desc">Begin ALTIJD hiermee — vóór je ook maar één component laat bouwen.</div>
-          </div>
-        </div>
-        <button class="copy-btn" onclick="copyPrompt(this, 'prompt0')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Kopieer
-        </button>
+  <header>
+    <div class="header-inner">
+      <div>
+        <div class="logo">Drapit</div>
+        <div class="header-sub">Antigravity Prompt-Gids — klik op "Kopieer" en plak in Antigravity</div>
       </div>
-      <div class="prompt-body">
-        <pre class="prompt-text" id="prompt0">Ik ga een SaaS-product bouwen genaamd Drapit — een virtual try-on platform voor kledingwebshops. Voordat je code schrijft, wil ik dat je de volledige huisstijl definieert en vastlegt als design tokens. Gebruik deze huisstijl consequent in ALLE componenten die je daarna bouwt.
+      <div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="progress-label" id="progressLabel">0 van 11 stappen voltooid</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-title">Stappen</div>
+      <nav id="sidebarNav">
+        <a href="#stap0"><span class="step-num" data-step="0">0</span>Design & Huisstijl</a>
+        <a href="#stap1"><span class="step-num" data-step="1">1</span>Project Setup</a>
+        <a href="#stap2"><span class="step-num" data-step="2">2</span>Supabase Database</a>
+        <a href="#stap3"><span class="step-num" data-step="3">3</span>AI Try-On API</a>
+        <a href="#stap4"><span class="step-num" data-step="4">4</span>Embeddable Widget</a>
+        <a href="#stap5"><span class="step-num" data-step="5">5</span>Async Verwerking</a>
+        <a href="#stap6"><span class="step-num" data-step="6">6</span>Admin Dashboard</a>
+        <a href="#stap7"><span class="step-num" data-step="7">7</span>Analytics</a>
+        <a href="#stap8"><span class="step-num" data-step="8">8</span>Stripe Integratie</a>
+        <a href="#stap9"><span class="step-num" data-step="9">9</span>Netlify Deployment</a>
+        <a href="#stap10"><span class="step-num" data-step="10">10</span>Landingspagina</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main>
+
+      <!-- STAP 0 -->
+      <div class="prompt-card" id="stap0">
+        <div class="card-header">
+          <div class="card-header-left">
+            <div class="step-badge" data-step="0">0</div>
+            <div>
+              <div class="card-title">Design & Huisstijl</div>
+              <div class="card-desc">Begin ALTIJD hiermee — vóór je ook maar één component laat bouwen.</div>
+            </div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt(this, 'prompt0')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            Kopieer
+          </button>
+        </div>
+        <div class="prompt-body">
+          <pre class="prompt-text"
+            id="prompt0">Ik ga een SaaS-product bouwen genaamd Drapit — een virtual try-on platform voor kledingwebshops. Voordat je code schrijft, wil ik dat je de volledige huisstijl definieert en vastlegt als design tokens. Gebruik deze huisstijl consequent in ALLE componenten die je daarna bouwt.
 
 MERK & GEVOEL:
 Drapit is modern, vertrouwd en professioneel. De uitstraling is clean en minimalistisch, vergelijkbaar met Stripe of Linear. Geen drukke layouts, geen felle kleuren. Het product moet vertrouwen uitstralen bij webshop-eigenaren én eindklanten.
@@ -265,33 +527,38 @@ LOGO: tekst 'Drapit' in Inter Bold, kleur #1D6FD8, met SVG kleidingshanger-icoon
 ANIMATIES: subtiel. Loading spinner: roterende cirkel #1D6FD8, 32px. Voortgangsbalk: 0→100% over ~45 sec. Modal: fade-in + scale 0.96→1.0 over 200ms.
 
 Sla tokens op in lib/design-tokens.ts én als CSS custom properties in app/globals.css. Bevestig met lijst van aangemaakte bestanden.</pre>
-      </div>
-      <div class="tip-box">
-        <span class="tip-box-icon">💡</span>
-        <div><strong>Na deze stap:</strong> Voeg aan elke volgende prompt toe: "Gebruik de Drapit huisstijl uit lib/design-tokens.ts." Zo blijft de agent consistent.</div>
-      </div>
-      <div class="done-toggle">
-        <label><input type="checkbox" onchange="markDone(0, this)"> Stap 0 afgerond</label>
-      </div>
-    </div>
-
-    <!-- STAP 1 -->
-    <div class="prompt-card" id="stap1">
-      <div class="card-header">
-        <div class="card-header-left">
-          <div class="step-badge" data-step="1">1</div>
-          <div>
-            <div class="card-title">Project Setup</div>
-            <div class="card-desc">Next.js project, mappenstructuur, packages en omgevingsvariabelen.</div>
-          </div>
         </div>
-        <button class="copy-btn" onclick="copyPrompt(this, 'prompt1')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Kopieer
-        </button>
+        <div class="tip-box">
+          <span class="tip-box-icon">💡</span>
+          <div><strong>Na deze stap:</strong> Voeg aan elke volgende prompt toe: "Gebruik de Drapit huisstijl uit
+            lib/design-tokens.ts." Zo blijft de agent consistent.</div>
+        </div>
+        <div class="done-toggle">
+          <label><input type="checkbox" onchange="markDone(0, this)"> Stap 0 afgerond</label>
+        </div>
       </div>
-      <div class="prompt-body">
-        <pre class="prompt-text" id="prompt1">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
+
+      <!-- STAP 1 -->
+      <div class="prompt-card" id="stap1">
+        <div class="card-header">
+          <div class="card-header-left">
+            <div class="step-badge" data-step="1">1</div>
+            <div>
+              <div class="card-title">Project Setup</div>
+              <div class="card-desc">Next.js project, mappenstructuur, packages en omgevingsvariabelen.</div>
+            </div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt(this, 'prompt1')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            Kopieer
+          </button>
+        </div>
+        <div class="prompt-body">
+          <pre class="prompt-text" id="prompt1">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
 
 Ik ga een SaaS-product bouwen genaamd Drapit — een virtual try-on platform voor kledingwebshops. Maak een volledig nieuw Next.js 14 project met App Router en TypeScript.
 
@@ -326,33 +593,38 @@ Maak .env.local met placeholders:
   STRIPE_WEBHOOK_SECRET=
 
 Bevestig met een overzicht van alle aangemaakte bestanden.</pre>
-      </div>
-      <div class="tip-box">
-        <span class="tip-box-icon">✅</span>
-        <div><strong>Verificatie:</strong> Vraag daarna: "Laat me de mappenstructuur zien die je hebt aangemaakt."</div>
-      </div>
-      <div class="done-toggle">
-        <label><input type="checkbox" onchange="markDone(1, this)"> Stap 1 afgerond</label>
-      </div>
-    </div>
-
-    <!-- STAP 2 -->
-    <div class="prompt-card" id="stap2">
-      <div class="card-header">
-        <div class="card-header-left">
-          <div class="step-badge" data-step="2">2</div>
-          <div>
-            <div class="card-title">Supabase Database</div>
-            <div class="card-desc">Tabellen, relaties, RLS-policies en Supabase clients.</div>
+        </div>
+        <div class="tip-box">
+          <span class="tip-box-icon">✅</span>
+          <div><strong>Verificatie:</strong> Vraag daarna: "Laat me de mappenstructuur zien die je hebt aangemaakt."
           </div>
         </div>
-        <button class="copy-btn" onclick="copyPrompt(this, 'prompt2')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Kopieer
-        </button>
+        <div class="done-toggle">
+          <label><input type="checkbox" onchange="markDone(1, this)"> Stap 1 afgerond</label>
+        </div>
       </div>
-      <div class="prompt-body">
-        <pre class="prompt-text" id="prompt2">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
+
+      <!-- STAP 2 -->
+      <div class="prompt-card" id="stap2">
+        <div class="card-header">
+          <div class="card-header-left">
+            <div class="step-badge" data-step="2">2</div>
+            <div>
+              <div class="card-title">Supabase Database</div>
+              <div class="card-desc">Tabellen, relaties, RLS-policies en Supabase clients.</div>
+            </div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt(this, 'prompt2')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            Kopieer
+          </button>
+        </div>
+        <div class="prompt-body">
+          <pre class="prompt-text" id="prompt2">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
 
 Schrijf het Supabase-databaseschema voor Drapit in supabase/migrations/001_initial.sql.
 
@@ -386,33 +658,38 @@ Schrijf daarna:
 - lib/supabase/server.ts met createServerClient
 - lib/supabase/client.ts met createBrowserClient
 - TypeScript types voor alle tabellen in lib/supabase/types.ts</pre>
-      </div>
-      <div class="tip-box blue">
-        <span class="tip-box-icon">🗄️</span>
-        <div><strong>Uitvoeren:</strong> Voer het SQL-bestand uit via Supabase Dashboard → SQL Editor, of via <code>supabase db push</code>.</div>
-      </div>
-      <div class="done-toggle">
-        <label><input type="checkbox" onchange="markDone(2, this)"> Stap 2 afgerond</label>
-      </div>
-    </div>
-
-    <!-- STAP 3 -->
-    <div class="prompt-card" id="stap3">
-      <div class="card-header">
-        <div class="card-header-left">
-          <div class="step-badge" data-step="3">3</div>
-          <div>
-            <div class="card-title">AI Try-On API Route</div>
-            <div class="card-desc">De kern van Drapit — serverless functie die Replicate IDM-VTON aanroept.</div>
-          </div>
         </div>
-        <button class="copy-btn" onclick="copyPrompt(this, 'prompt3')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Kopieer
-        </button>
+        <div class="tip-box blue">
+          <span class="tip-box-icon">🗄️</span>
+          <div><strong>Uitvoeren:</strong> Voer het SQL-bestand uit via Supabase Dashboard → SQL Editor, of via
+            <code>supabase db push</code>.</div>
+        </div>
+        <div class="done-toggle">
+          <label><input type="checkbox" onchange="markDone(2, this)"> Stap 2 afgerond</label>
+        </div>
       </div>
-      <div class="prompt-body">
-        <pre class="prompt-text" id="prompt3">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
+
+      <!-- STAP 3 -->
+      <div class="prompt-card" id="stap3">
+        <div class="card-header">
+          <div class="card-header-left">
+            <div class="step-badge" data-step="3">3</div>
+            <div>
+              <div class="card-title">AI Try-On API Route</div>
+              <div class="card-desc">De kern van Drapit — serverless functie die Replicate IDM-VTON aanroept.</div>
+            </div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt(this, 'prompt3')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            Kopieer
+          </button>
+        </div>
+        <div class="prompt-body">
+          <pre class="prompt-text" id="prompt3">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
 
 Bouw app/api/tryon/route.ts — de centrale try-on API route.
 
@@ -432,7 +709,7 @@ Bouw app/api/tryon/route.ts — de centrale try-on API route.
             garment_des: 'clothing item', is_checked: true,
             is_checked_crop: false, denoise_steps: 30, seed: 42 }
    Gebruik predictions.create (async). Sla replicate_prediction_id op.
-   Webhook: https://app.drapit.io/api/webhook/replicate
+   Webhook: https://drapit.io/api/webhook/replicate
    webhook_events_filter: ['completed', 'failed']
 
 7. RESPONSE: Geef direct { tryon_id, status: 'pending' } terug.
@@ -441,33 +718,38 @@ Bouw app/api/tryon/route.ts — de centrale try-on API route.
 
 Maak ook app/api/tryon/[id]/route.ts voor status-ophalen.
 Gebruik TypeScript. Voeg foutafhandeling toe.</pre>
-      </div>
-      <div class="tip-box orange">
-        <span class="tip-box-icon">⚡</span>
-        <div><strong>Waarom async?</strong> IDM-VTON duurt 20–60 sec. Direct een tryon_id teruggeven houdt de pagina responsive. Stap 5 bouwt het polling-systeem.</div>
-      </div>
-      <div class="done-toggle">
-        <label><input type="checkbox" onchange="markDone(3, this)"> Stap 3 afgerond</label>
-      </div>
-    </div>
-
-    <!-- STAP 4 -->
-    <div class="prompt-card" id="stap4">
-      <div class="card-header">
-        <div class="card-header-left">
-          <div class="step-badge" data-step="4">4</div>
-          <div>
-            <div class="card-title">Embeddable Widget</div>
-            <div class="card-desc">Het JS-bestand dat webshops met één script-tag in hun site laden.</div>
-          </div>
         </div>
-        <button class="copy-btn" onclick="copyPrompt(this, 'prompt4')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Kopieer
-        </button>
+        <div class="tip-box orange">
+          <span class="tip-box-icon">⚡</span>
+          <div><strong>Waarom async?</strong> IDM-VTON duurt 20–60 sec. Direct een tryon_id teruggeven houdt de pagina
+            responsive. Stap 5 bouwt het polling-systeem.</div>
+        </div>
+        <div class="done-toggle">
+          <label><input type="checkbox" onchange="markDone(3, this)"> Stap 3 afgerond</label>
+        </div>
       </div>
-      <div class="prompt-body">
-        <pre class="prompt-text" id="prompt4">Bouw de embeddable Drapit widget als standalone vanilla JavaScript (geen React, geen npm) in public/widget/drapit.js.
+
+      <!-- STAP 4 -->
+      <div class="prompt-card" id="stap4">
+        <div class="card-header">
+          <div class="card-header-left">
+            <div class="step-badge" data-step="4">4</div>
+            <div>
+              <div class="card-title">Embeddable Widget</div>
+              <div class="card-desc">Het JS-bestand dat webshops met één script-tag in hun site laden.</div>
+            </div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt(this, 'prompt4')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            Kopieer
+          </button>
+        </div>
+        <div class="prompt-body">
+          <pre class="prompt-text" id="prompt4">Bouw de embeddable Drapit widget als standalone vanilla JavaScript (geen React, geen npm) in public/widget/drapit.js.
 
 Bij laden:
 1. Zoek elementen met data-drapit-product attribuut. Elk heeft: data-drapit-product-image, data-drapit-product-id, data-drapit-buy-url.
@@ -481,43 +763,49 @@ Bij laden:
    - CTA-knop 'Bestel dit kledingstuk' → linkt naar buy_url
    - Sluit-icoon rechtsboven
 
-4. API CALL: POST naar https://app.drapit.io/api/tryon met X-Drapit-Key header (sleutel staat in data-drapit-key op de script-tag). Ontvang { tryon_id }.
+4. API CALL: POST naar https://drapit.io/api/tryon met X-Drapit-Key header (sleutel staat in data-drapit-key op de script-tag). Ontvang { tryon_id }.
 
 5. Poll elke 3 sec /api/tryon/{tryon_id} tot status 'completed'. Stop na 120 sec (timeout).
 
 6. Integratie door webshop:
-   <script src="https://app.drapit.io/widget/drapit.js" data-drapit-key="sk_live_xxxx"></script>
+   <script src="https://drapit.io/widget/drapit.js" data-drapit-key="sk_live_xxxx"></script>
 
 Gebruik shadow DOM of scoped 'drapit-' classnames. Geen CSS-conflicts met host-webshop.
 Schrijf ook public/widget/test.html als testpagina met nep product.
 Voeg TypeScript types toe in public/widget/drapit.d.ts.</pre>
-      </div>
-      <div class="tip-box">
-        <span class="tip-box-icon">🧪</span>
-        <div><strong>Testen:</strong> Open public/widget/test.html lokaal in je browser om de widget te testen zonder echte webshop.</div>
-      </div>
-      <div class="done-toggle">
-        <label><input type="checkbox" onchange="markDone(4, this)"> Stap 4 afgerond</label>
-      </div>
-    </div>
-
-    <!-- STAP 5 -->
-    <div class="prompt-card" id="stap5">
-      <div class="card-header">
-        <div class="card-header-left">
-          <div class="step-badge" data-step="5">5</div>
-          <div>
-            <div class="card-title">Async Verwerking & Realtime</div>
-            <div class="card-desc">Replicate webhook + polling zodat de widget het try-on resultaat ontvangt.</div>
-          </div>
         </div>
-        <button class="copy-btn" onclick="copyPrompt(this, 'prompt5')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Kopieer
-        </button>
+        <div class="tip-box">
+          <span class="tip-box-icon">🧪</span>
+          <div><strong>Testen:</strong> Open public/widget/test.html lokaal in je browser om de widget te testen zonder
+            echte webshop.</div>
+        </div>
+        <div class="done-toggle">
+          <label><input type="checkbox" onchange="markDone(4, this)"> Stap 4 afgerond</label>
+        </div>
       </div>
-      <div class="prompt-body">
-        <pre class="prompt-text" id="prompt5">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
+
+      <!-- STAP 5 -->
+      <div class="prompt-card" id="stap5">
+        <div class="card-header">
+          <div class="card-header-left">
+            <div class="step-badge" data-step="5">5</div>
+            <div>
+              <div class="card-title">Async Verwerking & Realtime</div>
+              <div class="card-desc">Replicate webhook + polling zodat de widget het try-on resultaat ontvangt.</div>
+            </div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt(this, 'prompt5')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            Kopieer
+          </button>
+        </div>
+        <div class="prompt-body">
+          <pre class="prompt-text"
+            id="prompt5">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
 
 Bouw het async verwerkingssysteem in twee delen:
 
@@ -535,33 +823,39 @@ Bij status 'failed': toon foutmelding met retry-knop.
 Stop na 120 seconden met timeout-melding.
 
 Schrijf ook docs/webhook-setup.md met instructies voor het instellen van de Replicate webhook in het Replicate dashboard.</pre>
-      </div>
-      <div class="tip-box purple" style="background:#F5F3FF;color:#4C1D95">
-        <span class="tip-box-icon">🔄</span>
-        <div><strong>Upgrade later:</strong> Vervang polling door Supabase Realtime (websockets) voor een nog soepelere UX zonder vertraging.</div>
-      </div>
-      <div class="done-toggle">
-        <label><input type="checkbox" onchange="markDone(5, this)"> Stap 5 afgerond</label>
-      </div>
-    </div>
-
-    <!-- STAP 6 -->
-    <div class="prompt-card" id="stap6">
-      <div class="card-header">
-        <div class="card-header-left">
-          <div class="step-badge" data-step="6">6</div>
-          <div>
-            <div class="card-title">Admin Dashboard</div>
-            <div class="card-desc">Login + dashboard voor webshop-eigenaren — statistieken, widget-config, API-sleutels.</div>
-          </div>
         </div>
-        <button class="copy-btn" onclick="copyPrompt(this, 'prompt6')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Kopieer
-        </button>
+        <div class="tip-box purple" style="background:#F5F3FF;color:#4C1D95">
+          <span class="tip-box-icon">🔄</span>
+          <div><strong>Upgrade later:</strong> Vervang polling door Supabase Realtime (websockets) voor een nog
+            soepelere UX zonder vertraging.</div>
+        </div>
+        <div class="done-toggle">
+          <label><input type="checkbox" onchange="markDone(5, this)"> Stap 5 afgerond</label>
+        </div>
       </div>
-      <div class="prompt-body">
-        <pre class="prompt-text" id="prompt6">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling. Sidebar: bg-[#0F2744], wit tekst, 256px breed.
+
+      <!-- STAP 6 -->
+      <div class="prompt-card" id="stap6">
+        <div class="card-header">
+          <div class="card-header-left">
+            <div class="step-badge" data-step="6">6</div>
+            <div>
+              <div class="card-title">Admin Dashboard</div>
+              <div class="card-desc">Login + dashboard voor webshop-eigenaren — statistieken, widget-config,
+                API-sleutels.</div>
+            </div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt(this, 'prompt6')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            Kopieer
+          </button>
+        </div>
+        <div class="prompt-body">
+          <pre class="prompt-text" id="prompt6">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling. Sidebar: bg-[#0F2744], wit tekst, 256px breed.
 
 Bouw het admin dashboard met Next.js App Router, Supabase Auth en shadcn/ui.
 
@@ -593,33 +887,38 @@ PAGINA'S:
 
 Sidebar-navigatie met Logo, menu-items en uitlogknop.
 Gebruik server components voor data-fetch.</pre>
-      </div>
-      <div class="tip-box">
-        <span class="tip-box-icon">🎨</span>
-        <div><strong>Design tip:</strong> Voeg toe: "Donkerblauw sidebar #0F2744, lichtgrijze achtergrond #F8FAFC voor het hoofdgebied."</div>
-      </div>
-      <div class="done-toggle">
-        <label><input type="checkbox" onchange="markDone(6, this)"> Stap 6 afgerond</label>
-      </div>
-    </div>
-
-    <!-- STAP 7 -->
-    <div class="prompt-card" id="stap7">
-      <div class="card-header">
-        <div class="card-header-left">
-          <div class="step-badge" data-step="7">7</div>
-          <div>
-            <div class="card-title">Analytics Module</div>
-            <div class="card-desc">Try-ons, conversies, top-producten en CSV-export per webshop.</div>
-          </div>
         </div>
-        <button class="copy-btn" onclick="copyPrompt(this, 'prompt7')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Kopieer
-        </button>
+        <div class="tip-box">
+          <span class="tip-box-icon">🎨</span>
+          <div><strong>Design tip:</strong> Voeg toe: "Donkerblauw sidebar #0F2744, lichtgrijze achtergrond #F8FAFC voor
+            het hoofdgebied."</div>
+        </div>
+        <div class="done-toggle">
+          <label><input type="checkbox" onchange="markDone(6, this)"> Stap 6 afgerond</label>
+        </div>
       </div>
-      <div class="prompt-body">
-        <pre class="prompt-text" id="prompt7">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
+
+      <!-- STAP 7 -->
+      <div class="prompt-card" id="stap7">
+        <div class="card-header">
+          <div class="card-header-left">
+            <div class="step-badge" data-step="7">7</div>
+            <div>
+              <div class="card-title">Analytics Module</div>
+              <div class="card-desc">Try-ons, conversies, top-producten en CSV-export per webshop.</div>
+            </div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt(this, 'prompt7')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            Kopieer
+          </button>
+        </div>
+        <div class="prompt-body">
+          <pre class="prompt-text" id="prompt7">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
 
 Bouw de analytics-module voor het Drapit dashboard.
 
@@ -642,33 +941,38 @@ FRONTEND /dashboard/analytics:
 - Date-range picker: 7 / 30 / 90 dagen
 
 Gebruik React Server Components voor initiële data-fetch.</pre>
-      </div>
-      <div class="tip-box blue">
-        <span class="tip-box-icon">📊</span>
-        <div><strong>Conversie meten:</strong> Voeg later toe: POST /api/tryon/{id}/convert — registreert wanneer klant op bestelknop klikt.</div>
-      </div>
-      <div class="done-toggle">
-        <label><input type="checkbox" onchange="markDone(7, this)"> Stap 7 afgerond</label>
-      </div>
-    </div>
-
-    <!-- STAP 8 -->
-    <div class="prompt-card" id="stap8">
-      <div class="card-header">
-        <div class="card-header-left">
-          <div class="step-badge" data-step="8">8</div>
-          <div>
-            <div class="card-title">Stripe Integratie</div>
-            <div class="card-desc">Maandelijkse abonnementen, facturering en automatische usage-caps.</div>
-          </div>
         </div>
-        <button class="copy-btn" onclick="copyPrompt(this, 'prompt8')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Kopieer
-        </button>
+        <div class="tip-box blue">
+          <span class="tip-box-icon">📊</span>
+          <div><strong>Conversie meten:</strong> Voeg later toe: POST /api/tryon/{id}/convert — registreert wanneer
+            klant op bestelknop klikt.</div>
+        </div>
+        <div class="done-toggle">
+          <label><input type="checkbox" onchange="markDone(7, this)"> Stap 7 afgerond</label>
+        </div>
       </div>
-      <div class="prompt-body">
-        <pre class="prompt-text" id="prompt8">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
+
+      <!-- STAP 8 -->
+      <div class="prompt-card" id="stap8">
+        <div class="card-header">
+          <div class="card-header-left">
+            <div class="step-badge" data-step="8">8</div>
+            <div>
+              <div class="card-title">Stripe Integratie</div>
+              <div class="card-desc">Maandelijkse abonnementen, facturering en automatische usage-caps.</div>
+            </div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt(this, 'prompt8')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            Kopieer
+          </button>
+        </div>
+        <div class="prompt-body">
+          <pre class="prompt-text" id="prompt8">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
 
 Integreer Stripe voor het SaaS-abonnementsmodel van Drapit.
 
@@ -701,33 +1005,38 @@ app/api/webhook/stripe/route.ts
 
 MAANDELIJKSE RESET:
 Supabase Edge Function (cron '0 0 1 * *') die tryons_this_month reset naar 0 voor alle shops.</pre>
-      </div>
-      <div class="tip-box orange">
-        <span class="tip-box-icon">🧪</span>
-        <div><strong>Lokaal testen:</strong> Voeg toe: "Configureer Stripe CLI: stripe listen --forward-to localhost:3000/api/webhook/stripe"</div>
-      </div>
-      <div class="done-toggle">
-        <label><input type="checkbox" onchange="markDone(8, this)"> Stap 8 afgerond</label>
-      </div>
-    </div>
-
-    <!-- STAP 9 -->
-    <div class="prompt-card" id="stap9">
-      <div class="card-header">
-        <div class="card-header-left">
-          <div class="step-badge" data-step="9">9</div>
-          <div>
-            <div class="card-title">Netlify Deployment</div>
-            <div class="card-desc">CI/CD pipeline, preview-deploys en live-deployment checklist.</div>
-          </div>
         </div>
-        <button class="copy-btn" onclick="copyPrompt(this, 'prompt9')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Kopieer
-        </button>
+        <div class="tip-box orange">
+          <span class="tip-box-icon">🧪</span>
+          <div><strong>Lokaal testen:</strong> Voeg toe: "Configureer Stripe CLI: stripe listen --forward-to
+            localhost:3000/api/webhook/stripe"</div>
+        </div>
+        <div class="done-toggle">
+          <label><input type="checkbox" onchange="markDone(8, this)"> Stap 8 afgerond</label>
+        </div>
       </div>
-      <div class="prompt-body">
-        <pre class="prompt-text" id="prompt9">Configureer Netlify deployment voor Drapit.
+
+      <!-- STAP 9 -->
+      <div class="prompt-card" id="stap9">
+        <div class="card-header">
+          <div class="card-header-left">
+            <div class="step-badge" data-step="9">9</div>
+            <div>
+              <div class="card-title">Netlify Deployment</div>
+              <div class="card-desc">CI/CD pipeline, preview-deploys en live-deployment checklist.</div>
+            </div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt(this, 'prompt9')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            Kopieer
+          </button>
+        </div>
+        <div class="prompt-body">
+          <pre class="prompt-text" id="prompt9">Configureer Netlify deployment voor Drapit.
 
 1. netlify.toml:
 [build]
@@ -764,33 +1073,38 @@ Schrijf DEPLOYMENT.md met:
 - Webhook-URLs configureren voor Supabase, Stripe en Replicate
 
 Geef een stap-voor-stap checklist voor de eerste live-deployment.</pre>
-      </div>
-      <div class="tip-box purple" style="background:#F5F3FF;color:#4C1D95">
-        <span class="tip-box-icon">🌐</span>
-        <div><strong>Custom domein:</strong> Netlify → Site settings → Domain management → Add custom domain. SSL-certificaat wordt automatisch aangemaakt.</div>
-      </div>
-      <div class="done-toggle">
-        <label><input type="checkbox" onchange="markDone(9, this)"> Stap 9 afgerond</label>
-      </div>
-    </div>
-
-    <!-- STAP 10 -->
-    <div class="prompt-card" id="stap10">
-      <div class="card-header">
-        <div class="card-header-left">
-          <div class="step-badge" data-step="10">10</div>
-          <div>
-            <div class="card-title">Landingspagina</div>
-            <div class="card-desc">Publieke marketingpagina — hero, features, pricing en CTA.</div>
-          </div>
         </div>
-        <button class="copy-btn" onclick="copyPrompt(this, 'prompt10')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Kopieer
-        </button>
+        <div class="tip-box purple" style="background:#F5F3FF;color:#4C1D95">
+          <span class="tip-box-icon">🌐</span>
+          <div><strong>Custom domein:</strong> Netlify → Site settings → Domain management → Add custom domain.
+            SSL-certificaat wordt automatisch aangemaakt.</div>
+        </div>
+        <div class="done-toggle">
+          <label><input type="checkbox" onchange="markDone(9, this)"> Stap 9 afgerond</label>
+        </div>
       </div>
-      <div class="prompt-body">
-        <pre class="prompt-text" id="prompt10">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
+
+      <!-- STAP 10 -->
+      <div class="prompt-card" id="stap10">
+        <div class="card-header">
+          <div class="card-header-left">
+            <div class="step-badge" data-step="10">10</div>
+            <div>
+              <div class="card-title">Landingspagina</div>
+              <div class="card-desc">Publieke marketingpagina — hero, features, pricing en CTA.</div>
+            </div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt(this, 'prompt10')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            Kopieer
+          </button>
+        </div>
+        <div class="prompt-body">
+          <pre class="prompt-text" id="prompt10">Gebruik de Drapit huisstijl uit lib/design-tokens.ts voor alle styling.
 
 Bouw de Drapit landingspagina in app/(marketing)/page.tsx (Next.js server component).
 
@@ -834,92 +1148,94 @@ TECHNISCH:
 - CTA's linken naar /dashboard/register
 - Metadata: title + description + Open Graph tags
 - Gebruik next/image</pre>
+        </div>
+        <div class="tip-box">
+          <span class="tip-box-icon">🖼️</span>
+          <div><strong>Referentie:</strong> Gebruik Drapit_Landingspagina.html als visuele referentie — open het in je
+            browser en toon het aan Antigravity als voorbeeld.</div>
+        </div>
+        <div class="done-toggle">
+          <label><input type="checkbox" onchange="markDone(10, this)"> Stap 10 afgerond</label>
+        </div>
       </div>
-      <div class="tip-box">
-        <span class="tip-box-icon">🖼️</span>
-        <div><strong>Referentie:</strong> Gebruik Drapit_Landingspagina.html als visuele referentie — open het in je browser en toon het aan Antigravity als voorbeeld.</div>
-      </div>
-      <div class="done-toggle">
-        <label><input type="checkbox" onchange="markDone(10, this)"> Stap 10 afgerond</label>
-      </div>
-    </div>
 
-  </main>
-</div>
+    </main>
+  </div>
 
-<!-- TOAST -->
-<div id="toast">✓ Gekopieerd naar klembord!</div>
+  <!-- TOAST -->
+  <div id="toast">✓ Gekopieerd naar klembord!</div>
 
-<script>
-  // ── COPY ──
-  function copyPrompt(btn, id) {
-    const text = document.getElementById(id).textContent;
-    navigator.clipboard.writeText(text).then(() => {
-      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg> Gekopieerd!`;
-      btn.classList.add('copied');
-      showToast();
-      setTimeout(() => {
-        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Kopieer`;
-        btn.classList.remove('copied');
-      }, 2500);
-    });
-  }
+  <script>
+    // ── COPY ──
+    function copyPrompt(btn, id) {
+      const text = document.getElementById(id).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg> Gekopieerd!`;
+        btn.classList.add('copied');
+        showToast();
+        setTimeout(() => {
+          btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Kopieer`;
+          btn.classList.remove('copied');
+        }, 2500);
+      });
+    }
 
-  function showToast() {
-    const t = document.getElementById('toast');
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2000);
-  }
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
 
-  // ── DONE TOGGLE ──
-  const done = JSON.parse(localStorage.getItem('drapit-done') || '{}');
+    // ── DONE TOGGLE ──
+    const done = JSON.parse(localStorage.getItem('drapit-done') || '{}');
 
-  function markDone(step, cb) {
-    done[step] = cb.checked;
-    localStorage.setItem('drapit-done', JSON.stringify(done));
-    updateUI();
-  }
+    function markDone(step, cb) {
+      done[step] = cb.checked;
+      localStorage.setItem('drapit-done', JSON.stringify(done));
+      updateUI();
+    }
 
-  function updateUI() {
-    const total = 11;
-    const count = Object.values(done).filter(Boolean).length;
-    document.getElementById('progressBar').style.width = (count / total * 100) + '%';
-    document.getElementById('progressLabel').textContent = `${count} van ${total} stappen voltooid`;
+    function updateUI() {
+      const total = 11;
+      const count = Object.values(done).filter(Boolean).length;
+      document.getElementById('progressBar').style.width = (count / total * 100) + '%';
+      document.getElementById('progressLabel').textContent = `${count} van ${total} stappen voltooid`;
 
-    for (let i = 0; i <= 10; i++) {
-      const badge = document.querySelector(`.step-badge[data-step="${i}"]`);
-      const navBadge = document.querySelector(`.step-num[data-step="${i}"]`);
-      const navLink = navBadge?.closest('a');
-      const cb = document.querySelector(`#stap${i} input[type=checkbox]`);
-      if (done[i]) {
-        badge?.classList.add('done');
-        navBadge?.classList.add('done');
-        navLink?.classList.add('done');
-        if (cb) cb.checked = true;
-      } else {
-        badge?.classList.remove('done');
-        navBadge?.classList.remove('done');
-        navLink?.classList.remove('done');
+      for (let i = 0; i <= 10; i++) {
+        const badge = document.querySelector(`.step-badge[data-step="${i}"]`);
+        const navBadge = document.querySelector(`.step-num[data-step="${i}"]`);
+        const navLink = navBadge?.closest('a');
+        const cb = document.querySelector(`#stap${i} input[type=checkbox]`);
+        if (done[i]) {
+          badge?.classList.add('done');
+          navBadge?.classList.add('done');
+          navLink?.classList.add('done');
+          if (cb) cb.checked = true;
+        } else {
+          badge?.classList.remove('done');
+          navBadge?.classList.remove('done');
+          navLink?.classList.remove('done');
+        }
       }
     }
-  }
 
-  // ── ACTIVE SIDEBAR LINK ──
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-        const id = e.target.id;
-        const link = document.querySelector(`.sidebar a[href="#${id}"]`);
-        if (link) link.classList.add('active');
-      }
-    });
-  }, { rootMargin: '-40% 0px -40% 0px' });
+    // ── ACTIVE SIDEBAR LINK ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+          const id = e.target.id;
+          const link = document.querySelector(`.sidebar a[href="#${id}"]`);
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -40% 0px' });
 
-  document.querySelectorAll('.prompt-card').forEach(el => observer.observe(el));
+    document.querySelectorAll('.prompt-card').forEach(el => observer.observe(el));
 
-  // Init
-  updateUI();
-</script>
+    // Init
+    updateUI();
+  </script>
 </body>
+
 </html>

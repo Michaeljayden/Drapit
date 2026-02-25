@@ -3,7 +3,7 @@
 // =============================================================================
 // Usage:
 //   <script
-//     src="https://app.drapit.io/widget/drapit-widget.js"
+//     src="https://drapit.io/widget/drapit-widget.js"
 //     data-drapit-key="dk_live_xxx"
 //     data-drapit-color="#1D6FD8"
 //     data-drapit-cta="Virtueel passen"

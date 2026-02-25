@@ -2,7 +2,7 @@
 
 Drapit uses [Replicate](https://replicate.com) webhooks to asynchronously receive results from the AI virtual try-on model (`viktorfa/idm-vton`). When a prediction completes or fails, Replicate sends a POST request to your webhook endpoint.
 
-**Webhook endpoint:** `https://app.drapit.io/api/webhook/replicate`
+**Webhook endpoint:** `https://drapit.io/api/webhook/replicate`
 
 ---
 
@@ -23,7 +23,7 @@ To test webhooks locally, you need a public URL that forwards to your local serv
 Add these to your `.env.local`:
 
 ```bash
-NEXT_PUBLIC_APP_URL=https://app.drapit.io
+NEXT_PUBLIC_APP_URL=https://drapit.io
 REPLICATE_WEBHOOK_SECRET=your_secret_here (optional, for validation)
 ```
 
@@ -36,7 +36,7 @@ When creating a prediction, Drapit automatically includes the webhook URL:
 prediction = await createTryOnPrediction(
   model_image,
   garment_image,
-  'https://app.drapit.io/api/webhook/replicate',  // ← webhook URL
+  'https://drapit.io/api/webhook/replicate',  // ← webhook URL
   shopId
 );
 ```
@@ -78,7 +78,7 @@ sequenceDiagram
 You can simulate a webhook call:
 
 ```bash
-curl -X POST https://app.drapit.io/api/webhook/replicate \
+curl -X POST https://drapit.io/api/webhook/replicate \
   -H "Content-Type: application/json" \
   -H "X-Drapit-Key: your-test-api-key" \
   -d '{

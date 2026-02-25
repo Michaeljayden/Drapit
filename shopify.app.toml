@@ -1,21 +1,20 @@
-# Learn more about Shopify app configuration at https://shopify.dev/docs/apps/tools/cli/configuration
-
 name = "Drapit Virtual Try-On"
-client_id = "" # Will be filled after linking to Shopify Partner account
-path = ""
-scopes = "write_products,read_shipping" # Basic scopes, adjust as needed
+client_id = "b4be0e4c410809e0f2b872950484cae1"
+application_url = "https://drapit.netlify.app"
+embedded = true
 
 [auth]
 redirect_urls = [
-  "https://app.drapit.io/api/auth/callback",
-  "https://app.drapit.io/api/auth/shopify/callback"
+  "https://drapit.io/api/auth/callback",
+  "https://drapit.io/api/auth/shopify/callback"
 ]
 
 [webhooks]
 api_version = "2024-01"
 
-[webhooks.subscriptions.app_uninstalled]
-uri = "/api/webhooks/app_uninstalled"
+[access_scopes]
+scopes = "write_products,read_themes,write_themes"
 
 [pos]
 embedded = false
+

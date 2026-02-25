@@ -282,7 +282,7 @@ export async function POST(request: NextRequest) {
         // 6. REPLICATE API — viktorfa/idm-vton (async with webhook)
         //    Webhook URL from NEXT_PUBLIC_APP_URL env var
         // ---------------------------------------------------------------
-        const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://app.drapit.io';
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://drapit.io';
         const webhookUrl = `${appUrl}/api/webhook/replicate`;
 
         let prediction;

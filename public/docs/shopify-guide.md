@@ -2,7 +2,7 @@
 
 ## Stap 1 — Drapit account aanmaken
 
-1. Ga naar [app.drapit.io/dashboard/login](https://app.drapit.io/dashboard/login)
+1. Ga naar [drapit.io/dashboard/login](https://drapit.io/dashboard/login)
 2. Maak een account aan en kies een abonnement
 3. Ga naar **API-sleutels** en maak een nieuwe sleutel aan
 4. Kopieer de API-sleutel (begint met `dk_live_`)
@@ -18,7 +18,7 @@
 ```html
 <!-- Drapit Virtual Try-On -->
 <script
-  src="https://app.drapit.io/widget/drapit-widget.js"
+  src="https://drapit.io/widget/drapit-widget.js"
   data-drapit-key="JOUW_API_SLEUTEL"
   data-drapit-color="#1D6FD8"
   data-drapit-cta="Virtueel passen"
