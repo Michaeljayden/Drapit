@@ -11,6 +11,15 @@ import Link from 'next/link';
 
 const PLANS = [
     {
+        key: 'trial',
+        name: 'Proef',
+        price: 0,
+        limit: '20',
+        features: ['20 try-ons/maand', '1 API-sleutel', 'E-mail support'],
+        popular: false,
+        cta: 'Gratis starten',
+    },
+    {
         key: 'starter',
         name: 'Starter',
         price: 49,
@@ -431,7 +440,7 @@ export default function LandingPage() {
                 @media (max-width: 860px) {
                     .d-hero-grid  { grid-template-columns: 1fr !important; }
                     .d-how-grid   { grid-template-columns: 1fr !important; }
-                    .d-plans-grid { grid-template-columns: 1fr 1fr !important; }
+                    .d-plans-grid { grid-template-columns: repeat(3, 1fr) !important; }
                     .d-feat-grid  { grid-template-columns: 1fr 1fr !important; }
                     .d-stats-grid { grid-template-columns: 1fr 1fr !important; }
                     .d-hero-title { font-size: clamp(34px, 7vw, 52px) !important; }
@@ -644,7 +653,7 @@ export default function LandingPage() {
                             </p>
                         </div>
 
-                        <div className="d-plans-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 20, alignItems: 'start' }}>
+                        <div className="d-plans-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 16, alignItems: 'start' }}>
                             {PLANS.map((plan, i) => (
                                 <div key={plan.key} className={`d-plan ${plan.popular ? 'd-plan-pop' : ''} d-in d-d${i + 1} ${pricing.inView ? 'visible' : ''}`}
                                     style={{
@@ -663,8 +672,8 @@ export default function LandingPage() {
                                     <div style={{ marginBottom: 22 }}>
                                         <div style={{ fontSize: 11, fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif', color: plan.popular ? '#93C5FD' : 'rgba(241,245,249,0.4)', letterSpacing: '0.08em', marginBottom: 10 }}>{plan.name.toUpperCase()}</div>
                                         <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                                            <span style={{ fontSize: 42, fontWeight: 800, fontFamily: 'Plus Jakarta Sans, sans-serif', color: '#F1F5F9', letterSpacing: '-0.028em', lineHeight: 1 }}>€{plan.price}</span>
-                                            <span style={{ fontSize: 13, color: 'rgba(241,245,249,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>/maand</span>
+                                            <span style={{ fontSize: 42, fontWeight: 800, fontFamily: 'Plus Jakarta Sans, sans-serif', color: '#F1F5F9', letterSpacing: '-0.028em', lineHeight: 1 }}>{plan.price === 0 ? 'Gratis' : `€${plan.price}`}</span>
+                                            {plan.price > 0 && <span style={{ fontSize: 13, color: 'rgba(241,245,249,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>/maand</span>}
                                         </div>
                                         <div style={{ marginTop: 8, fontSize: 13, color: 'rgba(241,245,249,0.4)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{plan.limit} try-ons/maand</div>
                                     </div>

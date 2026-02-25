@@ -33,8 +33,19 @@ export interface PlanConfig {
 }
 
 export const PLANS: Record<Plan, PlanConfig> = {
+    trial: {
+        price_id: '',
+        limit: 20,
+        price: 0,
+        name: 'Proef',
+        features: [
+            '20 try-ons per maand',
+            '1 API-sleutel',
+            'E-mail support',
+        ],
+    },
     starter: {
-        price_id: process.env.STRIPE_PRICE_STARTER || 'price_starter_xxx',
+        price_id: process.env.STRIPE_PRICE_STARTER || 'price_1T4eWrQf4cE06T91UECmF7rp',
         limit: 500,
         price: 49,
         name: 'Starter',
@@ -46,7 +57,7 @@ export const PLANS: Record<Plan, PlanConfig> = {
         ],
     },
     growth: {
-        price_id: process.env.STRIPE_PRICE_GROWTH || 'price_growth_xxx',
+        price_id: process.env.STRIPE_PRICE_GROWTH || 'price_1T4eXjQf4cE06T91YwBQAUWT',
         limit: 2500,
         price: 149,
         name: 'Pro',
@@ -61,7 +72,7 @@ export const PLANS: Record<Plan, PlanConfig> = {
         ],
     },
     scale: {
-        price_id: process.env.STRIPE_PRICE_SCALE || 'price_scale_xxx',
+        price_id: process.env.STRIPE_PRICE_SCALE || 'price_1T4eYtQf4cE06T91fYyeFyil',
         limit: 5000,
         price: 249,
         name: 'Scale',
@@ -76,7 +87,7 @@ export const PLANS: Record<Plan, PlanConfig> = {
         ],
     },
     enterprise: {
-        price_id: process.env.STRIPE_PRICE_ENTERPRISE || 'price_enterprise_xxx',
+        price_id: process.env.STRIPE_PRICE_ENTERPRISE || 'price_1T4eZtQf4cE06T919zzx0lVE',
         limit: 10_000,
         price: 399,
         name: 'Business',

@@ -4,7 +4,7 @@ import { colors, typography, componentStyles } from '@/lib/design-tokens';
 import type { Plan } from '@/lib/supabase/types';
 import BillingActions from '@/components/dashboard/BillingActions';
 
-const planOrder: Plan[] = ['starter', 'growth', 'scale', 'enterprise'];
+const planOrder: Plan[] = ['trial', 'starter', 'growth', 'scale', 'enterprise'];
 
 export default async function BillingPage() {
     const supabase = await createClient();
@@ -79,7 +79,7 @@ export default async function BillingPage() {
             </div>
 
             {/* Plans grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {planOrder.map((planKey) => {
                     const config = PLANS[planKey];
                     const isCurrent = planKey === currentPlan;
@@ -127,11 +127,13 @@ export default async function BillingPage() {
                                 </h3>
                                 <div className="mt-2">
                                     <span className="text-3xl font-bold" style={{ color: colors.gray900 }}>
-                                        €{config.price}
+                                        {config.price === 0 ? 'Gratis' : `€${config.price}`}
                                     </span>
-                                    <span className="text-sm" style={{ color: colors.gray500 }}>
-                                        /maand
-                                    </span>
+                                    {config.price > 0 && (
+                                        <span className="text-sm" style={{ color: colors.gray500 }}>
+                                            /maand
+                                        </span>
+                                    )}
                                 </div>
                                 <p className="text-xs mt-1" style={{ color: colors.gray500 }}>
                                     {config.limit.toLocaleString('nl-NL')} try-ons/maand

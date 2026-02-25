@@ -156,16 +156,15 @@ export async function POST(request: NextRequest) {
                 const subscription = event.data.object as Stripe.Subscription;
                 const customerId = subscription.customer as string;
 
-                // Downgrade to starter plan — keep 500 free try-ons so the shop
-                // isn't completely locked out. Set limit to 0 only if you want
-                // to enforce a hard paywall after cancellation.
+                // Downgrade to trial plan — keep 20 free try-ons so the shop
+                // isn't completely locked out.
                 await updateShopByCustomer(customerId, {
-                    plan: 'starter',
-                    monthly_tryon_limit: PLANS.starter.limit,
+                    plan: 'trial',
+                    monthly_tryon_limit: PLANS.trial.limit,
                     stripe_subscription_id: null,
                 });
 
-                console.log(`[stripe/webhook] ⛔ Customer ${customerId} subscription cancelled → reverted to starter`);
+                console.log(`[stripe/webhook] ⛔ Customer ${customerId} subscription cancelled → reverted to trial`);
                 break;
             }
 

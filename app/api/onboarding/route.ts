@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { PLANS } from '@/lib/stripe';
+import type { Plan } from '@/lib/supabase/types';
 
 export async function POST(request: Request) {
     const supabase = await createClient();
@@ -11,11 +13,18 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { shopName, domain } = body;
+    const { shopName, domain, plan } = body;
 
     if (!shopName || typeof shopName !== 'string' || shopName.trim().length === 0) {
         return NextResponse.json({ error: 'Shopnaam is verplicht' }, { status: 400 });
     }
+
+    const selectedPlan = (plan as Plan) || 'trial';
+    if (!PLANS[selectedPlan]) {
+        return NextResponse.json({ error: 'Ongeldig abonnement' }, { status: 400 });
+    }
+
+    const planConfig = PLANS[selectedPlan];
 
     // Use service role to bypass RLS for INSERT
     const serviceClient = createServiceClient(
@@ -34,7 +43,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Je hebt al een shop' }, { status: 409 });
     }
 
-    // Create the shop
+    // Create the shop with selected plan and matching try-on limit
     const { data: shop, error: insertError } = await serviceClient
         .from('shops')
         .insert({
@@ -42,7 +51,8 @@ export async function POST(request: Request) {
             email: user.email!,
             owner_id: user.id,
             domain: domain?.trim() || null,
-            plan: 'starter',
+            plan: selectedPlan,
+            monthly_tryon_limit: planConfig.limit,
         })
         .select('id')
         .single();
@@ -51,5 +61,5 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Kon shop niet aanmaken' }, { status: 500 });
     }
 
-    return NextResponse.json({ shopId: shop.id });
+    return NextResponse.json({ shopId: shop.id, plan: selectedPlan });
 }
