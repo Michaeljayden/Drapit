@@ -214,7 +214,8 @@ function FAQItem({ q, a, isOpen, onToggle }: { q: string; a: string; isOpen: boo
     );
 }
 
-function EcommerceLogos({ inView }: { inView: boolean }) {
+function PlatformLogos() {
+    const { ref, inView } = useInView(0.05);
     const logos = [
         {
             name: 'Shopify',
@@ -223,7 +224,7 @@ function EcommerceLogos({ inView }: { inView: boolean }) {
         },
         {
             name: 'WooCommerce',
-            path: 'M23.15,14.61a3.52,3.52,0,0,1,1.13,2.58,3.58,3.58,0,0,1-3.58,3.58H10.16a2,2,0,0,1-1.35-.5L4.44,16a1,1,0,0,1,0-1.42l4.37-4.27a2,2,0,0,1,1.35-.5h5.5l-.8,1.5H10.16a.49.49,0,0,0-.34.13L6.05,15.32l3.77,3.61a.49.49,0,0,0,.34.13h10.54a2.08,2.08,0,0,0,2.08-2.08,2,2,0,0,0-.73-1.57Z M16.32,5.23a3.52,3.52,0,0,1,1.13,2.58,3.58,3.58,0,0,1-3.58,3.58H3.31a2,2,0,0,1-1.35-.5L-1.28,6.62a1,1,0,0,1,0-1.42l4.37-4.27a2,2,0,0,1,1.35-.5h5.5l-.8,1.5H3.31a.49.49,0,0,0-.34.13L-.8,5.94l3.77,3.61a.49.49,0,0,0,.34.13h10.54a2.08,2.08,0,0,0,2.08-2.08,2,2,0,0,0-.73-1.57Z',
+            path: 'M23.15,14.61a3.52,3.52,0,0,1,1.13,2.58,3.58,3.58,0,0,1-3.58,3.58H10.16a2,2,0,0,1-1.35-.5L4.44,16a1,1,0,0,1,0-1.42l4.37-4.27a2,2,0,0,1,1.35-.5h5.5l-.8,1.5H10.16a.49.49,0,0,0-.34.13L6.05,15.32l3.77,3.61a.49.49,0,0,0,.34.13h10.54a2.08,2.08,0,0,0,2.08-2.08,2,2,0,0,0-.73-1.57Z',
             viewBox: '0 0 24 24'
         },
         {
@@ -244,18 +245,23 @@ function EcommerceLogos({ inView }: { inView: boolean }) {
     ];
 
     return (
-        <div className={`d-in d-d1 ${inView ? 'visible' : ''}`} style={{ marginTop: 20, display: 'flex', gap: 32, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', opacity: 0.5 }}>
-            {logos.map((logo) => (
-                <div key={logo.name} style={{ display: 'flex', alignItems: 'center', gap: 8, filter: 'grayscale(100%) brightness(1.5)', opacity: 0.7, transition: 'all 0.3s' }}
-                    onMouseEnter={e => { e.currentTarget.style.filter = 'grayscale(0%) brightness(1)'; e.currentTarget.style.opacity = '1'; }}
-                    onMouseLeave={e => { e.currentTarget.style.filter = 'grayscale(100%) brightness(1.5)'; e.currentTarget.style.opacity = '0.7'; }}
-                >
-                    <svg width="24" height="24" viewBox={logo.viewBox} fill="currentColor">
-                        <path d={logo.path} />
-                    </svg>
-                    <span style={{ fontSize: 13, fontWeight: 600, fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{logo.name}</span>
-                </div>
-            ))}
+        <div ref={ref} style={{ textAlign: 'center' }}>
+            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: 'rgba(241,245,249,0.3)', fontFamily: 'Plus Jakarta Sans, sans-serif', textTransform: 'uppercase', marginBottom: 20, display: 'block' }}>
+                Werkt met elk ecommerce platform
+            </span>
+            <div className={`d-in d-d1 ${inView ? 'visible' : ''}`} style={{ display: 'flex', gap: '32px 52px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
+                {logos.map((logo) => (
+                    <div key={logo.name} style={{ display: 'flex', alignItems: 'center', gap: 10, filter: 'grayscale(100%) brightness(1.2)', opacity: 0.5, transition: 'all 0.4s' }}
+                        onMouseEnter={e => { e.currentTarget.style.filter = 'grayscale(0%) brightness(1)'; e.currentTarget.style.opacity = '1'; }}
+                        onMouseLeave={e => { e.currentTarget.style.filter = 'grayscale(100%) brightness(1.2)'; e.currentTarget.style.opacity = '0.5'; }}
+                    >
+                        <svg width="24" height="24" viewBox={logo.viewBox} fill="currentColor">
+                            <path d={logo.path} />
+                        </svg>
+                        <span style={{ fontSize: 13, fontWeight: 600, fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{logo.name}</span>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }
@@ -523,9 +529,8 @@ export default function LandingPage() {
                                         ))}
                                     </div>
                                     <span style={{ fontSize: 13, color: 'rgba(241,245,249,0.42)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-                                        Vertrouwd door fashion webshops op elk platform:
+                                        Vertrouwd door groeiende fashion webshops
                                     </span>
-                                    <EcommerceLogos inView={hero.inView} />
                                 </div>
                             </div>
 
@@ -536,6 +541,11 @@ export default function LandingPage() {
                         </div>
                     </div>
                 </section>
+
+                {/* ─── PLATFORMS ─────────────────────────────────────────── */}
+                <div style={{ maxWidth: 1200, margin: '-60px auto 100px', position: 'relative', zIndex: 10 }}>
+                    <PlatformLogos />
+                </div>
 
                 {/* ─── STATS ─────────────────────────────────────────── */}
                 <div ref={stats.ref} style={{ borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '52px 28px', background: 'rgba(13,24,41,0.45)' }}>
