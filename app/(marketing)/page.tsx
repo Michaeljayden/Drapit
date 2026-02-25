@@ -292,6 +292,7 @@ export default function LandingPage() {
     const how = useInView(0.1);
     const feats = useInView(0.1);
     const pricing = useInView(0.08);
+    const shopify = useInView(0.1);
     const faqSec = useInView(0.1);
     const ctaSec = useInView(0.1);
 
@@ -480,7 +481,7 @@ export default function LandingPage() {
                         </a>
 
                         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                            {[['Hoe het werkt', '#hoe-het-werkt'], ['Prijzen', '#prijzen'], ['FAQ', '#faq']].map(([label, href]) => (
+                            {[['Hoe het werkt', '#hoe-het-werkt'], ['Shopify', '#shopify'], ['Prijzen', '#prijzen'], ['FAQ', '#faq']].map(([label, href]) => (
                                 <a key={label} href={href} className="d-nav-link">{label}</a>
                             ))}
                             <Link href="/dashboard/login" style={{ marginLeft: 8, padding: '9px 18px', fontSize: 14, fontWeight: 600, color: 'rgba(241,245,249,0.75)', fontFamily: 'Plus Jakarta Sans, sans-serif', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, textDecoration: 'none', transition: 'all 0.2s' }}
@@ -729,7 +730,127 @@ export default function LandingPage() {
                     </div>
                 </section>
 
-                {/* ─── FAQ ───────────────────────────────────────────── */}
+                {/* ─── SHOPIFY PARTNER ────────────────────────────────── */}
+                <section id="shopify" style={{ padding: '80px 28px 128px', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', top: '10%', right: '5%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(149,191,71,0.08) 0%, transparent 70%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
+
+                    <div ref={shopify.ref} style={{ maxWidth: 1200, margin: '0 auto' }}>
+                        <div className={`d-in d-d1 ${shopify.inView ? 'visible' : ''}`} style={{
+                            background: 'linear-gradient(135deg, rgba(13,24,41,0.85) 0%, rgba(6,9,15,0.95) 100%)',
+                            border: '1px solid rgba(149,191,71,0.25)',
+                            borderRadius: 32,
+                            padding: '80px 60px',
+                            display: 'grid',
+                            gridTemplateColumns: '1.2fr 1fr',
+                            gap: 64,
+                            alignItems: 'center',
+                            boxShadow: '0 40px 80px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.03)'
+                        }}>
+                            {/* Copy */}
+                            <div>
+                                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(149,191,71,0.1)', border: '1px solid rgba(149,191,71,0.2)', borderRadius: 100, padding: '8px 20px', marginBottom: 28 }}>
+                                    <img src="/images/logos/Shopify_logo_2018.svg.png" alt="Shopify" style={{ height: 18, width: 'auto' }} />
+                                    <div style={{ width: 1, height: 14, background: 'rgba(149,191,71,0.3)' }} />
+                                    <span style={{ fontSize: 12, fontWeight: 700, color: '#95BF47', fontFamily: 'Plus Jakarta Sans', letterSpacing: '0.05em' }}>OFFICIAL PARTNER</span>
+                                </div>
+
+                                <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 800, color: '#F1F5F9', lineHeight: 1.1, marginBottom: 24, letterSpacing: '-0.02em' }}>
+                                    Drapit & Shopify:<br />
+                                    <span style={{ color: '#95BF47' }}>E-commerce AI</span> perfected.
+                                </h2>
+
+                                <p style={{ fontSize: 18, color: 'rgba(241,245,249,0.55)', lineHeight: 1.7, marginBottom: 40, fontFamily: 'Plus Jakarta Sans' }}>
+                                    Wij zijn trots officieel Shopify Partner te zijn. Onze technologie is ontworpen om naadloos te integreren met jouw Shopify-omgeving, zodat je klanten direct kunnen profiteren van de toekomst van online fashion retail.
+                                </p>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 48 }}>
+                                    {[
+                                        { title: 'Shopify App Store', desc: 'Download Drapit rechtstreeks en start in minuten. Geen handmatige code nodig.' },
+                                        { title: 'Naadloze Installatie', desc: 'Onze app voegt de benodigde script-tags automatisch toe aan je theme.' }
+                                    ].map((item, i) => (
+                                        <div key={i}>
+                                            <div style={{ fontSize: 16, fontWeight: 700, color: '#F1F5F9', marginBottom: 8 }}>{item.title}</div>
+                                            <p style={{ fontSize: 14, color: 'rgba(241,245,249,0.4)', lineHeight: 1.5 }}>{item.desc}</p>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <a href="https://apps.shopify.com" target="_blank" rel="noopener noreferrer" style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: 12,
+                                    background: '#000000',
+                                    padding: '12px 24px',
+                                    borderRadius: 12,
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    textDecoration: 'none',
+                                    transition: 'all 0.3s'
+                                }} onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(149,191,71,0.5)'} onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}>
+                                    <img src="/images/logos/Shopify_logo_2018.svg.png" alt="Shopify" style={{ height: 20, filter: 'brightness(0) invert(1)' }} />
+                                    <div style={{ textAlign: 'left' }}>
+                                        <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', fontWeight: 500, lineHeight: 1 }}>Bekijk in de</div>
+                                        <div style={{ fontSize: 15, color: 'white', fontWeight: 700, lineHeight: 1.2 }}>App Store</div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            {/* Visual/Tech Card */}
+                            <div style={{ position: 'relative' }}>
+                                <div style={{
+                                    background: 'rgba(29,111,216,0.03)',
+                                    border: '1px solid rgba(255,255,255,0.05)',
+                                    borderRadius: 24,
+                                    padding: '32px',
+                                    backdropFilter: 'blur(10px)'
+                                }}>
+                                    <div style={{ fontSize: 12, fontWeight: 800, color: '#1D6FD8', letterSpacing: '0.1em', marginBottom: 20 }}>DRAPIT AI TECHNOLOGY</div>
+                                    <h3 style={{ fontSize: 20, fontWeight: 700, color: '#F1F5F9', marginBottom: 16 }}>State-of-the-Art VTON</h3>
+                                    <p style={{ fontSize: 14, color: 'rgba(241,245,249,0.5)', lineHeight: 1.6, marginBottom: 24 }}>
+                                        Onze eigen IDM-VTON architectuur gebruikt geavanceerde diffusion models om kledingstukken fotorealistisch te transformeren naar het lichaam van de klant.
+                                        In tegenstelling tot eenvoudige overlays, begrijpt Drapit textuur, schaduw en lichaamsvormen.
+                                    </p>
+
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                                        {[
+                                            'Real-time textuur rendering',
+                                            'Automatische lichaamsdetectie',
+                                            'Dynamische belichting aanpassing',
+                                            'Support voor alle kledingtypes'
+                                        ].map((feat, i) => (
+                                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 13, color: 'rgba(241,245,249,0.7)' }}>
+                                                <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#1D6FD8' }} />
+                                                {feat}
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', gap: 20 }}>
+                                        <div>
+                                            <div style={{ fontSize: 24, fontWeight: 800, color: '#F1F5F9' }}>+34%</div>
+                                            <div style={{ fontSize: 11, color: '#93C5FD' }}>CONVERSIE</div>
+                                        </div>
+                                        <div>
+                                            <div style={{ fontSize: 24, fontWeight: 800, color: '#F1F5F9' }}>-28%</div>
+                                            <div style={{ fontSize: 11, color: '#93C5FD' }}>RETOUREN</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Absolute floating elements */}
+                                <div style={{
+                                    position: 'absolute', top: -20, right: -20,
+                                    background: 'linear-gradient(135deg, #95BF47, #5E8E3E)',
+                                    borderRadius: 16, padding: '12px 16px',
+                                    boxShadow: '0 10px 30px rgba(149,191,71,0.3)',
+                                    color: 'white', fontWeight: 800, fontSize: 12,
+                                    animation: 'drapit-float 5s ease-in-out infinite'
+                                }}>
+                                    SHOPIFY READY
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
                 <section id="faq" style={{ padding: '128px 28px' }}>
                     <div style={{ maxWidth: 740, margin: '0 auto' }}>
                         <div ref={faqSec.ref} style={{ textAlign: 'center', marginBottom: 60 }}>

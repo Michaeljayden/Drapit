@@ -42,6 +42,11 @@ export async function updateSession(request: NextRequest) {
         return NextResponse.redirect(loginUrl);
     }
 
+    // Protect /admin route
+    if (pathname.startsWith('/admin') && user?.email !== process.env.ADMIN_EMAIL) {
+        return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
+
     // Redirect logged-in users away from login page
     if (isLoginPage && user) {
         const redirectTo = request.nextUrl.searchParams.get('redirect') || '/dashboard';
