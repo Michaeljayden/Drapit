@@ -71,7 +71,7 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
         );
         await supabase.auth.signOut();
-        router.push('/dashboard/login');
+        router.push('/');
         router.refresh();
     }
 
