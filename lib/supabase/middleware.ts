@@ -31,6 +31,7 @@ export async function updateSession(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
     const isDashboardRoute = pathname.startsWith('/dashboard');
     const isLoginPage = pathname === '/dashboard/login';
+    const isOnboardingPage = pathname === '/dashboard/onboarding';
 
     // Protect all /dashboard/* routes (except login)
     if (isDashboardRoute && !isLoginPage && !user) {
@@ -47,6 +48,21 @@ export async function updateSession(request: NextRequest) {
         dashboardUrl.pathname = redirectTo;
         dashboardUrl.searchParams.delete('redirect');
         return NextResponse.redirect(dashboardUrl);
+    }
+
+    // Redirect authenticated users without a shop to onboarding
+    if (isDashboardRoute && !isLoginPage && !isOnboardingPage && user) {
+        const { data: shop } = await supabase
+            .from('shops')
+            .select('id')
+            .eq('owner_id', user.id)
+            .single();
+
+        if (!shop) {
+            const onboardingUrl = request.nextUrl.clone();
+            onboardingUrl.pathname = '/dashboard/onboarding';
+            return NextResponse.redirect(onboardingUrl);
+        }
     }
 
     return supabaseResponse;
