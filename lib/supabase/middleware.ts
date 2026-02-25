@@ -31,10 +31,11 @@ export async function updateSession(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
     const isDashboardRoute = pathname.startsWith('/dashboard');
     const isLoginPage = pathname === '/dashboard/login';
+    const isSignupPage = pathname === '/auth/signup';
     const isOnboardingPage = pathname === '/dashboard/onboarding';
 
     // Protect all /dashboard/* routes (except login)
-    if (isDashboardRoute && !isLoginPage && !user) {
+    if (isDashboardRoute && !isLoginPage && !isSignupPage && !user) {
         const loginUrl = request.nextUrl.clone();
         loginUrl.pathname = '/dashboard/login';
         loginUrl.searchParams.set('redirect', pathname);

@@ -256,15 +256,13 @@ function PlatformLogos() {
             </span>
             <div className={`d-in d-d1 ${inView ? 'visible' : ''}`} style={{ display: 'flex', gap: '32px 52px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
                 {logos.map((logo) => (
-                    <div key={logo.name} style={{ display: 'flex', alignItems: 'center', filter: 'grayscale(100%) brightness(1.2)', opacity: 0.4, transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)' }}
+                    <div key={logo.name} style={{ display: 'flex', alignItems: 'center', opacity: 0.8, transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)' }}
                         onMouseEnter={e => {
-                            e.currentTarget.style.filter = 'grayscale(0%) brightness(1)';
                             e.currentTarget.style.opacity = '1';
                             e.currentTarget.style.transform = 'scale(1.05)';
                         }}
                         onMouseLeave={e => {
-                            e.currentTarget.style.filter = 'grayscale(100%) brightness(1.2)';
-                            e.currentTarget.style.opacity = '0.4';
+                            e.currentTarget.style.opacity = '0.8';
                             e.currentTarget.style.transform = 'scale(1)';
                         }}
                     >

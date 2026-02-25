@@ -21,5 +21,10 @@ export default async function OnboardingPage() {
         redirect('/dashboard');
     }
 
-    return <OnboardingForm email={user.email || ''} />;
+    return <OnboardingForm
+        email={user.email || ''}
+        initialData={{
+            shopName: user.user_metadata?.full_name
+        }}
+    />;
 }

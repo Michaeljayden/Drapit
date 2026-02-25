@@ -14,48 +14,48 @@ const ONBOARDING_PLANS: {
     features: string[];
     popular?: boolean;
 }[] = [
-    {
-        key: 'trial',
-        name: 'Proef',
-        price: 0,
-        limit: '20',
-        features: ['20 try-ons per maand', '1 API-sleutel', 'E-mail support'],
-    },
-    {
-        key: 'starter',
-        name: 'Starter',
-        price: 49,
-        limit: '500',
-        features: ['500 try-ons per maand', '1 API-sleutel', 'E-mail support', 'Widget personalisatie'],
-    },
-    {
-        key: 'growth',
-        name: 'Pro',
-        price: 149,
-        limit: '2.500',
-        popular: true,
-        features: ['2.500 try-ons per maand', 'Onbeperkt API-sleutels', 'Prioriteit support', 'Analytics dashboard', 'Webhook integraties'],
-    },
-    {
-        key: 'scale',
-        name: 'Scale',
-        price: 249,
-        limit: '5.000',
-        features: ['5.000 try-ons per maand', 'Onbeperkt API-sleutels', 'Custom branding', 'Analytics dashboard', 'SLA garantie'],
-    },
-    {
-        key: 'enterprise',
-        name: 'Business',
-        price: 399,
-        limit: '10.000',
-        features: ['10.000 try-ons per maand', 'Onbeperkt API-sleutels', 'Dedicated support', 'Custom branding', 'Custom integratie hulp'],
-    },
-];
+        {
+            key: 'trial',
+            name: 'Proef',
+            price: 0,
+            limit: '20',
+            features: ['20 try-ons per maand', '1 API-sleutel', 'E-mail support'],
+        },
+        {
+            key: 'starter',
+            name: 'Starter',
+            price: 49,
+            limit: '500',
+            features: ['500 try-ons per maand', '1 API-sleutel', 'E-mail support', 'Widget personalisatie'],
+        },
+        {
+            key: 'growth',
+            name: 'Pro',
+            price: 149,
+            limit: '2.500',
+            popular: true,
+            features: ['2.500 try-ons per maand', 'Onbeperkt API-sleutels', 'Prioriteit support', 'Analytics dashboard', 'Webhook integraties'],
+        },
+        {
+            key: 'scale',
+            name: 'Scale',
+            price: 249,
+            limit: '5.000',
+            features: ['5.000 try-ons per maand', 'Onbeperkt API-sleutels', 'Custom branding', 'Analytics dashboard', 'SLA garantie'],
+        },
+        {
+            key: 'enterprise',
+            name: 'Business',
+            price: 399,
+            limit: '10.000',
+            features: ['10.000 try-ons per maand', 'Onbeperkt API-sleutels', 'Dedicated support', 'Custom branding', 'Custom integratie hulp'],
+        },
+    ];
 
-export default function OnboardingForm({ email }: { email: string }) {
-    const [step, setStep] = useState<1 | 2>(1);
-    const [shopName, setShopName] = useState('');
-    const [domain, setDomain] = useState('');
+export default function OnboardingForm({ email, initialData }: { email: string, initialData?: { shopName?: string, domain?: string } }) {
+    const [step, setStep] = useState<1 | 2>(initialData?.shopName ? 2 : 1);
+    const [shopName, setShopName] = useState(initialData?.shopName || '');
+    const [domain, setDomain] = useState(initialData?.domain || '');
     const [selectedPlan, setSelectedPlan] = useState<PlanKey>('trial');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);

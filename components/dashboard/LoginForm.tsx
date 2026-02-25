@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Logo from '@/components/ui/Logo';
+import Link from 'next/link';
 
 export default function LoginForm() {
     const [email, setEmail] = useState('');
@@ -190,6 +191,15 @@ export default function LoginForm() {
                                     ) : mode === 'password' ? 'Inloggen' : 'Stuur magic link'}
                                 </button>
                             </form>
+
+                            <div className="mt-6 pt-6 border-t border-[#F1F5F9] text-center">
+                                <p className="text-sm text-[#64748B]">
+                                    Nog geen account?{' '}
+                                    <Link href="/auth/signup" className="font-medium text-[#1D6FD8] hover:underline">
+                                        Aanmelden
+                                    </Link>
+                                </p>
+                            </div>
                         </>
                     )}
                 </div>
