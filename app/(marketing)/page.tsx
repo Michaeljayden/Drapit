@@ -229,49 +229,23 @@ function PlatformLogos() {
     const logos = [
         {
             name: 'Shopify',
-            viewBox: '0 0 100 28',
-            color: '#95BF47',
-            render: (
-                <>
-                    <path d="M7.7 20.3l-2.8-.5-.3-14.7c0-.1.1-.2.2-.2L13 3.6c.1 0 .2.1.2.2l-2.8 16.2c0 .1-.1.2-.2.2-.1 0 0 0 0 0z" fill="#95BF47" />
-                    <path d="M19.4 17.5c-1.4 0-2.3-.5-2.8-1.4v4h-2.3V12.7h2.3v.8c.5-.7 1.4-1.1 2.8-1.1 2.3 0 3.8 1.9 3.8 3.5 0 1.7-1.5 3.6-3.8 3.6zm-.4-1.8c1.1 0 1.9-.9 1.9-1.9 0-1-.8-1.9-1.9-1.9s-1.9.9-1.9 1.9c0 1.1.8 1.9 1.9 1.9zm8.9 1.8c-1.4 0-2.3-.5-2.8-1.4v1.2h-2.3v-7.1h2.3v.8c.5-.7 1.4-1.1 2.8-1.1 2.3 0 3.8 1.9 3.8 3.5s-1.5 3.6-3.8 3.6zm-.4-1.8c1.1 0 1.9-.9 1.9-1.9 0-1-.8-1.9-1.9-1.9s-1.9.9-1.9 1.9.8 1.9 1.9 1.9zm9.2 1.8c-1.8 0-3.3-1.4-3.3-3.6s1.5-3.6 3.3-3.6c1.8 0 3.3 1.4 3.3 3.6s-1.5 3.6-3.3 3.6zm0-1.7c.9 0 1.6-.8 1.6-1.9s-.7-1.9-1.6-1.9-1.6.8-1.6 1.9.7 1.9 1.6 1.9zm6.1 1.7h-2.3V12.7h2.3v.8c.3-.7 1.1-1.1 2.3-1.1 1.7 0 3.1 1.4 3.1 3.5s-1.4 3.6-3.1 3.6c-1.2 0-2-.4-2.3-1.1v1.3zm1-1.8c.9 0 1.6-.9 1.6-1.9s-.7-1.9-1.6-1.9-1.6.9-1.6 1.9.7 1.9 1.6 1.9zm8.5 1.8h-2.3v-4.9h2.3v4.9zm0-5.8h-2.3v-2.3h2.3v2.3zm8.3 5.8l-1.6-2.8h1.6L63 12.7h2.3l-2.6 4.1 2.6 4.1h-2.3l-1.6-2.5-1.6 2.5h-2.3l2.6-4L55.1 11h2.3l1.6 2.4 1.6-2.4h2.3L61 14.8l2.3 2.7z" fill="currentColor" />
-                </>
-            )
+            src: '/images/logos/Shopify_logo_2018.svg.png',
+            width: 120,
         },
         {
             name: 'WooCommerce',
-            viewBox: '0 0 120 28',
-            color: '#96588A',
-            render: (
-                <>
-                    <path d="M12 20c-5.5 0-10-4.5-10-10S6.5 0 12 0s10 4.5 10 10c0 1.8-.5 3.5-1.4 5l3.4 5-5-2c-2.2 1.2-4.5 2-7 2z" fill="#96588A" />
-                    <path d="M8.5 12.5c0 .8-.7 1.5-1.5 1.5s-1.5-.7-1.5-1.5.7-1.5 1.5-1.5 1.5.7 1.5 1.5zm7 0c0 .8-.7 1.5-1.5 1.5s-1.5-.7-1.5-1.5.7-1.5 1.5-1.5 1.5.7 1.5 1.5z" fill="white" />
-                    <text x="28" y="19" fontFamily="Plus Jakarta Sans" fontWeight="700" fontSize="14" fill="currentColor">WooCommerce</text>
-                </>
-            )
+            src: '/images/logos/Woocommerce.png',
+            width: 140,
         },
         {
             name: 'Magento',
-            viewBox: '0 0 100 28',
-            color: '#F26322',
-            render: (
-                <>
-                    <path d="M6 22l-6-3.5V4.5L6 1l6 3.5v14L6 22zm0-16.5L2 8v8.5l4 2.5 4-2.5V8L6 5.5z" fill="#F26322" />
-                    <path d="M4 16h4V8l-2 3-2-3v8z" fill="#F26322" />
-                    <text x="18" y="19" fontFamily="Plus Jakarta Sans" fontWeight="700" fontSize="15" fill="currentColor">Magento</text>
-                </>
-            )
+            src: '/images/logos/Magento.png',
+            width: 110,
         },
         {
             name: 'Wix',
-            viewBox: '0 0 80 28',
-            color: '#F4AF74',
-            render: (
-                <>
-                    <path d="M0 22L4.5 1h4l2.5 11 2.5-11h4L22 22h-4.5l-2.5-11-2.5 11h-4L8.5 11l-4 11H0z M26 22h-4.5V2h4.5v20z M32 22l-5.5-9 5.5-9h4l-3.5 6 3.5 6h-4.2l-3.5-6.5-3.5 6.5h-4l5.5-9-5.5-9h4l3.5 6 3.5-6h4.5l-5.5 9 5.5 9H32z" fill="currentColor" />
-                    <circle cx="23.7" cy="4.5" r="3.5" fill="#F4AF74" />
-                </>
-            )
+            src: '/images/logos/wIX.png',
+            width: 70,
         }
     ];
 
@@ -282,7 +256,7 @@ function PlatformLogos() {
             </span>
             <div className={`d-in d-d1 ${inView ? 'visible' : ''}`} style={{ display: 'flex', gap: '32px 52px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
                 {logos.map((logo) => (
-                    <div key={logo.name} style={{ display: 'flex', alignItems: 'center', gap: 10, filter: 'grayscale(100%) brightness(1.2)', opacity: 0.4, transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)' }}
+                    <div key={logo.name} style={{ display: 'flex', alignItems: 'center', filter: 'grayscale(100%) brightness(1.2)', opacity: 0.4, transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)' }}
                         onMouseEnter={e => {
                             e.currentTarget.style.filter = 'grayscale(0%) brightness(1)';
                             e.currentTarget.style.opacity = '1';
@@ -294,9 +268,16 @@ function PlatformLogos() {
                             e.currentTarget.style.transform = 'scale(1)';
                         }}
                     >
-                        <svg width={logo.name === 'Shopify' ? 100 : (logo.name === 'WooCommerce' ? 120 : (logo.name === 'Magento' ? 100 : 80))} height="28" viewBox={logo.viewBox} fill="currentColor">
-                            {logo.render}
-                        </svg>
+                        <img
+                            src={logo.src}
+                            alt={logo.name}
+                            style={{
+                                width: logo.width,
+                                height: 'auto',
+                                display: 'block',
+                                objectFit: 'contain'
+                            }}
+                        />
                     </div>
                 ))}
             </div>
