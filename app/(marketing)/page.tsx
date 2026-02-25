@@ -230,40 +230,84 @@ function PlatformLogos() {
         {
             name: 'Shopify',
             src: '/images/logos/Shopify_logo_2018.svg.png',
-            width: 120,
+            width: 110,
+            glow: 'rgba(149,191,71,0.2)'
         },
         {
             name: 'WooCommerce',
             src: '/images/logos/Woocommerce.png',
-            width: 140,
+            width: 130,
+            glow: 'rgba(150,88,138,0.2)'
         },
         {
             name: 'Magento',
             src: '/images/logos/Magento.png',
-            width: 110,
+            width: 100,
+            glow: 'rgba(242,99,34,0.2)'
         },
         {
             name: 'Wix',
             src: '/images/logos/wIX.png',
             width: 70,
+            glow: 'rgba(244,175,116,0.2)'
         }
     ];
 
     return (
-        <div ref={ref} style={{ textAlign: 'center' }}>
-            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: 'rgba(241,245,249,0.3)', fontFamily: 'Plus Jakarta Sans, sans-serif', textTransform: 'uppercase', marginBottom: 20, display: 'block' }}>
-                Werkt met elk ecommerce platform
+        <div ref={ref} style={{ textAlign: 'center', padding: '40px 0' }}>
+            <span style={{
+                fontSize: 10,
+                fontWeight: 800,
+                letterSpacing: '0.2em',
+                color: 'rgba(241,245,249,0.25)',
+                fontFamily: 'Plus Jakarta Sans',
+                textTransform: 'uppercase',
+                marginBottom: 32,
+                display: 'block'
+            }}>
+                VERBIND MET JE FAVORIETE PLATFORM
             </span>
-            <div className={`d-in d-d1 ${inView ? 'visible' : ''}`} style={{ display: 'flex', gap: '32px 52px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
+            <div className={`d-in d-d1 ${inView ? 'visible' : ''}`} style={{
+                display: 'flex',
+                gap: '24px',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}>
                 {logos.map((logo) => (
-                    <div key={logo.name} style={{ display: 'flex', alignItems: 'center', opacity: 0.8, transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)' }}
+                    <div key={logo.name} style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '24px 32px',
+                        background: 'rgba(255,255,255,0.03)',
+                        border: '1px solid rgba(255,255,255,0.06)',
+                        borderRadius: 20,
+                        backdropFilter: 'blur(8px)',
+                        transition: 'all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)',
+                        cursor: 'pointer'
+                    }}
                         onMouseEnter={e => {
-                            e.currentTarget.style.opacity = '1';
-                            e.currentTarget.style.transform = 'scale(1.05)';
+                            e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
+                            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
+                            e.currentTarget.style.transform = 'translateY(-5px) scale(1.02)';
+                            e.currentTarget.style.boxShadow = `0 20px 40px ${logo.glow}`;
+                            const img = e.currentTarget.querySelector('img');
+                            if (img) {
+                                img.style.filter = 'none';
+                                img.style.opacity = '1';
+                            }
                         }}
                         onMouseLeave={e => {
-                            e.currentTarget.style.opacity = '0.8';
-                            e.currentTarget.style.transform = 'scale(1)';
+                            e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
+                            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)';
+                            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                            e.currentTarget.style.boxShadow = 'none';
+                            const img = e.currentTarget.querySelector('img');
+                            if (img) {
+                                img.style.filter = 'brightness(0) invert(1) opacity(0.5)';
+                                img.style.opacity = '0.5';
+                            }
                         }}
                     >
                         <img
@@ -273,7 +317,10 @@ function PlatformLogos() {
                                 width: logo.width,
                                 height: 'auto',
                                 display: 'block',
-                                objectFit: 'contain'
+                                objectFit: 'contain',
+                                filter: 'brightness(0) invert(1) opacity(0.5)',
+                                opacity: 0.5,
+                                transition: 'all 0.4s ease'
                             }}
                         />
                     </div>
