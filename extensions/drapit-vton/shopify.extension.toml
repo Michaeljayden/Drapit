@@ -3,4 +3,7 @@ api_version = "2024-01"
 [[extensions]]
 name = "Drapit Try-On Button"
 handle = "drapit-vton-button"
+
+uid = "d7490286-6435-6dc9-d6b1-85d0cf7172df9e51fe19"
+
 type = "theme"
