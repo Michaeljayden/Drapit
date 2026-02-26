@@ -493,18 +493,28 @@ export default function LandingPage() {
                 }
                 .d-nav-link:hover { color: #F1F5F9; background: rgba(255,255,255,0.05); }
 
-                @media (max-width: 860px) {
-                    .d-hero-grid  { grid-template-columns: 1fr !important; }
+                @media (max-width: 960px) {
+                    .d-hero-grid  { grid-template-columns: 1fr !important; gap: 48px !important; }
                     .d-how-grid   { grid-template-columns: 1fr !important; }
                     .d-plans-grid { grid-template-columns: repeat(3, 1fr) !important; }
                     .d-feat-grid  { grid-template-columns: 1fr 1fr !important; }
                     .d-stats-grid { grid-template-columns: 1fr 1fr !important; }
-                    .d-hero-title { font-size: clamp(34px, 7vw, 52px) !important; }
-                    .d-hero-visual { display: none !important; }
+                    .d-hero-title { font-size: clamp(34px, 7vw, 48px) !important; text-align: center; }
+                    .d-hero-p     { text-align: center; margin-left: auto; margin-right: auto; }
+                    .d-hero-ctas  { justify-content: center; }
+                    .d-hero-proof { justify-content: center; }
+                    .d-hero-visual { order: -1; margin-bottom: 20px; }
+                    .d-nav-links  { display: none !important; }
+                    .d-nav-mobile { display: flex !important; }
+                }
+                @media (max-width: 768px) {
+                    .d-shopify-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+                    .d-shopify-card { padding: 40px 24px !important; }
                 }
                 @media (max-width: 540px) {
                     .d-plans-grid { grid-template-columns: 1fr !important; }
                     .d-feat-grid  { grid-template-columns: 1fr !important; }
+                    .d-stats-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
                 }
             `}</style>
 
@@ -527,7 +537,7 @@ export default function LandingPage() {
                             <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 20, color: '#F1F5F9', letterSpacing: '-0.015em' }}>Drapit</span>
                         </a>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <div className="d-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                             {[['Hoe het werkt', '#hoe-het-werkt'], ['Shopify', '#shopify'], ['Prijzen', '#prijzen'], ['FAQ', '#faq']].map(([label, href]) => (
                                 <a key={label} href={href} className="d-nav-link">{label}</a>
                             ))}
@@ -539,6 +549,12 @@ export default function LandingPage() {
                             </Link>
                             <Link href="/dashboard/login" className="d-btn-primary" style={{ padding: '9px 20px', fontSize: 14, marginLeft: 4 }}>
                                 Gratis starten →
+                            </Link>
+                        </div>
+
+                        <div className="d-nav-mobile" style={{ display: 'none', alignItems: 'center', gap: 8 }}>
+                            <Link href="/dashboard/login" className="d-btn-primary" style={{ padding: '8px 16px', fontSize: 12 }}>
+                                Start gratis
                             </Link>
                         </div>
                     </div>
@@ -554,7 +570,7 @@ export default function LandingPage() {
                         <div className="d-hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }}>
 
                             {/* Left copy */}
-                            <div>
+                            <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                 {/* Eyebrow chip */}
                                 <div className={`d-in d-d1 ${hero.inView ? 'visible' : ''}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(29,111,216,0.1)', border: '1px solid rgba(29,111,216,0.22)', borderRadius: 100, padding: '6px 16px', marginBottom: 30 }}>
                                     <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#22D3EE', boxShadow: '0 0 8px #22D3EE', animation: 'drapit-pulse 2s ease-in-out infinite' }} />
@@ -569,12 +585,12 @@ export default function LandingPage() {
                                 </h1>
 
                                 {/* Body */}
-                                <p className={`d-in d-d3 ${hero.inView ? 'visible' : ''}`} style={{ fontSize: 18, color: 'rgba(241,245,249,0.58)', lineHeight: 1.72, marginBottom: 40, maxWidth: 460, fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 400 }}>
+                                <p className={`d-hero-p d-in d-d3 ${hero.inView ? 'visible' : ''}`} style={{ fontSize: 18, color: 'rgba(241,245,249,0.58)', lineHeight: 1.72, marginBottom: 40, maxWidth: 460, fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 400 }}>
                                     Eén script-tag. Elke webshop. Klanten uploaden een foto en zien zichzelf in elk kledingstuk — aangedreven door state-of-the-art AI diffusion technologie.
                                 </p>
 
                                 {/* CTAs */}
-                                <div className={`d-in d-d4 ${hero.inView ? 'visible' : ''}`} style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+                                <div className={`d-hero-ctas d-in d-d4 ${hero.inView ? 'visible' : ''}`} style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
                                     <Link href="/dashboard/login" className="d-btn-primary" style={{ padding: '14px 30px', fontSize: 16 }}>
                                         Begin gratis →
                                     </Link>
@@ -587,7 +603,7 @@ export default function LandingPage() {
                                 </div>
 
                                 {/* Social proof */}
-                                <div className={`d-in d-d5 ${hero.inView ? 'visible' : ''}`} style={{ marginTop: 36, display: 'flex', alignItems: 'center', gap: 12 }}>
+                                <div className={`d-hero-proof d-in d-d5 ${hero.inView ? 'visible' : ''}`} style={{ marginTop: 36, display: 'flex', alignItems: 'center', gap: 12 }}>
                                     <div style={{ display: 'flex' }}>
                                         {['#3B82F6', '#8B5CF6', '#EC4899', '#F59E0B', '#10B981'].map((c, i) => (
                                             <div key={i} style={{ width: 28, height: 28, borderRadius: '50%', background: c, border: '2px solid #06090F', marginLeft: i > 0 ? -9 : 0 }} />
@@ -782,7 +798,7 @@ export default function LandingPage() {
                     <div style={{ position: 'absolute', top: '10%', right: '5%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(149,191,71,0.08) 0%, transparent 70%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
 
                     <div ref={shopify.ref} style={{ maxWidth: 1200, margin: '0 auto' }}>
-                        <div className={`d-in d-d1 ${shopify.inView ? 'visible' : ''}`} style={{
+                        <div className={`d-shopify-card d-in d-d1 ${shopify.inView ? 'visible' : ''}`} style={{
                             background: 'linear-gradient(135deg, rgba(13,24,41,0.85) 0%, rgba(6,9,15,0.95) 100%)',
                             border: '1px solid rgba(149,191,71,0.25)',
                             borderRadius: 32,
@@ -792,7 +808,7 @@ export default function LandingPage() {
                             gap: 64,
                             alignItems: 'center',
                             boxShadow: '0 40px 80px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.03)'
-                        }}>
+                        }} id="shopify-card-inner">
                             {/* Copy */}
                             <div>
                                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(149,191,71,0.1)', border: '1px solid rgba(149,191,71,0.2)', borderRadius: 100, padding: '8px 20px', marginBottom: 28 }}>
@@ -941,57 +957,6 @@ export default function LandingPage() {
                     </div>
                 </section>
 
-                {/* ─── FOOTER ────────────────────────────────────────── */}
-                <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '44px 28px 40px' }}>
-                    <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: 32, marginBottom: 40 }}>
-                            {/* Brand */}
-                            <div style={{ maxWidth: 260 }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 14 }}>
-                                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-                                        <path d="M9.5 3.5C9.5 2.67 8.83 2 8 2S6.5 2.67 6.5 3.5" stroke="#1D6FD8" strokeWidth="1.5" strokeLinecap="round" />
-                                        <path d="M8 5L2.5 10.5C2.18 10.77 2 11.15 2 11.56C2 12.35 2.65 13 3.44 13H12.56C13.35 13 14 12.35 14 11.56C14 11.15 13.82 10.77 13.5 10.5L8 5Z" stroke="#1D6FD8" strokeWidth="1.5" strokeLinejoin="round" />
-                                    </svg>
-                                    <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 19, color: '#F1F5F9', letterSpacing: '-0.015em' }}>Drapit</span>
-                                </div>
-                                <p style={{ fontSize: 13, color: 'rgba(241,245,249,0.3)', fontFamily: 'Plus Jakarta Sans, sans-serif', lineHeight: 1.6 }}>
-                                    AI Virtual Try-On voor fashion webshops. Minder retours, meer conversie.
-                                </p>
-                            </div>
-
-                            {/* Links */}
-                            <div style={{ display: 'flex', gap: 48, flexWrap: 'wrap' }}>
-                                <div>
-                                    <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(241,245,249,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.1em', marginBottom: 14 }}>PRODUCT</div>
-                                    {['Hoe het werkt', 'Prijzen', 'Dashboard', 'API docs'].map(link => (
-                                        <div key={link} style={{ marginBottom: 10 }}>
-                                            <a href="#" style={{ fontSize: 14, color: 'rgba(241,245,249,0.38)', textDecoration: 'none', fontFamily: 'Plus Jakarta Sans, sans-serif', transition: 'color 0.2s' }}
-                                                onMouseEnter={e => (e.currentTarget.style.color = 'rgba(241,245,249,0.75)')}
-                                                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(241,245,249,0.38)')}
-                                            >{link}</a>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div>
-                                    <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(241,245,249,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.1em', marginBottom: 14 }}>BEDRIJF</div>
-                                    {['Over ons', 'Contact', 'Privacy', 'Voorwaarden'].map(link => (
-                                        <div key={link} style={{ marginBottom: 10 }}>
-                                            <a href="#" style={{ fontSize: 14, color: 'rgba(241,245,249,0.38)', textDecoration: 'none', fontFamily: 'Plus Jakarta Sans, sans-serif', transition: 'color 0.2s' }}
-                                                onMouseEnter={e => (e.currentTarget.style.color = 'rgba(241,245,249,0.75)')}
-                                                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(241,245,249,0.38)')}
-                                            >{link}</a>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
-                            <p style={{ fontSize: 12, color: 'rgba(241,245,249,0.2)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>© 2026 Drapit. Alle rechten voorbehouden.</p>
-                            <p style={{ fontSize: 12, color: 'rgba(241,245,249,0.2)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Gebouwd met ❤️ voor fashion webshops</p>
-                        </div>
-                    </div>
-                </footer>
 
             </div>
         </>

@@ -33,12 +33,12 @@ export default function Footer() {
             <div style={{ maxWidth: 1200, margin: '0 auto' }}>
                 <div style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                    gap: '48px',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                    gap: '40px',
                     marginBottom: '64px'
                 }}>
                     {/* Brand Section */}
-                    <div style={{ gridColumn: 'span 1.5', minWidth: '300px' }}>
+                    <div style={{ maxWidth: '360px' }}>
                         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 9, textDecoration: 'none', marginBottom: '24px' }}>
                             <svg width="24" height="24" viewBox="0 0 16 16" fill="none">
                                 <path d="M9.5 3.5C9.5 2.67 8.83 2 8 2S6.5 2.67 6.5 3.5" stroke="#1D6FD8" strokeWidth="1.5" strokeLinecap="round" />
@@ -51,7 +51,6 @@ export default function Footer() {
                             lineHeight: '1.6',
                             color: 'rgba(241,245,249,0.5)',
                             fontFamily: 'Plus Jakarta Sans, sans-serif',
-                            maxWidth: '320px',
                             marginBottom: '28px'
                         }}>
                             AI-powered virtual try-on technologie. Wij transformeren webshops met intelligente automatisering en realistische passessies.
@@ -88,88 +87,67 @@ export default function Footer() {
                         </div>
                     </div>
 
-                    {/* Product Links */}
-                    <div>
-                        <h4 style={{
-                            fontSize: '12px',
-                            fontWeight: 800,
-                            letterSpacing: '0.12em',
-                            color: '#F1F5F9',
-                            fontFamily: 'Plus Jakarta Sans, sans-serif',
-                            textTransform: 'uppercase',
-                            marginBottom: '24px'
-                        }}>Product</h4>
-                        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                            <li><a href="#hoe-het-werkt" style={footerLinkStyle}>Hoe het werkt</a></li>
-                            <li><a href="#shopify" style={footerLinkStyle}>Shopify Integratie</a></li>
-                            <li><a href="#prijzen" style={footerLinkStyle}>Prijzen</a></li>
-                            <li><Link href="/dashboard/login" style={footerLinkStyle}>Demo aanvragen</Link></li>
-                        </ul>
-                    </div>
+                    {/* Columns Container */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '40px', gridColumn: 'span 2' }}>
+                        {/* Product Links */}
+                        <div>
+                            <h4 style={footerHeadingStyle}>Product</h4>
+                            <ul style={footerListStyle}>
+                                <li><a href="#hoe-het-werkt" style={footerLinkStyle}>Hoe het werkt</a></li>
+                                <li><a href="#shopify" style={footerLinkStyle}>Shopify Integratie</a></li>
+                                <li><a href="#prijzen" style={footerLinkStyle}>Prijzen</a></li>
+                                <li><Link href="/dashboard/login" style={footerLinkStyle}>Demo aanvragen</Link></li>
+                            </ul>
+                        </div>
 
-                    {/* Bedrijf Links */}
-                    <div>
-                        <h4 style={{
-                            fontSize: '12px',
-                            fontWeight: 800,
-                            letterSpacing: '0.12em',
-                            color: '#F1F5F9',
-                            fontFamily: 'Plus Jakarta Sans, sans-serif',
-                            textTransform: 'uppercase',
-                            marginBottom: '24px'
-                        }}>Bedrijf</h4>
-                        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                            <li><a href="#" style={footerLinkStyle}>Over Ons</a></li>
-                            <li><a href="#faq" style={footerLinkStyle}>FAQ</a></li>
-                            <li><a href="#" style={footerLinkStyle}>Privacy Policy</a></li>
-                            <li><a href="#" style={footerLinkStyle}>Cookie Beleid</a></li>
-                        </ul>
-                    </div>
+                        {/* Bedrijf Links */}
+                        <div>
+                            <h4 style={footerHeadingStyle}>Bedrijf</h4>
+                            <ul style={footerListStyle}>
+                                <li><a href="#" style={footerLinkStyle}>Over Ons</a></li>
+                                <li><a href="#faq" style={footerLinkStyle}>FAQ</a></li>
+                                <li><a href="#" style={footerLinkStyle}>Privacy Policy</a></li>
+                                <li><a href="#" style={footerLinkStyle}>Cookie Beleid</a></li>
+                            </ul>
+                        </div>
 
-                    {/* Contact Section */}
-                    <div style={{ minWidth: '220px' }}>
-                        <h4 style={{
-                            fontSize: '12px',
-                            fontWeight: 800,
-                            letterSpacing: '0.12em',
-                            color: '#F1F5F9',
-                            fontFamily: 'Plus Jakarta Sans, sans-serif',
-                            textTransform: 'uppercase',
-                            marginBottom: '24px'
-                        }}>Contact</h4>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                            <a href="mailto:info@drapit.io" style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '12px',
-                                textDecoration: 'none',
-                                color: 'rgba(241,245,249,0.5)',
-                                fontSize: '14px',
-                                fontFamily: 'Plus Jakarta Sans, sans-serif',
-                                transition: 'color 0.2s'
-                            }}
-                                onMouseEnter={e => e.currentTarget.style.color = '#F1F5F9'}
-                                onMouseLeave={e => e.currentTarget.style.color = 'rgba(241,245,249,0.5)'}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                                    <polyline points="22,6 12,13 2,6" />
-                                </svg>
-                                info@drapit.io
-                            </a>
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'flex-start',
-                                gap: '12px',
-                                color: 'rgba(241,245,249,0.5)',
-                                fontSize: '14px',
-                                fontFamily: 'Plus Jakarta Sans, sans-serif',
-                                lineHeight: '1.5'
-                            }}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginTop: '3px', flexShrink: 0 }}>
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                    <circle cx="12" cy="10" r="3" />
-                                </svg>
-                                Kastanjelaan 400, 5616 LZ<br />Eindhoven, Nederland
+                        {/* Contact Section */}
+                        <div>
+                            <h4 style={footerHeadingStyle}>Contact</h4>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                <a href="mailto:info@drapit.io" style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '12px',
+                                    textDecoration: 'none',
+                                    color: 'rgba(241,245,249,0.5)',
+                                    fontSize: '14px',
+                                    fontFamily: 'Plus Jakarta Sans, sans-serif',
+                                    transition: 'color 0.2s'
+                                }}
+                                    onMouseEnter={e => e.currentTarget.style.color = '#F1F5F9'}
+                                    onMouseLeave={e => e.currentTarget.style.color = 'rgba(241,245,249,0.5)'}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                        <polyline points="22,6 12,13 2,6" />
+                                    </svg>
+                                    info@drapit.io
+                                </a>
+                                <div style={{
+                                    display: 'flex',
+                                    alignItems: 'flex-start',
+                                    gap: '12px',
+                                    color: 'rgba(241,245,249,0.5)',
+                                    fontSize: '14px',
+                                    fontFamily: 'Plus Jakarta Sans, sans-serif',
+                                    lineHeight: '1.5'
+                                }}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginTop: '3px', flexShrink: 0 }}>
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                        <circle cx="12" cy="10" r="3" />
+                                    </svg>
+                                    Kastanjelaan 400, 5616 LZ<br />Eindhoven, Nederland
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -203,6 +181,25 @@ export default function Footer() {
         </footer>
     );
 }
+
+const footerHeadingStyle = {
+    fontSize: '12px',
+    fontWeight: 800,
+    letterSpacing: '0.12em',
+    color: '#F1F5F9',
+    fontFamily: 'Plus Jakarta Sans, sans-serif',
+    textTransform: 'uppercase' as const,
+    marginBottom: '24px'
+};
+
+const footerListStyle = {
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '14px'
+};
 
 const footerLinkStyle: React.CSSProperties = {
     fontSize: '14px',
