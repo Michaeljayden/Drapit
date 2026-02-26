@@ -309,7 +309,13 @@ function PlatformLogos() {
                                 maxWidth: '100%',
                                 maxHeight: '100%',
                                 objectFit: 'contain',
-                                transition: 'all 0.4s ease'
+                                transition: 'all 0.4s ease',
+                                // Improve legibility on dark background: subtle brightness and white glow
+                                filter: `
+                                    brightness(${logo.name === 'Wix' ? 1.6 : logo.name === 'Shopify' ? 1.3 : 1.1}) 
+                                    contrast(1.1) 
+                                    drop-shadow(0 0 8px rgba(255,255,255,0.15))
+                                `
                             }}
                         />
                     </div>
