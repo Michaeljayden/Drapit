@@ -1,6 +1,6 @@
 name = "Drapit Virtual Try-On"
-client_id = "b4be0e4c410809e0f2b872950484cae1"
-application_url = "https://drapit.netlify.app"
+client_id = "15c8afc4a1e0648dde6da5870549dcb0"
+application_url = "https://drapit.io"
 embedded = true
 
 [auth]
