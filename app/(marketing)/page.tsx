@@ -230,26 +230,26 @@ function PlatformLogos() {
         {
             name: 'Shopify',
             src: '/images/logos/Shopify_logo_2018.svg.png',
-            width: 110,
-            glow: 'rgba(149,191,71,0.2)'
+            width: 100,
+            glow: 'rgba(149,191,71,0.15)'
         },
         {
             name: 'WooCommerce',
             src: '/images/logos/Woocommerce.png',
-            width: 130,
-            glow: 'rgba(150,88,138,0.2)'
+            width: 100,
+            glow: 'rgba(150,88,138,0.15)'
         },
         {
             name: 'Magento',
             src: '/images/logos/Magento.png',
             width: 100,
-            glow: 'rgba(242,99,34,0.2)'
+            glow: 'rgba(242,99,34,0.15)'
         },
         {
             name: 'Wix',
             src: '/images/logos/wIX.png',
-            width: 70,
-            glow: 'rgba(244,175,116,0.2)'
+            width: 60,
+            glow: 'rgba(10,131,255,0.15)'
         }
     ];
 
@@ -269,7 +269,7 @@ function PlatformLogos() {
             </span>
             <div className={`d-in d-d1 ${inView ? 'visible' : ''}`} style={{
                 display: 'flex',
-                gap: '24px',
+                gap: '20px',
                 flexWrap: 'wrap',
                 alignItems: 'center',
                 justifyContent: 'center'
@@ -279,47 +279,36 @@ function PlatformLogos() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        padding: '24px 32px',
+                        width: 180,
+                        height: 90,
                         background: 'rgba(255,255,255,0.03)',
                         border: '1px solid rgba(255,255,255,0.06)',
-                        borderRadius: 20,
+                        borderRadius: 16,
                         backdropFilter: 'blur(8px)',
-                        transition: 'all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)',
-                        cursor: 'pointer'
+                        transition: 'all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)',
+                        cursor: 'pointer',
+                        padding: '12px'
                     }}
                         onMouseEnter={e => {
                             e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
-                            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
-                            e.currentTarget.style.transform = 'translateY(-5px) scale(1.02)';
-                            e.currentTarget.style.boxShadow = `0 20px 40px ${logo.glow}`;
-                            const img = e.currentTarget.querySelector('img');
-                            if (img) {
-                                img.style.filter = 'none';
-                                img.style.opacity = '1';
-                            }
+                            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)';
+                            e.currentTarget.style.transform = 'translateY(-4px)';
+                            e.currentTarget.style.boxShadow = `0 15px 35px ${logo.glow}`;
                         }}
                         onMouseLeave={e => {
                             e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
                             e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)';
-                            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                            e.currentTarget.style.transform = 'translateY(0)';
                             e.currentTarget.style.boxShadow = 'none';
-                            const img = e.currentTarget.querySelector('img');
-                            if (img) {
-                                img.style.filter = 'brightness(0) invert(1) opacity(0.5)';
-                                img.style.opacity = '0.5';
-                            }
                         }}
                     >
                         <img
                             src={logo.src}
                             alt={logo.name}
                             style={{
-                                width: logo.width,
-                                height: 'auto',
-                                display: 'block',
+                                maxWidth: '100%',
+                                maxHeight: '100%',
                                 objectFit: 'contain',
-                                filter: 'brightness(0) invert(1) opacity(0.5)',
-                                opacity: 0.5,
                                 transition: 'all 0.4s ease'
                             }}
                         />
