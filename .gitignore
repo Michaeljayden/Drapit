@@ -43,3 +43,6 @@ next-env.d.ts
 # Claude / Antigravity internal files
 .claude/worktrees/
 .claude/settings.local.json
+memory/
+CLAUDE.md
+_docs/
