@@ -1,12 +1,15 @@
 // =============================================================================
 // Replicate API client — IDM-VTON virtual try-on
 // =============================================================================
-// Uses direct fetch against the Replicate v1 predictions endpoint.
-// Model: viktorfa/idm-vton
+// Uses /v1/predictions with explicit version hash for cuuupid/idm-vton.
+// Model: cuuupid/idm-vton (CC BY-NC-SA 4.0 — non-commercial, testing only)
 // =============================================================================
 
 const REPLICATE_API_URL = 'https://api.replicate.com/v1/predictions';
-const REPLICATE_MODEL_URL = 'https://api.replicate.com/v1/models/cuuupid/idm-vton/predictions';
+
+// cuuupid/idm-vton — version hash (latest as of 2024)
+// Using /v1/predictions with explicit version is more reliable than model-specific endpoint
+const REPLICATE_IDM_VTON_VERSION = '3b032a70c29aef7b9c3222f2e40b71660201d8c288336475ba326f3ca278a3e1';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -47,15 +50,15 @@ export async function createTryOnPrediction(
         throw new Error('Missing REPLICATE_API_TOKEN environment variable');
     }
 
-    // Use model-specific endpoint — no version hash needed, uses latest
-    const res = await fetch(REPLICATE_MODEL_URL, {
+    // Use /v1/predictions with explicit version hash — more reliable than model-specific endpoint
+    const res = await fetch(REPLICATE_API_URL, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
-            Prefer: 'respond-async',
         },
         body: JSON.stringify({
+            version: REPLICATE_IDM_VTON_VERSION,
             input: {
                 human_img: input.human_img,
                 garm_img: input.garm_img,
