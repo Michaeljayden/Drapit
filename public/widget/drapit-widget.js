@@ -371,6 +371,7 @@
         // Create Shadow DOM host
         const host = document.createElement('div');
         host.className = 'drapit-widget-host';
+        host.style.display = 'block'; // force visibility — :host CSS alone not reliable cross-browser
         const shadow = host.attachShadow({ mode: 'closed' });
 
         // Inject styles
