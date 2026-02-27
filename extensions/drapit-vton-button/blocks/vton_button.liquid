@@ -12,10 +12,10 @@
 ></script>
 
 <div class="drapit-product-container"
-  data-drapit-product="{{ product.featured_image | img_url: 'grande' }}"
+  data-drapit-product="https:{{ product.featured_image | img_url: 'grande' }}"
   data-drapit-product-id="{{ product.variants.first.sku | default: product.id }}"
   data-drapit-product-name="{{ product.title }}"
-  data-drapit-buy-url="{{ product.url }}"
+  data-drapit-buy-url="{{ shop.url }}{{ product.url }}"
 ></div>
 
 {% schema %}
