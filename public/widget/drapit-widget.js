@@ -44,6 +44,7 @@
     const STYLES = `
         :host {
             all: initial;
+            display: block;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             color: #0F172A;
         }
