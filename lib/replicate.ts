@@ -6,7 +6,7 @@
 // =============================================================================
 
 const REPLICATE_API_URL = 'https://api.replicate.com/v1/predictions';
-const REPLICATE_MODEL_URL = 'https://api.replicate.com/v1/models/viktorfa/idm-vton/predictions';
+const REPLICATE_MODEL_URL = 'https://api.replicate.com/v1/models/cuuupid/idm-vton/predictions';
 
 // ---------------------------------------------------------------------------
 // Types
