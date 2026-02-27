@@ -301,14 +301,15 @@ export async function POST(request: NextRequest) {
                 ['completed', 'failed']
             );
         } catch (replicateErr) {
-            console.error('[tryon] Replicate error:', replicateErr);
+            const replicateErrMsg = replicateErr instanceof Error ? replicateErr.message : String(replicateErr);
+            console.error('[tryon] Replicate error:', replicateErrMsg);
             await supabase
                 .from('tryons')
                 .update({ status: 'failed' })
                 .eq('id', tryonId);
 
             return NextResponse.json(
-                { error: 'Failed to start AI prediction' },
+                { error: 'Failed to start AI prediction', detail: replicateErrMsg },
                 { status: 502, headers: CORS_HEADERS }
             );
         }
