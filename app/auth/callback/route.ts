@@ -32,8 +32,11 @@ export async function GET(request: Request) {
         if (!error) {
             return NextResponse.redirect(`${origin}${next}`);
         }
+
+        // If code exchange fails, redirect to login with error
+        return NextResponse.redirect(`${origin}/dashboard/login?error=${encodeURIComponent(error.message)}`);
     }
 
-    // If code exchange fails, redirect to login with error
+    // If no code, redirect to login
     return NextResponse.redirect(`${origin}/dashboard/login`);
 }

@@ -57,7 +57,7 @@ export async function updateSession(request: NextRequest) {
     }
 
     // Redirect authenticated users without a shop to onboarding
-    if (isDashboardRoute && !isLoginPage && !isOnboardingPage && user) {
+    if (isDashboardRoute && !isLoginPage && !isOnboardingPage && user && user.email !== process.env.ADMIN_EMAIL) {
         const { data: shop } = await supabase
             .from('shops')
             .select('id')
