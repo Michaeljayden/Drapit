@@ -298,7 +298,7 @@ export async function POST(request: NextRequest) {
                     seed: 42,
                 },
                 webhookUrl,
-                ['completed', 'failed']
+                ['completed']
             );
         } catch (replicateErr) {
             const replicateErrMsg = replicateErr instanceof Error ? replicateErr.message : String(replicateErr);

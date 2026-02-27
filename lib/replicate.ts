@@ -6,6 +6,7 @@
 // =============================================================================
 
 const REPLICATE_API_URL = 'https://api.replicate.com/v1/predictions';
+const REPLICATE_MODEL_URL = 'https://api.replicate.com/v1/models/viktorfa/idm-vton/predictions';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -39,14 +40,15 @@ export interface ReplicatePrediction {
 export async function createTryOnPrediction(
     input: TryOnInput,
     webhookUrl: string,
-    webhookEventsFilter: string[] = ['completed', 'failed']
+    webhookEventsFilter: string[] = ['completed']
 ): Promise<ReplicatePrediction> {
     const token = process.env.REPLICATE_API_TOKEN;
     if (!token) {
         throw new Error('Missing REPLICATE_API_TOKEN environment variable');
     }
 
-    const res = await fetch(REPLICATE_API_URL, {
+    // Use model-specific endpoint — no version hash needed, uses latest
+    const res = await fetch(REPLICATE_MODEL_URL, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${token}`,
@@ -54,7 +56,6 @@ export async function createTryOnPrediction(
             Prefer: 'respond-async',
         },
         body: JSON.stringify({
-            model: 'viktorfa/idm-vton',
             input: {
                 human_img: input.human_img,
                 garm_img: input.garm_img,
