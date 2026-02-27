@@ -543,10 +543,15 @@
                     'X-Drapit-Key': API_KEY,
                 },
                 body: JSON.stringify({
-                    product_image_url: product.productImg,
+                    product_image_url: product.productImg?.startsWith('//') ? 'https:' + product.productImg : product.productImg,
                     user_photo_url: uploadUrl,
                     product_id: product.productId,
-                    buy_url: product.buyUrl || window.location.href,
+                    buy_url: (() => {
+                        const url = product.buyUrl || window.location.href;
+                        if (url.startsWith('//')) return 'https:' + url;
+                        if (url.startsWith('/')) return window.location.origin + url;
+                        return url;
+                    })(),
                 }),
             });
 
