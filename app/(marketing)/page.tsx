@@ -534,9 +534,10 @@ export default function LandingPage() {
                         </a>
 
                         <div className="d-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                            {[['Hoe het werkt', '#hoe-het-werkt'], ['Shopify', '#shopify'], ['Prijzen', '#prijzen'], ['FAQ', '#faq']].map(([label, href]) => (
+                            {[['Hoe het werkt', '#hoe-het-werkt'], ['Prijzen', '#prijzen'], ['FAQ', '#faq']].map(([label, href]) => (
                                 <a key={label} href={href} className="d-nav-link">{label}</a>
                             ))}
+                            <Link href="/shopify" className="d-nav-link">Shopify</Link>
                             <Link href="/dashboard/login" style={{ marginLeft: 8, padding: '9px 18px', fontSize: 14, fontWeight: 600, color: 'rgba(241,245,249,0.75)', fontFamily: 'Plus Jakarta Sans, sans-serif', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, textDecoration: 'none', transition: 'all 0.2s' }}
                                 onMouseEnter={(e) => { e.currentTarget.style.color = '#F1F5F9'; e.currentTarget.style.borderColor = 'rgba(29,111,216,0.4)'; }}
                                 onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(241,245,249,0.75)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
@@ -834,6 +835,29 @@ export default function LandingPage() {
                                     ))}
                                 </div>
 
+                                <Link href="/shopify" style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: 10,
+                                    background: 'linear-gradient(135deg, #95BF47, #5E8E3E)',
+                                    padding: '14px 28px',
+                                    borderRadius: 12,
+                                    textDecoration: 'none',
+                                    color: 'white',
+                                    fontSize: 15,
+                                    fontWeight: 700,
+                                    fontFamily: 'Plus Jakarta Sans, sans-serif',
+                                    letterSpacing: '0.03em',
+                                    transition: 'all 0.3s',
+                                    boxShadow: '0 8px 28px rgba(149,191,71,0.35)',
+                                    marginBottom: 20,
+                                }}
+                                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 14px 40px rgba(149,191,71,0.5)'; }}
+                                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(149,191,71,0.35)'; }}
+                                >
+                                    📖 Bekijk de installatie handleiding →
+                                </Link>
+
                                 <a href="https://apps.shopify.com" target="_blank" rel="noopener noreferrer" style={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
@@ -949,7 +973,7 @@ export default function LandingPage() {
                                 >
                                     <span style={{ width: 40, height: 40, background: 'rgba(29,111,216,0.12)', border: '1px solid rgba(29,111,216,0.20)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                                            <rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                                         </svg>
                                     </span>
                                     info@drapit.io
@@ -957,7 +981,7 @@ export default function LandingPage() {
                                 <div style={{ display: 'flex', alignItems: 'center', gap: 14, color: 'rgba(241,245,249,0.45)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 15 }}>
                                     <span style={{ width: 40, height: 40, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                                            <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
                                         </svg>
                                     </span>
                                     Reactie binnen 1 werkdag
