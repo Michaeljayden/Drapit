@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drapit — Gebruiksmelding</title>
+</head>
+<body style="margin:0;padding:0;background:#F1F5F9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#F1F5F9;padding:40px 20px;">
+    <tr>
+      <td align="center">
+
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#FFFFFF;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+
+          <!-- Header — color changes based on alert level -->
+          <!-- At 80%: amber warning. At 100%: red alert. -->
+          <!-- EmailJS doesn't support conditionals in HTML, use separate templates
+               OR keep one template and use neutral styling + dynamic text -->
+
+          <tr>
+            <td style="background:linear-gradient(135deg,#0B1E3D 0%,#1D6FD8 100%);padding:32px 48px;text-align:center;">
+              <div style="display:inline-block;background:rgba(255,255,255,0.12);border-radius:12px;padding:8px 18px;margin-bottom:20px;">
+                <span style="color:#FFFFFF;font-size:20px;font-weight:700;letter-spacing:-0.5px;">drapit</span>
+              </div>
+              <div style="background:rgba(255,255,255,0.15);border-radius:50%;width:56px;height:56px;margin:0 auto 16px;line-height:56px;text-align:center;font-size:28px;">
+                ⚡
+              </div>
+              <h1 style="color:#FFFFFF;font-size:22px;font-weight:700;margin:0;line-height:1.3;">
+                {{subject}}
+              </h1>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:36px 48px;">
+
+              <p style="color:#334155;font-size:16px;line-height:1.7;margin:0 0 28px;">
+                Hey <strong>{{to_name}}</strong>, dit is een automatische melding van Drapit over je maandelijkse try-on gebruik.
+              </p>
+
+              <!-- Usage bar -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+                <tr>
+                  <td style="padding:24px;background:#F8FAFC;border-radius:12px;border:1px solid #E2E8F0;">
+
+                    <!-- Labels -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:12px;">
+                      <tr>
+                        <td style="color:#64748B;font-size:13px;">Try-ons gebruikt deze maand</td>
+                        <td align="right" style="color:#1E293B;font-size:15px;font-weight:700;">{{used_tryons}} / {{monthly_limit}}</td>
+                      </tr>
+                    </table>
+
+                    <!-- Progress bar background -->
+                    <div style="background:#E2E8F0;border-radius:999px;height:10px;overflow:hidden;">
+                      <!-- Progress bar fill — width % set via template param -->
+                      <!-- EmailJS renders template vars in HTML, so this works -->
+                      <div style="background:linear-gradient(90deg,#1D6FD8,#60A5FA);height:10px;border-radius:999px;width:{{percentage}}%;max-width:100%;"></div>
+                    </div>
+
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:10px;">
+                      <tr>
+                        <td style="color:#94A3B8;font-size:12px;">0</td>
+                        <td align="right" style="color:#94A3B8;font-size:12px;">{{monthly_limit}} try-ons/maand</td>
+                      </tr>
+                    </table>
+
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Status message -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
+                <tr>
+                  <td style="padding:16px 20px;background:#FEF9EE;border-radius:10px;border-left:4px solid #F59E0B;">
+                    <p style="color:#92400E;font-size:14px;margin:0;line-height:1.6;">
+                      Je hebt nog <strong>{{remaining}} try-ons</strong> over deze maand.
+                      Overweeg je abonnement te upgraden om continuïteit te garanderen voor je shoppers.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- CTA -->
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center">
+                    <a href="{{upgrade_url}}"
+                       style="display:inline-block;background:linear-gradient(135deg,#1D6FD8,#2563EB);color:#FFFFFF;text-decoration:none;font-size:15px;font-weight:600;padding:13px 32px;border-radius:10px;">
+                      Bekijk abonnementen →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- Divider -->
+          <tr>
+            <td style="padding:0 48px;">
+              <div style="border-top:1px solid #E2E8F0;"></div>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:24px 48px;text-align:center;">
+              <p style="color:#94A3B8;font-size:13px;margin:0 0 6px;line-height:1.6;">
+                Je ontvangt deze mail omdat je Drapit gebruikt op <strong>{{shop_name}}</strong>.
+              </p>
+              <p style="color:#94A3B8;font-size:13px;margin:0 0 8px;">
+                Vragen? Mail naar <a href="mailto:{{support_email}}" style="color:#1D6FD8;text-decoration:none;">{{support_email}}</a>
+              </p>
+              <p style="color:#CBD5E1;font-size:12px;margin:0;">
+                © 2026 Drapit — Virtual Try-On for Shopify
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

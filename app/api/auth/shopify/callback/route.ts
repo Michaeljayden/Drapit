@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { sendWelcomeEmail } from '@/lib/email';
 
 const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -104,14 +105,24 @@ export async function GET(request: NextRequest) {
         console.warn('[shopify/callback] Could not fetch shop email, using placeholder');
     }
 
-    // 4. Upsert shop in Supabase
+    // 4. Check if this is a new shop (for welcome email)
+    const { data: existingShop } = await supabase
+        .from('shops')
+        .select('id')
+        .eq('shopify_domain', shop)
+        .maybeSingle();
+
+    const isNewInstall = !existingShop;
+
+    // 5. Upsert shop in Supabase
+    const shopDisplayName = shop.replace('.myshopify.com', '');
     const { data, error } = await supabase
         .from('shops')
         .upsert({
             shopify_domain: shop,
             shopify_access_token: access_token,
             shopify_app_installed: true,
-            name: shop.replace('.myshopify.com', ''),
+            name: shopDisplayName,
             email: shopEmail,
         }, { onConflict: 'shopify_domain' })
         .select()
@@ -122,6 +133,11 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Failed to save shop data' }, { status: 500 });
     }
 
-    // 5. Redirect to dashboard
+    // 6. Send welcome email on first install (fire-and-forget)
+    if (isNewInstall && shopEmail && !shopEmail.includes('shopify-placeholder')) {
+        sendWelcomeEmail(shopEmail, shopDisplayName).catch(console.error);
+    }
+
+    // 7. Redirect to dashboard
     return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/dashboard?shop_id=${data.id}`);
 }

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welkom bij Drapit</title>
+</head>
+<body style="margin:0;padding:0;background:#F1F5F9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+
+  <!-- Outer wrapper -->
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#F1F5F9;padding:40px 20px;">
+    <tr>
+      <td align="center">
+
+        <!-- Card -->
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#FFFFFF;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:linear-gradient(135deg,#0B1E3D 0%,#1D6FD8 100%);padding:40px 48px 36px;text-align:center;">
+              <!-- Logo text -->
+              <div style="display:inline-block;background:rgba(255,255,255,0.12);border-radius:12px;padding:10px 20px;margin-bottom:24px;">
+                <span style="color:#FFFFFF;font-size:22px;font-weight:700;letter-spacing:-0.5px;">drapit</span>
+                <span style="color:rgba(255,255,255,0.5);font-size:11px;font-weight:400;margin-left:8px;text-transform:uppercase;letter-spacing:1px;">virtual try-on</span>
+              </div>
+              <h1 style="color:#FFFFFF;font-size:28px;font-weight:700;margin:0;line-height:1.3;">
+                Welkom aan boord, {{shop_name}}! 🎉
+              </h1>
+              <p style="color:rgba(255,255,255,0.7);font-size:16px;margin:12px 0 0;">
+                Je Virtual Try-On widget is klaar om shoppers te verrassen.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:40px 48px;">
+
+              <p style="color:#334155;font-size:16px;line-height:1.7;margin:0 0 24px;">
+                Hey {{to_name}}, bedankt voor het installeren van Drapit. Je klanten kunnen nu kleding virtueel passen direct vanuit jouw Shopify store — zonder omweg, zonder app.
+              </p>
+
+              <!-- Steps -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
+                <tr>
+                  <td style="padding:16px;background:#F8FAFC;border-radius:12px;border-left:4px solid #1D6FD8;margin-bottom:12px;">
+                    <span style="display:block;color:#1D6FD8;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;">Stap 1</span>
+                    <span style="color:#1E293B;font-size:15px;font-weight:600;">Ga naar je dashboard</span>
+                    <span style="display:block;color:#64748B;font-size:13px;margin-top:2px;">Haal je API-sleutel op en stel je abonnement in.</span>
+                  </td>
+                </tr>
+                <tr><td style="height:8px;"></td></tr>
+                <tr>
+                  <td style="padding:16px;background:#F8FAFC;border-radius:12px;border-left:4px solid #1D6FD8;">
+                    <span style="display:block;color:#1D6FD8;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;">Stap 2</span>
+                    <span style="color:#1E293B;font-size:15px;font-weight:600;">Activeer de widget in Shopify</span>
+                    <span style="display:block;color:#64748B;font-size:13px;margin-top:2px;">Zet de Drapit-knop aan op je productpagina's via Theme Editor.</span>
+                  </td>
+                </tr>
+                <tr><td style="height:8px;"></td></tr>
+                <tr>
+                  <td style="padding:16px;background:#F8FAFC;border-radius:12px;border-left:4px solid #1D6FD8;">
+                    <span style="display:block;color:#1D6FD8;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;">Stap 3</span>
+                    <span style="color:#1E293B;font-size:15px;font-weight:600;">Test een try-on</span>
+                    <span style="display:block;color:#64748B;font-size:13px;margin-top:2px;">Upload een foto en zie hoe het werkt — je eerste 10 try-ons zijn gratis.</span>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- CTA button -->
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center">
+                    <a href="{{dashboard_url}}"
+                       style="display:inline-block;background:linear-gradient(135deg,#1D6FD8,#2563EB);color:#FFFFFF;text-decoration:none;font-size:16px;font-weight:600;padding:14px 36px;border-radius:10px;letter-spacing:0.2px;">
+                      Open je dashboard →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- Divider -->
+          <tr>
+            <td style="padding:0 48px;">
+              <div style="border-top:1px solid #E2E8F0;"></div>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:28px 48px;text-align:center;">
+              <p style="color:#94A3B8;font-size:13px;margin:0 0 8px;line-height:1.6;">
+                Vragen? Stuur een mail naar
+                <a href="mailto:{{support_email}}" style="color:#1D6FD8;text-decoration:none;">{{support_email}}</a>
+              </p>
+              <p style="color:#CBD5E1;font-size:12px;margin:0;">
+                © 2026 Drapit — Virtual Try-On for Shopify
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

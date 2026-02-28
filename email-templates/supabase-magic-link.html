@@ -1,0 +1,106 @@
+<!--
+  SUPABASE MAGIC LINK TEMPLATE
+  ============================
+  Plak deze HTML in:
+  Supabase Dashboard → Authentication → Email Templates → Magic Link
+
+  Supabase template variabelen (gebruik exact zo):
+    {{ .ConfirmationURL }}  — de volledige magic link URL
+    {{ .Email }}            — het e-mailadres van de merchant
+
+  Let op: Supabase heeft een max van ~64KB. Deze template is compact gehouden.
+-->
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inloggen bij Drapit</title>
+</head>
+<body style="margin:0;padding:0;background:#F1F5F9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#F1F5F9;padding:40px 20px;">
+    <tr>
+      <td align="center">
+
+        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#FFFFFF;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:linear-gradient(135deg,#0B1E3D 0%,#1D6FD8 100%);padding:36px 48px;text-align:center;">
+              <div style="display:inline-block;background:rgba(255,255,255,0.12);border-radius:12px;padding:10px 22px;margin-bottom:20px;">
+                <span style="color:#FFFFFF;font-size:22px;font-weight:700;letter-spacing:-0.5px;">drapit</span>
+                <span style="color:rgba(255,255,255,0.5);font-size:11px;font-weight:400;margin-left:8px;text-transform:uppercase;letter-spacing:1px;">virtual try-on</span>
+              </div>
+              <h1 style="color:#FFFFFF;font-size:24px;font-weight:700;margin:0;">
+                Jouw inloglink 🔑
+              </h1>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:36px 48px;">
+
+              <p style="color:#334155;font-size:16px;line-height:1.7;margin:0 0 8px;">
+                Hallo,
+              </p>
+              <p style="color:#334155;font-size:16px;line-height:1.7;margin:0 0 28px;">
+                Je hebt een inloglink aangevraagd voor Drapit. Klik op de knop hieronder om direct toegang te krijgen tot je dashboard. De link is <strong>60 minuten</strong> geldig.
+              </p>
+
+              <!-- CTA button -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+                <tr>
+                  <td align="center">
+                    <a href="{{ .ConfirmationURL }}"
+                       style="display:inline-block;background:linear-gradient(135deg,#1D6FD8,#2563EB);color:#FFFFFF;text-decoration:none;font-size:16px;font-weight:700;padding:15px 40px;border-radius:10px;letter-spacing:0.2px;">
+                      Inloggen bij Drapit →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Fallback URL -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px;">
+                <tr>
+                  <td style="padding:16px;background:#F8FAFC;border-radius:10px;border:1px solid #E2E8F0;">
+                    <p style="color:#64748B;font-size:12px;margin:0 0 6px;">Werkt de knop niet? Kopieer deze link:</p>
+                    <p style="color:#1D6FD8;font-size:12px;margin:0;word-break:break-all;">{{ .ConfirmationURL }}</p>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="color:#94A3B8;font-size:13px;line-height:1.6;margin:16px 0 0;">
+                Heb je deze link niet aangevraagd? Dan hoef je niets te doen — je account blijft veilig.
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- Divider -->
+          <tr>
+            <td style="padding:0 48px;">
+              <div style="border-top:1px solid #E2E8F0;"></div>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:24px 48px;text-align:center;">
+              <p style="color:#94A3B8;font-size:13px;margin:0 0 8px;">
+                Gestuurd naar <strong>{{ .Email }}</strong>
+              </p>
+              <p style="color:#CBD5E1;font-size:12px;margin:0;">
+                © 2026 Drapit — Virtual Try-On for Shopify
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

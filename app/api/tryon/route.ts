@@ -15,6 +15,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { createTryOnPrediction } from '@/lib/replicate';
+import { sendUsageAlertEmail } from '@/lib/email';
 
 // ---------------------------------------------------------------------------
 // CORS helpers — widget runs on external domains (Shopify, WooCommerce, etc.)
@@ -155,7 +156,7 @@ export async function POST(request: NextRequest) {
         // ---------------------------------------------------------------
         const { data: shop, error: shopError } = await supabase
             .from('shops')
-            .select('id, tryons_this_month, monthly_tryon_limit')
+            .select('id, tryons_this_month, monthly_tryon_limit, email, name')
             .eq('id', shopId)
             .single();
 
@@ -321,9 +322,24 @@ export async function POST(request: NextRequest) {
             .eq('id', tryonId);
 
         // ---------------------------------------------------------------
-        // 8. INCREMENT tryons_this_month
+        // 8. INCREMENT tryons_this_month + usage alerts
         // ---------------------------------------------------------------
         await supabase.rpc('increment_tryons_count', { shop_row_id: shopId });
+
+        // Fire usage alert emails at exactly 80% and 100% thresholds (fire-and-forget)
+        const newCount = shop.tryons_this_month + 1;
+        const limit = shop.monthly_tryon_limit;
+        const shopEmail = shop.email as string | null;
+        const shopName = (shop.name as string) || 'Drapit merchant';
+
+        if (shopEmail && !shopEmail.includes('shopify-placeholder')) {
+            const eightyPct = Math.floor(limit * 0.8);
+            if (newCount === eightyPct) {
+                sendUsageAlertEmail(shopEmail, shopName, newCount, limit, 80).catch(console.error);
+            } else if (newCount >= limit) {
+                sendUsageAlertEmail(shopEmail, shopName, newCount, limit, 100).catch(console.error);
+            }
+        }
 
         // ---------------------------------------------------------------
         // 7. RESPONSE — return immediately
