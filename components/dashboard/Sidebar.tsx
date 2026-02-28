@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
@@ -61,9 +62,25 @@ interface SidebarProps {
 export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryonsLimit = 500 }: SidebarProps) {
     const pathname = usePathname();
     const router = useRouter();
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     const usagePercent = tryonsLimit > 0 ? Math.min((tryonsUsed / tryonsLimit) * 100, 100) : 0;
     const usageColor = usagePercent > 90 ? '#DC2626' : usagePercent > 75 ? '#D97706' : '#1D6FD8';
+
+    // Close mobile menu on route change
+    useEffect(() => {
+        setMobileOpen(false);
+    }, [pathname]);
+
+    // Prevent body scroll when mobile menu is open
+    useEffect(() => {
+        if (mobileOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => { document.body.style.overflow = ''; };
+    }, [mobileOpen]);
 
     async function handleLogout() {
         const supabase = createBrowserClient(
@@ -75,8 +92,8 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
         router.refresh();
     }
 
-    return (
-        <aside className="bg-[#0F2744] text-white w-64 min-h-screen flex flex-col shrink-0">
+    const sidebarContent = (
+        <>
             {/* Logo */}
             <div className="p-6">
                 <Logo size="md" className="brightness-0 invert" />
@@ -135,6 +152,67 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
                     Uitloggen
                 </button>
             </div>
-        </aside>
+        </>
+    );
+
+    return (
+        <>
+            {/* ─── Mobile top bar ─────────────────────────────────── */}
+            <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-[#0F2744] flex items-center justify-between px-4 h-14 border-b border-white/10">
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={() => setMobileOpen(true)}
+                        className="text-white p-1.5 -ml-1.5 rounded-lg hover:bg-white/10 transition-colors"
+                        aria-label="Open menu"
+                    >
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <line x1="3" y1="12" x2="21" y2="12" />
+                            <line x1="3" y1="18" x2="21" y2="18" />
+                        </svg>
+                    </button>
+                    <Logo size="sm" className="brightness-0 invert" />
+                </div>
+                <p className="text-xs text-[#94A3B8] truncate max-w-[140px]">{shopName}</p>
+            </div>
+
+            {/* ─── Mobile overlay ─────────────────────────────────── */}
+            {mobileOpen && (
+                <div
+                    className="md:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+                    onClick={() => setMobileOpen(false)}
+                />
+            )}
+
+            {/* ─── Mobile drawer ──────────────────────────────────── */}
+            <aside
+                className={`
+                    md:hidden fixed top-0 left-0 bottom-0 z-50 w-64
+                    bg-[#0F2744] text-white flex flex-col
+                    transition-transform duration-300 ease-in-out
+                    ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}
+                `}
+            >
+                {/* Close button */}
+                <div className="absolute top-3 right-3">
+                    <button
+                        onClick={() => setMobileOpen(false)}
+                        className="text-[#94A3B8] hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+                        aria-label="Sluit menu"
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                    </button>
+                </div>
+                {sidebarContent}
+            </aside>
+
+            {/* ─── Desktop sidebar ────────────────────────────────── */}
+            <aside className="hidden md:flex bg-[#0F2744] text-white w-64 min-h-screen flex-col shrink-0 fixed top-0 left-0 bottom-0 z-30">
+                {sidebarContent}
+            </aside>
+        </>
     );
 }

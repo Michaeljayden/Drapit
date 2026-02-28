@@ -89,7 +89,7 @@ export default function ApiKeysManager({ initialKeys, shopId }: ApiKeysManagerPr
             {/* Create new key */}
             <div className="bg-white rounded-2xl border border-[#F1F5F9] shadow-[0_1px_2px_rgba(15,39,68,0.06)] p-6">
                 <h2 className="text-base font-bold text-[#0F172A] mb-4">Nieuwe sleutel aanmaken</h2>
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-3">
                     <input
                         type="text"
                         value={newKeyName}

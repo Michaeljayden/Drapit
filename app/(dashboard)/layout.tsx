@@ -29,13 +29,14 @@ export default async function DashboardLayout({
     }
 
     return (
-        <div className="flex min-h-screen">
+        <div className="min-h-screen">
             <Sidebar
                 shopName={shopName}
                 tryonsUsed={tryonsUsed}
                 tryonsLimit={tryonsLimit}
             />
-            <main className="flex-1 bg-[#F8FAFC] p-8 overflow-y-auto">
+            {/* Main content: offset for desktop sidebar + mobile top bar */}
+            <main className="md:ml-64 bg-[#F8FAFC] min-h-screen pt-[72px] md:pt-0 p-4 md:p-8 overflow-y-auto">
                 {children}
             </main>
         </div>

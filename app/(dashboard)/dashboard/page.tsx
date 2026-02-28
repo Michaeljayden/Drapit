@@ -130,7 +130,7 @@ export default async function DashboardPage() {
 
             {/* Chart */}
             <div className="bg-white rounded-2xl border border-[#F1F5F9] shadow-[0_1px_2px_rgba(15,39,68,0.06)] p-6">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                     <div>
                         <h2 className="text-lg font-bold text-[#0F172A]">Try-ons per dag</h2>
                         <p className="text-xs text-[#64748B] mt-0.5">Laatste 30 dagen</p>

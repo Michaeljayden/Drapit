@@ -1,5 +1,5 @@
 name = "Drapit Virtual Try-On"
-client_id = "15c8afc4a1e0648dde6da5870549dcb0"
+client_id = "b4be0e4c410809e0f2b872950484cae1"
 application_url = "https://drapit.io"
 embedded = true
 
@@ -9,12 +9,11 @@ redirect_urls = [
   "https://drapit.io/api/auth/shopify/callback"
 ]
 
-[webhooks]
-api_version = "2024-01"
-
 [access_scopes]
 scopes = "write_products,read_themes,write_themes"
 
+[webhooks]
+api_version = "2024-01"
+
 [pos]
 embedded = false
-

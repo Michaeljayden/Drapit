@@ -36,7 +36,7 @@ export default function TryOnsPage() {
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                     <h1 className={typography.h1}>Try-ons</h1>
                     <p className={`${typography.body} text-[${colors.gray500}] mt-1`}>
@@ -50,14 +50,14 @@ export default function TryOnsPage() {
             </div>
 
             {/* Filters */}
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
                 {filters.map((f) => (
                     <button
                         key={f.value}
                         onClick={() => setActiveFilter(f.value)}
                         className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-colors duration-150 ${activeFilter === f.value
-                                ? `bg-[${colors.blue}] text-white`
-                                : `bg-white text-[${colors.gray500}] border border-[${colors.gray300}] hover:bg-[${colors.gray100}]`
+                            ? `bg-[${colors.blue}] text-white`
+                            : `bg-white text-[${colors.gray500}] border border-[${colors.gray300}] hover:bg-[${colors.gray100}]`
                             }`}
                     >
                         {f.label}

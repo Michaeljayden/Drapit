@@ -283,7 +283,7 @@ export default function AnalyticsDashboard({
 
             {/* ── Line Chart ─────────────────────────────────────────────── */}
             <div className={componentStyles.dashboardCard}>
-                <div className="flex items-center justify-between mb-1">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
                     <div>
                         <h2 className={typography.h2} style={{ color: colors.gray900 }}>
                             Try-ons per dag

@@ -25,14 +25,14 @@ export default function SettingsPage() {
             </div>
 
             {/* Tab navigation */}
-            <div className="flex gap-1 border-b border-[var(--drapit-gray-100)]">
+            <div className="flex flex-wrap gap-1 border-b border-[var(--drapit-gray-100)]">
                 {tabs.map((tab) => (
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
                         className={`px-4 py-2.5 text-sm font-medium transition-colors relative ${activeTab === tab
-                                ? 'text-[var(--drapit-blue)]'
-                                : 'text-[var(--drapit-gray-500)] hover:text-[var(--drapit-gray-900)]'
+                            ? 'text-[var(--drapit-blue)]'
+                            : 'text-[var(--drapit-gray-500)] hover:text-[var(--drapit-gray-900)]'
                             }`}
                     >
                         {tab}
@@ -89,7 +89,7 @@ export default function SettingsPage() {
 
             {activeTab === 'API Keys' && (
                 <div className="space-y-4">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                         <p className={`text-sm text-[${colors.gray500}]`}>
                             Gebruik API keys om de Drapit widget te authenticeren op je webshop.
                         </p>
@@ -99,43 +99,45 @@ export default function SettingsPage() {
                     </div>
 
                     <div className={componentStyles.dashboardCard}>
-                        <table className="w-full">
-                            <thead>
-                                <tr className="border-b border-[var(--drapit-gray-100)]">
-                                    {['Key', 'Aangemaakt', 'Laatst gebruikt', 'Status', ''].map((h) => (
-                                        <th key={h} className="text-left text-xs font-medium text-[var(--drapit-gray-500)] uppercase tracking-wide pb-3">
-                                            {h}
-                                        </th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {mockApiKeys.map((key) => (
-                                    <tr key={key.id} className="border-b border-[var(--drapit-gray-100)] last:border-0">
-                                        <td className="py-3 text-sm font-mono text-[var(--drapit-gray-900)]">
-                                            {key.prefix}
-                                        </td>
-                                        <td className="py-3 text-sm text-[var(--drapit-gray-500)]">{key.created}</td>
-                                        <td className="py-3 text-sm text-[var(--drapit-gray-500)]">{key.lastUsed}</td>
-                                        <td className="py-3">
-                                            <span
-                                                className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${key.active
+                        <div className="overflow-x-auto">
+                            <table className="w-full min-w-[500px]">
+                                <thead>
+                                    <tr className="border-b border-[var(--drapit-gray-100)]">
+                                        {['Key', 'Aangemaakt', 'Laatst gebruikt', 'Status', ''].map((h) => (
+                                            <th key={h} className="text-left text-xs font-medium text-[var(--drapit-gray-500)] uppercase tracking-wide pb-3">
+                                                {h}
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {mockApiKeys.map((key) => (
+                                        <tr key={key.id} className="border-b border-[var(--drapit-gray-100)] last:border-0">
+                                            <td className="py-3 text-sm font-mono text-[var(--drapit-gray-900)]">
+                                                {key.prefix}
+                                            </td>
+                                            <td className="py-3 text-sm text-[var(--drapit-gray-500)]">{key.created}</td>
+                                            <td className="py-3 text-sm text-[var(--drapit-gray-500)]">{key.lastUsed}</td>
+                                            <td className="py-3">
+                                                <span
+                                                    className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${key.active
                                                         ? 'bg-[var(--drapit-green-light)] text-[var(--drapit-green)]'
                                                         : 'bg-[var(--drapit-gray-100)] text-[var(--drapit-gray-500)]'
-                                                    }`}
-                                            >
-                                                {key.active ? 'Actief' : 'Inactief'}
-                                            </span>
-                                        </td>
-                                        <td className="py-3 text-right">
-                                            <button className="text-xs text-[var(--drapit-red)] hover:underline font-medium">
-                                                Intrekken
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                                        }`}
+                                                >
+                                                    {key.active ? 'Actief' : 'Inactief'}
+                                                </span>
+                                            </td>
+                                            <td className="py-3 text-right">
+                                                <button className="text-xs text-[var(--drapit-red)] hover:underline font-medium">
+                                                    Intrekken
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             )}

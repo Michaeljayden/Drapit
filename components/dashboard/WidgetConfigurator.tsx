@@ -120,7 +120,7 @@ export default function WidgetConfigurator({ apiKeyPreview, domain }: WidgetConf
             </div>
 
             {/* Preview button */}
-            <div className="border-t border-[#F1F5F9] pt-6 flex items-center justify-between">
+            <div className="border-t border-[#F1F5F9] pt-6 flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                     <span className="text-xs text-[#64748B]">Preview:</span>
                     <button

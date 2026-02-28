@@ -45,7 +45,7 @@ export default async function WidgetPage() {
 
             {/* Installation snippet */}
             <div className="bg-white rounded-2xl border border-[#F1F5F9] shadow-[0_1px_2px_rgba(15,39,68,0.06)] p-6">
-                <div className="flex items-center gap-3 mb-4">
+                <div className="flex flex-wrap items-center gap-3 mb-4">
                     <div className="w-9 h-9 bg-[#EBF3FF] rounded-lg flex items-center justify-center">
                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                             <path d="M6 3l-4 4 4 4" stroke="#1D6FD8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
