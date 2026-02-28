@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { PLANS } from '@/lib/stripe';
 import type { Plan } from '@/lib/supabase/types';
+import { sendWelcomeEmail } from '@/lib/email';
 
 export async function POST(request: Request) {
     const supabase = await createClient();
@@ -59,6 +60,11 @@ export async function POST(request: Request) {
 
     if (insertError) {
         return NextResponse.json({ error: 'Kon shop niet aanmaken' }, { status: 500 });
+    }
+
+    // Send welcome email (fire-and-forget — non-blocking)
+    if (user.email) {
+        sendWelcomeEmail(user.email, shopName.trim()).catch(console.error);
     }
 
     return NextResponse.json({ shopId: shop.id, plan: selectedPlan });
