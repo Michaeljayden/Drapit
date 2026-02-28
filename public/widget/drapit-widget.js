@@ -218,10 +218,18 @@
             font-size: 14px;
         }
 
+        /* ── Upload hint bottom ────────────────────────── */
+        .drapit-upload-hint-bottom {
+            text-align: center;
+            font-size: 12px;
+            color: #94A3B8;
+            margin-top: 12px;
+        }
+
         /* ── Submit Button ─────────────────────────────── */
         .drapit-submit {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: none;
             border-radius: 12px;
             font-size: 14px;
@@ -229,17 +237,16 @@
             color: #fff;
             background: ${PRIMARY_COLOR};
             cursor: pointer;
-            transition: opacity 0.15s;
+            transition: opacity 0.15s, transform 0.1s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            box-shadow: 0 2px 8px ${PRIMARY_COLOR}40;
         }
-        .drapit-submit:hover { opacity: 0.9; }
-        .drapit-submit:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .drapit-submit svg { width: 16px; height: 16px; flex-shrink: 0; }
+        .drapit-submit:hover { opacity: 0.92; transform: translateY(-1px); }
+        .drapit-submit:active { transform: translateY(0); }
 
         /* ── Loading / Result States ───────────────────── */
         .drapit-loading {
@@ -340,7 +347,7 @@
     `;
 
     // ── SVG Icons ─────────────────────────────────────────────────────────
-    const ICON_TRYON = `<svg viewBox="0 0 16 16"><path d="M8 1C5.5 1 4 2.5 4 4.5S5.5 7 8 7s4-1 4-2.5S10.5 1 8 1z" stroke-linecap="round"/><path d="M2 14c0-3 2.5-5 6-5s6 2 6 5" stroke-linecap="round"/></svg>`;
+    const ICON_TRYON = `<svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1C5.5 1 4 2.5 4 4.5S5.5 7 8 7s4-1 4-2.5S10.5 1 8 1z" stroke-linecap="round"/><path d="M2 14c0-3 2.5-5 6-5s6 2 6 5" stroke-linecap="round"/></svg>`;
     const ICON_UPLOAD = `<svg viewBox="0 0 24 24"><path d="M12 16V4m0 0l-4 4m4-4l4 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2" stroke-linecap="round"/></svg>`;
     const ICON_CLOSE = `<svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
     const ICON_CART = `<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="6" cy="14" r="1" fill="currentColor"/><circle cx="12" cy="14" r="1" fill="currentColor"/><path d="M1 1h2l1.5 8h8L14 4H5" stroke="currentColor" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
@@ -426,7 +433,8 @@
                         </div>
                     </div>
                     <div class="drapit-preview-section" style="display:none"></div>
-                    <button class="drapit-submit" disabled style="margin-top:16px">
+                    <div class="drapit-upload-hint-bottom">Selecteer een foto om verder te gaan</div>
+                    <button class="drapit-submit" style="display:none;margin-top:16px">
                         ${ICON_TRYON} Pas dit item
                     </button>
                 </div>
@@ -454,6 +462,7 @@
         const submitBtn = overlay.querySelector('.drapit-submit');
         const uploadSection = overlay.querySelector('.drapit-upload-section');
         const previewSection = overlay.querySelector('.drapit-preview-section');
+        const hintBottom = overlay.querySelector('.drapit-upload-hint-bottom');
 
         dropzone.addEventListener('click', () => fileInput.click());
 
@@ -477,6 +486,7 @@
             userPhotoFile = file;
             userPhotoDataUrl = await fileToDataUrl(file);
             uploadSection.style.display = 'none';
+            hintBottom.style.display = 'none';
             previewSection.style.display = 'block';
             previewSection.innerHTML = `
                 <div class="drapit-preview-wrap">
@@ -484,14 +494,15 @@
                     <button class="drapit-preview-remove">✕</button>
                 </div>
             `;
-            submitBtn.disabled = false;
+            submitBtn.style.display = 'flex';
 
             previewSection.querySelector('.drapit-preview-remove').addEventListener('click', () => {
                 userPhotoDataUrl = null;
                 userPhotoFile = null;
                 uploadSection.style.display = 'block';
+                hintBottom.style.display = 'block';
                 previewSection.style.display = 'none';
-                submitBtn.disabled = true;
+                submitBtn.style.display = 'none';
             });
         }
 
