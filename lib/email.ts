@@ -3,12 +3,16 @@
 // =============================================================================
 // EmailJS Pro (server-side) docs: https://www.emailjs.com/docs/rest-api/send/
 //
+// EmailJS service: gebruik Hostinger SMTP (smtp.hostinger.com:465 SSL)
+//   Sender-adres: info@drapit.io
+//
 // Required env vars:
-//   EMAILJS_SERVICE_ID       — EmailJS → Email Services → Service ID
-//   EMAILJS_PUBLIC_KEY       — EmailJS → Account → Public Key
-//   EMAILJS_PRIVATE_KEY      — EmailJS → Account → Private Key
-//   EMAILJS_TEMPLATE_WELCOME — Template ID for welcome email
-//   EMAILJS_TEMPLATE_USAGE   — Template ID for usage alert email
+//   EMAILJS_SERVICE_ID        — EmailJS → Email Services → Service ID
+//   EMAILJS_PUBLIC_KEY        — EmailJS → Account → Public Key
+//   EMAILJS_PRIVATE_KEY       — EmailJS → Account → Private Key (Pro only)
+//   EMAILJS_TEMPLATE_WELCOME  — Template ID voor welcome email
+//   EMAILJS_TEMPLATE_USAGE    — Template ID voor usage alert email
+//   EMAILJS_TEMPLATE_CONTACT  — Template ID voor contact form notificatie
 // =============================================================================
 
 const EMAILJS_API_URL = 'https://api.emailjs.com/api/v1.0/email/send';
@@ -132,4 +136,31 @@ export async function sendUsageAlertEmail(
     if (sent) {
         console.log(`[email] Usage alert (${percentage}%) sent to ${toEmail} (${shopName}) — ${used}/${limit}`);
     }
+}
+
+// ---------------------------------------------------------------------------
+// 3. Contact form — melding naar info@drapit.io wanneer iemand het formulier stuurt
+// ---------------------------------------------------------------------------
+export async function sendContactEmail(params: {
+    fromName: string;
+    fromEmail: string;
+    subject: string;
+    message: string;
+}): Promise<boolean> {
+    const templateId = process.env.EMAILJS_TEMPLATE_CONTACT;
+
+    const sent = await sendEmail(templateId!, {
+        to_email: 'info@drapit.io',
+        from_name: params.fromName,
+        from_email: params.fromEmail,
+        subject: params.subject,
+        message: params.message,
+        reply_to: params.fromEmail,
+    });
+
+    if (sent) {
+        console.log(`[email] Contact form submission from ${params.fromEmail}`);
+    }
+
+    return sent;
 }

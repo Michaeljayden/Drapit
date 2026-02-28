@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import ContactForm from '@/components/ContactForm';
 
 /* ─────────────────────────────────────────────────────────────────────────────
    DRAPIT — LANDING PAGE
@@ -925,6 +926,53 @@ export default function LandingPage() {
                     </div>
                 </section>
 
+                {/* ─── CONTACT ───────────────────────────────────────── */}
+                <section id="contact" style={{ padding: '100px 28px', position: 'relative' }}>
+                    <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 30% 50%, rgba(29,111,216,0.06) 0%, transparent 60%)', pointerEvents: 'none' }} />
+                    <div style={{ maxWidth: 1080, margin: '0 auto', position: 'relative', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 64, alignItems: 'start' }}>
+
+                        {/* Left — tekst */}
+                        <div>
+                            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#1D6FD8', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 18 }}>CONTACT</div>
+                            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.1, margin: '0 0 20px', background: 'linear-gradient(135deg, #F1F5F9 0%, rgba(241,245,249,0.55) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                                Neem contact<br />met ons op
+                            </h2>
+                            <p style={{ color: 'rgba(241,245,249,0.50)', fontSize: 16, fontFamily: 'Plus Jakarta Sans, sans-serif', lineHeight: 1.7, margin: '0 0 36px', maxWidth: 400 }}>
+                                Heb je een vraag, wil je een demo of ben je benieuwd of Drapit past bij jouw webshop? We reageren normaal gesproken binnen één werkdag.
+                            </p>
+
+                            {/* Contact details */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                                <a href="mailto:info@drapit.io" style={{ display: 'flex', alignItems: 'center', gap: 14, textDecoration: 'none', color: 'rgba(241,245,249,0.70)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 15, transition: 'color 0.2s' }}
+                                    onMouseEnter={e => e.currentTarget.style.color = '#F1F5F9'}
+                                    onMouseLeave={e => e.currentTarget.style.color = 'rgba(241,245,249,0.70)'}
+                                >
+                                    <span style={{ width: 40, height: 40, background: 'rgba(29,111,216,0.12)', border: '1px solid rgba(29,111,216,0.20)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                                        </svg>
+                                    </span>
+                                    info@drapit.io
+                                </a>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 14, color: 'rgba(241,245,249,0.45)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 15 }}>
+                                    <span style={{ width: 40, height: 40, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                                        </svg>
+                                    </span>
+                                    Reactie binnen 1 werkdag
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right — formulier */}
+                        <div style={{ background: 'linear-gradient(135deg, rgba(13,24,41,0.92) 0%, rgba(6,9,15,0.97) 100%)', border: '1px solid rgba(29,111,216,0.12)', borderRadius: 20, padding: '36px 32px', boxShadow: '0 20px 60px rgba(0,0,0,0.40)' }}>
+                            <ContactForm />
+                        </div>
+
+                    </div>
+                </section>
+
                 {/* ─── FINAL CTA ─────────────────────────────────────── */}
                 <section style={{ padding: '60px 28px 120px', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 50%, rgba(29,111,216,0.09) 0%, transparent 60%)', pointerEvents: 'none' }} />
@@ -941,7 +989,7 @@ export default function LandingPage() {
                                 <Link href="/dashboard/login" className="d-btn-primary" style={{ padding: '16px 38px', fontSize: 16 }}>
                                     BEGIN GRATIS →
                                 </Link>
-                                <a href="mailto:hello@drapit.io" style={{ padding: '16px 30px', fontSize: 16, fontWeight: 500, color: 'rgba(241,245,249,0.68)', fontFamily: 'Plus Jakarta Sans, sans-serif', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 12, textDecoration: 'none', transition: 'all 0.2s' }}
+                                <a href="#contact" style={{ padding: '16px 30px', fontSize: 16, fontWeight: 500, color: 'rgba(241,245,249,0.68)', fontFamily: 'Plus Jakarta Sans, sans-serif', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 12, textDecoration: 'none', transition: 'all 0.2s' }}
                                     onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#F1F5F9'; }}
                                     onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = 'rgba(241,245,249,0.68)'; }}
                                 >
