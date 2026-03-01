@@ -598,6 +598,7 @@ export default function LandingPage() {
                 @media (max-width: 768px) {
                     .d-shopify-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
                     .d-shopify-card { padding: 40px 24px !important; }
+                    .d-shopify-install { grid-template-columns: 1fr !important; padding: 28px 20px !important; }
                 }
                 @media (max-width: 540px) {
                     .d-plans-grid { grid-template-columns: 1fr !important; }
@@ -818,6 +819,93 @@ export default function LandingPage() {
                                     </div>
                                 </div>
                             ))}
+                        </div>
+
+                        {/* ── Shopify installatie kort uitleg ────────── */}
+                        <div className={`d-shopify-install d-in d-d5 ${how.inView ? 'visible' : ''}`} style={{
+                            marginTop: 56,
+                            background: 'linear-gradient(135deg, rgba(13,24,41,0.7) 0%, rgba(6,9,15,0.85) 100%)',
+                            border: '1px solid rgba(149,191,71,0.2)',
+                            borderRadius: 24,
+                            padding: '40px 36px',
+                            display: 'grid',
+                            gridTemplateColumns: '1fr 1fr',
+                            gap: 40,
+                            alignItems: 'center',
+                            boxShadow: '0 20px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03)',
+                        }}>
+                            {/* Left: tekst */}
+                            <div>
+                                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(149,191,71,0.1)', border: '1px solid rgba(149,191,71,0.2)', borderRadius: 100, padding: '5px 14px', marginBottom: 20 }}>
+                                    <img src="/images/logos/Shopify_logo_2018.svg.png" alt="Shopify" style={{ height: 14, width: 'auto' }} />
+                                    <span style={{ fontSize: 10, fontWeight: 700, color: '#95BF47', fontFamily: 'Plus Jakarta Sans', letterSpacing: '0.08em' }}>SHOPIFY INSTALLATIE</span>
+                                </div>
+
+                                <h3 style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 800, color: '#F1F5F9', lineHeight: 1.15, marginBottom: 14, letterSpacing: '-0.02em', fontFamily: 'Plus Jakarta Sans' }}>
+                                    Shopify gebruiker?{' '}
+                                    <span style={{ color: '#95BF47' }}>Nog makkelijker.</span>
+                                </h3>
+
+                                <p style={{ fontSize: 15, color: 'rgba(241,245,249,0.5)', lineHeight: 1.7, marginBottom: 24, fontFamily: 'Plus Jakarta Sans' }}>
+                                    Installeer Drapit direct vanuit de Shopify App Store — geen code, geen developer. De app voegt automatisch de benodigde scripts toe aan je theme en je bent binnen minuten live.
+                                </p>
+
+                                <Link href="/shopify" style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: 8,
+                                    background: 'linear-gradient(135deg, #95BF47, #5E8E3E)',
+                                    padding: '11px 22px',
+                                    borderRadius: 10,
+                                    textDecoration: 'none',
+                                    color: 'white',
+                                    fontSize: 13,
+                                    fontWeight: 700,
+                                    fontFamily: 'Plus Jakarta Sans, sans-serif',
+                                    letterSpacing: '0.03em',
+                                    transition: 'all 0.3s',
+                                    boxShadow: '0 6px 20px rgba(149,191,71,0.3)',
+                                }}
+                                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 30px rgba(149,191,71,0.45)'; }}
+                                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(149,191,71,0.3)'; }}
+                                >
+                                    Meer over Shopify installatie →
+                                </Link>
+                            </div>
+
+                            {/* Right: mini-stappen */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                                {[
+                                    { step: '1', title: 'Installeer de app', desc: 'Zoek "Drapit" in de Shopify App Store en klik op installeren.', icon: '📦' },
+                                    { step: '2', title: 'Activeer in je theme', desc: 'De app configureert alles automatisch — geen code aanpassingen nodig.', icon: '⚡' },
+                                    { step: '3', title: 'Direct live', desc: 'Je klanten kunnen meteen virtueel kleding passen op je webshop.', icon: '🚀' },
+                                ].map((item, i) => (
+                                    <div key={i} style={{
+                                        display: 'flex',
+                                        alignItems: 'flex-start',
+                                        gap: 16,
+                                        background: 'rgba(255,255,255,0.02)',
+                                        border: '1px solid rgba(255,255,255,0.05)',
+                                        borderRadius: 14,
+                                        padding: '18px 20px',
+                                        transition: 'border-color 0.3s, background 0.3s',
+                                    }}
+                                        onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(149,191,71,0.25)'; e.currentTarget.style.background = 'rgba(149,191,71,0.04)'; }}
+                                        onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; }}
+                                    >
+                                        <div style={{
+                                            width: 40, height: 40, borderRadius: 12, flexShrink: 0,
+                                            background: 'rgba(149,191,71,0.1)', border: '1px solid rgba(149,191,71,0.2)',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            fontSize: 18,
+                                        }}>{item.icon}</div>
+                                        <div>
+                                            <div style={{ fontSize: 14, fontWeight: 700, color: '#F1F5F9', marginBottom: 4, fontFamily: 'Plus Jakarta Sans' }}>{item.title}</div>
+                                            <div style={{ fontSize: 13, color: 'rgba(241,245,249,0.42)', lineHeight: 1.5, fontFamily: 'Plus Jakarta Sans' }}>{item.desc}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </section>
