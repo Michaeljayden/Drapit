@@ -1,71 +1,87 @@
 <!--
-  EMAILJS CONTACT FORM TEMPLATE
-  ==============================
-  Maak in EmailJS een nieuw template aan met de naam "drapit_contact".
-  Kopieer deze HTML naar het HTML-body veld.
+  EMAILJS CONTACT FORM TEMPLATE (PREMIUM DESIGN)
+  ==============================================
+  Kopieer deze HTML naar het HTML-body veld in EmailJS.
 
   EmailJS template variabelen:
-    {{from_name}}   — naam van de afzender
-    {{from_email}}  — e-mailadres van de afzender
-    {{subject}}     — gekozen onderwerp
-    {{message}}     — bericht tekst
-    {{reply_to}}    — zelfde als from_email (instellen als Reply-To header)
+    {{from_name}}       — Naam afzender
+    {{from_email}}      — Email afzender
+    {{phone}}           — Telefoonnummer
+    {{webshop_name}}    — Webshop naam
+    {{brand_clothing}}  — Verkoopt merkkleding? (Ja/Nee/Gedeeltelijk)
+    {{subject}}         — Gekozen onderwerp
+    {{message}}         — Bericht tekst
+    {{reply_to}}        — Zelfde als from_email (instellen als Reply-To header)
 
-  Subject regel (in EmailJS template instellingen):
+  Subject regel in EmailJS:
     Nieuw bericht: {{subject}} — {{from_name}}
-
-  To e-mail: info@drapit.io
-  Reply-To:  {{reply_to}}
 -->
 <!DOCTYPE html>
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nieuw contactbericht — Drapit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Drapit — Contactbericht</title>
 </head>
-<body style="margin:0;padding:0;background:#F1F5F9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
-
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#F1F5F9;padding:40px 20px;">
+<body style="margin:0;padding:0;background:#F0F4F8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#F0F4F8;padding:40px 0;">
     <tr>
       <td align="center">
-
-        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#FFFFFF;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <table width="580" cellpadding="0" cellspacing="0" style="max-width:580px;width:100%;">
 
           <!-- Header -->
           <tr>
-            <td style="background:linear-gradient(135deg,#0B1E3D 0%,#1D6FD8 100%);padding:28px 40px;text-align:left;">
-              <div style="display:inline-block;background:rgba(255,255,255,0.12);border-radius:10px;padding:7px 16px;margin-bottom:14px;">
-                <span style="color:#FFFFFF;font-size:18px;font-weight:700;letter-spacing:-0.5px;">drapit</span>
+            <td align="center" style="padding-bottom:24px;">
+              <div style="display:inline-block;background:#1E3A5F;border-radius:12px;padding:10px 22px;">
+                <span style="color:#ffffff;font-size:18px;font-weight:800;letter-spacing:1px;">drapit</span>
               </div>
-              <div style="background:rgba(255,255,255,0.10);display:inline-block;border-radius:8px;padding:5px 12px;margin-left:8px;vertical-align:middle;">
-                <span style="color:rgba(255,255,255,0.80);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;">Nieuw bericht</span>
-              </div>
-              <h1 style="color:#FFFFFF;font-size:20px;font-weight:700;margin:0;line-height:1.3;">
-                📨 {{subject}}
-              </h1>
             </td>
           </tr>
 
-          <!-- Body -->
+          <!-- Card -->
           <tr>
-            <td style="padding:32px 40px;">
+            <td style="background:#ffffff;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,0.08);overflow:hidden;">
 
-              <!-- Afzender info -->
-              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;background:#F8FAFC;border-radius:10px;border:1px solid #E2E8F0;">
+              <!-- Badge + Subject -->
+              <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td style="padding:16px 20px;">
-                    <table width="100%" cellpadding="0" cellspacing="0">
+                  <td style="background:linear-gradient(135deg,#1E3A5F 0%,#2563EB 100%);padding:32px 40px 28px;">
+                    <div style="display:inline-block;background:rgba(255,255,255,0.15);border-radius:20px;padding:4px 14px;margin-bottom:14px;">
+                      <span style="color:#ffffff;font-size:11px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;">Nieuw Bericht</span>
+                    </div>
+                    <div style="color:#ffffff;font-size:22px;font-weight:700;line-height:1.3;">{{subject}}</div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Details (From, Phone, Webshop, Brand) -->
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:28px 40px 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0" style="background:#F8FAFC;border-radius:10px;border:1px solid #E2E8F0;">
                       <tr>
-                        <td style="padding-bottom:8px;">
-                          <span style="color:#94A3B8;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;">Van</span>
-                          <span style="display:block;color:#1E293B;font-size:15px;font-weight:600;margin-top:2px;">{{from_name}}</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <span style="color:#94A3B8;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;">E-mail</span>
-                          <a href="mailto:{{from_email}}" style="display:block;color:#1D6FD8;font-size:14px;margin-top:2px;text-decoration:none;">{{from_email}}</a>
+                        <td style="padding:18px 20px;">
+                          <div style="margin-bottom:16px;">
+                            <div style="color:#64748B;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Van</div>
+                            <div style="color:#0F172A;font-size:15px;font-weight:600;">{{from_name}}</div>
+                            <div style="color:#2563EB;font-size:13px;margin-top:2px;">{{from_email}}</div>
+                          </div>
+
+                          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                            <div style="margin-bottom:12px;">
+                              <div style="color:#64748B;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Telefoon</div>
+                              <div style="color:#0F172A;font-size:14px;">{{phone}}</div>
+                            </div>
+                            <div style="margin-bottom:12px;">
+                              <div style="color:#64748B;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Webshop</div>
+                              <div style="color:#0F172A;font-size:14px;">{{webshop_name}}</div>
+                            </div>
+                          </div>
+
+                          <div>
+                            <div style="color:#64748B;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Verkoopt merkkleding?</div>
+                            <div style="color:#0F172A;font-size:14px;">{{brand_clothing}}</div>
+                          </div>
                         </td>
                       </tr>
                     </table>
@@ -73,19 +89,24 @@
                 </tr>
               </table>
 
-              <!-- Bericht -->
-              <p style="color:#64748B;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;margin:0 0 10px;">Bericht</p>
-              <div style="background:#FAFAFA;border-left:3px solid #1D6FD8;border-radius:0 8px 8px 0;padding:18px 20px;margin-bottom:28px;">
-                <p style="color:#334155;font-size:15px;line-height:1.7;margin:0;white-space:pre-wrap;">{{message}}</p>
-              </div>
-
-              <!-- Reply button -->
+              <!-- Message -->
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td>
-                    <a href="mailto:{{from_email}}"
-                       style="display:inline-block;background:linear-gradient(135deg,#1D6FD8,#2563EB);color:#FFFFFF;text-decoration:none;font-size:14px;font-weight:600;padding:12px 28px;border-radius:9px;">
-                      Beantwoord {{from_name}} →
+                  <td style="padding:24px 40px 0;">
+                    <div style="color:#64748B;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Bericht</div>
+                    <div style="background:#F8FAFC;border-left:4px solid #2563EB;border-radius:0 8px 8px 0;padding:18px 20px;">
+                      <div style="color:#1E293B;font-size:15px;line-height:1.7;white-space:pre-wrap;">{{message}}</div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- CTA -->
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center" style="padding:32px 40px 36px;">
+                    <a href="mailto:{{reply_to}}" style="display:inline-block;background:#2563EB;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;border-radius:10px;padding:13px 32px;">
+                      Beantwoord {{from_name}} &rarr;
                     </a>
                   </td>
                 </tr>
@@ -94,19 +115,10 @@
             </td>
           </tr>
 
-          <!-- Divider -->
-          <tr>
-            <td style="padding:0 40px;">
-              <div style="border-top:1px solid #E2E8F0;"></div>
-            </td>
-          </tr>
-
           <!-- Footer -->
           <tr>
-            <td style="padding:20px 40px;text-align:center;">
-              <p style="color:#CBD5E1;font-size:12px;margin:0;">
-                Verzonden via het contactformulier op drapit.io
-              </p>
+            <td align="center" style="padding:24px 0 0;">
+              <div style="color:#94A3B8;font-size:12px;">Verzonden via het contactformulier op <a href="https://drapit.io" style="color:#94A3B8;">drapit.io</a></div>
             </td>
           </tr>
 
@@ -114,6 +126,6 @@
       </td>
     </tr>
   </table>
-
 </body>
 </html>
+

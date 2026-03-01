@@ -108,7 +108,8 @@ export async function POST(request: NextRequest) {
                     stripe_customer_id: customerId,
                     stripe_subscription_id: subscriptionId,
                     monthly_tryon_limit: planConfig.limit,
-                    tryons_this_month: 0, // Reset on new subscription
+                    tryons_this_month: 0,  // Reset on new subscription
+                    rollover_tryons: 0,    // No rollover for brand-new subscriptions
                 });
 
                 console.log(`[stripe/webhook] ✅ Shop ${shopId} activated plan: ${planKey}`);
@@ -202,6 +203,55 @@ export async function POST(request: NextRequest) {
                     console.error('[stripe/webhook] Failed to call notification function:', notifyErr);
                 }
 
+                break;
+            }
+
+            // ─────────────────────────────────────────────────────────────
+            // invoice.payment_succeeded
+            // Monthly renewal — reset counter & roll over unused try-ons.
+            // Only triggers on subscription_cycle (not first-time checkout).
+            // ─────────────────────────────────────────────────────────────
+            case 'invoice.payment_succeeded': {
+                const invoice = event.data.object as Stripe.Invoice;
+
+                // 'subscription_cycle' = recurring renewal; skip first payment
+                // (that is handled by checkout.session.completed above)
+                if (invoice.billing_reason !== 'subscription_cycle') break;
+
+                const customerId = invoice.customer as string;
+                const admin = getSupabaseAdmin();
+
+                // Fetch current shop state
+                const { data: shop, error: shopErr } = await admin
+                    .from('shops')
+                    .select('monthly_tryon_limit, tryons_this_month, rollover_tryons')
+                    .eq('stripe_customer_id', customerId)
+                    .single();
+
+                if (shopErr || !shop) {
+                    console.warn(`[stripe/webhook] invoice.payment_succeeded: shop not found for ${customerId}`);
+                    break;
+                }
+
+                const currentLimit = shop.monthly_tryon_limit as number;
+                const currentRollover = (shop.rollover_tryons as number) ?? 0;
+                const effectiveLimit = currentLimit + currentRollover;
+                const used = shop.tryons_this_month as number;
+
+                // Unused try-ons from this cycle → carry to next month
+                const unused = Math.max(0, effectiveLimit - used);
+                // Cap rollover at 1× the plan's monthly limit to prevent unlimited accumulation
+                const newRollover = Math.min(unused, currentLimit);
+
+                await updateShopByCustomer(customerId, {
+                    tryons_this_month: 0,
+                    rollover_tryons: newRollover,
+                });
+
+                console.log(
+                    `[stripe/webhook] ✅ Monthly reset for ${customerId}: ` +
+                    `used ${used}/${effectiveLimit}, rollover → ${newRollover}`
+                );
                 break;
             }
 

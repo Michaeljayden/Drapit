@@ -152,11 +152,11 @@ export async function POST(request: NextRequest) {
             .then();
 
         // ---------------------------------------------------------------
-        // 2. LIMIT CHECK — tryons_this_month < monthly_tryon_limit
+        // 2. LIMIT CHECK — tryons_this_month < monthly_tryon_limit + rollover
         // ---------------------------------------------------------------
         const { data: shop, error: shopError } = await supabase
             .from('shops')
-            .select('id, tryons_this_month, monthly_tryon_limit, email, name')
+            .select('id, tryons_this_month, monthly_tryon_limit, rollover_tryons, email, name')
             .eq('id', shopId)
             .single();
 
@@ -167,11 +167,14 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        if (shop.tryons_this_month >= shop.monthly_tryon_limit) {
+        // Effective limit = plan limit + rolled-over try-ons from previous month
+        const effectiveLimit = shop.monthly_tryon_limit + ((shop as Record<string, unknown>).rollover_tryons as number ?? 0);
+
+        if (shop.tryons_this_month >= effectiveLimit) {
             return NextResponse.json(
                 {
                     error: 'Monthly try-on limit reached',
-                    limit: shop.monthly_tryon_limit,
+                    limit: effectiveLimit,
                     used: shop.tryons_this_month,
                 },
                 { status: 429, headers: CORS_HEADERS }
@@ -327,17 +330,17 @@ export async function POST(request: NextRequest) {
         await supabase.rpc('increment_tryons_count', { shop_row_id: shopId });
 
         // Fire usage alert emails at exactly 80% and 100% thresholds (fire-and-forget)
+        // Use effectiveLimit (plan limit + rollover) so alerts are accurate
         const newCount = shop.tryons_this_month + 1;
-        const limit = shop.monthly_tryon_limit;
         const shopEmail = shop.email as string | null;
         const shopName = (shop.name as string) || 'Drapit merchant';
 
         if (shopEmail && !shopEmail.includes('shopify-placeholder')) {
-            const eightyPct = Math.floor(limit * 0.8);
+            const eightyPct = Math.floor(effectiveLimit * 0.8);
             if (newCount === eightyPct) {
-                sendUsageAlertEmail(shopEmail, shopName, newCount, limit, 80).catch(console.error);
-            } else if (newCount >= limit) {
-                sendUsageAlertEmail(shopEmail, shopName, newCount, limit, 100).catch(console.error);
+                sendUsageAlertEmail(shopEmail, shopName, newCount, effectiveLimit, 80).catch(console.error);
+            } else if (newCount >= effectiveLimit) {
+                sendUsageAlertEmail(shopEmail, shopName, newCount, effectiveLimit, 100).catch(console.error);
             }
         }
 
