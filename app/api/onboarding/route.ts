@@ -14,10 +14,31 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { shopName, domain, plan } = body;
+    const {
+        shopName,
+        domain,
+        plan,
+        phone,
+        contactPerson,
+        companyName,
+        kvkNumber,
+        vatNumber,
+        address,
+        postalCode,
+        city,
+        country,
+    } = body;
 
     if (!shopName || typeof shopName !== 'string' || shopName.trim().length === 0) {
         return NextResponse.json({ error: 'Shopnaam is verplicht' }, { status: 400 });
+    }
+
+    if (!phone || typeof phone !== 'string' || phone.trim().length === 0) {
+        return NextResponse.json({ error: 'Telefoonnummer is verplicht' }, { status: 400 });
+    }
+
+    if (!domain || typeof domain !== 'string' || domain.trim().length === 0) {
+        return NextResponse.json({ error: 'Webshop URL is verplicht' }, { status: 400 });
     }
 
     const selectedPlan = (plan as Plan) || 'trial';
@@ -44,7 +65,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Je hebt al een shop' }, { status: 409 });
     }
 
-    // Create the shop with selected plan and matching try-on limit
+    // Create the shop with selected plan, contact info and matching try-on limit
     const { data: shop, error: insertError } = await serviceClient
         .from('shops')
         .insert({
@@ -54,6 +75,15 @@ export async function POST(request: Request) {
             domain: domain?.trim() || null,
             plan: selectedPlan,
             monthly_tryon_limit: planConfig.limit,
+            phone: phone?.trim() || null,
+            contact_person: contactPerson?.trim() || null,
+            company_name: companyName?.trim() || null,
+            kvk_number: kvkNumber?.trim() || null,
+            vat_number: vatNumber?.trim() || null,
+            address: address?.trim() || null,
+            postal_code: postalCode?.trim() || null,
+            city: city?.trim() || null,
+            country: country?.trim() || 'Nederland',
         })
         .select('id')
         .single();
