@@ -10,6 +10,9 @@ import { sendContactEmail } from '@/lib/email';
 const contactSchema = z.object({
     name: z.string().min(1, 'Naam is verplicht').max(100),
     email: z.string().email('Ongeldig e-mailadres'),
+    phone: z.string().max(30).optional().default(''),
+    webshopName: z.string().max(200).optional().default(''),
+    brandClothing: z.string().max(50).optional().default(''),
     subject: z.string().min(1, 'Onderwerp is verplicht').max(200),
     message: z.string().min(10, 'Bericht moet minimaal 10 tekens bevatten').max(5000),
 });
@@ -62,11 +65,14 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    const { name, email, subject, message } = result.data;
+    const { name, email, phone, webshopName, brandClothing, subject, message } = result.data;
 
     const sent = await sendContactEmail({
         fromName: name,
         fromEmail: email,
+        phone: phone || undefined,
+        webshopName: webshopName || undefined,
+        brandClothing: brandClothing || undefined,
         subject,
         message,
     });

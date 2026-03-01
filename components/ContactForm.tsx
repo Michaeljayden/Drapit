@@ -7,11 +7,14 @@ import { useState } from 'react';
    Verstuurt via POST /api/contact → EmailJS → info@drapit.io
 ───────────────────────────────────────────────────────────────────────────── */
 
-type Field = 'name' | 'email' | 'subject' | 'message';
+type Field = 'name' | 'email' | 'phone' | 'webshopName' | 'brandClothing' | 'subject' | 'message';
 
 interface FormState {
     name: string;
     email: string;
+    phone: string;
+    webshopName: string;
+    brandClothing: string;
     subject: string;
     message: string;
 }
@@ -28,6 +31,9 @@ export default function ContactForm() {
     const [form, setForm] = useState<FormState>({
         name: '',
         email: '',
+        phone: '',
+        webshopName: '',
+        brandClothing: '',
         subject: SUBJECTS[0],
         message: '',
     });
@@ -64,7 +70,7 @@ export default function ContactForm() {
 
             if (res.ok) {
                 setStatus('success');
-                setForm({ name: '', email: '', subject: SUBJECTS[0], message: '' });
+                setForm({ name: '', email: '', phone: '', webshopName: '', brandClothing: '', subject: SUBJECTS[0], message: '' });
             } else {
                 setStatus('error');
             }
@@ -165,6 +171,68 @@ export default function ContactForm() {
                         onBlur={e => { e.target.style.borderColor = errors.email ? '#F87171' : 'rgba(255,255,255,0.10)'; e.target.style.background = 'rgba(255,255,255,0.04)'; }}
                     />
                     {errors.email && <p style={errorStyle}>{errors.email}</p>}
+                </div>
+            </div>
+
+            {/* Phone + Webshop name — two columns */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+                {/* Phone */}
+                <div>
+                    <label style={labelStyle}>Telefoonnummer <span style={{ color: 'rgba(241,245,249,0.25)', fontWeight: 400 }}>(optioneel)</span></label>
+                    <input
+                        type="tel"
+                        value={form.phone}
+                        onChange={e => update('phone', e.target.value)}
+                        placeholder="+31 6 12345678"
+                        style={inputStyle}
+                        onFocus={e => { e.target.style.borderColor = 'rgba(29,111,216,0.6)'; e.target.style.background = 'rgba(255,255,255,0.06)'; }}
+                        onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.10)'; e.target.style.background = 'rgba(255,255,255,0.04)'; }}
+                    />
+                </div>
+
+                {/* Webshop name */}
+                <div>
+                    <label style={labelStyle}>Webshopnaam <span style={{ color: 'rgba(241,245,249,0.25)', fontWeight: 400 }}>(optioneel)</span></label>
+                    <input
+                        type="text"
+                        value={form.webshopName}
+                        onChange={e => update('webshopName', e.target.value)}
+                        placeholder="Mijn Webshop"
+                        style={inputStyle}
+                        onFocus={e => { e.target.style.borderColor = 'rgba(29,111,216,0.6)'; e.target.style.background = 'rgba(255,255,255,0.06)'; }}
+                        onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.10)'; e.target.style.background = 'rgba(255,255,255,0.04)'; }}
+                    />
+                </div>
+            </div>
+
+            {/* Brand clothing */}
+            <div>
+                <label style={labelStyle}>Verkoopt u merkkleding? <span style={{ color: 'rgba(241,245,249,0.25)', fontWeight: 400 }}>(optioneel)</span></label>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                    {['Ja', 'Nee', 'Gedeeltelijk'].map(option => (
+                        <button
+                            key={option}
+                            type="button"
+                            onClick={() => update('brandClothing', form.brandClothing === option ? '' : option)}
+                            style={{
+                                padding: '10px 20px',
+                                fontSize: 14,
+                                fontWeight: 600,
+                                fontFamily: 'Plus Jakarta Sans, sans-serif',
+                                color: form.brandClothing === option ? '#FFFFFF' : 'rgba(241,245,249,0.55)',
+                                background: form.brandClothing === option
+                                    ? 'linear-gradient(135deg, #1D6FD8, #2563EB)'
+                                    : 'rgba(255,255,255,0.04)',
+                                border: `1px solid ${form.brandClothing === option ? 'rgba(29,111,216,0.6)' : 'rgba(255,255,255,0.10)'}`,
+                                borderRadius: 10,
+                                cursor: 'pointer',
+                                transition: 'all 0.2s ease',
+                                boxShadow: form.brandClothing === option ? '0 4px 16px rgba(29,111,216,0.30)' : 'none',
+                            }}
+                        >
+                            {option}
+                        </button>
+                    ))}
                 </div>
             </div>
 

@@ -144,6 +144,9 @@ export async function sendUsageAlertEmail(
 export async function sendContactEmail(params: {
     fromName: string;
     fromEmail: string;
+    phone?: string;
+    webshopName?: string;
+    brandClothing?: string;
     subject: string;
     message: string;
 }): Promise<boolean> {
@@ -153,6 +156,9 @@ export async function sendContactEmail(params: {
         to_email: 'info@drapit.io',
         from_name: params.fromName,
         from_email: params.fromEmail,
+        phone: params.phone || 'Niet opgegeven',
+        webshop_name: params.webshopName || 'Niet opgegeven',
+        brand_clothing: params.brandClothing || 'Niet opgegeven',
         subject: params.subject,
         message: params.message,
         reply_to: params.fromEmail,
