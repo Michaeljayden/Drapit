@@ -329,6 +329,7 @@ function PlatformLogos() {
 export default function LandingPage() {
     const [openFaq, setOpenFaq] = useState<number | null>(null);
     const [scrolled, setScrolled] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const hero = useInView(0.05);
     const stats = useInView(0.1);
@@ -500,8 +501,99 @@ export default function LandingPage() {
                     .d-hero-ctas  { justify-content: center; }
                     .d-hero-proof { justify-content: center; }
                     .d-hero-visual { order: -1; margin-bottom: 20px; }
-                    .d-nav-links  { display: none !important; }
+                        .d-nav-links  { display: none !important; }
                     .d-nav-mobile { display: flex !important; }
+                }
+
+                /* Mobile menu overlay */
+                .d-mobile-overlay {
+                    position: fixed;
+                    inset: 0;
+                    z-index: 299;
+                    background: rgba(6,9,15,0.6);
+                    backdrop-filter: blur(6px);
+                    opacity: 0;
+                    pointer-events: none;
+                    transition: opacity 0.3s ease;
+                }
+                .d-mobile-overlay.open {
+                    opacity: 1;
+                    pointer-events: auto;
+                }
+
+                /* Mobile menu drawer */
+                .d-mobile-drawer {
+                    position: fixed;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    width: min(320px, 85vw);
+                    z-index: 300;
+                    background: linear-gradient(180deg, rgba(13,24,41,0.98) 0%, rgba(6,9,15,0.99) 100%);
+                    border-left: 1px solid rgba(29,111,216,0.2);
+                    box-shadow: -10px 0 40px rgba(0,0,0,0.6);
+                    transform: translateX(100%);
+                    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+                    padding: 24px;
+                    display: flex;
+                    flex-direction: column;
+                }
+                .d-mobile-drawer.open {
+                    transform: translateX(0);
+                }
+
+                .d-mobile-drawer-link {
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    font-weight: 600;
+                    font-size: 17px;
+                    color: rgba(241,245,249,0.7);
+                    text-decoration: none;
+                    padding: 16px 12px;
+                    border-radius: 12px;
+                    transition: color 0.2s, background 0.2s;
+                    display: block;
+                }
+                .d-mobile-drawer-link:hover,
+                .d-mobile-drawer-link:active {
+                    color: #F1F5F9;
+                    background: rgba(29,111,216,0.1);
+                }
+
+                /* Hamburger button */
+                .d-hamburger {
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 5px;
+                    background: rgba(255,255,255,0.05);
+                    border: 1px solid rgba(255,255,255,0.1);
+                    border-radius: 10px;
+                    cursor: pointer;
+                    transition: background 0.2s;
+                    padding: 0;
+                }
+                .d-hamburger:hover {
+                    background: rgba(255,255,255,0.1);
+                }
+                .d-hamburger span {
+                    display: block;
+                    width: 18px;
+                    height: 2px;
+                    background: #F1F5F9;
+                    border-radius: 2px;
+                    transition: transform 0.3s ease, opacity 0.3s ease;
+                }
+                .d-hamburger.open span:nth-child(1) {
+                    transform: translateY(7px) rotate(45deg);
+                }
+                .d-hamburger.open span:nth-child(2) {
+                    opacity: 0;
+                }
+                .d-hamburger.open span:nth-child(3) {
+                    transform: translateY(-7px) rotate(-45deg);
                 }
                 @media (max-width: 768px) {
                     .d-shopify-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
@@ -553,9 +645,60 @@ export default function LandingPage() {
                             <Link href="/dashboard/login" className="d-btn-primary" style={{ padding: '8px 16px', fontSize: 12 }}>
                                 Start gratis
                             </Link>
+                            <button
+                                className={`d-hamburger ${mobileMenuOpen ? 'open' : ''}`}
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                aria-label="Menu openen"
+                            >
+                                <span />
+                                <span />
+                                <span />
+                            </button>
                         </div>
                     </div>
                 </nav>
+
+                {/* Mobile menu overlay */}
+                <div
+                    className={`d-mobile-overlay ${mobileMenuOpen ? 'open' : ''}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                />
+
+                {/* Mobile menu drawer */}
+                <div className={`d-mobile-drawer ${mobileMenuOpen ? 'open' : ''}`}>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+                        <button
+                            className={`d-hamburger open`}
+                            onClick={() => setMobileMenuOpen(false)}
+                            aria-label="Menu sluiten"
+                        >
+                            <span />
+                            <span />
+                            <span />
+                        </button>
+                    </div>
+
+                    <nav style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
+                        {[['Hoe het werkt', '#hoe-het-werkt'], ['Prijzen', '#prijzen'], ['FAQ', '#faq']].map(([label, href]) => (
+                            <a key={label} href={href} className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>{label}</a>
+                        ))}
+                        <Link href="/shopify" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>Shopify</Link>
+                        <Link href="/contact" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
+                        <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '12px 0' }} />
+                        <Link href="/dashboard/login" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>Inloggen</Link>
+                    </nav>
+
+                    <div style={{ paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                        <Link
+                            href="/dashboard/login"
+                            className="d-btn-primary"
+                            style={{ display: 'block', textAlign: 'center', padding: '14px 0', fontSize: 15, width: '100%' }}
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            Gratis starten →
+                        </Link>
+                    </div>
+                </div>
 
                 {/* ─── HERO ───────────────────────────────────────────── */}
                 <section className="drapit-grid-bg" style={{ paddingTop: 148, paddingBottom: 128, position: 'relative', overflow: 'hidden' }}>
