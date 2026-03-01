@@ -13,6 +13,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { processVtonResult } from '@/lib/image-processing';
 
 // ---------------------------------------------------------------------------
 // Supabase admin client (service role — bypasses RLS)
@@ -158,6 +159,32 @@ async function storeResultImage(
 }
 
 // ---------------------------------------------------------------------------
+// Upload a pre-processed image buffer directly to Supabase Storage
+// ---------------------------------------------------------------------------
+async function storeProcessedImage(
+    supabase: SupabaseClient,
+    imageBuffer: Buffer,
+    storagePath: string
+): Promise<string> {
+    const { error } = await supabase.storage
+        .from('results')
+        .upload(storagePath, imageBuffer, {
+            contentType: 'image/jpeg',
+            upsert: true,
+        });
+
+    if (error) {
+        throw new Error(`Storage upload failed: ${error.message}`);
+    }
+
+    const { data: urlData } = supabase.storage
+        .from('results')
+        .getPublicUrl(storagePath);
+
+    return urlData.publicUrl;
+}
+
+// ---------------------------------------------------------------------------
 // POST handler
 // ---------------------------------------------------------------------------
 export async function POST(request: NextRequest) {
@@ -251,17 +278,39 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ received: true });
         }
 
+        // -------------------------------------------------------------------
+        // Process image: remove background + composite on studio backdrop
+        // Falls back to raw VTON output if processing fails (safe degradation)
+        // -------------------------------------------------------------------
+        let processedImageBuffer: Buffer | null = null;
+        try {
+            processedImageBuffer = await processVtonResult(outputUrl);
+            console.log(`[webhook/replicate] Studio processing complete for try-on ${tryon.id}`);
+        } catch (processErr) {
+            console.error(`[webhook/replicate] Image processing failed, falling back to raw output:`, processErr);
+        }
+
         // Download and store the result image
         let resultStorageUrl: string;
         try {
-            resultStorageUrl = await storeResultImage(
-                supabase,
-                outputUrl,
-                `${tryon.shop_id}/${tryon.id}/result.jpg`
-            );
+            if (processedImageBuffer) {
+                // Store the studio-processed image directly from buffer
+                resultStorageUrl = await storeProcessedImage(
+                    supabase,
+                    processedImageBuffer,
+                    `${tryon.shop_id}/${tryon.id}/result.jpg`
+                );
+            } else {
+                // Fallback: store raw VTON output
+                resultStorageUrl = await storeResultImage(
+                    supabase,
+                    outputUrl,
+                    `${tryon.shop_id}/${tryon.id}/result.jpg`
+                );
+            }
         } catch (storageErr) {
             console.error(`[webhook/replicate] Failed to store result image:`, storageErr);
-            // Fall back to the original Replicate URL (temporary, will expire)
+            // Last resort: use temporary Replicate URL
             resultStorageUrl = outputUrl;
         }
 
