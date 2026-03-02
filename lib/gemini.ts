@@ -51,22 +51,28 @@ export async function generateVtonWithGemini(
                 role: 'user',
                 parts: [
                     {
-                        text: `You are a professional virtual try-on system for a fashion e-commerce platform.
+                        text: `Task: Virtual try-on. Edit the person photo so they are wearing the garment shown in the second image.
 
-The FIRST image shows a person (the shopper).
-The SECOND image shows a clothing item (the garment to try on).
+CRITICAL IDENTITY RULES — these must be followed exactly:
+- The output must show THE EXACT SAME PERSON as in image 1. Same face, same facial features, same skin tone, same hair color and style, same body shape, same height, same age appearance.
+- DO NOT change the person's face or generate a new face. Copy it pixel-perfectly.
+- DO NOT change the person's hairstyle or hair color.
+- DO NOT change the person's skin tone or ethnicity.
+- DO NOT change the person's body proportions or pose.
+- DO NOT change the background. Keep it identical to image 1.
+- DO NOT replace the person with a model or mannequin.
 
-Your task: Generate a photorealistic image of the person wearing the clothing item.
+CLOTHING CHANGE — only this should change:
+- Remove the clothing the person is currently wearing.
+- Replace it with the garment shown in image 2, fitted naturally to their body.
+- The garment must follow the body's pose, shape, and proportions realistically.
+- Show natural fabric draping, wrinkles, folds, and shadows matching the scene lighting.
+- Preserve the garment's exact color, pattern, texture, and design from image 2.
 
-Rules:
-- Keep the person's face, hairstyle, skin tone, body shape, and pose EXACTLY the same
-- Keep the original background EXACTLY the same
-- Replace ONLY the clothing with the garment from the second image
-- The clothing must fit naturally on the person's body proportions
-- Ensure realistic fabric draping, folds, creases, and shadows
-- Match the lighting of the original photo
-- The result must look like a real fashion photograph — not AI-generated
-- Output a high quality, sharp image`,
+OUTPUT:
+- Photorealistic fashion photograph quality.
+- Same resolution and framing as image 1.
+- The result should look like the person in image 1 actually put on the clothes from image 2 and a photo was taken.`,
                     },
                     {
                         inlineData: {
