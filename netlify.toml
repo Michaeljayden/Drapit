@@ -3,13 +3,10 @@
   publish = ".next"
 
 [functions]
-  # Webhook handler heeft extra tijd nodig voor bg-removal + compositing
   node_bundler = "nft"
 
-[[functions]]
-  path = "/api/webhook/replicate"
+[functions."api/webhook/replicate"]
   timeout = 60
 
-[[functions]]
-  path = "/api/tryon/process"
+[functions."api/tryon/process"]
   timeout = 60
