@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[functions]
+  # Webhook handler heeft extra tijd nodig voor bg-removal + compositing
+  node_bundler = "nft"
+
+[[functions]]
+  path = "/api/webhook/replicate"
+  timeout = 60
