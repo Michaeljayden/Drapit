@@ -9,3 +9,7 @@
 [[functions]]
   path = "/api/webhook/replicate"
   timeout = 60
+
+[[functions]]
+  path = "/api/tryon/process"
+  timeout = 60

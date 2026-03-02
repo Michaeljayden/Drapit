@@ -14,7 +14,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
-import { createTryOnPrediction } from '@/lib/replicate';
 import { sendUsageAlertEmail } from '@/lib/email';
 
 // ---------------------------------------------------------------------------
@@ -283,46 +282,29 @@ export async function POST(request: NextRequest) {
             .eq('id', tryonId);
 
         // ---------------------------------------------------------------
-        // 6. REPLICATE API — viktorfa/idm-vton (async with webhook)
-        //    Webhook URL from NEXT_PUBLIC_APP_URL env var
+        // 6. GEMINI VTON — fire-and-forget to background process route
+        //    /api/tryon/process handles the actual Gemini call + storage
         // ---------------------------------------------------------------
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://drapit.io';
-        const webhookUrl = `${appUrl}/api/webhook/replicate`;
+        const processUrl = `${appUrl}/api/tryon/process`;
+        const processSecret = process.env.TRYON_PROCESS_SECRET || '';
 
-        let prediction;
-        try {
-            prediction = await createTryOnPrediction(
-                {
-                    human_img: user_photo_url,
-                    garm_img: product_image_url,
-                    garment_des: 'clothing item',
-                    is_checked: true,
-                    is_checked_crop: false,
-                    denoise_steps: 30,
-                    seed: 42,
-                },
-                webhookUrl,
-                ['completed']
-            );
-        } catch (replicateErr) {
-            const replicateErrMsg = replicateErr instanceof Error ? replicateErr.message : String(replicateErr);
-            console.error('[tryon] Replicate error:', replicateErrMsg);
-            await supabase
-                .from('tryons')
-                .update({ status: 'failed' })
-                .eq('id', tryonId);
-
-            return NextResponse.json(
-                { error: 'Failed to start AI prediction', detail: replicateErrMsg },
-                { status: 502, headers: CORS_HEADERS }
-            );
-        }
-
-        // Save the Replicate prediction ID
-        await supabase
-            .from('tryons')
-            .update({ replicate_prediction_id: prediction.id })
-            .eq('id', tryonId);
+        // Fire-and-forget: do not await — we return immediately to the widget
+        fetch(processUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Process-Secret': processSecret,
+            },
+            body: JSON.stringify({
+                tryon_id: tryonId,
+                human_image_url: storedUserUrl,
+                garment_image_url: storedProductUrl,
+                shop_id: shopId,
+            }),
+        }).catch((err) => {
+            console.error('[tryon] Failed to trigger process route:', err);
+        });
 
         // ---------------------------------------------------------------
         // 8. INCREMENT tryons_this_month + usage alerts

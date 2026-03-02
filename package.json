@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@google/genai": "^0.7.0",
     "@netlify/plugin-nextjs": "^5.15.8",
     "@stripe/stripe-js": "^8.8.0",
     "@supabase/ssr": "^0.8.0",
