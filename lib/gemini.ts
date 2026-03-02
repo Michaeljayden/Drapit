@@ -83,7 +83,7 @@ Rules:
                 ],
             },
         ],
-        generationConfig: {
+        config: {
             responseModalities: ['image', 'text'],
         },
     });
