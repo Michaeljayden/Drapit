@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="nl" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drapit Studio — Redesign</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <style>
+    /* =========================================
+       CSS VARIABLES — DARK / LIGHT THEME
+    ========================================= */
+    :root[data-theme="dark"] {
+      --bg:              #0A0A0C;
+      --surface:         #111117;
+      --surface-2:       #17171F;
+      --surface-3:       #1C1C27;
+      --border:          #1F1F2C;
+      --border-hover:    #2C2C3E;
+      --text-primary:    #EDEAE3;
+      --text-secondary:  #7C7A86;
+      --text-tertiary:   #47465A;
+      --accent:          #3B7EF6;
+      --accent-hover:    #5A94F8;
+      --accent-bg:       rgba(59,126,246,0.10);
+      --accent-border:   rgba(59,126,246,0.28);
+      --upload-bg:       rgba(255,255,255,0.02);
+      --upload-hover:    rgba(59,126,246,0.06);
+      --success:         #22C55E;
+      --shadow:          0 0 0 1px rgba(255,255,255,0.04), 0 8px 32px rgba(0,0,0,0.4);
+    }
+    :root[data-theme="light"] {
+      --bg:              #F2F0EB;
+      --surface:         #FFFFFF;
+      --surface-2:       #F7F5F0;
+      --surface-3:       #EDEBE4;
+      --border:          #E3E0D8;
+      --border-hover:    #CCCAB8;
+      --text-primary:    #18181A;
+      --text-secondary:  #6B6864;
+      --text-tertiary:   #ABAAA4;
+      --accent:          #2563EB;
+      --accent-hover:    #1D4ED8;
+      --accent-bg:       rgba(37,99,235,0.08);
+      --accent-border:   rgba(37,99,235,0.22);
+      --upload-bg:       #FAFAF7;
+      --upload-hover:    rgba(37,99,235,0.04);
+      --success:         #16A34A;
+      --shadow:          0 0 0 1px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    /* =========================================
+       RESET & BASE
+    ========================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      height: 100vh;
+      overflow: hidden;
+      transition: background 0.3s, color 0.3s;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button { font-family: 'DM Sans', sans-serif; }
+    input, select, textarea { font-family: 'DM Sans', sans-serif; }
+
+    /* =========================================
+       LAYOUT SHELL
+    ========================================= */
+    .studio {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* =========================================
+       TOP BAR
+    ========================================= */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 20px;
+      height: 54px;
+      min-height: 54px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .topbar-logo {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 17px;
+      letter-spacing: -0.4px;
+      color: var(--text-primary);
+      flex-shrink: 0;
+    }
+    .topbar-logo span { color: var(--accent); }
+
+    /* Mode pills */
+    .mode-selector {
+      display: flex;
+      gap: 3px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      flex-shrink: 0;
+    }
+    .mode-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 13px;
+      border: none;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.18s;
+      white-space: nowrap;
+    }
+    .mode-btn.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(59,126,246,0.35);
+    }
+    .mode-btn:not(.active):hover { background: var(--surface-3); color: var(--text-primary); }
+    .mode-badge {
+      font-size: 10px;
+      font-weight: 600;
+      opacity: 0.7;
+    }
+
+    /* Topbar right */
+    .topbar-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+    .credits-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .credits-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .icon-btn {
+      width: 34px; height: 34px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-2);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.18s;
+      flex-shrink: 0;
+    }
+    .icon-btn:hover { color: var(--text-primary); border-color: var(--border-hover); }
+
+    /* =========================================
+       MAIN BODY — DESKTOP
+    ========================================= */
+    .studio-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* =========================================
+       LEFT PANEL
+    ========================================= */
+    .settings-panel {
+      width: 390px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .panel-scroll {
+      flex: 1;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .panel-scroll::-webkit-scrollbar { width: 4px; }
+    .panel-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* ---- Clothing tabs ---- */
+    .clothing-tabs {
+      padding: 16px 18px 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .tabs-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--text-tertiary);
+      margin-bottom: 11px;
+    }
+    .tab-list {
+      display: flex;
+      gap: 2px;
+      margin-bottom: -1px;
+    }
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border: 1px solid transparent;
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .tab-btn.active {
+      background: var(--surface-2);
+      border-color: var(--border);
+      border-bottom-color: var(--surface-2);
+      color: var(--text-primary);
+    }
+    .tab-btn:not(.active):hover { color: var(--text-primary); background: var(--surface-2); }
+
+    /* ---- Upload zone ---- */
+    .upload-section {
+      padding: 18px;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+    }
+    .upload-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .upload-zone {
+      aspect-ratio: 3/4;
+      border: 1.5px dashed var(--border);
+      border-radius: 12px;
+      background: var(--upload-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .upload-zone:hover { border-color: var(--accent); background: var(--upload-hover); }
+    .upload-zone.loaded { border-style: solid; border-color: var(--accent-border); background: var(--accent-bg); }
+    .upload-badge {
+      position: absolute;
+      top: 8px; left: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 2px 7px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+    }
+    .upload-ico { color: var(--text-tertiary); transition: color 0.2s; }
+    .upload-zone:hover .upload-ico,
+    .upload-zone.loaded .upload-ico { color: var(--accent); }
+    .upload-lbl {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+    .upload-sub {
+      font-size: 10px;
+      color: var(--text-tertiary);
+      text-align: center;
+    }
+
+    /* ---- Accordions ---- */
+    .accordion { border-bottom: 1px solid var(--border); }
+    .acc-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .acc-trigger:hover { background: var(--surface-2); }
+    .acc-left { display: flex; align-items: center; gap: 10px; }
+    .acc-icon-box {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .accordion.open .acc-icon-box {
+      background: var(--accent-bg);
+      border-color: var(--accent-border);
+      color: var(--accent);
+    }
+    .acc-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .acc-chevron {
+      color: var(--text-tertiary);
+      transition: transform 0.25s ease;
+      flex-shrink: 0;
+    }
+    .accordion.open .acc-chevron { transform: rotate(180deg); }
+    .acc-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.32s ease;
+    }
+    .accordion.open .acc-content { max-height: 600px; }
+    .acc-inner { padding: 2px 18px 18px; }
+
+    /* ---- Form controls ---- */
+    .form-row { margin-bottom: 14px; }
+    .form-row:last-child { margin-bottom: 0; }
+    .form-lbl {
+      display: block;
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      margin-bottom: 7px;
+    }
+    .select-wrap { position: relative; }
+    .form-select {
+      width: 100%;
+      padding: 9px 32px 9px 11px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.18s;
+      appearance: none; -webkit-appearance: none;
+      cursor: pointer;
+    }
+    .form-select:focus { border-color: var(--accent); }
+    .select-wrap::after {
+      content: '';
+      position: absolute;
+      right: 11px; top: 50%;
+      transform: translateY(-50%);
+      width: 0; height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--text-tertiary);
+      pointer-events: none;
+    }
+    .form-input {
+      width: 100%;
+      padding: 9px 11px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.18s;
+    }
+    .form-input::placeholder { color: var(--text-tertiary); }
+    .form-input:focus { border-color: var(--accent); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+
+    /* Chips */
+    .chip-group { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      padding: 5px 13px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--surface-2);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .chip:hover { border-color: var(--border-hover); color: var(--text-primary); }
+    .chip.on { background: var(--accent-bg); border-color: var(--accent-border); color: var(--accent); }
+
+    /* Slider */
+    .slider-row { display: flex; align-items: center; gap: 12px; }
+    .form-slider { flex: 1; accent-color: var(--accent); cursor: pointer; height: 4px; }
+    .slider-val { font-size: 12px; color: var(--text-secondary); min-width: 28px; text-align: right; }
+
+    /* ---- Panel footer ---- */
+    .panel-footer {
+      padding: 14px 18px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .credits-bar-head {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .credits-bar-lbl { font-size: 11px; font-weight: 500; color: var(--text-secondary); }
+    .credits-bar-val { font-size: 11px; color: var(--text-tertiary); }
+    .bar-track {
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 0.5s ease;
+    }
+    .btn-generate {
+      width: 100%;
+      padding: 13px 20px;
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      transition: all 0.2s;
+    }
+    .btn-generate:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(59,126,246,0.3);
+    }
+    .btn-generate:active { transform: none; }
+    .gen-cost { font-size: 11px; font-weight: 400; opacity: 0.72; }
+
+    /* =========================================
+       RIGHT — PREVIEW PANEL
+    ========================================= */
+    .preview-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .preview-topbar {
+      height: 54px;
+      padding: 0 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .preview-topbar-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .preview-actions { display: flex; gap: 7px; }
+    .preview-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    .preview-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      max-width: 260px;
+      text-align: center;
+    }
+    .preview-empty-icon {
+      width: 60px; height: 60px;
+      border-radius: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-tertiary);
+    }
+    .preview-empty-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .preview-empty-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    /* =========================================
+       MOBILE WIZARD
+    ========================================= */
+    .mobile-wizard { display: none; }
+
+    @media (max-width: 768px) {
+      body { overflow: auto; }
+      .studio-body { display: none; }
+      .mode-selector { display: none !important; }
+
+      .mobile-wizard {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        overflow: hidden;
+        height: calc(100vh - 54px);
+      }
+
+      /* Progress */
+      .wiz-progress {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 14px 18px 0;
+      }
+      .wiz-step-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .wiz-step-lbl {
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--text-tertiary);
+        transition: color 0.2s;
+      }
+      .wiz-step-lbl.active { color: var(--accent); }
+      .wiz-track {
+        height: 2.5px;
+        background: var(--border);
+        border-radius: 2px;
+        margin-bottom: -1px;
+      }
+      .wiz-fill {
+        height: 100%;
+        background: var(--accent);
+        border-radius: 2px;
+        transition: width 0.35s ease;
+      }
+
+      /* Content */
+      .wiz-content { flex: 1; overflow-y: auto; padding: 22px 18px; }
+      .wiz-step { display: none; }
+      .wiz-step.active { display: block; }
+      .wiz-step-title {
+        font-family: 'Outfit', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 5px;
+      }
+      .wiz-step-sub {
+        font-size: 13.5px;
+        color: var(--text-secondary);
+        margin-bottom: 22px;
+        line-height: 1.5;
+      }
+
+      /* Type cards */
+      .type-cards { display: flex; flex-direction: column; gap: 10px; }
+      .type-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 15px;
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        background: var(--surface);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .type-card.sel { border-color: var(--accent); background: var(--accent-bg); }
+      .type-card-ico {
+        width: 42px; height: 42px;
+        border-radius: 10px;
+        background: var(--surface-2);
+        display: flex; align-items: center; justify-content: center;
+        color: var(--text-secondary);
+        flex-shrink: 0;
+        transition: all 0.2s;
+      }
+      .type-card.sel .type-card-ico { background: var(--accent-bg); color: var(--accent); }
+      .type-card-info { flex: 1; }
+      .type-card-name { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
+      .type-card-credits { font-size: 12px; color: var(--text-secondary); }
+      .type-card-check {
+        width: 20px; height: 20px;
+        border-radius: 50%;
+        border: 2px solid var(--border);
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+        transition: all 0.2s;
+      }
+      .type-card.sel .type-card-check { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+      /* Nav bar */
+      .wiz-nav {
+        padding: 14px 18px;
+        border-top: 1px solid var(--border);
+        background: var(--surface);
+        display: flex;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+      .btn-wiz-back {
+        padding: 12px 18px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: transparent;
+        color: var(--text-primary);
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.18s;
+      }
+      .btn-wiz-back:hover { background: var(--surface-2); }
+      .btn-wiz-next {
+        flex: 1;
+        padding: 12px 18px;
+        background: var(--accent);
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        font-family: 'Outfit', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.18s;
+      }
+      .btn-wiz-next:hover { background: var(--accent-hover); }
+
+      /* Summary rows */
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 14px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        margin-bottom: 8px;
+      }
+      .summary-row-lbl { font-size: 13px; color: var(--text-secondary); }
+      .summary-row-val { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+      .summary-row.accent { background: var(--accent-bg); border-color: var(--accent-border); }
+      .summary-row.accent .summary-row-val { color: var(--accent); font-weight: 600; }
+
+      .info-strip {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin-bottom: 8px;
+      }
+      .info-strip span { font-size: 12px; color: var(--text-secondary); }
+    }
+
+    /* Very small screens */
+    @media (max-width: 480px) {
+      .topbar { padding: 0 14px; }
+      .topbar-logo { font-size: 15px; }
+      .credits-pill span { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="studio">
+
+  <!-- ===== TOP BAR ===== -->
+  <div class="topbar">
+    <div class="topbar-logo">Drapit <span>Studio</span></div>
+
+    <div class="mode-selector" id="modeSelector">
+      <button class="mode-btn active" onclick="setMode(this)">
+        <!-- Person icon -->
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+        Virtueel Model
+        <span class="mode-badge">2 cr</span>
+      </button>
+      <button class="mode-btn" onclick="setMode(this)">
+        <!-- Camera icon -->
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+        Product Foto
+        <span class="mode-badge">1 cr</span>
+      </button>
+      <button class="mode-btn" onclick="setMode(this)">
+        <!-- Rotate icon -->
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+        360° Rotatie
+        <span class="mode-badge">4 cr</span>
+      </button>
+    </div>
+
+    <div class="topbar-right">
+      <div class="credits-pill">
+        <div class="credits-dot"></div>
+        <span>17 / 500 tries</span>
+      </div>
+      <button class="icon-btn" onclick="toggleTheme()" title="Thema wisselen" id="themeBtn">
+        <!-- Sun icon (dark mode = show sun) -->
+        <svg id="themeIco" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== DESKTOP BODY ===== -->
+  <div class="studio-body">
+
+    <!-- LEFT — SETTINGS PANEL -->
+    <div class="settings-panel">
+      <div class="panel-scroll">
+
+        <!-- Clothing tabs -->
+        <div class="clothing-tabs">
+          <div class="tabs-label">Kledingstuk</div>
+          <div class="tab-list">
+            <button class="tab-btn active" onclick="setTab(this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>
+              Bovenkleding
+            </button>
+            <button class="tab-btn" onclick="setTab(this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
+              Onderkleding
+            </button>
+            <button class="tab-btn" onclick="setTab(this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2H2v20l10-5 10 5V2h-2M4 2v13M20 2v13"/></svg>
+              Bovenlaag
+            </button>
+          </div>
+        </div>
+
+        <!-- Upload zones -->
+        <div class="upload-section">
+          <div class="upload-grid">
+            <div class="upload-zone" onclick="toggleUpload(this)">
+              <div class="upload-badge">Voorkant</div>
+              <div class="upload-ico" id="frontIco">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <div class="upload-lbl" id="frontLbl">Afbeelding uploaden</div>
+              <div class="upload-sub">JPG · PNG · WEBP</div>
+            </div>
+            <div class="upload-zone" onclick="toggleUpload(this)">
+              <div class="upload-badge">Achterkant</div>
+              <div class="upload-ico" id="backIco">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <div class="upload-lbl" id="backLbl">Afbeelding uploaden</div>
+              <div class="upload-sub">Optioneel</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordions -->
+        <!-- MODEL & FYSIEK -->
+        <div class="accordion" id="acc-model">
+          <button class="acc-trigger" onclick="toggleAcc('acc-model')">
+            <div class="acc-left">
+              <div class="acc-icon-box">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+              </div>
+              <span class="acc-title">Model & Fysiek</span>
+            </div>
+            <svg class="acc-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-content">
+            <div class="acc-inner">
+              <div class="form-row">
+                <label class="form-lbl">Geslacht</label>
+                <div class="chip-group">
+                  <div class="chip on" onclick="chipSingle(this)">Vrouw</div>
+                  <div class="chip" onclick="chipSingle(this)">Man</div>
+                  <div class="chip" onclick="chipSingle(this)">Neutraal</div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-lbl">Huidtint</label>
+                <div class="chip-group">
+                  <div class="chip on" onclick="chipSingle(this)">Licht</div>
+                  <div class="chip" onclick="chipSingle(this)">Medium</div>
+                  <div class="chip" onclick="chipSingle(this)">Donker</div>
+                  <div class="chip" onclick="chipSingle(this)">Divers</div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-lbl">Postuur</label>
+                <div class="select-wrap">
+                  <select class="form-select">
+                    <option>Slank</option>
+                    <option>Atletisch</option>
+                    <option>Gemiddeld</option>
+                    <option>Plus size</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-lbl">Leeftijdsbereik</label>
+                <div class="form-grid">
+                  <div class="select-wrap">
+                    <select class="form-select">
+                      <option>18–25</option><option>25–35</option><option>35–50</option><option>50+</option>
+                    </select>
+                  </div>
+                  <div class="select-wrap">
+                    <select class="form-select">
+                      <option>Willekeurig</option><option>Specifiek</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- OMGEVING & LICHT -->
+        <div class="accordion" id="acc-env">
+          <button class="acc-trigger" onclick="toggleAcc('acc-env')">
+            <div class="acc-left">
+              <div class="acc-icon-box">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+              </div>
+              <span class="acc-title">Omgeving & Licht</span>
+            </div>
+            <svg class="acc-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-content">
+            <div class="acc-inner">
+              <div class="form-row">
+                <label class="form-lbl">Achtergrond</label>
+                <div class="chip-group">
+                  <div class="chip on" onclick="chipSingle(this)">Studio</div>
+                  <div class="chip" onclick="chipSingle(this)">Buiten</div>
+                  <div class="chip" onclick="chipSingle(this)">Interieur</div>
+                  <div class="chip" onclick="chipSingle(this)">Straat</div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-lbl">Lichtintensiteit</label>
+                <div class="slider-row">
+                  <input type="range" class="form-slider" min="0" max="100" value="70" oninput="updSlider(this,'sv1')">
+                  <span class="slider-val" id="sv1">70</span>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-lbl">Lichtrichting</label>
+                <div class="select-wrap">
+                  <select class="form-select">
+                    <option>Vooraan</option><option>Zij (links)</option><option>Zij (rechts)</option><option>Achter</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CAMERA & OPTIEK -->
+        <div class="accordion" id="acc-cam">
+          <button class="acc-trigger" onclick="toggleAcc('acc-cam')">
+            <div class="acc-left">
+              <div class="acc-icon-box">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+              </div>
+              <span class="acc-title">Camera & Optiek</span>
+            </div>
+            <svg class="acc-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-content">
+            <div class="acc-inner">
+              <div class="form-row">
+                <label class="form-lbl">Camerahoek</label>
+                <div class="chip-group">
+                  <div class="chip on" onclick="chipSingle(this)">Frontaal</div>
+                  <div class="chip" onclick="chipSingle(this)">3/4 hoek</div>
+                  <div class="chip" onclick="chipSingle(this)">Profiel</div>
+                  <div class="chip" onclick="chipSingle(this)">Achter</div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-lbl">Zoomafstand</label>
+                <div class="chip-group">
+                  <div class="chip" onclick="chipSingle(this)">Close-up</div>
+                  <div class="chip on" onclick="chipSingle(this)">Halffiguur</div>
+                  <div class="chip" onclick="chipSingle(this)">Vollfiguur</div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-lbl">Diepte van veld</label>
+                <div class="slider-row">
+                  <input type="range" class="form-slider" min="0" max="100" value="40" oninput="updSlider(this,'sv2')">
+                  <span class="slider-val" id="sv2">40</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BATCH & BRANDING -->
+        <div class="accordion" id="acc-batch">
+          <button class="acc-trigger" onclick="toggleAcc('acc-batch')">
+            <div class="acc-left">
+              <div class="acc-icon-box">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              </div>
+              <span class="acc-title">Batch & Branding</span>
+            </div>
+            <svg class="acc-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-content">
+            <div class="acc-inner">
+              <div class="form-row">
+                <label class="form-lbl">Aantal generaties</label>
+                <div class="chip-group">
+                  <div class="chip on" onclick="chipSingle(this)">1×</div>
+                  <div class="chip" onclick="chipSingle(this)">2×</div>
+                  <div class="chip" onclick="chipSingle(this)">4×</div>
+                  <div class="chip" onclick="chipSingle(this)">8×</div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-lbl">Uitvoerformaat</label>
+                <div class="chip-group">
+                  <div class="chip on" onclick="chipSingle(this)">1:1</div>
+                  <div class="chip" onclick="chipSingle(this)">4:5</div>
+                  <div class="chip" onclick="chipSingle(this)">9:16</div>
+                  <div class="chip" onclick="chipSingle(this)">3:4</div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-lbl">Bestandsnaam</label>
+                <input type="text" class="form-input" placeholder="bijv. zomercollectie_model">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /panel-scroll -->
+
+      <!-- Panel footer -->
+      <div class="panel-footer">
+        <div class="credits-bar-head">
+          <span class="credits-bar-lbl">Studio credits</span>
+          <span class="credits-bar-val">0 / 20</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: 0%"></div>
+        </div>
+        <button class="btn-generate">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Genereren
+          <span class="gen-cost">— 2 credits</span>
+        </button>
+      </div>
+    </div><!-- /settings-panel -->
+
+    <!-- RIGHT — PREVIEW -->
+    <div class="preview-panel">
+      <div class="preview-topbar">
+        <span class="preview-topbar-title">Studio resultaat</span>
+        <div class="preview-actions">
+          <button class="icon-btn" title="Downloaden">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+          <button class="icon-btn" title="Opslaan">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          </button>
+          <button class="icon-btn" title="Meer opties">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="preview-body">
+        <div class="preview-empty">
+          <div class="preview-empty-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div class="preview-empty-title">Studio resultaat</div>
+          <div class="preview-empty-sub">Upload kleding, stel je instellingen in en klik op Genereren om een AI-foto te maken.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /studio-body -->
+
+  <!-- ===== MOBILE WIZARD ===== -->
+  <div class="mobile-wizard">
+    <div class="wiz-progress">
+      <div class="wiz-step-labels">
+        <span class="wiz-step-lbl active" id="wl1">Type</span>
+        <span class="wiz-step-lbl" id="wl2">Upload</span>
+        <span class="wiz-step-lbl" id="wl3">Instellingen</span>
+        <span class="wiz-step-lbl" id="wl4">Genereer</span>
+      </div>
+      <div class="wiz-track">
+        <div class="wiz-fill" id="wizFill" style="width:25%"></div>
+      </div>
+    </div>
+
+    <div class="wiz-content">
+
+      <!-- Step 1 -->
+      <div class="wiz-step active" id="ws1">
+        <div class="wiz-step-title">Kies een type</div>
+        <div class="wiz-step-sub">Welk soort AI-foto wil je genereren?</div>
+        <div class="type-cards">
+          <div class="type-card sel" onclick="selCard(this)">
+            <div class="type-card-ico">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+            </div>
+            <div class="type-card-info">
+              <div class="type-card-name">Virtueel Model</div>
+              <div class="type-card-credits">2 credits per generatie</div>
+            </div>
+            <div class="type-card-check">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="type-card" onclick="selCard(this)">
+            <div class="type-card-ico">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+            </div>
+            <div class="type-card-info">
+              <div class="type-card-name">Product Foto</div>
+              <div class="type-card-credits">1 credit per generatie</div>
+            </div>
+            <div class="type-card-check">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="type-card" onclick="selCard(this)">
+            <div class="type-card-ico">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+            </div>
+            <div class="type-card-info">
+              <div class="type-card-name">360° Rotatie</div>
+              <div class="type-card-credits">4 credits per generatie</div>
+            </div>
+            <div class="type-card-check">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="wiz-step" id="ws2">
+        <div class="wiz-step-title">Upload kleding</div>
+        <div class="wiz-step-sub">Upload minimaal de voorkant van het kledingstuk.</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">
+          <button style="padding:6px 14px;border:1px solid var(--accent-border);border-radius:20px;background:var(--accent-bg);color:var(--accent);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;">Bovenkleding</button>
+          <button style="padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:var(--surface-2);color:var(--text-secondary);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;">Onderkleding</button>
+          <button style="padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:var(--surface-2);color:var(--text-secondary);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;">Bovenlaag</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="upload-zone" style="aspect-ratio:3/4;">
+            <div class="upload-badge">Voorkant</div>
+            <div class="upload-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+            <div class="upload-lbl">Uploaden</div>
+            <div class="upload-sub">JPG · PNG · WEBP</div>
+          </div>
+          <div class="upload-zone" style="aspect-ratio:3/4;">
+            <div class="upload-badge">Achterkant</div>
+            <div class="upload-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+            <div class="upload-lbl">Uploaden</div>
+            <div class="upload-sub">Optioneel</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="wiz-step" id="ws3">
+        <div class="wiz-step-title">Instellingen</div>
+        <div class="wiz-step-sub">Pas het model en de omgeving aan naar wens.</div>
+        <div class="form-row">
+          <label class="form-lbl">Geslacht</label>
+          <div class="chip-group">
+            <div class="chip on" onclick="chipSingle(this)">Vrouw</div>
+            <div class="chip" onclick="chipSingle(this)">Man</div>
+            <div class="chip" onclick="chipSingle(this)">Neutraal</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-lbl">Achtergrond</label>
+          <div class="chip-group">
+            <div class="chip on" onclick="chipSingle(this)">Studio</div>
+            <div class="chip" onclick="chipSingle(this)">Buiten</div>
+            <div class="chip" onclick="chipSingle(this)">Interieur</div>
+            <div class="chip" onclick="chipSingle(this)">Straat</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-lbl">Camerahoek</label>
+          <div class="chip-group">
+            <div class="chip on" onclick="chipSingle(this)">Frontaal</div>
+            <div class="chip" onclick="chipSingle(this)">3/4 hoek</div>
+            <div class="chip" onclick="chipSingle(this)">Profiel</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-lbl">Zoomafstand</label>
+          <div class="chip-group">
+            <div class="chip" onclick="chipSingle(this)">Close-up</div>
+            <div class="chip on" onclick="chipSingle(this)">Halffiguur</div>
+            <div class="chip" onclick="chipSingle(this)">Vollfiguur</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="wiz-step" id="ws4">
+        <div class="wiz-step-title">Klaar om te genereren</div>
+        <div class="wiz-step-sub">Controleer je instellingen en start de generatie.</div>
+        <div class="summary-row"><span class="summary-row-lbl">Type</span><span class="summary-row-val">Virtueel Model</span></div>
+        <div class="summary-row"><span class="summary-row-lbl">Kledingstuk</span><span class="summary-row-val">Bovenkleding</span></div>
+        <div class="summary-row"><span class="summary-row-lbl">Model</span><span class="summary-row-val">Vrouw · Licht · Slank</span></div>
+        <div class="summary-row"><span class="summary-row-lbl">Omgeving</span><span class="summary-row-val">Studio · Frontaal</span></div>
+        <div class="summary-row accent"><span class="summary-row-lbl">Kosten</span><span class="summary-row-val">2 credits</span></div>
+        <div class="info-strip" style="margin-top:16px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-tertiary);flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>Saldo: 0 / 20 Studio credits</span>
+        </div>
+      </div>
+
+    </div><!-- /wiz-content -->
+
+    <div class="wiz-nav">
+      <button class="btn-wiz-back" id="wizBack" onclick="wBack()" style="display:none;">Terug</button>
+      <button class="btn-wiz-next" id="wizNext" onclick="wNext()">
+        Volgende
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </div><!-- /mobile-wizard -->
+
+</div><!-- /studio -->
+
+<script>
+  /* ---- Theme toggle ---- */
+  function toggleTheme() {
+    const html = document.documentElement;
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    const ico = document.getElementById('themeIco');
+    if (next === 'light') {
+      ico.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    } else {
+      ico.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
+    }
+  }
+
+  /* ---- Mode selector ---- */
+  function setMode(btn) {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  /* ---- Clothing tabs ---- */
+  function setTab(btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  /* ---- Upload zone (demo toggle) ---- */
+  function toggleUpload(zone) {
+    zone.classList.toggle('loaded');
+    const lbl = zone.querySelector('.upload-lbl');
+    const ico = zone.querySelector('.upload-ico svg');
+    if (zone.classList.contains('loaded')) {
+      lbl.textContent = 'Bestand geladen';
+      ico.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+    } else {
+      lbl.textContent = 'Afbeelding uploaden';
+      ico.innerHTML = '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>';
+    }
+  }
+
+  /* ---- Accordion ---- */
+  function toggleAcc(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  /* ---- Chips (single select within group) ---- */
+  function chipSingle(chip) {
+    chip.closest('.chip-group').querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+    chip.classList.add('on');
+  }
+
+  /* ---- Sliders ---- */
+  function updSlider(el, id) {
+    document.getElementById(id).textContent = el.value;
+  }
+
+  /* ---- Mobile wizard ---- */
+  let wStep = 1;
+  const wTotal = 4;
+
+  function wNext() {
+    if (wStep < wTotal) {
+      document.getElementById('ws' + wStep).classList.remove('active');
+      wStep++;
+      document.getElementById('ws' + wStep).classList.add('active');
+      syncWiz();
+    }
+  }
+  function wBack() {
+    if (wStep > 1) {
+      document.getElementById('ws' + wStep).classList.remove('active');
+      wStep--;
+      document.getElementById('ws' + wStep).classList.add('active');
+      syncWiz();
+    }
+  }
+  function syncWiz() {
+    document.getElementById('wizFill').style.width = (wStep / wTotal * 100) + '%';
+    for (let i = 1; i <= wTotal; i++) {
+      document.getElementById('wl' + i).classList.toggle('active', i === wStep);
+    }
+    document.getElementById('wizBack').style.display = wStep > 1 ? 'block' : 'none';
+    const nb = document.getElementById('wizNext');
+    if (wStep === wTotal) {
+      nb.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Genereren`;
+    } else {
+      nb.innerHTML = `Volgende <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`;
+    }
+  }
+
+  /* Type card selector (mobile) */
+  function selCard(card) {
+    card.closest('.type-cards').querySelectorAll('.type-card').forEach(c => c.classList.remove('sel'));
+    card.classList.add('sel');
+  }
+</script>
+</body>
+</html>
