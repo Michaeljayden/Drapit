@@ -84,7 +84,8 @@ export interface StudioGenerationResult {
 // ---------------------------------------------------------------------------
 
 // Best available image generation model via Gemini API
-const GENERATION_MODEL = 'gemini-2.0-flash-preview-image-generation';
+// gemini-3.1-flash-image-preview = "Nano Banana 2 Preview" (best all-round per Google docs)
+const GENERATION_MODEL = 'gemini-3.1-flash-image-preview';
 
 // Text-only model for garment analysis (fast, accurate)
 const ANALYSIS_MODEL = 'gemini-2.0-flash';

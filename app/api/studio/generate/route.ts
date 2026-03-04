@@ -241,8 +241,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // In development: return actual error for debugging
+    const isDev = process.env.NODE_ENV === 'development';
     return NextResponse.json(
-      { error: 'Generatie mislukt. Probeer het opnieuw.' },
+      {
+        error: 'Generatie mislukt. Probeer het opnieuw.',
+        ...(isDev && { debug: message }),
+      },
       { status: 500 }
     );
   }
