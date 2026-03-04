@@ -31,6 +31,18 @@ const navItems = [
         ),
     },
     {
+        label: 'Studio',
+        href: '/dashboard/studio',
+        badge: 'Nieuw',
+        icon: (
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 13V5.5A1.5 1.5 0 014.5 4h.75L6 2.5h6L12.75 4h.75A1.5 1.5 0 0115 5.5V13a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 013 13z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="9" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.5" />
+                <circle cx="13.5" cy="5.5" r="0.5" fill="currentColor" />
+            </svg>
+        ),
+    },
+    {
         label: 'API-sleutels',
         href: '/dashboard/api-keys',
         icon: (
@@ -118,7 +130,12 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
                                 }`}
                         >
                             {item.icon}
-                            {item.label}
+                            <span className="flex-1">{item.label}</span>
+                            {'badge' in item && item.badge && (
+                                <span className="text-[9px] font-black uppercase tracking-wider bg-[#1D6FD8] text-white px-1.5 py-0.5 rounded-full leading-none">
+                                    {item.badge}
+                                </span>
+                            )}
                         </Link>
                     );
                 })}

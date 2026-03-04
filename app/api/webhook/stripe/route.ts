@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { getStripe, PLANS, planByPriceId } from '@/lib/stripe';
-import type { Plan } from '@/lib/supabase/types';
+import { getStripe, PLANS, planByPriceId, STUDIO_PLANS, studioPlanByPriceId, creditPackByPriceId } from '@/lib/stripe';
+import type { Plan, StudioPlan } from '@/lib/supabase/types';
 import Stripe from 'stripe';
 
 // ── Admin Supabase client ───────────────────────────────────────────────────
@@ -84,19 +84,80 @@ export async function POST(request: NextRequest) {
         switch (event.type) {
             // ─────────────────────────────────────────────────────────────
             // checkout.session.completed
-            // Customer completed the checkout — activate their plan
+            // Customer completed the checkout — activate their plan or add credits
             // ─────────────────────────────────────────────────────────────
             case 'checkout.session.completed': {
                 const session = event.data.object as Stripe.Checkout.Session;
 
+                const shopId = session.metadata?.shop_id;
+                const productType = session.metadata?.product_type;
+                const customerId = session.customer as string;
+
+                if (!shopId) {
+                    console.warn('[stripe/webhook] checkout.session.completed: missing shop_id metadata');
+                    break;
+                }
+
+                // ── Studio subscription activated ────────────────────────
+                if (productType === 'studio' && session.mode === 'subscription') {
+                    const studioPlanKey = session.metadata?.studio_plan_key as StudioPlan | undefined;
+                    const subscriptionId = session.subscription as string;
+
+                    if (!studioPlanKey || !STUDIO_PLANS[studioPlanKey]) {
+                        console.warn('[stripe/webhook] studio checkout: missing studio_plan_key metadata');
+                        break;
+                    }
+
+                    const studioPlanConfig = STUDIO_PLANS[studioPlanKey];
+
+                    await updateShopById(shopId, {
+                        has_studio: true,
+                        studio_plan: studioPlanKey,
+                        studio_subscription_id: subscriptionId,
+                        stripe_customer_id: customerId,
+                        studio_credits_limit: studioPlanConfig.credits_limit,
+                        studio_credits_used: 0,   // Reset on new subscription
+                    });
+
+                    console.log(`[stripe/webhook] ✅ Shop ${shopId} activated Studio plan: ${studioPlanKey}`);
+                    break;
+                }
+
+                // ── Studio credit pack purchased ─────────────────────────
+                if (productType === 'studio_credits' && session.mode === 'payment') {
+                    const creditsAmount = parseInt(session.metadata?.credits_amount ?? '0', 10);
+
+                    if (!creditsAmount || creditsAmount <= 0) {
+                        console.warn('[stripe/webhook] studio_credits checkout: invalid credits_amount');
+                        break;
+                    }
+
+                    // Increment studio_extra_credits (these never reset on monthly renewal)
+                    const admin = getSupabaseAdmin();
+                    const { data: shop } = await admin
+                        .from('shops')
+                        .select('studio_extra_credits')
+                        .eq('id', shopId)
+                        .single();
+
+                    const currentExtra = (shop?.studio_extra_credits as number) ?? 0;
+
+                    await updateShopById(shopId, {
+                        studio_extra_credits: currentExtra + creditsAmount,
+                        stripe_customer_id: customerId,
+                    });
+
+                    console.log(`[stripe/webhook] ✅ Shop ${shopId} added ${creditsAmount} extra Studio credits`);
+                    break;
+                }
+
+                // ── VTON subscription activated ──────────────────────────
                 if (session.mode !== 'subscription') break;
 
-                const shopId = session.metadata?.shop_id;
                 const planKey = session.metadata?.plan_key as Plan | undefined;
-                const customerId = session.customer as string;
                 const subscriptionId = session.subscription as string;
 
-                if (!shopId || !planKey || !PLANS[planKey]) {
+                if (!planKey || !PLANS[planKey]) {
                     console.warn('[stripe/webhook] checkout.session.completed missing metadata');
                     break;
                 }
@@ -112,13 +173,13 @@ export async function POST(request: NextRequest) {
                     rollover_tryons: 0,    // No rollover for brand-new subscriptions
                 });
 
-                console.log(`[stripe/webhook] ✅ Shop ${shopId} activated plan: ${planKey}`);
+                console.log(`[stripe/webhook] ✅ Shop ${shopId} activated VTON plan: ${planKey}`);
                 break;
             }
 
             // ─────────────────────────────────────────────────────────────
             // customer.subscription.updated
-            // Upgrade / downgrade / plan change
+            // Upgrade / downgrade / plan change (both VTON and Studio)
             // ─────────────────────────────────────────────────────────────
             case 'customer.subscription.updated': {
                 const subscription = event.data.object as Stripe.Subscription;
@@ -131,6 +192,21 @@ export async function POST(request: NextRequest) {
                     break;
                 }
 
+                // ── Check if this is a Studio plan ───────────────────────
+                const newStudioPlan = studioPlanByPriceId(priceId);
+                if (newStudioPlan) {
+                    const studioConfig = STUDIO_PLANS[newStudioPlan];
+                    await updateShopByCustomer(customerId, {
+                        studio_plan: newStudioPlan,
+                        studio_credits_limit: studioConfig.credits_limit,
+                        studio_subscription_id: subscription.id,
+                        has_studio: true,
+                    });
+                    console.log(`[stripe/webhook] ✅ Customer ${customerId} Studio plan changed to: ${newStudioPlan}`);
+                    break;
+                }
+
+                // ── Check if this is a VTON plan ─────────────────────────
                 const newPlan = planByPriceId(priceId);
                 if (!newPlan) {
                     console.warn(`[stripe/webhook] subscription.updated: unknown price ${priceId}`);
@@ -145,27 +221,43 @@ export async function POST(request: NextRequest) {
                     stripe_subscription_id: subscription.id,
                 });
 
-                console.log(`[stripe/webhook] ✅ Customer ${customerId} changed to plan: ${newPlan}`);
+                console.log(`[stripe/webhook] ✅ Customer ${customerId} VTON plan changed to: ${newPlan}`);
                 break;
             }
 
             // ─────────────────────────────────────────────────────────────
             // customer.subscription.deleted
-            // Subscription cancelled — downgrade to free
+            // Subscription cancelled — downgrade to free (VTON or Studio)
             // ─────────────────────────────────────────────────────────────
             case 'customer.subscription.deleted': {
                 const subscription = event.data.object as Stripe.Subscription;
                 const customerId = subscription.customer as string;
 
-                // Downgrade to trial plan — keep 20 free try-ons so the shop
-                // isn't completely locked out.
-                await updateShopByCustomer(customerId, {
-                    plan: 'trial',
-                    monthly_tryon_limit: PLANS.trial.limit,
-                    stripe_subscription_id: null,
-                });
+                // Determine if this was a Studio or VTON subscription
+                const cancelledPriceId = subscription.items.data[0]?.price?.id;
+                const wasStudio = cancelledPriceId
+                    ? studioPlanByPriceId(cancelledPriceId) !== null
+                    : false;
 
-                console.log(`[stripe/webhook] ⛔ Customer ${customerId} subscription cancelled → reverted to trial`);
+                if (wasStudio) {
+                    // Revert Studio to free trial (keep access with 20 monthly credits)
+                    await updateShopByCustomer(customerId, {
+                        studio_plan: 'studio_trial',
+                        studio_credits_limit: STUDIO_PLANS.studio_trial.credits_limit,
+                        studio_credits_used: 0,
+                        studio_subscription_id: null,
+                        has_studio: true,  // Keep trial access
+                    });
+                    console.log(`[stripe/webhook] ⛔ Customer ${customerId} Studio subscription cancelled → reverted to studio_trial`);
+                } else {
+                    // Revert VTON to trial plan — keep 20 free try-ons
+                    await updateShopByCustomer(customerId, {
+                        plan: 'trial',
+                        monthly_tryon_limit: PLANS.trial.limit,
+                        stripe_subscription_id: null,
+                    });
+                    console.log(`[stripe/webhook] ⛔ Customer ${customerId} VTON subscription cancelled → reverted to trial`);
+                }
                 break;
             }
 
@@ -208,23 +300,31 @@ export async function POST(request: NextRequest) {
 
             // ─────────────────────────────────────────────────────────────
             // invoice.payment_succeeded
-            // Monthly renewal — reset counter & roll over unused try-ons.
+            // Monthly renewal — reset counters & roll over unused credits.
+            // Handles both VTON and Studio subscriptions.
             // Only triggers on subscription_cycle (not first-time checkout).
             // ─────────────────────────────────────────────────────────────
             case 'invoice.payment_succeeded': {
                 const invoice = event.data.object as Stripe.Invoice;
 
                 // 'subscription_cycle' = recurring renewal; skip first payment
-                // (that is handled by checkout.session.completed above)
                 if (invoice.billing_reason !== 'subscription_cycle') break;
 
                 const customerId = invoice.customer as string;
                 const admin = getSupabaseAdmin();
 
+                // Determine if this is a Studio or VTON renewal via price ID
+                const renewedPriceId = (invoice as Stripe.Invoice & { lines?: { data?: Array<{ price?: { id?: string } }> } })
+                    .lines?.data?.[0]?.price?.id;
+
+                const isStudioRenewal = renewedPriceId
+                    ? studioPlanByPriceId(renewedPriceId) !== null
+                    : false;
+
                 // Fetch current shop state
                 const { data: shop, error: shopErr } = await admin
                     .from('shops')
-                    .select('monthly_tryon_limit, tryons_this_month, rollover_tryons')
+                    .select('monthly_tryon_limit, tryons_this_month, rollover_tryons, studio_credits_limit, studio_credits_used, studio_plan')
                     .eq('stripe_customer_id', customerId)
                     .single();
 
@@ -233,25 +333,41 @@ export async function POST(request: NextRequest) {
                     break;
                 }
 
-                const currentLimit = shop.monthly_tryon_limit as number;
-                const currentRollover = (shop.rollover_tryons as number) ?? 0;
-                const effectiveLimit = currentLimit + currentRollover;
-                const used = shop.tryons_this_month as number;
+                if (isStudioRenewal) {
+                    // ── Studio monthly renewal ───────────────────────────
+                    const studPlan = (shop.studio_plan as string) ?? 'studio_trial';
+                    const studioPlan = studioPlanByPriceId(renewedPriceId!) ?? (studPlan as StudioPlan);
+                    const studioConfig = STUDIO_PLANS[studioPlan] ?? STUDIO_PLANS.studio_trial;
 
-                // Unused try-ons from this cycle → carry to next month
-                const unused = Math.max(0, effectiveLimit - used);
-                // Cap rollover at 1× the plan's monthly limit to prevent unlimited accumulation
-                const newRollover = Math.min(unused, currentLimit);
+                    // Reset studio_credits_used; restore monthly limit; keep extra credits
+                    await updateShopByCustomer(customerId, {
+                        studio_credits_used: 0,
+                        studio_credits_limit: studioConfig.credits_limit,
+                    });
 
-                await updateShopByCustomer(customerId, {
-                    tryons_this_month: 0,
-                    rollover_tryons: newRollover,
-                });
+                    console.log(`[stripe/webhook] ✅ Studio monthly reset for ${customerId} (plan: ${studioPlan})`);
+                } else {
+                    // ── VTON monthly renewal ─────────────────────────────
+                    const currentLimit = shop.monthly_tryon_limit as number;
+                    const currentRollover = (shop.rollover_tryons as number) ?? 0;
+                    const effectiveLimit = currentLimit + currentRollover;
+                    const used = shop.tryons_this_month as number;
 
-                console.log(
-                    `[stripe/webhook] ✅ Monthly reset for ${customerId}: ` +
-                    `used ${used}/${effectiveLimit}, rollover → ${newRollover}`
-                );
+                    // Unused try-ons from this cycle → carry to next month
+                    const unused = Math.max(0, effectiveLimit - used);
+                    // Cap rollover at 1× the plan's monthly limit
+                    const newRollover = Math.min(unused, currentLimit);
+
+                    await updateShopByCustomer(customerId, {
+                        tryons_this_month: 0,
+                        rollover_tryons: newRollover,
+                    });
+
+                    console.log(
+                        `[stripe/webhook] ✅ VTON monthly reset for ${customerId}: ` +
+                        `used ${used}/${effectiveLimit}, rollover → ${newRollover}`
+                    );
+                }
                 break;
             }
 
