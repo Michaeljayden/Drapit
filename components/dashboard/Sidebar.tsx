@@ -77,7 +77,7 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
     const [mobileOpen, setMobileOpen] = useState(false);
 
     const usagePercent = tryonsLimit > 0 ? Math.min((tryonsUsed / tryonsLimit) * 100, 100) : 0;
-    const usageColor = usagePercent > 90 ? '#DC2626' : usagePercent > 75 ? '#D97706' : '#1D6FD8';
+    const usageColor = usagePercent > 90 ? '#EF4444' : usagePercent > 75 ? '#F59E0B' : '#1D6FD8';
 
     // Close mobile menu on route change
     useEffect(() => {
@@ -107,13 +107,19 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
     const sidebarContent = (
         <>
             {/* Logo */}
-            <div className="p-6">
+            <div className="px-5 pt-6 pb-5">
                 <Logo size="md" className="brightness-0 invert" />
-                <p className="text-xs text-[#94A3B8] mt-2 truncate">{shopName}</p>
+                <div className="flex items-center gap-2 mt-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]" />
+                    <p className="text-xs text-[#94A3B8] truncate font-medium">{shopName}</p>
+                </div>
             </div>
 
+            {/* Divider */}
+            <div className="mx-4 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-3" />
+
             {/* Navigation */}
-            <nav className="flex-1 px-3 space-y-1">
+            <nav className="flex-1 px-3 space-y-0.5">
                 {navItems.map((item) => {
                     const isActive =
                         item.href === '/dashboard'
@@ -124,15 +130,15 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
                         <Link
                             key={item.href}
                             href={item.href}
-                            className={`flex items-center gap-3 ${isActive
-                                ? 'bg-[#1D6FD8] text-white rounded-lg px-4 py-2.5 text-sm font-medium'
-                                : 'text-[#94A3B8] hover:bg-[#1A3A5C] hover:text-white rounded-lg px-4 py-2.5 text-sm font-medium transition-colors duration-150'
+                            className={`flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-150 ${isActive
+                                ? 'bg-gradient-to-r from-[#1D6FD8] to-[#1558B0] text-white shadow-[0_4px_12px_rgba(29,111,216,0.35)]'
+                                : 'text-[#94A3B8] hover:bg-white/8 hover:text-white'
                                 }`}
                         >
-                            {item.icon}
+                            <span className={isActive ? 'text-white' : 'text-[#94A3B8]'}>{item.icon}</span>
                             <span className="flex-1">{item.label}</span>
                             {'badge' in item && item.badge && (
-                                <span className="text-[9px] font-black uppercase tracking-wider bg-[#1D6FD8] text-white px-1.5 py-0.5 rounded-full leading-none">
+                                <span className="text-[9px] font-black uppercase tracking-wider bg-emerald-500 text-white px-1.5 py-0.5 rounded-full leading-none">
                                     {item.badge}
                                 </span>
                             )}
@@ -142,26 +148,41 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
             </nav>
 
             {/* Usage indicator */}
-            <div className="px-4 py-3 mx-3 mb-2 rounded-lg bg-white/5">
-                <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-xs font-medium text-[#94A3B8]">Try-ons deze maand</span>
-                    <span className="text-xs font-bold text-white">{tryonsUsed} / {tryonsLimit}</span>
-                </div>
-                <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                    <div
-                        className="h-full rounded-full transition-all duration-500"
-                        style={{ width: `${usagePercent}%`, backgroundColor: usageColor }}
-                    />
+            <div className="px-4 py-3 mx-3 mb-3">
+                <div className="bg-white/5 rounded-xl p-3 border border-white/5">
+                    <div className="flex justify-between items-center mb-2">
+                        <span className="text-[11px] font-semibold text-[#94A3B8]">Try-ons deze maand</span>
+                        <span className="text-[11px] font-bold text-white">{tryonsUsed} <span className="text-white/40 font-normal">/ {tryonsLimit}</span></span>
+                    </div>
+                    <div className="w-full h-1.5 bg-white/8 rounded-full overflow-hidden">
+                        <div
+                            className="h-full rounded-full transition-all duration-700 ease-out"
+                            style={{
+                                width: `${usagePercent}%`,
+                                background: usagePercent > 90
+                                    ? 'linear-gradient(90deg, #EF4444, #DC2626)'
+                                    : usagePercent > 75
+                                        ? 'linear-gradient(90deg, #F59E0B, #D97706)'
+                                        : 'linear-gradient(90deg, #1D6FD8, #3B9AF0)',
+                            }}
+                        />
+                    </div>
+                    {usagePercent > 80 && (
+                        <p className="text-[10px] text-amber-400 mt-1.5 font-medium">
+                            {usagePercent > 90 ? '⚠ Bijna vol' : 'Bijna op limiet'}
+                        </p>
+                    )}
                 </div>
             </div>
 
             {/* Logout */}
-            <div className="p-3 border-t border-white/10">
+            <div className="p-3 pt-0">
+                <div className="h-px bg-white/8 mb-2" />
                 <button
                     onClick={handleLogout}
-                    className="flex items-center gap-3 text-[#94A3B8] hover:bg-[#1A3A5C] hover:text-white rounded-lg px-4 py-2.5 text-sm font-medium transition-colors duration-150 w-full"
+                    className="flex items-center gap-3 text-[#64748B] hover:text-white hover:bg-white/8 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-150 w-full group"
                 >
-                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:text-red-400 transition-colors">
                         <path d="M6.5 16H3.5C2.67 16 2 15.33 2 14.5V3.5C2 2.67 2.67 2 3.5 2H6.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                         <path d="M12 12.5L16 9L12 5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         <line x1="16" y1="9" x2="7" y2="9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -190,7 +211,10 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
                     </button>
                     <Logo size="sm" className="brightness-0 invert" />
                 </div>
-                <p className="text-xs text-[#94A3B8] truncate max-w-[140px]">{shopName}</p>
+                <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    <p className="text-xs text-[#94A3B8] truncate max-w-[140px]">{shopName}</p>
+                </div>
             </div>
 
             {/* ─── Mobile overlay ─────────────────────────────────── */}
@@ -205,7 +229,7 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
             <aside
                 className={`
                     md:hidden fixed top-0 left-0 bottom-0 z-50 w-64
-                    bg-[#0F2744] text-white flex flex-col
+                    bg-[#0B1E38] text-white flex flex-col
                     transition-transform duration-300 ease-in-out
                     ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}
                 `}
@@ -227,7 +251,7 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
             </aside>
 
             {/* ─── Desktop sidebar ────────────────────────────────── */}
-            <aside className="hidden md:flex bg-[#0F2744] text-white w-64 min-h-screen flex-col shrink-0 fixed top-0 left-0 bottom-0 z-30">
+            <aside className="hidden md:flex bg-[#0B1E38] text-white w-64 min-h-screen flex-col shrink-0 fixed top-0 left-0 bottom-0 z-30">
                 {sidebarContent}
             </aside>
         </>

@@ -50,6 +50,7 @@ export interface StudioGenerationParams {
   height?: number;
   bodyType?: string;
   customModelPrompt?: string;
+  customModelImage?: string; // base64
 
   // Pose & expression (virtual-model only)
   posePrompt?: string;
@@ -272,6 +273,10 @@ async function generateVirtualModelImage(params: StudioGenerationParams): Promis
     ? `\n- A custom brand logo is on the garment at position: "${params.clothingLogo.position.replace(/_/g, ' ')}". The logo reference image is included below — reproduce it with PIXEL-PERFECT accuracy: every line, colour, shape, and symbol must match exactly.`
     : '';
 
+  const modelPortraitInstruction = params.customModelImage
+    ? `\n- THE MODEL: A specific person's reference image is included below. This is your PRIMARY REFERENCE for the model's likeness, hair style, facial features, and skin tone. Reproduce this exact person as the model wearing the garment.`
+    : '';
+
   const prompt = `You are a world-class AI fashion photographer producing editorial-quality campaign imagery.
 
 ══════════════════════════════════════════════════════
@@ -305,7 +310,7 @@ MODEL
 - Ethnicity: ${params.ethnicityPrompt || 'caucasian, European features'}
 - Age: approximately ${params.age || 25} years old
 - Build: ${params.bodyType || 'slim build, model physique'}
-- Height: approximately ${params.height || 175}cm${customModelInstruction}
+- Height: approximately ${params.height || 175}cm${customModelInstruction}${modelPortraitInstruction}
 
 ══════════════════════════════════════════════════════
 SHOT COMPOSITION
@@ -342,6 +347,11 @@ TECHNICAL OUTPUT REQUIREMENTS
   if (params.clothingLogo) {
     contents.push({ text: `\n── BRAND LOGO REFERENCE (place at: "${params.clothingLogo.position.replace(/_/g, ' ')}") ──` });
     contents.push({ inlineData: { mimeType: 'image/jpeg', data: params.clothingLogo.image } });
+  }
+
+  if (params.customModelImage) {
+    contents.push({ text: '\n── CUSTOM MODEL REFERENCE (Likeness to reproduce exactly) ──' });
+    contents.push({ inlineData: { mimeType: 'image/jpeg', data: params.customModelImage } });
   }
 
   const response = await ai.models.generateContent({

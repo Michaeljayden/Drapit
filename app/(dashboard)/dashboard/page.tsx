@@ -84,14 +84,22 @@ export default async function DashboardPage() {
     // Recent 5 for table
     const recentTryons = tryons.slice(0, 5);
 
+    const usageValue = parseFloat(usagePercent as string);
+
     return (
         <div className="space-y-6 max-w-[1200px]">
             {/* Header */}
-            <div>
-                <h1 className="text-2xl font-bold text-[#0F172A]">Dashboard</h1>
-                <p className="text-sm text-[#64748B] mt-1">
-                    Welkom terug. Hier is een overzicht van je try-on activiteit.
-                </p>
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="text-2xl font-bold text-[#0F172A]">Dashboard</h1>
+                    <p className="text-sm text-[#64748B] mt-1">
+                        Welkom terug — hier is een overzicht van je try-on activiteit.
+                    </p>
+                </div>
+                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-white rounded-xl border border-[#F1F5F9] shadow-[0_1px_2px_rgba(15,39,68,0.04)] text-xs text-[#64748B]">
+                    <div className="w-2 h-2 rounded-full bg-emerald-400" />
+                    <span>Live</span>
+                </div>
             </div>
 
             {/* Stat cards */}
@@ -99,6 +107,7 @@ export default async function DashboardPage() {
                 <StatCard
                     label="Try-ons deze maand"
                     value={tryonsUsed}
+                    accentColor="blue"
                     icon={
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <path d="M10 2L4 8v8a1 1 0 001 1h4v-5h2v5h4a1 1 0 001-1V8l-6-6z" stroke="#1D6FD8" strokeWidth="1.5" strokeLinejoin="round" fill="none" />
@@ -108,6 +117,7 @@ export default async function DashboardPage() {
                 <StatCard
                     label="Conversieratio"
                     value={`${conversionRate}%`}
+                    accentColor="green"
                     icon={
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <polyline points="4,14 8,10 12,12 16,6" stroke="#16A34A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
@@ -119,6 +129,7 @@ export default async function DashboardPage() {
                     value={planName}
                     change={`${tryonsUsed}/${tryonsLimit} verbruikt`}
                     trend="neutral"
+                    accentColor="amber"
                     icon={
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <rect x="2" y="4" width="16" height="12" rx="2" stroke="#D97706" strokeWidth="1.5" />
@@ -130,14 +141,14 @@ export default async function DashboardPage() {
 
             {/* Chart */}
             <div className="bg-white rounded-2xl border border-[#F1F5F9] shadow-[0_1px_2px_rgba(15,39,68,0.06)] p-6">
-                <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
                     <div>
                         <h2 className="text-lg font-bold text-[#0F172A]">Try-ons per dag</h2>
-                        <p className="text-xs text-[#64748B] mt-0.5">Laatste 30 dagen</p>
+                        <p className="text-xs text-[#94A3B8] mt-0.5">Laatste 30 dagen</p>
                     </div>
-                    <div className="text-right">
+                    <div className="flex flex-col items-end">
                         <p className="text-2xl font-bold text-[#0F172A]">{totalCount}</p>
-                        <p className="text-xs text-[#64748B]">totaal</p>
+                        <p className="text-xs text-[#94A3B8]">totaal</p>
                     </div>
                 </div>
                 <TryonChart data={chartData} />
@@ -145,58 +156,67 @@ export default async function DashboardPage() {
 
             {/* Usage bar */}
             <div className="bg-white rounded-2xl border border-[#F1F5F9] shadow-[0_1px_2px_rgba(15,39,68,0.06)] p-6">
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center justify-between mb-4">
                     <div>
                         <h3 className="text-base font-bold text-[#0F172A]">Maandelijks verbruik</h3>
-                        <p className="text-xs text-[#64748B] mt-0.5">
+                        <p className="text-xs text-[#94A3B8] mt-0.5">
                             {tryonsUsed} van {tryonsLimit} try-ons gebruikt
                         </p>
                     </div>
-                    <span className="text-sm font-semibold text-[#1D6FD8]">{usagePercent}%</span>
+                    <span className="text-lg font-bold text-[#1D6FD8]">{usagePercent}%</span>
                 </div>
-                <div className="w-full h-3 bg-[#EBF3FF] rounded-full overflow-hidden">
+                <div className="w-full h-2.5 bg-[#F1F5F9] rounded-full overflow-hidden">
                     <div
                         className="h-full rounded-full transition-all duration-700 ease-out"
                         style={{
-                            width: `${Math.min(parseFloat(usagePercent as string), 100)}%`,
-                            backgroundColor: parseFloat(usagePercent as string) > 90 ? '#DC2626' : parseFloat(usagePercent as string) > 75 ? '#D97706' : '#1D6FD8',
+                            width: `${Math.min(usageValue, 100)}%`,
+                            background: usageValue > 90
+                                ? 'linear-gradient(90deg, #EF4444, #DC2626)'
+                                : usageValue > 75
+                                    ? 'linear-gradient(90deg, #F59E0B, #D97706)'
+                                    : 'linear-gradient(90deg, #1D6FD8, #3B9AF0)',
                         }}
                     />
+                </div>
+                <div className="flex justify-between text-[11px] text-[#CBD5E1] mt-1.5">
+                    <span>0</span>
+                    <span>{tryonsLimit}</span>
                 </div>
             </div>
 
             {/* Recent try-ons */}
             <div className="bg-white rounded-2xl border border-[#F1F5F9] shadow-[0_1px_2px_rgba(15,39,68,0.06)] p-6">
-                <h2 className="text-lg font-bold text-[#0F172A] mb-4">Recente try-ons</h2>
+                <h2 className="text-lg font-bold text-[#0F172A] mb-5">Recente try-ons</h2>
                 {recentTryons.length === 0 ? (
-                    <div className="text-center py-8">
-                        <div className="w-12 h-12 bg-[#EBF3FF] rounded-full flex items-center justify-center mx-auto mb-3">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <div className="text-center py-10">
+                        <div className="inline-flex items-center justify-center w-14 h-14 bg-[#EBF3FF] rounded-2xl mb-3">
+                            <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
                                 <path d="M10 2L4 8v8a1 1 0 001 1h4v-5h2v5h4a1 1 0 001-1V8l-6-6z" stroke="#1D6FD8" strokeWidth="1.5" strokeLinejoin="round" fill="none" />
                             </svg>
                         </div>
-                        <p className="text-sm text-[#64748B]">Nog geen try-ons. Installeer de widget om te beginnen.</p>
+                        <p className="text-sm font-semibold text-[#0F172A]">Nog geen try-ons</p>
+                        <p className="text-xs text-[#94A3B8] mt-1">Installeer de widget op je webshop om te beginnen.</p>
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
                                 <tr className="border-b border-[#F1F5F9]">
-                                    <th className="text-left text-xs font-medium text-[#64748B] uppercase tracking-wide pb-3">Product</th>
-                                    <th className="text-left text-xs font-medium text-[#64748B] uppercase tracking-wide pb-3">Status</th>
-                                    <th className="text-right text-xs font-medium text-[#64748B] uppercase tracking-wide pb-3">Tijd</th>
+                                    <th className="text-left text-xs font-semibold text-[#94A3B8] uppercase tracking-wider pb-3">Product</th>
+                                    <th className="text-left text-xs font-semibold text-[#94A3B8] uppercase tracking-wider pb-3">Status</th>
+                                    <th className="text-right text-xs font-semibold text-[#94A3B8] uppercase tracking-wider pb-3">Tijd</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {recentTryons.map((tryon: { id: string; product_id: string | null; status: string; created_at: string }) => (
-                                    <tr key={tryon.id} className="border-b border-[#F1F5F9] last:border-0">
-                                        <td className="py-3 text-sm font-medium text-[#0F172A]">
+                                    <tr key={tryon.id} className="border-b border-[#F1F5F9] last:border-0 hover:bg-[#F8FAFC] transition-colors">
+                                        <td className="py-3.5 text-sm font-medium text-[#0F172A]">
                                             {tryon.product_id || 'Onbekend product'}
                                         </td>
-                                        <td className="py-3">
+                                        <td className="py-3.5">
                                             <StatusBadge status={tryon.status as TryOnStatus} />
                                         </td>
-                                        <td className="py-3 text-right text-xs text-[#64748B]">
+                                        <td className="py-3.5 text-right text-xs text-[#94A3B8] font-medium">
                                             {getRelativeTime(tryon.created_at)}
                                         </td>
                                     </tr>

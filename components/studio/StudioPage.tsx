@@ -4,7 +4,7 @@
 // Drapit Studio — Main client component
 // =============================================================================
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import {
   STUDIO_MODELS, STUDIO_ETHNICITIES, STUDIO_BODY_TYPES, STUDIO_POSES,
   STUDIO_EXPRESSIONS, STUDIO_FRAMINGS, STUDIO_BACKGROUNDS, STUDIO_LIGHTING,
@@ -28,6 +28,12 @@ interface WatermarkSettings {
   position: WatermarkPosition;
   opacity: number;
   size: number;
+}
+
+interface CustomModel {
+  id: string;
+  name: string;
+  image_url: string;
 }
 
 interface StudioPageProps {
@@ -63,28 +69,30 @@ function AccordionSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className="border-b border-white/10 last:border-b-0">
+    <div className="border-b border-white/8 last:border-b-0">
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between py-4 text-left group"
+        className="w-full flex items-center justify-between py-3.5 text-left group"
       >
-        <div className="flex items-center gap-2.5">
-          <span className="text-slate-400 group-hover:text-white transition-colors">{icon}</span>
-          <span className="text-sm font-bold text-slate-200 group-hover:text-white transition-colors">
+        <div className="flex items-center gap-3">
+          <span className={`transition-colors ${isOpen ? 'text-[#1D6FD8]' : 'text-slate-500 group-hover:text-slate-300'}`}>{icon}</span>
+          <span className="text-sm font-semibold text-slate-200 group-hover:text-white transition-colors">
             {title}
           </span>
         </div>
-        <svg
-          className={`w-4 h-4 text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2.5}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-        </svg>
+        <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 ${isOpen ? 'bg-[#1D6FD8]/20' : 'bg-white/5 group-hover:bg-white/10'}`}>
+          <svg
+            className={`w-3.5 h-3.5 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#1D6FD8]' : 'text-slate-500'}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2.5}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
       </button>
-      <div className={`overflow-hidden transition-all duration-400 ease-in-out ${isOpen ? 'max-h-[2000px] opacity-100 pb-5' : 'max-h-0 opacity-0'}`}>
+      <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[2000px] opacity-100 pb-5' : 'max-h-0 opacity-0'}`}>
         {children}
       </div>
     </div>
@@ -155,6 +163,14 @@ function SliderInput({
     </div>
   );
 }
+
+const toBase64 = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
 
 // ---------------------------------------------------------------------------
 // Product uploader
@@ -296,23 +312,34 @@ function ResultDisplay({
 
   if (images.length === 0) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center gap-5 min-h-[300px] p-6">
-        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#1D6FD8]/20 to-[#0F2744]/40 border border-white/5 flex items-center justify-center">
-          <svg className="w-10 h-10 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-        </div>
-        <div className="text-center space-y-1.5">
-          <p className="font-bold text-slate-300">Studio resultaat</p>
-          <p className="text-xs text-slate-500 max-w-[200px] leading-relaxed">
-            Upload kleding, kies je instellingen en klik op Genereren.
+      <div className="flex-1 flex flex-col items-center justify-center gap-8 min-h-[300px] p-8">
+        <div className="text-center">
+          <div className="inline-flex w-16 h-16 rounded-2xl bg-[#1D6FD8]/10 border border-[#1D6FD8]/20 items-center justify-center mb-4">
+            <svg className="w-8 h-8 text-[#1D6FD8]/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <p className="font-semibold text-slate-500 text-sm">Nog geen resultaat</p>
+          <p className="text-xs text-slate-600 mt-1 max-w-[200px] leading-relaxed mx-auto">
+            {mode === 'video-360' ? '360° modus genereert 4 foto\'s vanuit verschillende hoeken.' : 'Upload kleding, stel je opties in en klik op Genereren.'}
           </p>
         </div>
-        {mode === 'video-360' && (
-          <p className="text-[10px] text-slate-600 text-center max-w-[220px]">
-            360° modus genereert 4 productfoto's vanuit verschillende hoeken
-          </p>
-        )}
+
+        {/* Steps */}
+        <div className="flex flex-col gap-3 w-full max-w-xs">
+          {[
+            { step: '1', text: 'Upload kleding (voor- en achterkant)', done: false },
+            { step: '2', text: 'Kies model, omgeving & stijl', done: false },
+            { step: '3', text: 'Klik op Genereren', done: false },
+          ].map((item) => (
+            <div key={item.step} className="flex items-center gap-3">
+              <div className="w-6 h-6 rounded-full border border-slate-700 bg-white/3 flex items-center justify-center shrink-0">
+                <span className="text-[10px] font-bold text-slate-600">{item.step}</span>
+              </div>
+              <span className="text-xs text-slate-600">{item.text}</span>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -657,6 +684,10 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
   const [height, setHeight] = useState(175);
   const [bodyType, setBodyType] = useState('slim');
   const [customModelPrompt, setCustomModelPrompt] = useState('');
+  const [customModels, setCustomModels] = useState<CustomModel[]>([]);
+  const [selectedModelId, setSelectedModelId] = useState<string | null>(null);
+  const [isUploadingModel, setIsUploadingModel] = useState(false);
+  const modelUploadRef = useRef<HTMLInputElement>(null);
 
   // Pose & expression
   const [pose, setPose] = useState('standing-straight');
@@ -698,6 +729,55 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
   const logoRef = useRef<HTMLInputElement>(null);
 
   const toggle = (s: string) => setOpenSection(openSection === s ? '' : s);
+
+  // Fetch custom models
+  useEffect(() => {
+    const fetchModels = async () => {
+      try {
+        const res = await fetch('/api/studio/models');
+        const data = await res.json();
+        if (data.models) setCustomModels(data.models);
+      } catch (err) {
+        console.error('[StudioPage] Fetch models error:', err);
+      }
+    };
+    fetchModels();
+  }, []);
+
+  const handleModelUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingModel(true);
+    try {
+      const base64 = await toBase64(file);
+      const res = await fetch('/api/studio/models', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: file.name, image: base64 }),
+      });
+      const data = await res.json();
+      if (data.model) {
+        setCustomModels(prev => [data.model, ...prev]);
+        setSelectedModelId(data.model.id);
+      }
+    } catch (err) {
+      console.error('[StudioPage] Model upload error:', err);
+    } finally {
+      setIsUploadingModel(false);
+    }
+  };
+
+  const deleteModel = async (id: string) => {
+    if (!confirm('Weet je zeker dat je dit model wilt verwijderen?')) return;
+    try {
+      await fetch(`/api/studio/models?id=${id}`, { method: 'DELETE' });
+      setCustomModels(prev => prev.filter(m => m.id !== id));
+      if (selectedModelId === id) setSelectedModelId(null);
+    } catch (err) {
+      console.error('[StudioPage] Delete model error:', err);
+    }
+  };
 
   // Credit calculation
   const COST_MAP: Record<StudioMode, number> = { 'virtual-model': 2, 'product-only': 1, 'video-360': 4 };
@@ -784,6 +864,7 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
         age, weight, height,
         bodyType: bodyTypeOpt?.prompt ?? '',
         customModelPrompt,
+        customModelId: selectedModelId || undefined,
         posePrompt: poseOpt?.prompt ?? '',
         expressionPrompt: expressionOpt?.prompt ?? '',
         framingPrompt: framingOpt?.prompt ?? '',
@@ -841,46 +922,74 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
   return (
     <div className="flex flex-col min-h-screen -m-4 md:-m-8">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-100">
+      <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-b from-white to-slate-50 border-b border-slate-100 shadow-[0_1px_3px_rgba(15,39,68,0.05)]">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#1D6FD8] flex items-center justify-center">
-            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1D6FD8] to-[#1558B0] flex items-center justify-center shadow-[0_4px_10px_rgba(29,111,216,0.35)]">
+            <svg className="w-4.5 h-4.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
             </svg>
           </div>
           <div>
             <h1 className="text-base font-bold text-slate-900">Drapit Studio</h1>
-            <p className="text-[10px] text-slate-400 font-medium">AI productfotografie</p>
+            <p className="text-[11px] text-slate-400 font-medium">AI productfotografie</p>
           </div>
         </div>
         {/* Credits badge */}
         <div className="flex items-center gap-2">
-          <div className={`px-3 py-1.5 rounded-full text-xs font-bold ${remaining < 10 ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-[#1D6FD8]'}`}>
-            {remaining} credits over
+          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border ${remaining < 10
+            ? 'bg-red-50 text-red-600 border-red-100'
+            : 'bg-[#EBF3FF] text-[#1D6FD8] border-blue-100'
+            }`}>
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+            </svg>
+            {remaining} credits
           </div>
         </div>
       </div>
 
       {/* Mode selector */}
-      <div className="px-4 md:px-6 py-4 bg-slate-50 border-b border-slate-100">
+      <div className="px-4 md:px-6 py-3.5 bg-slate-50/80 border-b border-slate-100">
         <div className="flex gap-2 max-w-xl">
           {[
-            { id: 'virtual-model' as StudioMode, label: 'Virtueel Model', cost: 2, icon: '🧍' },
-            { id: 'product-only' as StudioMode, label: 'Product Foto', cost: 1, icon: '👕' },
-            { id: 'video-360' as StudioMode, label: '360° Rotatie', cost: 4, icon: '🔄' },
+            {
+              id: 'virtual-model' as StudioMode, label: 'Virtueel Model', cost: 2,
+              icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+              )
+            },
+            {
+              id: 'product-only' as StudioMode, label: 'Product Foto', cost: 1,
+              icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm5.625 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                </svg>
+              )
+            },
+            {
+              id: 'video-360' as StudioMode, label: '360° Rotatie', cost: 4,
+              icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.990" />
+                </svg>
+              )
+            },
           ].map((m) => (
             <button
               key={m.id}
               onClick={() => setMode(m.id)}
-              className={`flex-1 flex flex-col items-center gap-1 py-3 px-2 rounded-xl border-2 transition-all text-xs font-bold ${mode === m.id
-                ? 'border-[#1D6FD8] bg-[#1D6FD8] text-white shadow-md'
-                : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300'
+              className={`flex-1 flex flex-col items-center gap-1.5 py-3 px-2 rounded-xl border transition-all text-xs font-semibold ${mode === m.id
+                ? 'border-[#1D6FD8] bg-[#1D6FD8] text-white shadow-[0_4px_12px_rgba(29,111,216,0.3)]'
+                : 'border-slate-200 bg-white text-slate-400 hover:border-slate-300 hover:text-slate-600'
                 }`}
             >
-              <span className="text-base">{m.icon}</span>
-              <span className="hidden sm:block">{m.label}</span>
-              <span className={`text-[9px] font-bold ${mode === m.id ? 'text-white/70' : 'text-slate-400'}`}>
+              <span>{m.icon}</span>
+              <span className="hidden sm:block leading-tight">{m.label}</span>
+              <span className={`text-[9px] font-bold uppercase tracking-wide ${mode === m.id ? 'text-white/60' : 'text-slate-300'
+                }`}>
                 {m.cost === 4 ? '4 credits' : `${m.cost} credit${m.cost > 1 ? 's' : ''}`}
               </span>
             </button>
@@ -891,7 +1000,7 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
       {/* Main layout */}
       <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
         {/* Left panel — Controls */}
-        <div className="w-full md:w-80 lg:w-96 bg-[#0F2744] flex flex-col overflow-y-auto shrink-0 max-h-[50vh] md:max-h-none">
+        <div className="w-full md:w-80 lg:w-96 bg-[#0B1E38] flex flex-col overflow-y-auto shrink-0 max-h-[50vh] md:max-h-none">
           <div className="flex-1 p-4 space-y-0 divide-y divide-white/10">
 
             {/* — CLOTHING — */}
@@ -924,62 +1033,136 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
                 isOpen={openSection === 'model'}
                 onToggle={() => toggle('model')}
               >
-                <div className="space-y-5">
-                  <div>
-                    <SectionLabel>Geslacht</SectionLabel>
-                    <OptionGrid options={STUDIO_MODELS} selected={gender} onSelect={setGender} cols={2} />
+                <div className="space-y-6">
+                  {/* Custom Model Library */}
+                  <div className="space-y-3">
+                    <SectionLabel>Modellen Bibliotheek</SectionLabel>
+                    <div className="grid grid-cols-3 gap-2">
+                      {/* Upload Button */}
+                      <button
+                        onClick={() => modelUploadRef.current?.click()}
+                        disabled={isUploadingModel}
+                        className="aspect-square rounded-xl border-2 border-dashed border-white/10 flex flex-col items-center justify-center gap-2 hover:border-white/20 hover:bg-white/5 transition-all group"
+                      >
+                        {isUploadingModel ? (
+                          <div className="w-5 h-5 border-2 border-slate-500 border-t-white rounded-full animate-spin" />
+                        ) : (
+                          <>
+                            <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#1D6FD8]/20 group-hover:text-[#1D6FD8] transition-colors">
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                              </svg>
+                            </div>
+                            <span className="text-[10px] font-bold text-slate-500 group-hover:text-slate-300">Nieuw</span>
+                          </>
+                        )}
+                      </button>
+                      <input
+                        ref={modelUploadRef}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleModelUpload}
+                      />
+
+                      {/* Model List */}
+                      {customModels.map((m) => (
+                        <div key={m.id} className="relative group aspect-square">
+                          <button
+                            onClick={() => setSelectedModelId(selectedModelId === m.id ? null : m.id)}
+                            className={`w-full h-full rounded-xl overflow-hidden border-2 transition-all ${selectedModelId === m.id ? 'border-[#1D6FD8] ring-2 ring-[#1D6FD8]/20' : 'border-transparent hover:border-white/10'
+                              }`}
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={m.image_url} alt={m.name} className="w-full h-full object-cover" />
+                          </button>
+                          {/* Selected Badge */}
+                          {selectedModelId === m.id && (
+                            <div className="absolute top-1 right-1 bg-[#1D6FD8] text-white rounded-full p-0.5 shadow-sm">
+                              <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                              </svg>
+                            </div>
+                          )}
+                          {/* Delete Button */}
+                          <button
+                            onClick={(e) => { e.stopPropagation(); deleteModel(m.id); }}
+                            className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:scale-110 active:scale-95"
+                          >
+                            <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
-                  <div>
-                    <SectionLabel>Etniciteit</SectionLabel>
-                    <OptionGrid options={STUDIO_ETHNICITIES} selected={ethnicity} onSelect={setEthnicity} cols={2} />
-                  </div>
+                  <div className="h-px bg-white/5 my-2" />
 
-                  <div>
-                    <SectionLabel>Lichaamsbouw</SectionLabel>
-                    <OptionGrid options={STUDIO_BODY_TYPES} selected={bodyType} onSelect={setBodyType} cols={2} />
-                  </div>
+                  {/* Generic Model Settings (only show or emphasize if no custom model selected?) */}
+                  <div className={selectedModelId ? 'opacity-40 grayscale pointer-events-none' : ''}>
+                    <div>
+                      <SectionLabel>Fysieke Kenmerken (Generiek)</SectionLabel>
+                      <div className="space-y-4 pt-2">
+                        <div>
+                          <SectionLabel>Geslacht</SectionLabel>
+                          <OptionGrid options={STUDIO_MODELS} selected={gender} onSelect={setGender} cols={2} />
+                        </div>
 
-                  <div className="space-y-3 bg-white/5 rounded-xl p-3">
-                    <SliderInput label="Leeftijd" value={age} min={18} max={65} unit=" jr" onChange={setAge} />
-                    <SliderInput label="Gewicht" value={weight} min={45} max={130} unit=" kg" onChange={setWeight} />
-                    <SliderInput label="Lengte" value={height} min={155} max={200} unit=" cm" onChange={setHeight} />
-                  </div>
+                        <div>
+                          <SectionLabel>Etniciteit</SectionLabel>
+                          <OptionGrid options={STUDIO_ETHNICITIES} selected={ethnicity} onSelect={setEthnicity} cols={2} />
+                        </div>
 
-                  <div>
-                    <SectionLabel>Extra modelomschrijving (optioneel)</SectionLabel>
-                    <textarea
-                      value={customModelPrompt}
-                      onChange={(e) => setCustomModelPrompt(e.target.value)}
-                      placeholder="Bv. sproetjes, kort rood haar, tatoeage op arm..."
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-[#1D6FD8]/50 min-h-[64px] resize-none"
-                    />
-                  </div>
+                        <div>
+                          <SectionLabel>Lichaamsbouw</SectionLabel>
+                          <OptionGrid options={STUDIO_BODY_TYPES} selected={bodyType} onSelect={setBodyType} cols={2} />
+                        </div>
 
-                  <div>
-                    <SectionLabel>Houding (Pose)</SectionLabel>
-                    <OptionGrid options={STUDIO_POSES} selected={pose} onSelect={setPose} cols={2} />
-                  </div>
+                        <div className="space-y-3 bg-white/5 rounded-xl p-3">
+                          <SliderInput label="Leeftijd" value={age} min={18} max={65} unit=" jr" onChange={setAge} />
+                          <SliderInput label="Gewicht" value={weight} min={45} max={130} unit=" kg" onChange={setWeight} />
+                          <SliderInput label="Lengte" value={height} min={155} max={200} unit=" cm" onChange={setHeight} />
+                        </div>
 
-                  <div>
-                    <SectionLabel>Gezichtsuitdrukking</SectionLabel>
-                    <OptionGrid options={STUDIO_EXPRESSIONS} selected={expression} onSelect={setExpression} cols={2} />
-                  </div>
+                        <div>
+                          <SectionLabel>Extra modelomschrijving (optioneel)</SectionLabel>
+                          <textarea
+                            value={customModelPrompt}
+                            onChange={(e) => setCustomModelPrompt(e.target.value)}
+                            placeholder="Bv. sproetjes, kort rood haar, tatoeage op arm..."
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-[#1D6FD8]/50 min-h-[64px] resize-none"
+                          />
+                        </div>
 
-                  <div>
-                    <SectionLabel>Kadrering</SectionLabel>
-                    <OptionGrid options={STUDIO_FRAMINGS} selected={framing} onSelect={setFraming} cols={2} />
-                  </div>
+                        <div>
+                          <SectionLabel>Houding (Pose)</SectionLabel>
+                          <OptionGrid options={STUDIO_POSES} selected={pose} onSelect={setPose} cols={2} />
+                        </div>
 
-                  <div>
-                    <SectionLabel>Rekwisiet (optioneel)</SectionLabel>
-                    <input
-                      type="text"
-                      value={propText}
-                      onChange={(e) => setPropText(e.target.value)}
-                      placeholder="Bv. koffiekopje, zonnebril, boek..."
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-[#1D6FD8]/50"
-                    />
+                        <div>
+                          <SectionLabel>Gezichtsuitdrukking</SectionLabel>
+                          <OptionGrid options={STUDIO_EXPRESSIONS} selected={expression} onSelect={setExpression} cols={2} />
+                        </div>
+
+                        <div>
+                          <SectionLabel>Kadrering</SectionLabel>
+                          <OptionGrid options={STUDIO_FRAMINGS} selected={framing} onSelect={setFraming} cols={2} />
+                        </div>
+
+                        <div>
+                          <SectionLabel>Rekwisiet (optioneel)</SectionLabel>
+                          <input
+                            type="text"
+                            value={propText}
+                            onChange={(e) => setPropText(e.target.value)}
+                            placeholder="Bv. koffiekopje, zonnebril, boek..."
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-[#1D6FD8]/50"
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </AccordionSection>
@@ -1157,19 +1340,21 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
           </div>
 
           {/* Generate button */}
-          <div className="p-4 border-t border-white/10 bg-[#0A1E35]">
+          <div className="p-4 border-t border-white/8 bg-[#071426]">
             {/* Credits bar */}
             <div className="mb-3">
-              <div className="flex justify-between text-[10px] text-slate-500 mb-1">
-                <span>Studio credits</span>
-                <span>{localCreditsUsed} / {creditsLimit}</span>
+              <div className="flex justify-between text-[10px] mb-1.5">
+                <span className="text-slate-500 font-medium">Studio credits</span>
+                <span className="text-slate-400 font-semibold">{localCreditsUsed} <span className="text-slate-600">/ {creditsLimit}</span></span>
               </div>
-              <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+              <div className="w-full h-1.5 bg-white/8 rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full transition-all duration-500"
                   style={{
                     width: `${Math.min((localCreditsUsed / Math.max(creditsLimit, 1)) * 100, 100)}%`,
-                    backgroundColor: remaining < 10 ? '#DC2626' : '#1D6FD8',
+                    background: remaining < 10
+                      ? 'linear-gradient(90deg, #EF4444, #DC2626)'
+                      : 'linear-gradient(90deg, #1D6FD8, #3B9AF0)',
                   }}
                 />
               </div>
@@ -1178,18 +1363,26 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
             <button
               onClick={handleGenerate}
               disabled={isLoading || !hasClothing || !canGenerate}
-              className={`w-full py-4 rounded-2xl text-sm font-black uppercase tracking-wider transition-all ${isLoading || !hasClothing || !canGenerate
-                ? 'bg-white/10 text-slate-500 cursor-not-allowed'
-                : 'bg-[#1D6FD8] hover:bg-[#1558B0] text-white shadow-[0_0_20px_rgba(29,111,216,0.4)] hover:shadow-[0_0_30px_rgba(29,111,216,0.6)] active:scale-95 transform'
+              className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all ${isLoading || !hasClothing || !canGenerate
+                ? 'bg-white/8 text-slate-500 cursor-not-allowed'
+                : 'bg-gradient-to-r from-[#1D6FD8] to-[#1558B0] text-white shadow-[0_4px_16px_rgba(29,111,216,0.4)] hover:shadow-[0_4px_24px_rgba(29,111,216,0.55)] active:scale-[0.98] transform'
                 }`}
             >
               {isLoading
-                ? 'GENEREREN...'
+                ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Genereren...
+                  </span>
+                )
                 : mode === 'video-360'
-                  ? `360° GENEREREN — ${totalCost} CREDITS`
+                  ? `360° Genereren · ${totalCost} credits`
                   : numVariations > 1
-                    ? `${numVariations}× GENEREREN — ${totalCost} CREDITS`
-                    : `GENEREREN — ${totalCost} CREDIT${totalCost > 1 ? 'S' : ''}`
+                    ? `${numVariations}× Genereren · ${totalCost} credits`
+                    : `Genereren · ${totalCost} credit${totalCost > 1 ? 's' : ''}`
               }
             </button>
 
@@ -1201,14 +1394,14 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
             {!canGenerate && hasClothing && (
               <div className="mt-3 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20 p-3 text-center space-y-2">
                 <p className="text-xs font-bold text-amber-300">
-                  🎉 Je gratis credits zijn op
+                  Gratis credits zijn op
                 </p>
                 <p className="text-[10px] text-slate-400 leading-relaxed">
-                  Je hebt 20 gratis credits gebruikt. Upgrade naar een plan voor meer afbeeldingen.
+                  Je hebt de 20 gratis credits gebruikt. Upgrade voor meer afbeeldingen.
                 </p>
                 <a
                   href="/dashboard/billing"
-                  className="inline-flex items-center gap-1.5 bg-[#1D6FD8] hover:bg-[#1558B0] text-white text-[11px] font-bold py-2 px-4 rounded-lg transition-colors"
+                  className="inline-flex items-center gap-1.5 bg-[#1D6FD8] hover:bg-[#1558B0] text-white text-[11px] font-semibold py-2 px-4 rounded-lg transition-colors"
                 >
                   Abonnement kiezen
                   <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -1221,7 +1414,7 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
         </div>
 
         {/* Right panel — Result */}
-        <div className="flex-1 bg-white flex flex-col p-4 md:p-6 overflow-y-auto min-h-[400px] md:min-h-0">
+        <div className="flex-1 bg-[#F8FAFC] flex flex-col p-4 md:p-6 overflow-y-auto min-h-[400px] md:min-h-0">
           <ResultDisplay
             images={generatedImages}
             isLoading={isLoading}

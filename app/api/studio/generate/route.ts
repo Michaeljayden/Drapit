@@ -67,6 +67,7 @@ const GenerateRequestSchema = z.object({
   height: z.number().min(140).max(210).optional(),
   bodyType: z.string().optional(),
   customModelPrompt: z.string().max(500).optional(),
+  customModelId: z.string().uuid().optional(),
 
   // Pose & expression
   posePrompt: z.string().optional(),
@@ -176,6 +177,28 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // 5.5 Fetch custom model image if ID provided
+    let customModelImage: string | undefined;
+    if (params.customModelId) {
+      const { data: customModel } = await supabase
+        .from('custom_models')
+        .select('image_url')
+        .eq('id', params.customModelId)
+        .eq('owner_id', user.id)
+        .single();
+
+      if (customModel) {
+        // Convert public URL to base64 for Gemini
+        try {
+          const imgRes = await fetch(customModel.image_url);
+          const arrayBuffer = await imgRes.arrayBuffer();
+          customModelImage = Buffer.from(arrayBuffer).toString('base64');
+        } catch (err) {
+          console.error('[studio/generate] Failed to fetch custom model image:', err);
+        }
+      }
+    }
+
     // 6. Generate images
     const generationParams: StudioGenerationParams = {
       mode: params.mode,
@@ -187,6 +210,7 @@ export async function POST(req: NextRequest) {
       height: params.height,
       bodyType: params.bodyType,
       customModelPrompt: params.customModelPrompt,
+      customModelImage, // Pass the base64 image
       posePrompt: params.posePrompt,
       expressionPrompt: params.expressionPrompt,
       framingPrompt: params.framingPrompt,
