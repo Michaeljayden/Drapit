@@ -109,11 +109,10 @@ function OptionGrid<T extends { id: string; label: string }>({
         <button
           key={opt.id}
           onClick={() => onSelect(opt.id)}
-          className={`px-2 py-2 rounded-lg text-xs font-semibold text-center transition-all border ${
-            selected === opt.id
-              ? 'bg-[#1D6FD8] border-[#1D6FD8] text-white shadow-[0_0_12px_rgba(29,111,216,0.4)]'
-              : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:border-white/20'
-          }`}
+          className={`px-2 py-2 rounded-lg text-xs font-semibold text-center transition-all border ${selected === opt.id
+            ? 'bg-[#1D6FD8] border-[#1D6FD8] text-white shadow-[0_0_12px_rgba(29,111,216,0.4)]'
+            : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:border-white/20'
+            }`}
         >
           {opt.label}
         </button>
@@ -357,9 +356,8 @@ function ResultDisplay({
             <button
               key={i}
               onClick={() => setActiveIndex(i)}
-              className={`relative flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${
-                activeIndex === i ? 'border-[#1D6FD8] shadow-[0_0_8px_rgba(29,111,216,0.5)]' : 'border-white/10 hover:border-white/30'
-              }`}
+              className={`relative flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${activeIndex === i ? 'border-[#1D6FD8] shadow-[0_0_8px_rgba(29,111,216,0.5)]' : 'border-white/10 hover:border-white/30'
+                }`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={img} alt={`Variatie ${i + 1}`} className="w-full h-full object-cover" />
@@ -504,11 +502,10 @@ function WatermarkControls({
                 <button
                   key={pos.id}
                   onClick={() => onChange({ ...settings, position: pos.id })}
-                  className={`py-1.5 rounded-lg text-[9px] font-bold transition-all ${
-                    settings.position === pos.id
-                      ? 'bg-[#1D6FD8] text-white'
-                      : 'bg-white/5 text-slate-500 hover:bg-white/10'
-                  }`}
+                  className={`py-1.5 rounded-lg text-[9px] font-bold transition-all ${settings.position === pos.id
+                    ? 'bg-[#1D6FD8] text-white'
+                    : 'bg-white/5 text-slate-500 hover:bg-white/10'
+                    }`}
                 >
                   {pos.label}
                 </button>
@@ -833,53 +830,9 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
   };
 
   // ---------------------------------------------------------------------------
-  // Paywall (no Studio subscription)
+  // No hard paywall — everyone always sees the Studio.
+  // When credits run out, show a soft upgrade banner inside the UI.
   // ---------------------------------------------------------------------------
-
-  if (!hasStudio) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center p-8">
-        <div className="max-w-md text-center space-y-6">
-          <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-[#1D6FD8] to-[#0F2744] flex items-center justify-center mx-auto shadow-xl">
-            <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
-            </svg>
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">Drapit Studio</h2>
-            <p className="text-gray-500 mt-2 text-sm leading-relaxed">
-              Maak professionele AI-productfoto's en modelshots met jouw producten. Kies uit virtuele modellen, product-only shots en 360° rotatie.
-            </p>
-          </div>
-          <div className="bg-blue-50 rounded-2xl p-5 text-left space-y-3">
-            {[
-              'AI-modellen met jouw kleding in elke instelling',
-              'Professionele productfoto\'s zonder fotoshoot',
-              '360° rotatie voor premium showcase',
-              'Volledig aanpasbaar: model, licht, achtergrond, camera',
-            ].map((feature) => (
-              <div key={feature} className="flex items-start gap-2">
-                <svg className="w-4 h-4 text-[#1D6FD8] mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span className="text-sm text-gray-700">{feature}</span>
-              </div>
-            ))}
-          </div>
-          <a
-            href="/dashboard/billing"
-            className="inline-flex items-center gap-2 bg-[#1D6FD8] hover:bg-[#1558B0] text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-lg"
-          >
-            Studio activeren
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-            </svg>
-          </a>
-        </div>
-      </div>
-    );
-  }
 
   // ---------------------------------------------------------------------------
   // Main Studio UI
@@ -920,11 +873,10 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
             <button
               key={m.id}
               onClick={() => setMode(m.id)}
-              className={`flex-1 flex flex-col items-center gap-1 py-3 px-2 rounded-xl border-2 transition-all text-xs font-bold ${
-                mode === m.id
-                  ? 'border-[#1D6FD8] bg-[#1D6FD8] text-white shadow-md'
-                  : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300'
-              }`}
+              className={`flex-1 flex flex-col items-center gap-1 py-3 px-2 rounded-xl border-2 transition-all text-xs font-bold ${mode === m.id
+                ? 'border-[#1D6FD8] bg-[#1D6FD8] text-white shadow-md'
+                : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300'
+                }`}
             >
               <span className="text-base">{m.icon}</span>
               <span className="hidden sm:block">{m.label}</span>
@@ -1081,11 +1033,10 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
                         <button
                           key={l.id}
                           onClick={() => setLens(l.id)}
-                          className={`flex flex-col items-center gap-1 py-3 rounded-xl border-2 transition-all ${
-                            lens === l.id
-                              ? 'border-[#1D6FD8] bg-[#1D6FD8]/10 text-[#1D6FD8]'
-                              : 'border-white/10 text-slate-400 hover:border-white/20'
-                          }`}
+                          className={`flex flex-col items-center gap-1 py-3 rounded-xl border-2 transition-all ${lens === l.id
+                            ? 'border-[#1D6FD8] bg-[#1D6FD8]/10 text-[#1D6FD8]'
+                            : 'border-white/10 text-slate-400 hover:border-white/20'
+                            }`}
                         >
                           <span className="text-sm font-bold">{l.label}</span>
                           <span className="text-[9px] font-medium opacity-70">{l.description}</span>
@@ -1131,11 +1082,10 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
                         <button
                           key={n}
                           onClick={() => setNumVariations(n)}
-                          className={`flex-1 py-2.5 rounded-xl text-xs font-bold border-2 transition-all ${
-                            numVariations === n
-                              ? 'bg-[#1D6FD8] border-[#1D6FD8] text-white shadow-md'
-                              : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
-                          }`}
+                          className={`flex-1 py-2.5 rounded-xl text-xs font-bold border-2 transition-all ${numVariations === n
+                            ? 'bg-[#1D6FD8] border-[#1D6FD8] text-white shadow-md'
+                            : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
+                            }`}
                         >
                           {n}×
                         </button>
@@ -1187,11 +1137,10 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
                           <button
                             key={pos.id}
                             onClick={() => setClothingLogoPosition(pos.id)}
-                            className={`py-1.5 rounded-lg text-[10px] font-semibold transition-all ${
-                              clothingLogoPosition === pos.id
-                                ? 'bg-[#1D6FD8] text-white'
-                                : 'bg-white/5 text-slate-400 hover:bg-white/10'
-                            }`}
+                            className={`py-1.5 rounded-lg text-[10px] font-semibold transition-all ${clothingLogoPosition === pos.id
+                              ? 'bg-[#1D6FD8] text-white'
+                              : 'bg-white/5 text-slate-400 hover:bg-white/10'
+                              }`}
                           >
                             {pos.label}
                           </button>
@@ -1229,19 +1178,18 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
             <button
               onClick={handleGenerate}
               disabled={isLoading || !hasClothing || !canGenerate}
-              className={`w-full py-4 rounded-2xl text-sm font-black uppercase tracking-wider transition-all ${
-                isLoading || !hasClothing || !canGenerate
-                  ? 'bg-white/10 text-slate-500 cursor-not-allowed'
-                  : 'bg-[#1D6FD8] hover:bg-[#1558B0] text-white shadow-[0_0_20px_rgba(29,111,216,0.4)] hover:shadow-[0_0_30px_rgba(29,111,216,0.6)] active:scale-95 transform'
-              }`}
+              className={`w-full py-4 rounded-2xl text-sm font-black uppercase tracking-wider transition-all ${isLoading || !hasClothing || !canGenerate
+                ? 'bg-white/10 text-slate-500 cursor-not-allowed'
+                : 'bg-[#1D6FD8] hover:bg-[#1558B0] text-white shadow-[0_0_20px_rgba(29,111,216,0.4)] hover:shadow-[0_0_30px_rgba(29,111,216,0.6)] active:scale-95 transform'
+                }`}
             >
               {isLoading
                 ? 'GENEREREN...'
                 : mode === 'video-360'
-                ? `360° GENEREREN — ${totalCost} CREDITS`
-                : numVariations > 1
-                ? `${numVariations}× GENEREREN — ${totalCost} CREDITS`
-                : `GENEREREN — ${totalCost} CREDIT${totalCost > 1 ? 'S' : ''}`
+                  ? `360° GENEREREN — ${totalCost} CREDITS`
+                  : numVariations > 1
+                    ? `${numVariations}× GENEREREN — ${totalCost} CREDITS`
+                    : `GENEREREN — ${totalCost} CREDIT${totalCost > 1 ? 'S' : ''}`
               }
             </button>
 
@@ -1251,9 +1199,23 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
               </p>
             )}
             {!canGenerate && hasClothing && (
-              <p className="text-center text-[10px] text-red-400 mt-2">
-                Onvoldoende credits — {remaining} resterend
-              </p>
+              <div className="mt-3 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20 p-3 text-center space-y-2">
+                <p className="text-xs font-bold text-amber-300">
+                  🎉 Je gratis credits zijn op
+                </p>
+                <p className="text-[10px] text-slate-400 leading-relaxed">
+                  Je hebt 20 gratis credits gebruikt. Upgrade naar een plan voor meer afbeeldingen.
+                </p>
+                <a
+                  href="/dashboard/billing"
+                  className="inline-flex items-center gap-1.5 bg-[#1D6FD8] hover:bg-[#1558B0] text-white text-[11px] font-bold py-2 px-4 rounded-lg transition-colors"
+                >
+                  Abonnement kiezen
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </a>
+              </div>
             )}
           </div>
         </div>

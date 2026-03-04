@@ -29,9 +29,11 @@ export default async function StudioPageRoute() {
     .single();
 
   const shopId = shop?.id ?? '';
-  const hasStudio = !!(shop?.has_studio);
-  const creditsUsed = (shop?.studio_credits_used as number) ?? 0;
-  const creditsLimit = (shop?.studio_credits_limit as number) ?? 0;
+  // Admin always has full Studio access with unlimited credits
+  const isAdmin = user.email === process.env.ADMIN_EMAIL;
+  const hasStudio = isAdmin ? true : !!(shop?.has_studio);
+  const creditsUsed = isAdmin ? 0 : ((shop?.studio_credits_used as number) ?? 0);
+  const creditsLimit = isAdmin ? 99999 : ((shop?.studio_credits_limit as number) ?? 20);
 
   return (
     <StudioPage

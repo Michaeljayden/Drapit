@@ -78,9 +78,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Geen shop gevonden' }, { status: 404 });
         }
 
-        if (!shop.has_studio) {
-            return NextResponse.json({ error: 'Geen Studio-toegang' }, { status: 403 });
-        }
+        // Everyone can purchase extra credits — no has_studio gate needed
 
         const stripe = getStripe();
 

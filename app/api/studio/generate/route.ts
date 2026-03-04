@@ -3,10 +3,10 @@
 // =============================================================================
 // Flow:
 //   1. Authenticate via Supabase session (dashboard user)
-//   2. Verify Studio subscription (has_studio = true)
-//   3. Check available Studio credits
+//   2. Admin bypass: ADMIN_EMAIL has unlimited access, no credit deduction
+//   3. Check available Studio credits (monthly + extra)
 //   4. Generate image(s) via Gemini AI
-//   5. Deduct credits from shop
+//   5. Deduct credits from shop (skipped for admin)
 //   6. Return generated images as base64 data URLs
 // =============================================================================
 
@@ -108,7 +108,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Niet ingelogd.' }, { status: 401 });
     }
 
-    // 2. Fetch shop and check Studio access
+    // 2. Fetch shop — everyone always has access (has_studio defaults to true)
     const { data: shop, error: shopError } = await supabase
       .from('shops')
       .select('id, has_studio, studio_credits_used, studio_credits_limit, studio_extra_credits')
@@ -119,12 +119,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Shop niet gevonden.' }, { status: 404 });
     }
 
-    if (!shop.has_studio) {
-      return NextResponse.json(
-        { error: 'Geen toegang tot Drapit Studio. Upgrade je abonnement.', code: 'NO_STUDIO_ACCESS' },
-        { status: 403 }
-      );
-    }
+    // Admin bypass: unlimited access, no credit deduction
+    const isAdmin = user.email === process.env.ADMIN_EMAIL;
 
     // 3. Parse and validate request body
     let body: unknown;
@@ -167,7 +163,8 @@ export async function POST(req: NextRequest) {
     const monthlyRemaining = Math.max(0, creditsLimit - creditsUsed);
     const totalRemaining = monthlyRemaining + extraCredits;
 
-    if (totalRemaining < totalCost) {
+    // Admin never gets blocked by credits
+    if (!isAdmin && totalRemaining < totalCost) {
       return NextResponse.json(
         {
           error: `Onvoldoende Studio-credits. Je hebt ${totalRemaining} credits beschikbaar maar hebt ${totalCost} nodig.`,
@@ -207,25 +204,27 @@ export async function POST(req: NextRequest) {
     const result = await generateStudioImages(generationParams);
 
     // 7. Deduct credits: first from monthly allowance, then from extra credits
-    const admin = getAdmin();
+    //    Admin users never have credits deducted
+    if (!isAdmin) {
+      const adminClient = getAdmin();
+      const monthlyDeduct = Math.min(totalCost, monthlyRemaining);
+      const extraDeduct = totalCost - monthlyDeduct;
 
-    const monthlyDeduct = Math.min(totalCost, monthlyRemaining);
-    const extraDeduct = totalCost - monthlyDeduct;
-
-    await admin
-      .from('shops')
-      .update({
-        studio_credits_used: creditsUsed + monthlyDeduct,
-        studio_extra_credits: extraCredits - extraDeduct,
-      })
-      .eq('id', shop.id);
+      await adminClient
+        .from('shops')
+        .update({
+          studio_credits_used: creditsUsed + monthlyDeduct,
+          studio_extra_credits: extraCredits - extraDeduct,
+        })
+        .eq('id', shop.id);
+    }
 
     // 8. Return results
     return NextResponse.json({
       images: result.images,
       mode: result.mode,
-      creditsUsed: totalCost,
-      creditsRemaining: totalRemaining - totalCost,
+      creditsUsed: isAdmin ? 0 : totalCost,
+      creditsRemaining: isAdmin ? 99999 : totalRemaining - totalCost,
     });
 
   } catch (err: unknown) {

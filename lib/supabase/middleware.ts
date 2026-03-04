@@ -43,8 +43,18 @@ export async function updateSession(request: NextRequest) {
     }
 
     // Protect /admin route
-    if (pathname.startsWith('/admin') && user?.email !== process.env.ADMIN_EMAIL) {
-        return NextResponse.redirect(new URL('/dashboard', request.url));
+    if (pathname.startsWith('/admin')) {
+        if (!user) {
+            // Not logged in → send to login with redirect back to /admin
+            const loginUrl = request.nextUrl.clone();
+            loginUrl.pathname = '/dashboard/login';
+            loginUrl.searchParams.set('redirect', pathname);
+            return NextResponse.redirect(loginUrl);
+        }
+        if (user.email !== process.env.ADMIN_EMAIL) {
+            // Logged in but not admin → send to dashboard
+            return NextResponse.redirect(new URL('/dashboard', request.url));
+        }
     }
 
     // Redirect logged-in users away from login page
