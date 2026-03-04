@@ -1,10 +1,16 @@
 // =============================================================================
-// Drapit Studio — Gemini AI generation service
+// Drapit Studio — Gemini AI generation service (quality-optimised)
 // =============================================================================
 // Handles three generation modes:
 //   1. virtual-model  → AI fashion model wearing the uploaded garment
 //   2. product-only   → Professional product shot without a model
 //   3. video-360      → Multi-angle product shots (4 perspectives)
+//
+// Quality strategy:
+//   Step 1 — Analyse garment(s): ask Gemini to produce a hyper-detailed written
+//             description of every visual property (colour, print, logo, cut…).
+//   Step 2 — Generate image: feed the analysis + original images back into the
+//             generation prompt so the model has maximum context.
 // =============================================================================
 
 import { GoogleGenAI } from '@google/genai';
@@ -74,6 +80,16 @@ export interface StudioGenerationResult {
 }
 
 // ---------------------------------------------------------------------------
+// Model names
+// ---------------------------------------------------------------------------
+
+// Best available image generation model via Gemini API
+const GENERATION_MODEL = 'gemini-2.0-flash-preview-image-generation';
+
+// Text-only model for garment analysis (fast, accurate)
+const ANALYSIS_MODEL = 'gemini-2.0-flash';
+
+// ---------------------------------------------------------------------------
 // Gemini client helper
 // ---------------------------------------------------------------------------
 
@@ -84,42 +100,7 @@ function getClient(): GoogleGenAI {
 }
 
 // ---------------------------------------------------------------------------
-// Build clothing description from images
-// ---------------------------------------------------------------------------
-
-function buildClothingParts(clothing: ClothingImages): { text: string; inlineData: { mimeType: string; data: string } }[] {
-  const parts: { text: string; inlineData: { mimeType: string; data: string } }[] = [];
-
-  if (clothing.top?.front) {
-    parts.push(
-      { text: 'TOP GARMENT (front view):', inlineData: null as any },
-      { text: null as any, inlineData: { mimeType: 'image/jpeg', data: clothing.top.front } }
-    );
-  }
-  if (clothing.top?.back) {
-    parts.push(
-      { text: 'TOP GARMENT (back view):', inlineData: null as any },
-      { text: null as any, inlineData: { mimeType: 'image/jpeg', data: clothing.top.back } }
-    );
-  }
-  if (clothing.bottom?.front) {
-    parts.push(
-      { text: 'BOTTOM GARMENT (front view):', inlineData: null as any },
-      { text: null as any, inlineData: { mimeType: 'image/jpeg', data: clothing.bottom.front } }
-    );
-  }
-  if (clothing.outerwear?.front) {
-    parts.push(
-      { text: 'OUTERWEAR (front view):', inlineData: null as any },
-      { text: null as any, inlineData: { mimeType: 'image/jpeg', data: clothing.outerwear.front } }
-    );
-  }
-
-  return parts.filter(p => p.text !== null || p.inlineData !== null);
-}
-
-// ---------------------------------------------------------------------------
-// Build content parts (filter nulls)
+// Types for Gemini parts
 // ---------------------------------------------------------------------------
 
 type GeminiPart =
@@ -136,6 +117,115 @@ function buildParts(rawParts: { text?: string | null; inlineData?: { mimeType: s
 }
 
 // ---------------------------------------------------------------------------
+// Build clothing image parts for Gemini
+// ---------------------------------------------------------------------------
+
+function buildClothingImageParts(clothing: ClothingImages): GeminiPart[] {
+  const parts: GeminiPart[] = [];
+
+  if (clothing.top?.front) {
+    parts.push({ text: 'KLEDINGSTUK — BOVENSTUK (voorkant):' });
+    parts.push({ inlineData: { mimeType: 'image/jpeg', data: clothing.top.front } });
+  }
+  if (clothing.top?.back) {
+    parts.push({ text: 'KLEDINGSTUK — BOVENSTUK (achterkant):' });
+    parts.push({ inlineData: { mimeType: 'image/jpeg', data: clothing.top.back } });
+  }
+  if (clothing.bottom?.front) {
+    parts.push({ text: 'KLEDINGSTUK — ONDERSTUK (voorkant):' });
+    parts.push({ inlineData: { mimeType: 'image/jpeg', data: clothing.bottom.front } });
+  }
+  if (clothing.outerwear?.front) {
+    parts.push({ text: 'KLEDINGSTUK — BOVENLAAG (voorkant):' });
+    parts.push({ inlineData: { mimeType: 'image/jpeg', data: clothing.outerwear.front } });
+  }
+
+  return parts;
+}
+
+// ---------------------------------------------------------------------------
+// Step 1: Garment analysis — produces a rich text description
+// ---------------------------------------------------------------------------
+
+async function analyseGarment(
+  ai: GoogleGenAI,
+  clothing: ClothingImages,
+  logo?: ClothingLogo
+): Promise<string> {
+  const analysisPrompt = `You are an expert fashion analyst and technical garment descriptor. 
+Carefully examine the uploaded garment image(s) and produce an EXTREMELY DETAILED written description.
+
+Your description MUST cover ALL of the following without exception:
+
+1. GARMENT TYPE & SILHOUETTE
+   - Exact garment type (e.g. crew-neck sweatshirt, relaxed-fit straight-leg jeans)
+   - Fit: slim / regular / relaxed / oversized
+   - Length: crop / regular / longline / midi / maxi
+   - Neckline shape, collar style
+   - Sleeve type and length (in approximate cm or % of arm length)
+   - Hemline shape and finish
+
+2. COLOURS (be extremely precise)
+   - Primary colour(s): describe as specific as possible (e.g. "muted sage green, similar to #8FAF8F", NOT just "green")
+   - Secondary/accent colours with exact placement
+   - Any gradients, colour blocks, or tonal variations
+
+3. PRINTS, GRAPHICS & TEXT (CRITICAL — reproduce exactly)
+   - Every piece of text: exact wording, punctuation, capitalisation, letter spacing
+   - Font style: serif / sans-serif / script / bold / italic / condensed
+   - Font colour and any outline or shadow effects
+   - Graphic elements: logo shape, icon, emblem — describe shape, symbol, style in detail
+   - Exact position on garment (e.g. "centred on chest, approx 8cm below neckline, spanning 60% of chest width")
+   - Size relative to garment
+   - Any distressed, vintage, or worn-in appearance of the print
+
+4. FABRIC & TEXTURE
+   - Apparent material (cotton, denim, linen, knit, satin, etc.)
+   - Texture: smooth, brushed, ribbed, waffle, terry cloth, etc.
+   - Sheen level: matte / semi-matte / slight sheen / glossy
+
+5. CONSTRUCTION DETAILS
+   - Seam placement and style (e.g. "flatlock seams at shoulders")
+   - Pockets: position, type, size
+   - Closures: buttons, zip, snap buttons — material, colour, style
+   - Cuffs, waistband, hem finish
+   - Any embroidery, appliqué, patches, studs, or 3D elements
+
+6. BRANDING (if visible)
+   - Label or tag position
+   - Any woven or printed branding
+
+Write in precise, technical English. Be exhaustive — this description will be used as the single source of truth for recreating the garment in a photorealistic image. Every detail you mention will be reproduced; every detail you omit may be lost.`;
+
+  const parts: GeminiPart[] = [
+    { text: analysisPrompt },
+    ...buildClothingImageParts(clothing),
+  ];
+
+  if (logo) {
+    parts.push({ text: `\nBRAND LOGO (to be placed at "${logo.position.replace(/_/g, ' ')}"):` });
+    parts.push({ inlineData: { mimeType: 'image/jpeg', data: logo.image } });
+    parts.push({ text: 'Also describe this logo in extreme detail: shape, colours, symbols, text, style.' });
+  }
+
+  const response = await ai.models.generateContent({
+    model: ANALYSIS_MODEL,
+    contents: [{ role: 'user', parts }],
+  });
+
+  const text = response.candidates?.[0]?.content?.parts
+    ?.filter((p: any) => p.text)
+    ?.map((p: any) => p.text)
+    ?.join('\n') ?? '';
+
+  if (!text || text.length < 50) {
+    return 'A garment as shown in the reference image(s). Reproduce all visible details exactly.';
+  }
+
+  return text;
+}
+
+// ---------------------------------------------------------------------------
 // Extract image from Gemini response
 // ---------------------------------------------------------------------------
 
@@ -148,22 +238,22 @@ function extractImage(response: any): string | null {
 }
 
 // ---------------------------------------------------------------------------
-// Mode 1: Virtual Model Image
+// Mode 1: Virtual Model Image (two-step: analyse → generate)
 // ---------------------------------------------------------------------------
 
 async function generateVirtualModelImage(params: StudioGenerationParams): Promise<string> {
   const ai = getClient();
 
+  // ── Step 1: Analyse garment ──
+  const garmentAnalysis = await analyseGarment(ai, params.clothing, params.clothingLogo);
+
+  // ── Step 2: Generate image ──
   const bokehDesc =
     (params.bokeh ?? 5) <= 3
       ? 'very shallow depth of field, strongly blurred background (f/1.4–f/2)'
       : (params.bokeh ?? 5) <= 6
-      ? 'moderate depth of field, naturally blurred background (f/2.8–f/4)'
-      : 'deep focus, sharp background (f/8–f/11)';
-
-  const logoInstruction = params.clothingLogo
-    ? `\n- The garment has a small brand logo placed at the ${params.clothingLogo.position.replace(/_/g, ' ')} — reproduce it exactly.`
-    : '';
+        ? 'moderate depth of field, naturally blurred background (f/2.8–f/4)'
+        : 'deep focus, sharp background (f/8–f/11)';
 
   const propInstruction = params.propText
     ? `\n- Include the following prop: ${params.propText}`
@@ -177,52 +267,84 @@ async function generateVirtualModelImage(params: StudioGenerationParams): Promis
     ? `\n- Additional model details: ${params.customModelPrompt}`
     : '';
 
-  const prompt = `You are a world-class AI fashion photographer. Generate a single photorealistic professional fashion photography image based on the garment(s) provided.
+  const logoPlacementInstruction = params.clothingLogo
+    ? `\n- A custom brand logo is on the garment at position: "${params.clothingLogo.position.replace(/_/g, ' ')}". The logo reference image is included below — reproduce it with PIXEL-PERFECT accuracy: every line, colour, shape, and symbol must match exactly.`
+    : '';
 
-═══ MODEL ═══
+  const prompt = `You are a world-class AI fashion photographer producing editorial-quality campaign imagery.
+
+══════════════════════════════════════════════════════
+EXPERT GARMENT ANALYSIS (USE AS ABSOLUTE REFERENCE)
+══════════════════════════════════════════════════════
+The following technical analysis describes every detail of the garment. This is your GROUND TRUTH:
+
+${garmentAnalysis}
+
+══════════════════════════════════════════════════════
+CRITICAL REPRODUCTION RULES
+══════════════════════════════════════════════════════
+You MUST reproduce the garment with extreme fidelity to the analysis above AND the reference images provided:
+
+• PRINTS, LOGOS & TEXT — TOP PRIORITY:
+  - Every letter, number, symbol: exact wording, font, weight, style, colour
+  - Exact position, size, and proportion on the garment
+  - Do NOT simplify, paraphrase, or alter any text or graphic
+  - Render each letterform individually with correct spacing
+  - Match all colours to the reference exactly (correct hue, saturation, brightness)${logoPlacementInstruction}
+
+• COLOURS: Match exact shades from the reference — no hue or saturation shifts
+• SILHOUETTE: Exact neckline, collar, sleeve length, hemline, fit
+• CONSTRUCTION: All buttons, zippers, seams, pockets, cuffs as shown
+• FABRIC DRAPE: Realistic gravity folds and natural wrinkles for the material type
+
+══════════════════════════════════════════════════════
+MODEL
+══════════════════════════════════════════════════════
 - Gender: ${params.gender || 'female'}
 - Ethnicity: ${params.ethnicityPrompt || 'caucasian, European features'}
 - Age: approximately ${params.age || 25} years old
 - Build: ${params.bodyType || 'slim build, model physique'}
 - Height: approximately ${params.height || 175}cm${customModelInstruction}
 
-═══ OUTFIT ═══
-Study the uploaded garment image(s) carefully. Reproduce EVERY detail exactly:
-- Exact colors (do not shift hue or saturation)
-- All patterns, prints, graphics, logos, and text
-- Exact silhouette: neckline, collar, sleeve length, hemline, fit
-- All construction details: buttons, zippers, seams, pockets, cuffs
-- Realistic fabric draping, gravity folds, natural wrinkles${logoInstruction}
-
-═══ SHOT ═══
+══════════════════════════════════════════════════════
+SHOT COMPOSITION
+══════════════════════════════════════════════════════
 - Framing: ${params.framingPrompt || 'full body shot, head to toe'}
 - Pose: ${params.posePrompt || 'natural standing pose, facing forward'}
-- Expression: ${params.expressionPrompt || 'natural, pleasant'}
-- Camera: ${params.lensPrompt || '50mm standard lens, natural perspective'}
+- Expression: ${params.expressionPrompt || 'natural, pleasant, relaxed'}
+- Camera: ${params.lensPrompt || '50mm standard lens, natural perspective, no distortion'}
 - Depth of field: ${bokehDesc}${propInstruction}
 
-═══ ENVIRONMENT ═══
+══════════════════════════════════════════════════════
+ENVIRONMENT
+══════════════════════════════════════════════════════
 - Background: ${params.backgroundPrompt}
 - Lighting: ${params.lightingPrompt}${timeInstruction}
 
-═══ TECHNICAL ═══
-- Professional high-fashion editorial quality
-- Sharp focus on model and garment
-- Realistic photographic rendering — indistinguishable from a real photo
-- Magazine quality, 2K resolution appearance
-- Do NOT add text, watermarks, or borders`;
+══════════════════════════════════════════════════════
+TECHNICAL OUTPUT REQUIREMENTS
+══════════════════════════════════════════════════════
+- Photorealistic — indistinguishable from a real professional fashion photograph
+- High-end editorial / campaign quality (Vogue, Arena Homme+)
+- Ultra-sharp focus on model and ALL garment details simultaneously
+- True-to-life colour reproduction throughout
+- Maximum detail in print / logo areas — these must be razor sharp
+- Render as if captured on a high-resolution medium-format camera
+- Do NOT add text, watermarks, frames, or UI elements of any kind`;
 
-  const clothingParts = buildClothingParts(params.clothing);
-
-  const contents: GeminiPart[] = buildParts([
+  const contents: GeminiPart[] = [
     { text: prompt },
-    ...clothingParts.map(p => p.text != null ? { text: p.text } : { inlineData: p.inlineData }),
-    params.clothingLogo ? { text: `\nBRAND LOGO to place on garment (position: ${params.clothingLogo.position.replace(/_/g, ' ')}):` } : null,
-    params.clothingLogo ? { inlineData: { mimeType: 'image/jpeg', data: params.clothingLogo.image } } : null,
-  ].filter(Boolean) as any);
+    { text: '\n\n── REFERENCE IMAGES (use for exact garment reproduction) ──' },
+    ...buildClothingImageParts(params.clothing),
+  ];
+
+  if (params.clothingLogo) {
+    contents.push({ text: `\n── BRAND LOGO REFERENCE (place at: "${params.clothingLogo.position.replace(/_/g, ' ')}") ──` });
+    contents.push({ inlineData: { mimeType: 'image/jpeg', data: params.clothingLogo.image } });
+  }
 
   const response = await ai.models.generateContent({
-    model: 'gemini-2.0-flash-exp-image-generation',
+    model: GENERATION_MODEL,
     contents: [{ role: 'user', parts: contents }],
     config: { responseModalities: ['IMAGE', 'TEXT'] },
   });
@@ -233,55 +355,78 @@ Study the uploaded garment image(s) carefully. Reproduce EVERY detail exactly:
 }
 
 // ---------------------------------------------------------------------------
-// Mode 2: Product-Only Photo
+// Mode 2: Product-Only Photo (two-step: analyse → generate)
 // ---------------------------------------------------------------------------
 
 async function generateProductPhoto(params: StudioGenerationParams): Promise<string> {
   const ai = getClient();
 
-  const logoInstruction = params.clothingLogo
-    ? `\n- Include the brand logo at the ${params.clothingLogo.position.replace(/_/g, ' ')} of the garment.`
+  // ── Step 1: Analyse garment ──
+  const garmentAnalysis = await analyseGarment(ai, params.clothing, params.clothingLogo);
+
+  // ── Step 2: Generate image ──
+  const logoPlacementInstruction = params.clothingLogo
+    ? `\n- The garment has a custom brand logo at position: "${params.clothingLogo.position.replace(/_/g, ' ')}". The logo reference image is included — reproduce it with PIXEL-PERFECT fidelity.`
     : '';
 
-  const prompt = `You are a world-class product photographer specializing in fashion and apparel. Create a single professional product photography image of the garment(s) shown.
+  const prompt = `You are a world-class commercial product photographer specialising in fashion and apparel.
 
-═══ GARMENT ═══
-Reproduce the product EXACTLY as shown in the uploaded image(s):
-- Exact color(s) — match perfectly
-- All patterns, prints, textures, graphics, logos, and text
-- Full garment silhouette: shape, neckline, hemline, sleeves, fit
-- All details: buttons, zippers, seams, pockets, cuffs, waistband
-- Natural fabric texture and subtle fold/crease details${logoInstruction}
+══════════════════════════════════════════════════════
+EXPERT GARMENT ANALYSIS (USE AS ABSOLUTE REFERENCE)
+══════════════════════════════════════════════════════
+${garmentAnalysis}
 
-═══ PRESENTATION ═══
-- Display the garment flat-lay style OR as a ghost mannequin (invisible mannequin) OR floating/hanging — choose whichever looks most professional and clean
-- The garment should appear perfectly pressed with natural fabric drape
-- All design details should be clearly visible
+══════════════════════════════════════════════════════
+CRITICAL REPRODUCTION RULES
+══════════════════════════════════════════════════════
+• PRINTS, LOGOS & TEXT — TOP PRIORITY:
+  - Reproduce every character, graphic, and symbol with pixel-perfect accuracy
+  - Exact font, weight, colour, position, size, and proportion
+  - Do NOT change, simplify, or omit any text or graphic element
+  - Each print area must be razor-sharp and fully legible${logoPlacementInstruction}
 
-═══ ENVIRONMENT ═══
+• COLOURS: Exact colour match — no shifts in hue, saturation, or brightness
+• SILHOUETTE: Faithful reproduction of neckline, cut, hemline, and fit
+• DETAILS: All construction details (stitching, zippers, pockets, cuffs) clearly visible
+• FABRIC: Realistic drape with authentic texture representation
+
+══════════════════════════════════════════════════════
+PRESENTATION STYLE
+══════════════════════════════════════════════════════
+- ghost mannequin (invisible mannequin) — the garment appears as if worn but no body visible
+- The garment should appear perfectly presented with natural fabric drape
+- All design details must be fully visible and in sharp focus
+- No model or person in the image
+
+══════════════════════════════════════════════════════
+ENVIRONMENT
+══════════════════════════════════════════════════════
 - Background: ${params.backgroundPrompt}
-- Lighting: ${params.lightingPrompt} — illuminate the garment evenly to show true colors and texture
-- Camera: ${params.lensPrompt || '50mm standard lens'}
+- Lighting: ${params.lightingPrompt} — illuminate the garment evenly to show true colours and texture with no harsh shadows obscuring details
+- Camera: ${params.lensPrompt || '80–100mm macro-capable lens, no distortion, product photography standard'}
 
-═══ TECHNICAL ═══
-- Professional commercial product photography
-- Sharp focus across the entire garment
-- True-to-life color reproduction
-- Clean, high-end e-commerce quality image
-- No model or person
-- Do NOT add text, watermarks, or borders`;
+══════════════════════════════════════════════════════
+TECHNICAL OUTPUT REQUIREMENTS
+══════════════════════════════════════════════════════
+- Professional high-end e-commerce / lookbook quality
+- Ultra-sharp focus across the entire garment — especially print areas
+- True colour reproduction as if under calibrated studio lighting
+- Render at maximum resolution and detail
+- Do NOT add text, watermarks, labels, or borders`;
 
-  const clothingParts = buildClothingParts(params.clothing);
-
-  const contents: GeminiPart[] = buildParts([
+  const contents: GeminiPart[] = [
     { text: prompt },
-    ...clothingParts.map(p => p.text != null ? { text: p.text } : { inlineData: p.inlineData }),
-    params.clothingLogo ? { text: `\nBRAND LOGO (position: ${params.clothingLogo.position.replace(/_/g, ' ')}):` } : null,
-    params.clothingLogo ? { inlineData: { mimeType: 'image/jpeg', data: params.clothingLogo.image } } : null,
-  ].filter(Boolean) as any);
+    { text: '\n\n── REFERENCE IMAGES ──' },
+    ...buildClothingImageParts(params.clothing),
+  ];
+
+  if (params.clothingLogo) {
+    contents.push({ text: `\n── BRAND LOGO REFERENCE (position: "${params.clothingLogo.position.replace(/_/g, ' ')}") ──` });
+    contents.push({ inlineData: { mimeType: 'image/jpeg', data: params.clothingLogo.image } });
+  }
 
   const response = await ai.models.generateContent({
-    model: 'gemini-2.0-flash-exp-image-generation',
+    model: GENERATION_MODEL,
     contents: [{ role: 'user', parts: contents }],
     config: { responseModalities: ['IMAGE', 'TEXT'] },
   });
@@ -292,49 +437,70 @@ Reproduce the product EXACTLY as shown in the uploaded image(s):
 }
 
 // ---------------------------------------------------------------------------
-// Mode 3: 360° Multi-angle product shots
+// Mode 3: 360° Multi-angle product shots (shared analysis across all angles)
 // ---------------------------------------------------------------------------
 
 const ROTATION_ANGLES = [
-  { label: 'Front', instruction: 'Front view — directly facing forward (0°). Show the front of the garment.' },
-  { label: 'Three-Quarter Right', instruction: 'Three-quarter right angle view (45°). Show the right side detail.' },
-  { label: 'Side', instruction: 'Direct right side view (90°). Show the complete right profile.' },
-  { label: 'Back', instruction: 'Back view — directly from behind (180°). Show all back details.' },
+  { label: 'Front', instruction: 'Front view — directly facing forward (0°). Show the complete front of the garment including all front-facing prints, logos, and details.' },
+  { label: 'Three-Quarter Right', instruction: 'Three-quarter right angle view (45°). Reveal the right side detail while still showing most of the front.' },
+  { label: 'Side', instruction: 'Direct right side (profile) view (90°). Show the complete right profile of the garment.' },
+  { label: 'Back', instruction: 'Back view — directly from behind (180°). Show all back details, prints, and construction.' },
 ];
 
 async function generateProductRotation(params: StudioGenerationParams): Promise<string[]> {
   const ai = getClient();
 
+  // ── Step 1: Analyse garment ONCE — reuse for all angles ──
+  const garmentAnalysis = await analyseGarment(ai, params.clothing, params.clothingLogo);
+
   const results: string[] = [];
 
   for (const angle of ROTATION_ANGLES) {
-    const prompt = `You are a world-class product photographer. Create a professional product image of the garment shown, specifically from this angle: ${angle.instruction}
+    const prompt = `You are a world-class product photographer producing a consistent 360° product photography set.
 
-═══ GARMENT ═══
-Reproduce the garment EXACTLY as shown — same colors, patterns, textures, logos, and design details.
-Adapt naturally to the viewing angle: show appropriate back/side details for that perspective.
+══════════════════════════════════════════════════════
+EXPERT GARMENT ANALYSIS (GROUND TRUTH FOR ALL ANGLES)
+══════════════════════════════════════════════════════
+${garmentAnalysis}
 
-═══ ENVIRONMENT ═══
+══════════════════════════════════════════════════════
+CURRENT ANGLE: ${angle.label.toUpperCase()}
+══════════════════════════════════════════════════════
+${angle.instruction}
+
+CRITICAL: For this specific angle, show the appropriate details for that perspective. Adapt the garment naturally to the viewing angle — show back seams, side panels, etc. as appropriate. Maintain 100% colour and detail accuracy from the analysis above.
+
+══════════════════════════════════════════════════════
+REPRODUCTION RULES (APPLY TO ALL ANGLES)
+══════════════════════════════════════════════════════
+- Every print, logo, and text visible from this angle: pixel-perfect accuracy
+- Exact garment colours — no shifts between angles
+- ghost mannequin presentation (no model, no body)
+- Consistent lighting and background across all angles (same studio session appearance)
+
+══════════════════════════════════════════════════════
+ENVIRONMENT (CONSISTENT ACROSS ALL SHOTS)
+══════════════════════════════════════════════════════
 - Background: ${params.backgroundPrompt}
 - Lighting: ${params.lightingPrompt}
-- Camera: consistent product photography setup across all angles
+- Camera: consistent product photography setup — same focal length and distance as all other angles
 
-═══ TECHNICAL ═══
-- Professional 360° product photography quality
-- Ghost mannequin or flat-lay presentation (no model)
-- Sharp, commercially clean result
-- Same lighting and background as if it is one consistent photo session
-- Do NOT add text, watermarks, labels, or angle annotations`;
+══════════════════════════════════════════════════════
+TECHNICAL
+══════════════════════════════════════════════════════
+- Professional 360° e-commerce photography quality
+- Maximum sharpness across entire garment
+- Do NOT add text, watermarks, angle labels, or borders`;
 
-    const clothingParts = buildClothingParts(params.clothing);
-    const contents: GeminiPart[] = buildParts([
+    const contents: GeminiPart[] = [
       { text: prompt },
-      ...clothingParts.map(p => p.text != null ? { text: p.text } : { inlineData: p.inlineData }),
-    ]);
+      { text: '\n\n── REFERENCE IMAGES ──' },
+      ...buildClothingImageParts(params.clothing),
+    ];
 
     try {
       const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash-exp-image-generation',
+        model: GENERATION_MODEL,
         contents: [{ role: 'user', parts: contents }],
         config: { responseModalities: ['IMAGE', 'TEXT'] },
       });
@@ -358,7 +524,6 @@ export async function generateStudioImages(params: StudioGenerationParams): Prom
   const variations = params.numVariations ?? 1;
 
   if (params.mode === 'video-360') {
-    // 360° mode generates 4 angles — always 1 "set"
     const images = await generateProductRotation(params);
     return { images, mode: 'video-360' };
   }

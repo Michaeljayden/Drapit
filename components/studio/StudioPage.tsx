@@ -263,7 +263,7 @@ function ResultDisplay({
 
   if (isLoading) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center gap-6 min-h-[400px]">
+      <div className="flex-1 flex flex-col items-center justify-center gap-6 min-h-[300px]">
         <div className="relative">
           <div className="w-16 h-16 rounded-full border-4 border-white/10 border-t-[#1D6FD8] animate-spin" />
           <div className="absolute inset-0 flex items-center justify-center">
@@ -280,7 +280,7 @@ function ResultDisplay({
 
   if (error) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center gap-4 min-h-[400px] p-6">
+      <div className="flex-1 flex flex-col items-center justify-center gap-4 min-h-[300px] p-6">
         <div className="w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center">
           <svg className="w-7 h-7 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
@@ -296,7 +296,7 @@ function ResultDisplay({
 
   if (images.length === 0) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center gap-5 min-h-[400px] p-6">
+      <div className="flex-1 flex flex-col items-center justify-center gap-5 min-h-[300px] p-6">
         <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#1D6FD8]/20 to-[#0F2744]/40 border border-white/5 flex items-center justify-center">
           <svg className="w-10 h-10 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -889,9 +889,9 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
       </div>
 
       {/* Main layout */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
         {/* Left panel — Controls */}
-        <div className="w-full md:w-80 lg:w-96 bg-[#0F2744] flex flex-col overflow-y-auto shrink-0">
+        <div className="w-full md:w-80 lg:w-96 bg-[#0F2744] flex flex-col overflow-y-auto shrink-0 max-h-[50vh] md:max-h-none">
           <div className="flex-1 p-4 space-y-0 divide-y divide-white/10">
 
             {/* — CLOTHING — */}
@@ -1221,7 +1221,7 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
         </div>
 
         {/* Right panel — Result */}
-        <div className="flex-1 bg-white flex flex-col p-6 overflow-y-auto">
+        <div className="flex-1 bg-white flex flex-col p-4 md:p-6 overflow-y-auto min-h-[400px] md:min-h-0">
           <ResultDisplay
             images={generatedImages}
             isLoading={isLoading}
