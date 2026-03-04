@@ -3,1296 +3,1063 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drapit Studio — Redesign</title>
+  <title>Drapit Studio — v2</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
   <style>
-    /* =========================================
-       CSS VARIABLES — DARK / LIGHT THEME
-    ========================================= */
+    /* === VARIABLES === */
     :root[data-theme="dark"] {
-      --bg:              #0A0A0C;
-      --surface:         #111117;
-      --surface-2:       #17171F;
-      --surface-3:       #1C1C27;
-      --border:          #1F1F2C;
-      --border-hover:    #2C2C3E;
-      --text-primary:    #EDEAE3;
-      --text-secondary:  #7C7A86;
-      --text-tertiary:   #47465A;
-      --accent:          #3B7EF6;
-      --accent-hover:    #5A94F8;
-      --accent-bg:       rgba(59,126,246,0.10);
-      --accent-border:   rgba(59,126,246,0.28);
-      --upload-bg:       rgba(255,255,255,0.02);
-      --upload-hover:    rgba(59,126,246,0.06);
-      --success:         #22C55E;
-      --shadow:          0 0 0 1px rgba(255,255,255,0.04), 0 8px 32px rgba(0,0,0,0.4);
+      --bg:           #0A0A0C;
+      --surface:      #111117;
+      --surface-2:    #17171F;
+      --surface-3:    #1C1C27;
+      --border:       #1F1F2C;
+      --border-h:     #2C2C3E;
+      --text-1:       #EDEAE3;
+      --text-2:       #7C7A86;
+      --text-3:       #47465A;
+      --accent:       #3B7EF6;
+      --accent-h:     #5A94F8;
+      --accent-bg:    rgba(59,126,246,.10);
+      --accent-bd:    rgba(59,126,246,.28);
+      --up-bg:        rgba(255,255,255,.02);
+      --up-hov:       rgba(59,126,246,.06);
     }
     :root[data-theme="light"] {
-      --bg:              #F2F0EB;
-      --surface:         #FFFFFF;
-      --surface-2:       #F7F5F0;
-      --surface-3:       #EDEBE4;
-      --border:          #E3E0D8;
-      --border-hover:    #CCCAB8;
-      --text-primary:    #18181A;
-      --text-secondary:  #6B6864;
-      --text-tertiary:   #ABAAA4;
-      --accent:          #2563EB;
-      --accent-hover:    #1D4ED8;
-      --accent-bg:       rgba(37,99,235,0.08);
-      --accent-border:   rgba(37,99,235,0.22);
-      --upload-bg:       #FAFAF7;
-      --upload-hover:    rgba(37,99,235,0.04);
-      --success:         #16A34A;
-      --shadow:          0 0 0 1px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08);
+      --bg:           #F2F0EB;
+      --surface:      #FFFFFF;
+      --surface-2:    #F7F5F0;
+      --surface-3:    #EDEBE4;
+      --border:       #E3E0D8;
+      --border-h:     #CCCAB8;
+      --text-1:       #18181A;
+      --text-2:       #6B6864;
+      --text-3:       #ABAAA4;
+      --accent:       #2563EB;
+      --accent-h:     #1D4ED8;
+      --accent-bg:    rgba(37,99,235,.08);
+      --accent-bd:    rgba(37,99,235,.22);
+      --up-bg:        #FAFAF7;
+      --up-hov:       rgba(37,99,235,.04);
     }
 
-    /* =========================================
-       RESET & BASE
-    ========================================= */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { height: 100%; }
-
+    html, body { height: 100%; }
     body {
       font-family: 'DM Sans', sans-serif;
       background: var(--bg);
-      color: var(--text-primary);
+      color: var(--text-1);
       height: 100vh;
       overflow: hidden;
-      transition: background 0.3s, color 0.3s;
       -webkit-font-smoothing: antialiased;
+      transition: background .3s, color .3s;
     }
-
     button { font-family: 'DM Sans', sans-serif; }
-    input, select, textarea { font-family: 'DM Sans', sans-serif; }
 
-    /* =========================================
-       LAYOUT SHELL
-    ========================================= */
-    .studio {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
+    /* === LAYOUT === */
+    .studio { display: flex; flex-direction: column; height: 100vh; }
 
-    /* =========================================
-       TOP BAR
-    ========================================= */
+    /* === TOPBAR === */
     .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 0 20px;
-      height: 54px;
-      min-height: 54px;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-      z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; padding: 0 20px; height: 54px;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      flex-shrink: 0; z-index: 10;
     }
+    .logo { font-family:'Outfit',sans-serif; font-weight:700; font-size:17px; letter-spacing:-.4px; flex-shrink:0; }
+    .logo span { color: var(--accent); }
+    .mode-sel { display:flex; gap:3px; background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:4px; flex-shrink:0; }
+    .mode-btn { display:flex; align-items:center; gap:6px; padding:6px 13px; border:none; border-radius:7px; background:transparent; color:var(--text-2); font-size:12.5px; font-weight:500; cursor:pointer; transition:all .18s; white-space:nowrap; }
+    .mode-btn.on { background:var(--accent); color:#fff; box-shadow:0 2px 8px rgba(59,126,246,.35); }
+    .mode-btn:not(.on):hover { background:var(--surface-3); color:var(--text-1); }
+    .mode-badge { font-size:10px; font-weight:600; opacity:.7; }
+    .topbar-r { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+    .cred-pill { display:flex; align-items:center; gap:6px; padding:5px 11px; background:var(--surface-2); border:1px solid var(--border); border-radius:20px; font-size:12px; font-weight:500; color:var(--text-2); }
+    .cred-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); }
+    .ico-btn { width:34px; height:34px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:8px; background:var(--surface-2); color:var(--text-2); cursor:pointer; transition:all .18s; flex-shrink:0; }
+    .ico-btn:hover { color:var(--text-1); border-color:var(--border-h); }
 
-    .topbar-logo {
-      font-family: 'Outfit', sans-serif;
-      font-weight: 700;
-      font-size: 17px;
-      letter-spacing: -0.4px;
-      color: var(--text-primary);
-      flex-shrink: 0;
-    }
-    .topbar-logo span { color: var(--accent); }
+    /* === BODY === */
+    .body { display:flex; flex:1; overflow:hidden; }
 
-    /* Mode pills */
-    .mode-selector {
-      display: flex;
-      gap: 3px;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 4px;
-      flex-shrink: 0;
-    }
-    .mode-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 13px;
-      border: none;
-      border-radius: 7px;
-      background: transparent;
-      color: var(--text-secondary);
-      font-size: 12.5px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.18s;
-      white-space: nowrap;
-    }
-    .mode-btn.active {
-      background: var(--accent);
-      color: #fff;
-      box-shadow: 0 2px 8px rgba(59,126,246,0.35);
-    }
-    .mode-btn:not(.active):hover { background: var(--surface-3); color: var(--text-primary); }
-    .mode-badge {
-      font-size: 10px;
-      font-weight: 600;
-      opacity: 0.7;
-    }
+    /* === LEFT PANEL === */
+    .lpanel { width:400px; flex-shrink:0; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
+    .pscroll { flex:1; overflow-y:auto; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+    .pscroll::-webkit-scrollbar { width:4px; }
+    .pscroll::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
 
-    /* Topbar right */
-    .topbar-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    /* Clothing tabs */
+    .ctabs { padding:14px 18px 0; border-bottom:1px solid var(--border); }
+    .ctabs-lbl { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.09em; color:var(--text-3); margin-bottom:10px; }
+    .tab-row { display:flex; gap:2px; margin-bottom:-1px; }
+    .tab { display:flex; align-items:center; gap:6px; padding:8px 13px; border:1px solid transparent; border-bottom:none; border-radius:7px 7px 0 0; background:transparent; color:var(--text-2); font-size:12px; font-weight:500; cursor:pointer; transition:all .18s; }
+    .tab.on { background:var(--surface-2); border-color:var(--border); border-bottom-color:var(--surface-2); color:var(--text-1); }
+    .tab:not(.on):hover { color:var(--text-1); background:var(--surface-2); }
 
-    .credits-pill {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 11px;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-secondary);
-    }
-    .credits-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
+    /* Upload */
+    .upload-sect { padding:16px 18px; background:var(--surface-2); border-bottom:1px solid var(--border); }
+    .upload-grid { display:grid; grid-template-columns:1fr 1fr; gap:11px; }
+    .uzone { aspect-ratio:3/4; border:1.5px dashed var(--border); border-radius:11px; background:var(--up-bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; cursor:pointer; position:relative; overflow:hidden; transition:border-color .2s, background .2s; }
+    .uzone:hover { border-color:var(--accent); background:var(--up-hov); }
+    .uzone.loaded { border-style:solid; border-color:var(--accent-bd); background:var(--accent-bg); }
+    .u-badge { position:absolute; top:8px; left:8px; background:var(--surface); border:1px solid var(--border); border-radius:4px; padding:2px 6px; font-size:9px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--text-3); }
+    .u-ico { color:var(--text-3); transition:color .2s; }
+    .uzone:hover .u-ico, .uzone.loaded .u-ico { color:var(--accent); }
+    .u-lbl { font-size:12px; font-weight:500; color:var(--text-2); }
+    .u-sub { font-size:10px; color:var(--text-3); }
 
-    .icon-btn {
-      width: 34px; height: 34px;
-      display: flex; align-items: center; justify-content: center;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--surface-2);
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.18s;
-      flex-shrink: 0;
-    }
-    .icon-btn:hover { color: var(--text-primary); border-color: var(--border-hover); }
+    /* Accordions */
+    .acc { border-bottom:1px solid var(--border); }
+    .acc-trig { width:100%; display:flex; align-items:center; justify-content:space-between; padding:13px 18px; background:transparent; border:none; cursor:pointer; transition:background .15s; }
+    .acc-trig:hover { background:var(--surface-2); }
+    .acc-l { display:flex; align-items:center; gap:10px; }
+    .acc-ibox { width:28px; height:28px; border-radius:7px; background:var(--surface-2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--text-2); transition:all .2s; }
+    .acc.open .acc-ibox { background:var(--accent-bg); border-color:var(--accent-bd); color:var(--accent); }
+    .acc-title { font-size:13px; font-weight:500; color:var(--text-1); }
+    .acc-chev { color:var(--text-3); transition:transform .25s; flex-shrink:0; }
+    .acc.open .acc-chev { transform:rotate(180deg); }
+    .acc-body { max-height:0; overflow:hidden; transition:max-height .35s ease; }
+    .acc.open .acc-body { max-height:2400px; }
+    .acc-inner { padding:4px 18px 18px; }
 
-    /* =========================================
-       MAIN BODY — DESKTOP
-    ========================================= */
-    .studio-body {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-    }
+    /* Section dividers inside acc */
+    .sec-lbl { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.09em; color:var(--text-3); margin:16px 0 8px; }
+    .sec-lbl:first-child { margin-top:4px; }
 
-    /* =========================================
-       LEFT PANEL
-    ========================================= */
-    .settings-panel {
-      width: 390px;
-      flex-shrink: 0;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .panel-scroll {
-      flex: 1;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: var(--border) transparent;
-    }
-    .panel-scroll::-webkit-scrollbar { width: 4px; }
-    .panel-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-    /* ---- Clothing tabs ---- */
-    .clothing-tabs {
-      padding: 16px 18px 0;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-    }
-    .tabs-label {
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      color: var(--text-tertiary);
-      margin-bottom: 11px;
-    }
-    .tab-list {
-      display: flex;
-      gap: 2px;
-      margin-bottom: -1px;
-    }
-    .tab-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 14px;
-      border: 1px solid transparent;
-      border-bottom: none;
-      border-radius: 8px 8px 0 0;
-      background: transparent;
-      color: var(--text-secondary);
-      font-size: 12px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.18s;
-    }
-    .tab-btn.active {
-      background: var(--surface-2);
-      border-color: var(--border);
-      border-bottom-color: var(--surface-2);
-      color: var(--text-primary);
-    }
-    .tab-btn:not(.active):hover { color: var(--text-primary); background: var(--surface-2); }
-
-    /* ---- Upload zone ---- */
-    .upload-section {
-      padding: 18px;
-      background: var(--surface-2);
-      border-bottom: 1px solid var(--border);
-    }
-    .upload-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .upload-zone {
-      aspect-ratio: 3/4;
-      border: 1.5px dashed var(--border);
-      border-radius: 12px;
-      background: var(--upload-bg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .upload-zone:hover { border-color: var(--accent); background: var(--upload-hover); }
-    .upload-zone.loaded { border-style: solid; border-color: var(--accent-border); background: var(--accent-bg); }
-    .upload-badge {
-      position: absolute;
-      top: 8px; left: 8px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 5px;
-      padding: 2px 7px;
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-    }
-    .upload-ico { color: var(--text-tertiary); transition: color 0.2s; }
-    .upload-zone:hover .upload-ico,
-    .upload-zone.loaded .upload-ico { color: var(--accent); }
-    .upload-lbl {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      text-align: center;
-    }
-    .upload-sub {
-      font-size: 10px;
-      color: var(--text-tertiary);
-      text-align: center;
-    }
-
-    /* ---- Accordions ---- */
-    .accordion { border-bottom: 1px solid var(--border); }
-    .acc-trigger {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 18px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .acc-trigger:hover { background: var(--surface-2); }
-    .acc-left { display: flex; align-items: center; gap: 10px; }
-    .acc-icon-box {
-      width: 30px; height: 30px;
-      border-radius: 8px;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      color: var(--text-secondary);
-      transition: all 0.2s;
-    }
-    .accordion.open .acc-icon-box {
-      background: var(--accent-bg);
-      border-color: var(--accent-border);
-      color: var(--accent);
-    }
-    .acc-title {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-primary);
-    }
-    .acc-chevron {
-      color: var(--text-tertiary);
-      transition: transform 0.25s ease;
-      flex-shrink: 0;
-    }
-    .accordion.open .acc-chevron { transform: rotate(180deg); }
-    .acc-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.32s ease;
-    }
-    .accordion.open .acc-content { max-height: 600px; }
-    .acc-inner { padding: 2px 18px 18px; }
-
-    /* ---- Form controls ---- */
-    .form-row { margin-bottom: 14px; }
-    .form-row:last-child { margin-bottom: 0; }
-    .form-lbl {
-      display: block;
-      font-size: 10.5px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-secondary);
-      margin-bottom: 7px;
-    }
-    .select-wrap { position: relative; }
-    .form-select {
-      width: 100%;
-      padding: 9px 32px 9px 11px;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text-primary);
-      font-size: 13px;
-      outline: none;
-      transition: border-color 0.18s;
-      appearance: none; -webkit-appearance: none;
-      cursor: pointer;
-    }
-    .form-select:focus { border-color: var(--accent); }
-    .select-wrap::after {
-      content: '';
-      position: absolute;
-      right: 11px; top: 50%;
-      transform: translateY(-50%);
-      width: 0; height: 0;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      border-top: 5px solid var(--text-tertiary);
-      pointer-events: none;
-    }
-    .form-input {
-      width: 100%;
-      padding: 9px 11px;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text-primary);
-      font-size: 13px;
-      outline: none;
-      transition: border-color 0.18s;
-    }
-    .form-input::placeholder { color: var(--text-tertiary); }
-    .form-input:focus { border-color: var(--accent); }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    /* Form elements */
+    .frow { margin-bottom:14px; }
+    .frow:last-child { margin-bottom:0; }
+    .flbl { display:block; font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:var(--text-2); margin-bottom:7px; }
+    .sel-w { position:relative; }
+    .fsel { width:100%; padding:9px 30px 9px 11px; background:var(--surface-2); border:1px solid var(--border); border-radius:8px; color:var(--text-1); font-size:13px; outline:none; transition:border-color .18s; appearance:none; -webkit-appearance:none; cursor:pointer; }
+    .fsel:focus { border-color:var(--accent); }
+    .sel-w::after { content:''; position:absolute; right:10px; top:50%; transform:translateY(-50%); width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent; border-top:5px solid var(--text-3); pointer-events:none; }
+    .finp { width:100%; padding:9px 11px; background:var(--surface-2); border:1px solid var(--border); border-radius:8px; color:var(--text-1); font-size:13px; outline:none; transition:border-color .18s; }
+    .finp::placeholder { color:var(--text-3); }
+    .finp:focus { border-color:var(--accent); }
+    .fgrid2 { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
 
     /* Chips */
-    .chip-group { display: flex; flex-wrap: wrap; gap: 6px; }
-    .chip {
-      padding: 5px 13px;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      background: var(--surface-2);
-      color: var(--text-secondary);
-      font-size: 12px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s;
-      user-select: none;
-    }
-    .chip:hover { border-color: var(--border-hover); color: var(--text-primary); }
-    .chip.on { background: var(--accent-bg); border-color: var(--accent-border); color: var(--accent); }
+    .chips { display:flex; flex-wrap:wrap; gap:5px; }
+    .chip { padding:5px 12px; border:1px solid var(--border); border-radius:20px; background:var(--surface-2); color:var(--text-2); font-size:12px; font-weight:500; cursor:pointer; transition:all .15s; user-select:none; }
+    .chip:hover { border-color:var(--border-h); color:var(--text-1); }
+    .chip.on { background:var(--accent-bg); border-color:var(--accent-bd); color:var(--accent); }
 
     /* Slider */
-    .slider-row { display: flex; align-items: center; gap: 12px; }
-    .form-slider { flex: 1; accent-color: var(--accent); cursor: pointer; height: 4px; }
-    .slider-val { font-size: 12px; color: var(--text-secondary); min-width: 28px; text-align: right; }
+    .sl-row { display:flex; align-items:center; gap:11px; }
+    .fslider { flex:1; accent-color:var(--accent); cursor:pointer; height:4px; }
+    .sl-val { font-size:12px; color:var(--text-2); min-width:38px; text-align:right; white-space:nowrap; }
 
-    /* ---- Panel footer ---- */
-    .panel-footer {
-      padding: 14px 18px;
-      border-top: 1px solid var(--border);
-      background: var(--surface);
-      flex-shrink: 0;
-    }
-    .credits-bar-head {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-    .credits-bar-lbl { font-size: 11px; font-weight: 500; color: var(--text-secondary); }
-    .credits-bar-val { font-size: 11px; color: var(--text-tertiary); }
-    .bar-track {
-      height: 3px;
-      background: var(--border);
-      border-radius: 2px;
-      overflow: hidden;
-      margin-bottom: 14px;
-    }
-    .bar-fill {
-      height: 100%;
-      background: var(--accent);
-      border-radius: 2px;
-      transition: width 0.5s ease;
-    }
-    .btn-generate {
-      width: 100%;
-      padding: 13px 20px;
-      background: var(--accent);
-      border: none;
-      border-radius: 10px;
-      color: #fff;
-      font-family: 'Outfit', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-      transition: all 0.2s;
-    }
-    .btn-generate:hover {
-      background: var(--accent-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(59,126,246,0.3);
-    }
-    .btn-generate:active { transform: none; }
-    .gen-cost { font-size: 11px; font-weight: 400; opacity: 0.72; }
+    /* Pose grid */
+    .pose-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }
+    .pose-card { display:flex; flex-direction:column; align-items:center; gap:5px; padding:10px 6px 8px; border:1px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; transition:all .18s; }
+    .pose-card:hover { border-color:var(--border-h); background:var(--surface-3); }
+    .pose-card.on { border-color:var(--accent-bd); background:var(--accent-bg); }
+    .pose-card.on .pose-ico { color:var(--accent); }
+    .pose-ico { color:var(--text-2); transition:color .18s; }
+    .pose-lbl { font-size:10px; font-weight:500; color:var(--text-2); text-align:center; line-height:1.3; }
+    .pose-card.on .pose-lbl { color:var(--accent); }
 
-    /* =========================================
-       RIGHT — PREVIEW PANEL
-    ========================================= */
-    .preview-panel {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      background: var(--bg);
+    /* Angle slider */
+    .angle-wrap { position:relative; }
+    .angle-value-badge { display:inline-flex; align-items:center; padding:4px 10px; background:var(--accent); border-radius:20px; font-size:11px; font-weight:600; color:#fff; margin-bottom:10px; }
+    .angle-track-wrap { padding: 0 2px; }
+    .angle-labels { display:flex; justify-content:space-between; margin-top:5px; }
+    .angle-lbl { font-size:9.5px; color:var(--text-3); }
+
+    /* Expression grid */
+    .expr-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+    .expr-card { display:flex; flex-direction:column; align-items:center; gap:5px; padding:9px 4px 7px; border:1px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; transition:all .18s; }
+    .expr-card:hover { border-color:var(--border-h); }
+    .expr-card.on { border-color:var(--accent-bd); background:var(--accent-bg); }
+    .expr-card.on .expr-ico { color:var(--accent); }
+    .expr-ico { color:var(--text-2); transition:color .18s; }
+    .expr-lbl { font-size:10px; font-weight:500; color:var(--text-2); }
+    .expr-card.on .expr-lbl { color:var(--accent); }
+
+    /* Focus/Framing cards */
+    .frame-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:7px; }
+    .frame-card { display:flex; align-items:center; gap:8px; padding:9px 11px; border:1px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; transition:all .18s; }
+    .frame-card:hover { border-color:var(--border-h); }
+    .frame-card.on { border-color:var(--accent-bd); background:var(--accent-bg); }
+    .frame-card.on .frame-ico { color:var(--accent); }
+    .frame-card.on .frame-lbl { color:var(--accent); }
+    .frame-ico { color:var(--text-2); flex-shrink:0; transition:color .18s; }
+    .frame-lbl { font-size:11.5px; font-weight:500; color:var(--text-2); line-height:1.3; transition:color .18s; }
+
+    /* Background preset grid */
+    .bg-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+    .bg-card { position:relative; border-radius:9px; overflow:hidden; border:2px solid transparent; cursor:pointer; transition:all .18s; aspect-ratio:4/3; }
+    .bg-card:hover { border-color:var(--border-h); }
+    .bg-card.on { border-color:var(--accent); }
+    .bg-swatch { width:100%; height:100%; }
+    .bg-name { position:absolute; bottom:0; left:0; right:0; padding:4px 5px; background:rgba(0,0,0,.55); backdrop-filter:blur(4px); font-size:9px; font-weight:500; color:#fff; text-align:center; line-height:1.3; }
+    .bg-card.on .bg-name { background:rgba(59,126,246,.65); }
+    .bg-upload-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; border-radius:9px; border:1.5px dashed var(--border); cursor:pointer; transition:all .18s; aspect-ratio:4/3; background:var(--up-bg); }
+    .bg-upload-card:hover { border-color:var(--accent); background:var(--up-hov); }
+
+    /* Lighting presets */
+    .light-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+    .light-card { display:flex; flex-direction:column; align-items:center; gap:5px; padding:9px 5px 7px; border:1px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; transition:all .18s; }
+    .light-card:hover { border-color:var(--border-h); }
+    .light-card.on { border-color:var(--accent-bd); background:var(--accent-bg); }
+    .light-card.on .light-lbl { color:var(--accent); }
+    .light-dot { width:24px; height:24px; border-radius:50%; flex-shrink:0; }
+    .light-lbl { font-size:10px; font-weight:500; color:var(--text-2); text-align:center; line-height:1.3; }
+
+    /* Focal length cards */
+    .focal-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+    .focal-card { display:flex; flex-direction:column; align-items:center; gap:5px; padding:10px 8px; border:1px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; transition:all .18s; }
+    .focal-card:hover { border-color:var(--border-h); }
+    .focal-card.on { border-color:var(--accent-bd); background:var(--accent-bg); }
+    .focal-card.on .focal-ico { color:var(--accent); }
+    .focal-card.on .focal-lbl { color:var(--accent); }
+    .focal-ico { color:var(--text-2); transition:color .18s; }
+    .focal-lbl { font-size:10.5px; font-weight:500; color:var(--text-2); text-align:center; transition:color .18s; }
+
+    /* Small upload zone (logo) */
+    .logo-zone { border:1.5px dashed var(--border); border-radius:10px; background:var(--up-bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; cursor:pointer; padding:18px; transition:all .2s; }
+    .logo-zone:hover { border-color:var(--accent); background:var(--up-hov); }
+
+    /* Toggle */
+    .toggle-row { display:flex; align-items:center; justify-content:space-between; }
+    .toggle-lbl { font-size:12.5px; font-weight:500; color:var(--text-1); }
+    .toggle-sub { font-size:11px; color:var(--text-2); margin-top:1px; }
+    .toggle-btn { position:relative; width:40px; height:22px; flex-shrink:0; }
+    .toggle-btn input { opacity:0; width:0; height:0; position:absolute; }
+    .toggle-track { position:absolute; inset:0; border-radius:11px; background:var(--surface-3); border:1px solid var(--border); cursor:pointer; transition:all .25s; }
+    .toggle-btn input:checked + .toggle-track { background:var(--accent); border-color:var(--accent); }
+    .toggle-track::after { content:''; position:absolute; width:16px; height:16px; border-radius:50%; background:#fff; top:2px; left:2px; transition:left .25s; box-shadow:0 1px 3px rgba(0,0,0,.3); }
+    .toggle-btn input:checked + .toggle-track::after { left:20px; }
+
+    /* Panel footer */
+    .pfooter { padding:14px 18px; border-top:1px solid var(--border); background:var(--surface); flex-shrink:0; }
+    .cbar-head { display:flex; justify-content:space-between; margin-bottom:6px; }
+    .cbar-lbl { font-size:11px; font-weight:500; color:var(--text-2); }
+    .cbar-val { font-size:11px; color:var(--text-3); }
+    .bar-track { height:3px; background:var(--border); border-radius:2px; overflow:hidden; margin-bottom:13px; }
+    .bar-fill { height:100%; background:var(--accent); border-radius:2px; }
+    .btn-gen { width:100%; padding:13px 20px; background:var(--accent); border:none; border-radius:10px; color:#fff; font-family:'Outfit',sans-serif; font-size:14px; font-weight:600; letter-spacing:.02em; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:9px; transition:all .2s; }
+    .btn-gen:hover { background:var(--accent-h); transform:translateY(-1px); box-shadow:0 6px 20px rgba(59,126,246,.3); }
+    .btn-gen:active { transform:none; }
+    .gen-cost { font-size:11px; font-weight:400; opacity:.72; }
+
+    /* === RIGHT PANEL === */
+    .rpanel { flex:1; display:flex; flex-direction:column; overflow:hidden; background:var(--bg); }
+    .prev-bar { height:54px; padding:0 22px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); flex-shrink:0; }
+    .prev-title { font-size:13px; font-weight:500; color:var(--text-2); }
+    .prev-acts { display:flex; gap:7px; }
+    .prev-body { flex:1; display:flex; align-items:center; justify-content:center; padding:40px; }
+    .prev-empty { display:flex; flex-direction:column; align-items:center; gap:14px; max-width:260px; text-align:center; }
+    .prev-empty-ico { width:60px; height:60px; border-radius:16px; background:var(--surface); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--text-3); }
+    .prev-empty-t { font-family:'Outfit',sans-serif; font-size:15px; font-weight:600; color:var(--text-1); }
+    .prev-empty-s { font-size:13px; color:var(--text-2); line-height:1.55; }
+
+    /* === MOBILE === */
+    .mob-wiz { display:none; }
+    @media (max-width:768px) {
+      body { overflow:auto; }
+      .body { display:none; }
+      .mode-sel { display:none !important; }
+      .mob-wiz { display:flex; flex-direction:column; flex:1; overflow:hidden; height:calc(100vh - 54px); }
+      .wiz-prog { background:var(--surface); border-bottom:1px solid var(--border); padding:14px 18px 0; }
+      .wiz-lbls { display:flex; justify-content:space-between; margin-bottom:10px; }
+      .wiz-lbl { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.07em; color:var(--text-3); transition:color .2s; }
+      .wiz-lbl.on { color:var(--accent); }
+      .wiz-track { height:2.5px; background:var(--border); border-radius:2px; margin-bottom:-1px; }
+      .wiz-fill { height:100%; background:var(--accent); border-radius:2px; transition:width .35s ease; }
+      .wiz-cont { flex:1; overflow-y:auto; padding:22px 18px; }
+      .wiz-step { display:none; }
+      .wiz-step.on { display:block; }
+      .wiz-t { font-family:'Outfit',sans-serif; font-size:20px; font-weight:700; color:var(--text-1); margin-bottom:5px; }
+      .wiz-s { font-size:13.5px; color:var(--text-2); margin-bottom:22px; line-height:1.5; }
+      .type-cards { display:flex; flex-direction:column; gap:10px; }
+      .type-card { display:flex; align-items:center; gap:14px; padding:15px; border:1.5px solid var(--border); border-radius:12px; background:var(--surface); cursor:pointer; transition:all .2s; }
+      .type-card.on { border-color:var(--accent); background:var(--accent-bg); }
+      .tc-ico { width:42px; height:42px; border-radius:10px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; color:var(--text-2); flex-shrink:0; transition:all .2s; }
+      .type-card.on .tc-ico { background:var(--accent-bg); color:var(--accent); }
+      .tc-name { font-size:14px; font-weight:600; color:var(--text-1); margin-bottom:2px; }
+      .tc-cr { font-size:12px; color:var(--text-2); }
+      .tc-check { width:20px; height:20px; border-radius:50%; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .2s; }
+      .type-card.on .tc-check { background:var(--accent); border-color:var(--accent); color:#fff; }
+      .wiz-nav { padding:14px 18px; border-top:1px solid var(--border); background:var(--surface); display:flex; gap:10px; flex-shrink:0; }
+      .btn-back { padding:12px 18px; border:1px solid var(--border); border-radius:10px; background:transparent; color:var(--text-1); font-size:14px; font-weight:500; cursor:pointer; transition:all .18s; }
+      .btn-next { flex:1; padding:12px 18px; background:var(--accent); border:none; border-radius:10px; color:#fff; font-family:'Outfit',sans-serif; font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all .18s; }
+      .sum-row { display:flex; justify-content:space-between; align-items:center; padding:12px 14px; background:var(--surface); border:1px solid var(--border); border-radius:10px; margin-bottom:8px; }
+      .sum-row.hl { background:var(--accent-bg); border-color:var(--accent-bd); }
+      .sr-l { font-size:13px; color:var(--text-2); }
+      .sr-v { font-size:13px; font-weight:500; color:var(--text-1); }
+      .sum-row.hl .sr-v { color:var(--accent); font-weight:600; }
     }
-    .preview-topbar {
-      height: 54px;
-      padding: 0 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-    }
-    .preview-topbar-title {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-secondary);
-    }
-    .preview-actions { display: flex; gap: 7px; }
-    .preview-body {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-    }
-    .preview-empty {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      max-width: 260px;
-      text-align: center;
-    }
-    .preview-empty-icon {
-      width: 60px; height: 60px;
-      border-radius: 16px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text-tertiary);
-    }
-    .preview-empty-title {
-      font-family: 'Outfit', sans-serif;
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-    .preview-empty-sub {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.55;
-    }
-
-    /* =========================================
-       MOBILE WIZARD
-    ========================================= */
-    .mobile-wizard { display: none; }
-
-    @media (max-width: 768px) {
-      body { overflow: auto; }
-      .studio-body { display: none; }
-      .mode-selector { display: none !important; }
-
-      .mobile-wizard {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        overflow: hidden;
-        height: calc(100vh - 54px);
-      }
-
-      /* Progress */
-      .wiz-progress {
-        background: var(--surface);
-        border-bottom: 1px solid var(--border);
-        padding: 14px 18px 0;
-      }
-      .wiz-step-labels {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-      }
-      .wiz-step-lbl {
-        font-size: 10px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.07em;
-        color: var(--text-tertiary);
-        transition: color 0.2s;
-      }
-      .wiz-step-lbl.active { color: var(--accent); }
-      .wiz-track {
-        height: 2.5px;
-        background: var(--border);
-        border-radius: 2px;
-        margin-bottom: -1px;
-      }
-      .wiz-fill {
-        height: 100%;
-        background: var(--accent);
-        border-radius: 2px;
-        transition: width 0.35s ease;
-      }
-
-      /* Content */
-      .wiz-content { flex: 1; overflow-y: auto; padding: 22px 18px; }
-      .wiz-step { display: none; }
-      .wiz-step.active { display: block; }
-      .wiz-step-title {
-        font-family: 'Outfit', sans-serif;
-        font-size: 20px;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 5px;
-      }
-      .wiz-step-sub {
-        font-size: 13.5px;
-        color: var(--text-secondary);
-        margin-bottom: 22px;
-        line-height: 1.5;
-      }
-
-      /* Type cards */
-      .type-cards { display: flex; flex-direction: column; gap: 10px; }
-      .type-card {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 15px;
-        border: 1.5px solid var(--border);
-        border-radius: 12px;
-        background: var(--surface);
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-      .type-card.sel { border-color: var(--accent); background: var(--accent-bg); }
-      .type-card-ico {
-        width: 42px; height: 42px;
-        border-radius: 10px;
-        background: var(--surface-2);
-        display: flex; align-items: center; justify-content: center;
-        color: var(--text-secondary);
-        flex-shrink: 0;
-        transition: all 0.2s;
-      }
-      .type-card.sel .type-card-ico { background: var(--accent-bg); color: var(--accent); }
-      .type-card-info { flex: 1; }
-      .type-card-name { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
-      .type-card-credits { font-size: 12px; color: var(--text-secondary); }
-      .type-card-check {
-        width: 20px; height: 20px;
-        border-radius: 50%;
-        border: 2px solid var(--border);
-        display: flex; align-items: center; justify-content: center;
-        flex-shrink: 0;
-        transition: all 0.2s;
-      }
-      .type-card.sel .type-card-check { background: var(--accent); border-color: var(--accent); color: #fff; }
-
-      /* Nav bar */
-      .wiz-nav {
-        padding: 14px 18px;
-        border-top: 1px solid var(--border);
-        background: var(--surface);
-        display: flex;
-        gap: 10px;
-        flex-shrink: 0;
-      }
-      .btn-wiz-back {
-        padding: 12px 18px;
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        background: transparent;
-        color: var(--text-primary);
-        font-size: 14px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.18s;
-      }
-      .btn-wiz-back:hover { background: var(--surface-2); }
-      .btn-wiz-next {
-        flex: 1;
-        padding: 12px 18px;
-        background: var(--accent);
-        border: none;
-        border-radius: 10px;
-        color: #fff;
-        font-family: 'Outfit', sans-serif;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        transition: all 0.18s;
-      }
-      .btn-wiz-next:hover { background: var(--accent-hover); }
-
-      /* Summary rows */
-      .summary-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 14px;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        margin-bottom: 8px;
-      }
-      .summary-row-lbl { font-size: 13px; color: var(--text-secondary); }
-      .summary-row-val { font-size: 13px; font-weight: 500; color: var(--text-primary); }
-      .summary-row.accent { background: var(--accent-bg); border-color: var(--accent-border); }
-      .summary-row.accent .summary-row-val { color: var(--accent); font-weight: 600; }
-
-      .info-strip {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 14px;
-        background: var(--surface-2);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        margin-bottom: 8px;
-      }
-      .info-strip span { font-size: 12px; color: var(--text-secondary); }
-    }
-
-    /* Very small screens */
-    @media (max-width: 480px) {
-      .topbar { padding: 0 14px; }
-      .topbar-logo { font-size: 15px; }
-      .credits-pill span { display: none; }
+    @media (max-width:480px) {
+      .topbar { padding:0 14px; }
+      .logo { font-size:15px; }
     }
   </style>
 </head>
 <body>
 <div class="studio">
 
-  <!-- ===== TOP BAR ===== -->
+  <!-- TOPBAR -->
   <div class="topbar">
-    <div class="topbar-logo">Drapit <span>Studio</span></div>
-
-    <div class="mode-selector" id="modeSelector">
-      <button class="mode-btn active" onclick="setMode(this)">
-        <!-- Person icon -->
+    <div class="logo">Drapit <span>Studio</span></div>
+    <div class="mode-sel" id="msel">
+      <button class="mode-btn on" onclick="setMode(this)">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
-        Virtueel Model
-        <span class="mode-badge">2 cr</span>
+        Virtueel Model <span class="mode-badge">2 cr</span>
       </button>
       <button class="mode-btn" onclick="setMode(this)">
-        <!-- Camera icon -->
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-        Product Foto
-        <span class="mode-badge">1 cr</span>
+        Product Foto <span class="mode-badge">1 cr</span>
       </button>
       <button class="mode-btn" onclick="setMode(this)">
-        <!-- Rotate icon -->
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
-        360° Rotatie
-        <span class="mode-badge">4 cr</span>
+        360° Rotatie <span class="mode-badge">4 cr</span>
       </button>
     </div>
-
-    <div class="topbar-right">
-      <div class="credits-pill">
-        <div class="credits-dot"></div>
-        <span>17 / 500 tries</span>
-      </div>
-      <button class="icon-btn" onclick="toggleTheme()" title="Thema wisselen" id="themeBtn">
-        <!-- Sun icon (dark mode = show sun) -->
-        <svg id="themeIco" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="4"/>
-          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+    <div class="topbar-r">
+      <div class="cred-pill"><div class="cred-dot"></div><span>17 / 500</span></div>
+      <button class="ico-btn" onclick="toggleTheme()" id="thBtn">
+        <svg id="thIco" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
         </svg>
       </button>
     </div>
   </div>
 
-  <!-- ===== DESKTOP BODY ===== -->
-  <div class="studio-body">
+  <!-- DESKTOP BODY -->
+  <div class="body">
 
-    <!-- LEFT — SETTINGS PANEL -->
-    <div class="settings-panel">
-      <div class="panel-scroll">
+    <!-- LEFT PANEL -->
+    <div class="lpanel">
+      <div class="pscroll">
 
         <!-- Clothing tabs -->
-        <div class="clothing-tabs">
-          <div class="tabs-label">Kledingstuk</div>
-          <div class="tab-list">
-            <button class="tab-btn active" onclick="setTab(this)">
+        <div class="ctabs">
+          <div class="ctabs-lbl">Kledingstuk</div>
+          <div class="tab-row">
+            <button class="tab on" onclick="setTab(this)">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>
-              Bovenkleding
+              Bovenstuk
             </button>
-            <button class="tab-btn" onclick="setTab(this)">
+            <button class="tab" onclick="setTab(this)">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
-              Onderkleding
+              Onderstuk
             </button>
-            <button class="tab-btn" onclick="setTab(this)">
+            <button class="tab" onclick="setTab(this)">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2H2v20l10-5 10 5V2h-2M4 2v13M20 2v13"/></svg>
-              Bovenlaag
+              Buitenlaag
             </button>
           </div>
         </div>
 
         <!-- Upload zones -->
-        <div class="upload-section">
+        <div class="upload-sect">
           <div class="upload-grid">
-            <div class="upload-zone" onclick="toggleUpload(this)">
-              <div class="upload-badge">Voorkant</div>
-              <div class="upload-ico" id="frontIco">
+            <div class="uzone" onclick="toggleU(this)">
+              <div class="u-badge">Voorkant</div>
+              <div class="u-ico">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
               </div>
-              <div class="upload-lbl" id="frontLbl">Afbeelding uploaden</div>
-              <div class="upload-sub">JPG · PNG · WEBP</div>
+              <div class="u-lbl">Uploaden</div>
+              <div class="u-sub">JPG · PNG · WEBP</div>
             </div>
-            <div class="upload-zone" onclick="toggleUpload(this)">
-              <div class="upload-badge">Achterkant</div>
-              <div class="upload-ico" id="backIco">
+            <div class="uzone" onclick="toggleU(this)">
+              <div class="u-badge">Achterkant</div>
+              <div class="u-ico">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
               </div>
-              <div class="upload-lbl" id="backLbl">Afbeelding uploaden</div>
-              <div class="upload-sub">Optioneel</div>
+              <div class="u-lbl">Uploaden</div>
+              <div class="u-sub">Optioneel</div>
             </div>
           </div>
         </div>
 
-        <!-- Accordions -->
-        <!-- MODEL & FYSIEK -->
-        <div class="accordion" id="acc-model">
-          <button class="acc-trigger" onclick="toggleAcc('acc-model')">
-            <div class="acc-left">
-              <div class="acc-icon-box">
+        <!-- ===== ACCORDION: MODEL & FYSIEK ===== -->
+        <div class="acc" id="a1">
+          <button class="acc-trig" onclick="toggleAcc('a1')">
+            <div class="acc-l">
+              <div class="acc-ibox">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
               </div>
               <span class="acc-title">Model & Fysiek</span>
             </div>
-            <svg class="acc-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="acc-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
-          <div class="acc-content">
+          <div class="acc-body">
             <div class="acc-inner">
-              <div class="form-row">
-                <label class="form-lbl">Geslacht</label>
-                <div class="chip-group">
-                  <div class="chip on" onclick="chipSingle(this)">Vrouw</div>
-                  <div class="chip" onclick="chipSingle(this)">Man</div>
-                  <div class="chip" onclick="chipSingle(this)">Neutraal</div>
+
+              <!-- Geslacht -->
+              <div class="sec-lbl">Geslacht</div>
+              <div class="frow">
+                <div class="chips">
+                  <div class="chip on" onclick="cSingle(this)">Vrouw</div>
+                  <div class="chip" onclick="cSingle(this)">Man</div>
+                  <div class="chip" onclick="cSingle(this)">Neutraal</div>
                 </div>
               </div>
-              <div class="form-row">
-                <label class="form-lbl">Huidtint</label>
-                <div class="chip-group">
-                  <div class="chip on" onclick="chipSingle(this)">Licht</div>
-                  <div class="chip" onclick="chipSingle(this)">Medium</div>
-                  <div class="chip" onclick="chipSingle(this)">Donker</div>
-                  <div class="chip" onclick="chipSingle(this)">Divers</div>
+
+              <!-- Ethniciteit -->
+              <div class="sec-lbl">Ethniciteit</div>
+              <div class="frow">
+                <div class="chips">
+                  <div class="chip on" onclick="cSingle(this)">Willekeurig</div>
+                  <div class="chip" onclick="cSingle(this)">Europees</div>
+                  <div class="chip" onclick="cSingle(this)">Afrikaans</div>
+                  <div class="chip" onclick="cSingle(this)">Aziatisch</div>
+                  <div class="chip" onclick="cSingle(this)">Latijns</div>
+                  <div class="chip" onclick="cSingle(this)">Midden-Oosters</div>
                 </div>
               </div>
-              <div class="form-row">
-                <label class="form-lbl">Postuur</label>
-                <div class="select-wrap">
-                  <select class="form-select">
-                    <option>Slank</option>
-                    <option>Atletisch</option>
-                    <option>Gemiddeld</option>
-                    <option>Plus size</option>
-                  </select>
+
+              <!-- Lichaamsbouw -->
+              <div class="sec-lbl">Lichaamsbouw</div>
+              <div class="frow">
+                <div class="chips">
+                  <div class="chip on" onclick="cSingle(this)">Slank</div>
+                  <div class="chip" onclick="cSingle(this)">Atletisch</div>
+                  <div class="chip" onclick="cSingle(this)">Gemiddeld</div>
+                  <div class="chip" onclick="cSingle(this)">Curvy</div>
+                  <div class="chip" onclick="cSingle(this)">Gespierd</div>
+                  <div class="chip" onclick="cSingle(this)">Plus Size</div>
                 </div>
               </div>
-              <div class="form-row">
-                <label class="form-lbl">Leeftijdsbereik</label>
-                <div class="form-grid">
-                  <div class="select-wrap">
-                    <select class="form-select">
-                      <option>18–25</option><option>25–35</option><option>35–50</option><option>50+</option>
-                    </select>
+
+              <!-- Leeftijd + Lengte -->
+              <div class="sec-lbl">Afmetingen</div>
+              <div class="frow">
+                <label class="flbl">Leeftijd</label>
+                <div class="sl-row">
+                  <input type="range" class="fslider" min="18" max="70" value="28" oninput="updSl(this,'sv-age')">
+                  <span class="sl-val" id="sv-age">28 jaar</span>
+                </div>
+              </div>
+              <div class="frow">
+                <label class="flbl">Lengte</label>
+                <div class="sl-row">
+                  <input type="range" class="fslider" min="155" max="200" value="172" oninput="updSlCm(this,'sv-h')">
+                  <span class="sl-val" id="sv-h">172 cm</span>
+                </div>
+              </div>
+
+              <!-- Focus & Kadering -->
+              <div class="sec-lbl">Focus & Kadering</div>
+              <div class="frow">
+                <div class="frame-grid">
+                  <div class="frame-card on" onclick="cSingleClass(this,'frame-card')">
+                    <div class="frame-ico">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+                    </div>
+                    <span class="frame-lbl">Automatisch</span>
                   </div>
-                  <div class="select-wrap">
-                    <select class="form-select">
-                      <option>Willekeurig</option><option>Specifiek</option>
-                    </select>
+                  <div class="frame-card" onclick="cSingleClass(this,'frame-card')">
+                    <div class="frame-ico">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20L21 20M7 20V12M12 20V8M17 20V4"/></svg>
+                    </div>
+                    <span class="frame-lbl">Benen & Schoenen</span>
+                  </div>
+                  <div class="frame-card" onclick="cSingleClass(this,'frame-card')">
+                    <div class="frame-ico">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="14" rx="2"/><path d="M5 16v6M19 16v6"/></svg>
+                    </div>
+                    <span class="frame-lbl">Torso (Headless)</span>
+                  </div>
+                  <div class="frame-card" onclick="cSingleClass(this,'frame-card')">
+                    <div class="frame-ico">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </div>
+                    <span class="frame-lbl">Detail Close-up</span>
                   </div>
                 </div>
               </div>
+
+              <!-- Houding (Pose) -->
+              <div class="sec-lbl">Houding</div>
+              <div class="frow">
+                <div class="pose-grid">
+                  <!-- Staan -->
+                  <div class="pose-card on" onclick="cSingleClass(this,'pose-card')">
+                    <div class="pose-ico">
+                      <svg width="22" height="26" viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="3" r="2.2"/><line x1="11" y1="5.2" x2="11" y2="14"/><line x1="6" y1="9" x2="16" y2="9"/><line x1="11" y1="14" x2="7.5" y2="22"/><line x1="11" y1="14" x2="14.5" y2="22"/>
+                      </svg>
+                    </div>
+                    <span class="pose-lbl">Staan</span>
+                  </div>
+                  <!-- Lopen -->
+                  <div class="pose-card" onclick="cSingleClass(this,'pose-card')">
+                    <div class="pose-ico">
+                      <svg width="22" height="26" viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="3" r="2.2"/><line x1="11" y1="5.2" x2="11" y2="13"/><line x1="6" y1="8" x2="11" y2="10.5"/><line x1="11" y1="10.5" x2="16" y2="7.5"/><line x1="11" y1="13" x2="7" y2="21"/><line x1="11" y1="13" x2="16" y2="20"/>
+                      </svg>
+                    </div>
+                    <span class="pose-lbl">Lopen</span>
+                  </div>
+                  <!-- Zitten -->
+                  <div class="pose-card" onclick="cSingleClass(this,'pose-card')">
+                    <div class="pose-ico">
+                      <svg width="22" height="26" viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="3" r="2.2"/><line x1="11" y1="5.2" x2="11" y2="13"/><line x1="6" y1="9" x2="16" y2="9"/><line x1="11" y1="13" x2="4" y2="13"/><line x1="4" y1="13" x2="4" y2="22"/><line x1="11" y1="13" x2="16" y2="20"/>
+                      </svg>
+                    </div>
+                    <span class="pose-lbl">Zitten</span>
+                  </div>
+                  <!-- Handen in zakken -->
+                  <div class="pose-card" onclick="cSingleClass(this,'pose-card')">
+                    <div class="pose-ico">
+                      <svg width="22" height="26" viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="3" r="2.2"/><line x1="11" y1="5.2" x2="11" y2="14"/><line x1="11" y1="9.5" x2="6.5" y2="13.5"/><line x1="11" y1="9.5" x2="15.5" y2="13.5"/><line x1="11" y1="14" x2="7.5" y2="22"/><line x1="11" y1="14" x2="14.5" y2="22"/>
+                      </svg>
+                    </div>
+                    <span class="pose-lbl">Handen in zakken</span>
+                  </div>
+                  <!-- Springen -->
+                  <div class="pose-card" onclick="cSingleClass(this,'pose-card')">
+                    <div class="pose-ico">
+                      <svg width="22" height="26" viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="3" r="2.2"/><line x1="11" y1="5.2" x2="11" y2="13"/><line x1="4.5" y1="7" x2="11" y2="10"/><line x1="11" y1="10" x2="17.5" y2="7"/><line x1="11" y1="13" x2="6" y2="20"/><line x1="11" y1="13" x2="16" y2="20"/>
+                      </svg>
+                    </div>
+                    <span class="pose-lbl">Springen</span>
+                  </div>
+                  <!-- Armen over elkaar -->
+                  <div class="pose-card" onclick="cSingleClass(this,'pose-card')">
+                    <div class="pose-ico">
+                      <svg width="22" height="26" viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="3" r="2.2"/><line x1="11" y1="5.2" x2="11" y2="14"/><path d="M6,10 Q11,12.5 16,10"/><path d="M6,12 Q11,14.5 16,12"/><line x1="11" y1="14" x2="7.5" y2="22"/><line x1="11" y1="14" x2="14.5" y2="22"/>
+                      </svg>
+                    </div>
+                    <span class="pose-lbl">Armen gekruist</span>
+                  </div>
+                  <!-- Over schouder -->
+                  <div class="pose-card" onclick="cSingleClass(this,'pose-card')">
+                    <div class="pose-ico">
+                      <svg width="22" height="26" viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="13" cy="3" r="2.2"/><line x1="11" y1="5.5" x2="11" y2="14"/><line x1="6" y1="9" x2="16" y2="9"/><line x1="11" y1="14" x2="7.5" y2="22"/><line x1="11" y1="14" x2="14.5" y2="22"/><line x1="13" y1="3" x2="11" y2="5.5"/>
+                      </svg>
+                    </div>
+                    <span class="pose-lbl">Over schouder</span>
+                  </div>
+                  <!-- Dansen -->
+                  <div class="pose-card" onclick="cSingleClass(this,'pose-card')">
+                    <div class="pose-ico">
+                      <svg width="22" height="26" viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="3" r="2.2"/><line x1="11" y1="5.2" x2="11" y2="13"/><line x1="4.5" y1="8" x2="11" y2="10"/><line x1="11" y1="10" x2="16" y2="7"/><line x1="11" y1="13" x2="6.5" y2="18"/><line x1="6.5" y1="18" x2="9" y2="23"/><line x1="11" y1="13" x2="17" y2="18"/>
+                      </svg>
+                    </div>
+                    <span class="pose-lbl">Dansen</span>
+                  </div>
+                  <!-- Handen op rug -->
+                  <div class="pose-card" onclick="cSingleClass(this,'pose-card')">
+                    <div class="pose-ico">
+                      <svg width="22" height="26" viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="3" r="2.2"/><line x1="11" y1="5.2" x2="11" y2="14"/><line x1="11" y1="10" x2="7" y2="12.5"/><line x1="7" y1="12.5" x2="9" y2="10"/><line x1="11" y1="10" x2="15" y2="12.5"/><line x1="15" y1="12.5" x2="13" y2="10"/><line x1="11" y1="14" x2="7.5" y2="22"/><line x1="11" y1="14" x2="14.5" y2="22"/>
+                      </svg>
+                    </div>
+                    <span class="pose-lbl">Handen op rug</span>
+                  </div>
+                  <!-- Benen gekruist -->
+                  <div class="pose-card" onclick="cSingleClass(this,'pose-card')">
+                    <div class="pose-ico">
+                      <svg width="22" height="26" viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="3" r="2.2"/><line x1="11" y1="5.2" x2="11" y2="13"/><line x1="6" y1="9" x2="16" y2="9"/><line x1="11" y1="13" x2="15" y2="18"/><line x1="15" y1="18" x2="9" y2="23"/><line x1="11" y1="13" x2="7" y2="17"/><line x1="7" y1="17" x2="14" y2="21"/>
+                      </svg>
+                    </div>
+                    <span class="pose-lbl">Benen gekruist</span>
+                  </div>
+                  <!-- Hand op heup -->
+                  <div class="pose-card" onclick="cSingleClass(this,'pose-card')">
+                    <div class="pose-ico">
+                      <svg width="22" height="26" viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="3" r="2.2"/><line x1="11" y1="5.2" x2="11" y2="14"/><line x1="6" y1="9" x2="11" y2="8"/><line x1="11" y1="8" x2="16" y2="11"/><line x1="16" y1="11" x2="14" y2="13.5"/><line x1="11" y1="14" x2="7.5" y2="22"/><line x1="11" y1="14" x2="14.5" y2="22"/>
+                      </svg>
+                    </div>
+                    <span class="pose-lbl">Hand op heup</span>
+                  </div>
+                  <!-- Photoshoot -->
+                  <div class="pose-card" onclick="cSingleClass(this,'pose-card')">
+                    <div class="pose-ico">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>
+                      </svg>
+                    </div>
+                    <span class="pose-lbl">Photoshoot</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Kijkhoek (Viewing angle) -->
+              <div class="sec-lbl">Kijkhoek</div>
+              <div class="frow">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                  <span style="font-size:11px;color:var(--text-2);">Hoek</span>
+                  <span class="angle-value-badge" id="ang-badge">0° (Voorkant)</span>
+                </div>
+                <input type="range" class="fslider" min="0" max="360" value="0" oninput="updAngle(this)" style="width:100%;">
+                <div class="angle-labels">
+                  <span class="angle-lbl">Voor</span>
+                  <span class="angle-lbl">Rechts</span>
+                  <span class="angle-lbl">Achter</span>
+                  <span class="angle-lbl">Links</span>
+                  <span class="angle-lbl">Voor</span>
+                </div>
+              </div>
+
+              <!-- Gezichtsuitdrukking -->
+              <div class="sec-lbl">Gezichtsuitdrukking</div>
+              <div class="frow">
+                <div class="expr-grid">
+                  <div class="expr-card on" onclick="cSingleClass(this,'expr-card')">
+                    <div class="expr-ico">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="9" y1="10" x2="9.01" y2="10"/><line x1="15" y1="10" x2="15.01" y2="10"/><path d="M9 15h6"/></svg>
+                    </div>
+                    <span class="expr-lbl">Neutraal</span>
+                  </div>
+                  <div class="expr-card" onclick="cSingleClass(this,'expr-card')">
+                    <div class="expr-ico">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="9" y1="10" x2="9.01" y2="10"/><line x1="15" y1="10" x2="15.01" y2="10"/><path d="M8 15s1.5 2 4 2 4-2 4-2"/></svg>
+                    </div>
+                    <span class="expr-lbl">Blij</span>
+                  </div>
+                  <div class="expr-card" onclick="cSingleClass(this,'expr-card')">
+                    <div class="expr-ico">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 9l1 1"/><path d="M15 9l1 1"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                    </div>
+                    <span class="expr-lbl">Stoer</span>
+                  </div>
+                  <div class="expr-card" onclick="cSingleClass(this,'expr-card')">
+                    <div class="expr-ico">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 8l1 1"/><path d="M15 8l1 1"/><circle cx="9" cy="11" r="1.2"/><circle cx="15" cy="11" r="1.2"/><path d="M9 16s1-1 3-1 3 1 3 1"/></svg>
+                    </div>
+                    <span class="expr-lbl">Verbaasd</span>
+                  </div>
+                  <div class="expr-card" onclick="cSingleClass(this,'expr-card')">
+                    <div class="expr-ico">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="9" y1="10" x2="9.01" y2="10"/><line x1="15" y1="10" x2="15.01" y2="10"/><path d="M8 15.5s2-1 4 0 4 0 4 0"/></svg>
+                    </div>
+                    <span class="expr-lbl">Sensueel</span>
+                  </div>
+                  <div class="expr-card" onclick="cSingleClass(this,'expr-card')">
+                    <div class="expr-ico">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 9l1-1"/><path d="M16 9l-1-1"/><line x1="9" y1="10" x2="9.01" y2="10"/><line x1="15" y1="10" x2="15.01" y2="10"/><path d="M8 16s2-2 4-2 4 2 4 2" stroke-dasharray="2"/></svg>
+                    </div>
+                    <span class="expr-lbl">Boos</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Rekwisiet -->
+              <div class="sec-lbl">Rekwisiet (Prop)</div>
+              <div class="frow">
+                <input type="text" class="finp" placeholder="bijv. handtas, zonnebril, paraplu…">
+              </div>
+
             </div>
           </div>
-        </div>
+        </div><!-- /acc Model & Fysiek -->
 
-        <!-- OMGEVING & LICHT -->
-        <div class="accordion" id="acc-env">
-          <button class="acc-trigger" onclick="toggleAcc('acc-env')">
-            <div class="acc-left">
-              <div class="acc-icon-box">
+        <!-- ===== ACCORDION: OMGEVING & LICHT ===== -->
+        <div class="acc" id="a2">
+          <button class="acc-trig" onclick="toggleAcc('a2')">
+            <div class="acc-l">
+              <div class="acc-ibox">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
               </div>
               <span class="acc-title">Omgeving & Licht</span>
             </div>
-            <svg class="acc-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="acc-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
-          <div class="acc-content">
+          <div class="acc-body">
             <div class="acc-inner">
-              <div class="form-row">
-                <label class="form-lbl">Achtergrond</label>
-                <div class="chip-group">
-                  <div class="chip on" onclick="chipSingle(this)">Studio</div>
-                  <div class="chip" onclick="chipSingle(this)">Buiten</div>
-                  <div class="chip" onclick="chipSingle(this)">Interieur</div>
-                  <div class="chip" onclick="chipSingle(this)">Straat</div>
+
+              <!-- Achtergrond presets -->
+              <div class="sec-lbl">Achtergrond</div>
+              <div class="frow">
+                <div class="bg-grid">
+                  <div class="bg-card on" onclick="cSingleClass(this,'bg-card')"><div class="bg-swatch" style="background:linear-gradient(145deg,#e8e8e8,#f5f5f5)"></div><div class="bg-name">Minimalistisch</div></div>
+                  <div class="bg-card" onclick="cSingleClass(this,'bg-card')"><div class="bg-swatch" style="background:#ffffff"></div><div class="bg-name">Infinity Wit</div></div>
+                  <div class="bg-card" onclick="cSingleClass(this,'bg-card')"><div class="bg-swatch" style="background:radial-gradient(circle at 50% 50%,#3d3d5c,#0d0d1a)"></div><div class="bg-name">Donkere Spot</div></div>
+                  <div class="bg-card" onclick="cSingleClass(this,'bg-card')"><div class="bg-swatch" style="background:linear-gradient(145deg,#c8a96e,#8b6a28)"></div><div class="bg-name">Luxe Interieur</div></div>
+                  <div class="bg-card" onclick="cSingleClass(this,'bg-card')"><div class="bg-swatch" style="background:linear-gradient(145deg,#9ca3af,#6b7280)"></div><div class="bg-name">Moderne Arch.</div></div>
+                  <div class="bg-card" onclick="cSingleClass(this,'bg-card')"><div class="bg-swatch" style="background:linear-gradient(145deg,#f97316,#ec4899,#8b5cf6)"></div><div class="bg-name">Rooftop Zons.</div></div>
+                  <div class="bg-card" onclick="cSingleClass(this,'bg-card')"><div class="bg-swatch" style="background:linear-gradient(145deg,#4a7c59,#2d5a3d)"></div><div class="bg-name">Studio Planten</div></div>
+                  <div class="bg-card" onclick="cSingleClass(this,'bg-card')"><div class="bg-swatch" style="background:linear-gradient(145deg,#78716c,#44403c)"></div><div class="bg-name">Industrieel Loft</div></div>
+                  <div class="bg-card" onclick="cSingleClass(this,'bg-card')"><div class="bg-swatch" style="background:linear-gradient(145deg,#fce7f3,#fdf2f8)"></div><div class="bg-name">Zachte Klassiek</div></div>
+                  <div class="bg-card" onclick="cSingleClass(this,'bg-card')"><div class="bg-swatch" style="background:linear-gradient(145deg,#1e3a8a,#1e40af)"></div><div class="bg-name">Winkelvitrine</div></div>
+                  <div class="bg-card" onclick="cSingleClass(this,'bg-card')"><div class="bg-swatch" style="background:linear-gradient(145deg,#0c4a6e,#0369a1)"></div><div class="bg-name">Luxe Jacht</div></div>
+                  <div class="bg-upload-card" onclick="">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-3)"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <span style="font-size:9px;font-weight:500;color:var(--text-3);text-align:center;line-height:1.3;">Upload eigen</span>
+                  </div>
                 </div>
               </div>
-              <div class="form-row">
-                <label class="form-lbl">Lichtintensiteit</label>
-                <div class="slider-row">
-                  <input type="range" class="form-slider" min="0" max="100" value="70" oninput="updSlider(this,'sv1')">
-                  <span class="slider-val" id="sv1">70</span>
+
+              <!-- Belichting -->
+              <div class="sec-lbl">Belichting</div>
+              <div class="frow">
+                <div class="light-grid">
+                  <div class="light-card on" onclick="cSingleClass(this,'light-card')">
+                    <div class="light-dot" style="background:radial-gradient(circle,#fff 20%,#aaa)"></div>
+                    <span class="light-lbl">Studio­flits</span>
+                  </div>
+                  <div class="light-card" onclick="cSingleClass(this,'light-card')">
+                    <div class="light-dot" style="background:radial-gradient(circle,#fef9ec,#e5d5a3)"></div>
+                    <span class="light-lbl">Zacht Sfeer</span>
+                  </div>
+                  <div class="light-card" onclick="cSingleClass(this,'light-card')">
+                    <div class="light-dot" style="background:linear-gradient(135deg,#fde68a,#fb923c)"></div>
+                    <span class="light-lbl">Ochtend</span>
+                  </div>
+                  <div class="light-card" onclick="cSingleClass(this,'light-card')">
+                    <div class="light-dot" style="background:radial-gradient(circle,#e0f2fe,#bfdbfe)"></div>
+                    <span class="light-lbl">Middag</span>
+                  </div>
+                  <div class="light-card" onclick="cSingleClass(this,'light-card')">
+                    <div class="light-dot" style="background:linear-gradient(135deg,#f59e0b,#d97706)"></div>
+                    <span class="light-lbl">Gouden Uur</span>
+                  </div>
+                  <div class="light-card" onclick="cSingleClass(this,'light-card')">
+                    <div class="light-dot" style="background:linear-gradient(135deg,#1c1c1c,#fff 50%,#1c1c1c)"></div>
+                    <span class="light-lbl">Hard Contrast</span>
+                  </div>
+                  <div class="light-card" onclick="cSingleClass(this,'light-card')">
+                    <div class="light-dot" style="background:radial-gradient(ellipse at 30% 50%,#d4a96a,#3d2b1f)"></div>
+                    <span class="light-lbl">Rembrandt</span>
+                  </div>
+                  <div class="light-card" onclick="cSingleClass(this,'light-card')">
+                    <div class="light-dot" style="background:radial-gradient(circle,#60a5fa,#1e3a8a)"></div>
+                    <span class="light-lbl">Cinematic</span>
+                  </div>
+                  <div class="light-card" onclick="cSingleClass(this,'light-card')">
+                    <div class="light-dot" style="background:radial-gradient(circle,#4338ca,#0f172a)"></div>
+                    <span class="light-lbl">Nacht</span>
+                  </div>
                 </div>
               </div>
-              <div class="form-row">
-                <label class="form-lbl">Lichtrichting</label>
-                <div class="select-wrap">
-                  <select class="form-select">
-                    <option>Vooraan</option><option>Zij (links)</option><option>Zij (rechts)</option><option>Achter</option>
-                  </select>
-                </div>
-              </div>
+
             </div>
           </div>
-        </div>
+        </div><!-- /acc Omgeving -->
 
-        <!-- CAMERA & OPTIEK -->
-        <div class="accordion" id="acc-cam">
-          <button class="acc-trigger" onclick="toggleAcc('acc-cam')">
-            <div class="acc-left">
-              <div class="acc-icon-box">
+        <!-- ===== ACCORDION: CAMERA & OPTIEK ===== -->
+        <div class="acc" id="a3">
+          <button class="acc-trig" onclick="toggleAcc('a3')">
+            <div class="acc-l">
+              <div class="acc-ibox">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
               </div>
               <span class="acc-title">Camera & Optiek</span>
             </div>
-            <svg class="acc-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="acc-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
-          <div class="acc-content">
+          <div class="acc-body">
             <div class="acc-inner">
-              <div class="form-row">
-                <label class="form-lbl">Camerahoek</label>
-                <div class="chip-group">
-                  <div class="chip on" onclick="chipSingle(this)">Frontaal</div>
-                  <div class="chip" onclick="chipSingle(this)">3/4 hoek</div>
-                  <div class="chip" onclick="chipSingle(this)">Profiel</div>
-                  <div class="chip" onclick="chipSingle(this)">Achter</div>
+
+              <!-- Brandpuntsafstand (Lens) -->
+              <div class="sec-lbl">Brandpuntsafstand (Lens)</div>
+              <div class="frow">
+                <div class="focal-grid">
+                  <div class="focal-card" onclick="cSingleClass(this,'focal-card')">
+                    <div class="focal-ico">
+                      <svg width="28" height="20" viewBox="0 0 36 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <ellipse cx="18" cy="12" rx="16" ry="10"/><ellipse cx="18" cy="12" rx="10" ry="10"/>
+                      </svg>
+                    </div>
+                    <span class="focal-lbl">Sterk Wide</span>
+                  </div>
+                  <div class="focal-card on" onclick="cSingleClass(this,'focal-card')">
+                    <div class="focal-ico">
+                      <svg width="28" height="20" viewBox="0 0 36 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <ellipse cx="18" cy="12" rx="16" ry="10"/><ellipse cx="18" cy="12" rx="7" ry="10"/>
+                      </svg>
+                    </div>
+                    <span class="focal-lbl">Standaard</span>
+                  </div>
+                  <div class="focal-card" onclick="cSingleClass(this,'focal-card')">
+                    <div class="focal-ico">
+                      <svg width="28" height="20" viewBox="0 0 36 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <ellipse cx="18" cy="12" rx="16" ry="10"/><ellipse cx="18" cy="12" rx="4" ry="10"/>
+                      </svg>
+                    </div>
+                    <span class="focal-lbl">Portrait</span>
+                  </div>
                 </div>
               </div>
-              <div class="form-row">
-                <label class="form-lbl">Zoomafstand</label>
-                <div class="chip-group">
-                  <div class="chip" onclick="chipSingle(this)">Close-up</div>
-                  <div class="chip on" onclick="chipSingle(this)">Halffiguur</div>
-                  <div class="chip" onclick="chipSingle(this)">Vollfiguur</div>
+
+              <!-- Diepte / Bokeh -->
+              <div class="sec-lbl">Diepte / Bokeh</div>
+              <div class="frow">
+                <div class="sl-row">
+                  <input type="range" class="fslider" min="1" max="22" value="8" oninput="updBokeh(this)">
+                  <span class="sl-val" id="sv-bokeh">F/8</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-top:5px;">
+                  <span style="font-size:9.5px;color:var(--text-3);">Wazig (F/1)</span>
+                  <span style="font-size:9.5px;color:var(--text-3);">Scherp (F/22)</span>
                 </div>
               </div>
-              <div class="form-row">
-                <label class="form-lbl">Diepte van veld</label>
-                <div class="slider-row">
-                  <input type="range" class="form-slider" min="0" max="100" value="40" oninput="updSlider(this,'sv2')">
-                  <span class="slider-val" id="sv2">40</span>
-                </div>
-              </div>
+
             </div>
           </div>
-        </div>
+        </div><!-- /acc Camera -->
 
-        <!-- BATCH & BRANDING -->
-        <div class="accordion" id="acc-batch">
-          <button class="acc-trigger" onclick="toggleAcc('acc-batch')">
-            <div class="acc-left">
-              <div class="acc-icon-box">
+        <!-- ===== ACCORDION: BATCH & BRANDING ===== -->
+        <div class="acc" id="a4">
+          <button class="acc-trig" onclick="toggleAcc('a4')">
+            <div class="acc-l">
+              <div class="acc-ibox">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
               </div>
               <span class="acc-title">Batch & Branding</span>
             </div>
-            <svg class="acc-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="acc-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
-          <div class="acc-content">
+          <div class="acc-body">
             <div class="acc-inner">
-              <div class="form-row">
-                <label class="form-lbl">Aantal generaties</label>
-                <div class="chip-group">
-                  <div class="chip on" onclick="chipSingle(this)">1×</div>
-                  <div class="chip" onclick="chipSingle(this)">2×</div>
-                  <div class="chip" onclick="chipSingle(this)">4×</div>
-                  <div class="chip" onclick="chipSingle(this)">8×</div>
+
+              <!-- Batch variaties -->
+              <div class="sec-lbl">Batch Variaties</div>
+              <div class="frow">
+                <div class="chips">
+                  <div class="chip on" onclick="cSingle(this)">1×</div>
+                  <div class="chip" onclick="cSingle(this)">2×</div>
+                  <div class="chip" onclick="cSingle(this)">4×</div>
+                  <div class="chip" onclick="cSingle(this)">8×</div>
                 </div>
               </div>
-              <div class="form-row">
-                <label class="form-lbl">Uitvoerformaat</label>
-                <div class="chip-group">
-                  <div class="chip on" onclick="chipSingle(this)">1:1</div>
-                  <div class="chip" onclick="chipSingle(this)">4:5</div>
-                  <div class="chip" onclick="chipSingle(this)">9:16</div>
-                  <div class="chip" onclick="chipSingle(this)">3:4</div>
+
+              <!-- Uitvoerformaat -->
+              <div class="sec-lbl">Uitvoerformaat</div>
+              <div class="frow">
+                <div class="chips">
+                  <div class="chip on" onclick="cSingle(this)">1:1</div>
+                  <div class="chip" onclick="cSingle(this)">4:5</div>
+                  <div class="chip" onclick="cSingle(this)">9:16</div>
+                  <div class="chip" onclick="cSingle(this)">3:4</div>
                 </div>
               </div>
-              <div class="form-row">
-                <label class="form-lbl">Bestandsnaam</label>
-                <input type="text" class="form-input" placeholder="bijv. zomercollectie_model">
+
+              <!-- Logo op kleding -->
+              <div class="sec-lbl">Logo op Kleding <span style="font-size:9px;background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-bd);border-radius:4px;padding:1px 5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;vertical-align:middle;">Nieuw</span></div>
+              <div class="frow">
+                <div class="logo-zone" onclick="">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-3)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  <span style="font-size:11.5px;font-weight:500;color:var(--text-2);">Upload Logo</span>
+                  <span style="font-size:10px;color:var(--text-3);">PNG met transparantie</span>
+                </div>
               </div>
+
+              <!-- Watermark -->
+              <div class="sec-lbl">Opties</div>
+              <div class="frow">
+                <div class="toggle-row">
+                  <div>
+                    <div class="toggle-lbl">Watermark activeren</div>
+                    <div class="toggle-sub">Voeg een subtiel Drapit-watermerk toe</div>
+                  </div>
+                  <label class="toggle-btn">
+                    <input type="checkbox">
+                    <div class="toggle-track"></div>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Bestandsnaam -->
+              <div class="sec-lbl">Bestandsnaam</div>
+              <div class="frow">
+                <input type="text" class="finp" placeholder="bijv. zomercollectie_model">
+              </div>
+
             </div>
           </div>
-        </div>
+        </div><!-- /acc Batch -->
 
-      </div><!-- /panel-scroll -->
+      </div><!-- /pscroll -->
 
       <!-- Panel footer -->
-      <div class="panel-footer">
-        <div class="credits-bar-head">
-          <span class="credits-bar-lbl">Studio credits</span>
-          <span class="credits-bar-val">0 / 20</span>
+      <div class="pfooter">
+        <div class="cbar-head">
+          <span class="cbar-lbl">Studio credits</span>
+          <span class="cbar-val">0 / 20</span>
         </div>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 0%"></div>
-        </div>
-        <button class="btn-generate">
+        <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
+        <button class="btn-gen">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           Genereren
           <span class="gen-cost">— 2 credits</span>
         </button>
       </div>
-    </div><!-- /settings-panel -->
 
-    <!-- RIGHT — PREVIEW -->
-    <div class="preview-panel">
-      <div class="preview-topbar">
-        <span class="preview-topbar-title">Studio resultaat</span>
-        <div class="preview-actions">
-          <button class="icon-btn" title="Downloaden">
+    </div><!-- /lpanel -->
+
+    <!-- RIGHT PANEL -->
+    <div class="rpanel">
+      <div class="prev-bar">
+        <span class="prev-title">Studio resultaat</span>
+        <div class="prev-acts">
+          <button class="ico-btn" title="Downloaden">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </button>
-          <button class="icon-btn" title="Opslaan">
+          <button class="ico-btn" title="Opslaan">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
           </button>
-          <button class="icon-btn" title="Meer opties">
+          <button class="ico-btn" title="Meer">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
           </button>
         </div>
       </div>
-      <div class="preview-body">
-        <div class="preview-empty">
-          <div class="preview-empty-icon">
+      <div class="prev-body">
+        <div class="prev-empty">
+          <div class="prev-empty-ico">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           </div>
-          <div class="preview-empty-title">Studio resultaat</div>
-          <div class="preview-empty-sub">Upload kleding, stel je instellingen in en klik op Genereren om een AI-foto te maken.</div>
+          <div class="prev-empty-t">Studio resultaat</div>
+          <div class="prev-empty-s">Upload kleding, stel je instellingen in en klik op Genereren om een AI-foto te maken.</div>
         </div>
       </div>
     </div>
 
-  </div><!-- /studio-body -->
+  </div><!-- /body -->
 
-  <!-- ===== MOBILE WIZARD ===== -->
-  <div class="mobile-wizard">
-    <div class="wiz-progress">
-      <div class="wiz-step-labels">
-        <span class="wiz-step-lbl active" id="wl1">Type</span>
-        <span class="wiz-step-lbl" id="wl2">Upload</span>
-        <span class="wiz-step-lbl" id="wl3">Instellingen</span>
-        <span class="wiz-step-lbl" id="wl4">Genereer</span>
+  <!-- MOBILE WIZARD -->
+  <div class="mob-wiz">
+    <div class="wiz-prog">
+      <div class="wiz-lbls">
+        <span class="wiz-lbl on" id="wl1">Type</span>
+        <span class="wiz-lbl" id="wl2">Upload</span>
+        <span class="wiz-lbl" id="wl3">Instellingen</span>
+        <span class="wiz-lbl" id="wl4">Genereer</span>
       </div>
-      <div class="wiz-track">
-        <div class="wiz-fill" id="wizFill" style="width:25%"></div>
-      </div>
+      <div class="wiz-track"><div class="wiz-fill" id="wFill" style="width:25%"></div></div>
     </div>
-
-    <div class="wiz-content">
-
-      <!-- Step 1 -->
-      <div class="wiz-step active" id="ws1">
-        <div class="wiz-step-title">Kies een type</div>
-        <div class="wiz-step-sub">Welk soort AI-foto wil je genereren?</div>
+    <div class="wiz-cont">
+      <!-- Step 1: Type -->
+      <div class="wiz-step on" id="ws1">
+        <div class="wiz-t">Kies een type</div>
+        <div class="wiz-s">Welk soort AI-foto wil je genereren?</div>
         <div class="type-cards">
-          <div class="type-card sel" onclick="selCard(this)">
-            <div class="type-card-ico">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
-            </div>
-            <div class="type-card-info">
-              <div class="type-card-name">Virtueel Model</div>
-              <div class="type-card-credits">2 credits per generatie</div>
-            </div>
-            <div class="type-card-check">
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
+          <div class="type-card on" onclick="selCard(this)">
+            <div class="tc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg></div>
+            <div><div class="tc-name">Virtueel Model</div><div class="tc-cr">2 credits per generatie</div></div>
+            <div class="tc-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
           </div>
           <div class="type-card" onclick="selCard(this)">
-            <div class="type-card-ico">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-            </div>
-            <div class="type-card-info">
-              <div class="type-card-name">Product Foto</div>
-              <div class="type-card-credits">1 credit per generatie</div>
-            </div>
-            <div class="type-card-check">
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
+            <div class="tc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg></div>
+            <div><div class="tc-name">Product Foto</div><div class="tc-cr">1 credit per generatie</div></div>
+            <div class="tc-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
           </div>
           <div class="type-card" onclick="selCard(this)">
-            <div class="type-card-ico">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
-            </div>
-            <div class="type-card-info">
-              <div class="type-card-name">360° Rotatie</div>
-              <div class="type-card-credits">4 credits per generatie</div>
-            </div>
-            <div class="type-card-check">
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
+            <div class="tc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg></div>
+            <div><div class="tc-name">360° Rotatie</div><div class="tc-cr">4 credits per generatie</div></div>
+            <div class="tc-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
           </div>
         </div>
       </div>
-
-      <!-- Step 2 -->
+      <!-- Step 2: Upload -->
       <div class="wiz-step" id="ws2">
-        <div class="wiz-step-title">Upload kleding</div>
-        <div class="wiz-step-sub">Upload minimaal de voorkant van het kledingstuk.</div>
+        <div class="wiz-t">Upload kleding</div>
+        <div class="wiz-s">Upload minimaal de voorkant van het kledingstuk.</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">
-          <button style="padding:6px 14px;border:1px solid var(--accent-border);border-radius:20px;background:var(--accent-bg);color:var(--accent);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;">Bovenkleding</button>
-          <button style="padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:var(--surface-2);color:var(--text-secondary);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;">Onderkleding</button>
-          <button style="padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:var(--surface-2);color:var(--text-secondary);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;">Bovenlaag</button>
+          <button style="padding:6px 14px;border:1px solid var(--accent-bd);border-radius:20px;background:var(--accent-bg);color:var(--accent);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;">Bovenstuk</button>
+          <button style="padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:var(--surface-2);color:var(--text-2);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;">Onderstuk</button>
+          <button style="padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:var(--surface-2);color:var(--text-2);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;">Buitenlaag</button>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div class="upload-zone" style="aspect-ratio:3/4;">
-            <div class="upload-badge">Voorkant</div>
-            <div class="upload-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
-            <div class="upload-lbl">Uploaden</div>
-            <div class="upload-sub">JPG · PNG · WEBP</div>
-          </div>
-          <div class="upload-zone" style="aspect-ratio:3/4;">
-            <div class="upload-badge">Achterkant</div>
-            <div class="upload-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
-            <div class="upload-lbl">Uploaden</div>
-            <div class="upload-sub">Optioneel</div>
-          </div>
+          <div class="uzone" style="aspect-ratio:3/4;"><div class="u-badge">Voorkant</div><div class="u-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div><div class="u-lbl">Uploaden</div><div class="u-sub">JPG · PNG</div></div>
+          <div class="uzone" style="aspect-ratio:3/4;"><div class="u-badge">Achterkant</div><div class="u-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div><div class="u-lbl">Uploaden</div><div class="u-sub">Optioneel</div></div>
         </div>
       </div>
-
-      <!-- Step 3 -->
+      <!-- Step 3: Instellingen -->
       <div class="wiz-step" id="ws3">
-        <div class="wiz-step-title">Instellingen</div>
-        <div class="wiz-step-sub">Pas het model en de omgeving aan naar wens.</div>
-        <div class="form-row">
-          <label class="form-lbl">Geslacht</label>
-          <div class="chip-group">
-            <div class="chip on" onclick="chipSingle(this)">Vrouw</div>
-            <div class="chip" onclick="chipSingle(this)">Man</div>
-            <div class="chip" onclick="chipSingle(this)">Neutraal</div>
-          </div>
-        </div>
-        <div class="form-row">
-          <label class="form-lbl">Achtergrond</label>
-          <div class="chip-group">
-            <div class="chip on" onclick="chipSingle(this)">Studio</div>
-            <div class="chip" onclick="chipSingle(this)">Buiten</div>
-            <div class="chip" onclick="chipSingle(this)">Interieur</div>
-            <div class="chip" onclick="chipSingle(this)">Straat</div>
-          </div>
-        </div>
-        <div class="form-row">
-          <label class="form-lbl">Camerahoek</label>
-          <div class="chip-group">
-            <div class="chip on" onclick="chipSingle(this)">Frontaal</div>
-            <div class="chip" onclick="chipSingle(this)">3/4 hoek</div>
-            <div class="chip" onclick="chipSingle(this)">Profiel</div>
-          </div>
-        </div>
-        <div class="form-row">
-          <label class="form-lbl">Zoomafstand</label>
-          <div class="chip-group">
-            <div class="chip" onclick="chipSingle(this)">Close-up</div>
-            <div class="chip on" onclick="chipSingle(this)">Halffiguur</div>
-            <div class="chip" onclick="chipSingle(this)">Vollfiguur</div>
-          </div>
-        </div>
+        <div class="wiz-t">Instellingen</div>
+        <div class="wiz-s">Pas het model, pose en omgeving aan.</div>
+        <div class="frow"><label class="flbl">Geslacht</label><div class="chips"><div class="chip on" onclick="cSingle(this)">Vrouw</div><div class="chip" onclick="cSingle(this)">Man</div><div class="chip" onclick="cSingle(this)">Neutraal</div></div></div>
+        <div class="frow"><label class="flbl">Ethniciteit</label><div class="chips"><div class="chip on" onclick="cSingle(this)">Willekeurig</div><div class="chip" onclick="cSingle(this)">Europees</div><div class="chip" onclick="cSingle(this)">Afrikaans</div><div class="chip" onclick="cSingle(this)">Aziatisch</div><div class="chip" onclick="cSingle(this)">Latijns</div></div></div>
+        <div class="frow"><label class="flbl">Houding</label><div class="chips"><div class="chip on" onclick="cSingle(this)">Staan</div><div class="chip" onclick="cSingle(this)">Lopen</div><div class="chip" onclick="cSingle(this)">Zitten</div><div class="chip" onclick="cSingle(this)">Springen</div><div class="chip" onclick="cSingle(this)">Dansen</div></div></div>
+        <div class="frow"><label class="flbl">Achtergrond</label><div class="chips"><div class="chip on" onclick="cSingle(this)">Minimalistisch</div><div class="chip" onclick="cSingle(this)">Buiten</div><div class="chip" onclick="cSingle(this)">Interieur</div><div class="chip" onclick="cSingle(this)">Donkere Spot</div></div></div>
       </div>
-
-      <!-- Step 4 -->
+      <!-- Step 4: Genereer -->
       <div class="wiz-step" id="ws4">
-        <div class="wiz-step-title">Klaar om te genereren</div>
-        <div class="wiz-step-sub">Controleer je instellingen en start de generatie.</div>
-        <div class="summary-row"><span class="summary-row-lbl">Type</span><span class="summary-row-val">Virtueel Model</span></div>
-        <div class="summary-row"><span class="summary-row-lbl">Kledingstuk</span><span class="summary-row-val">Bovenkleding</span></div>
-        <div class="summary-row"><span class="summary-row-lbl">Model</span><span class="summary-row-val">Vrouw · Licht · Slank</span></div>
-        <div class="summary-row"><span class="summary-row-lbl">Omgeving</span><span class="summary-row-val">Studio · Frontaal</span></div>
-        <div class="summary-row accent"><span class="summary-row-lbl">Kosten</span><span class="summary-row-val">2 credits</span></div>
-        <div class="info-strip" style="margin-top:16px;">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-tertiary);flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <span>Saldo: 0 / 20 Studio credits</span>
-        </div>
+        <div class="wiz-t">Klaar om te genereren</div>
+        <div class="wiz-s">Controleer je instellingen en start de generatie.</div>
+        <div class="sum-row"><span class="sr-l">Type</span><span class="sr-v">Virtueel Model</span></div>
+        <div class="sum-row"><span class="sr-l">Kledingstuk</span><span class="sr-v">Bovenstuk (voorkant)</span></div>
+        <div class="sum-row"><span class="sr-l">Model</span><span class="sr-v">Vrouw · Europees · Slank</span></div>
+        <div class="sum-row"><span class="sr-l">Houding</span><span class="sr-v">Staan · 0° Voorkant</span></div>
+        <div class="sum-row"><span class="sr-l">Omgeving</span><span class="sr-v">Minimalistisch · Studioflits</span></div>
+        <div class="sum-row hl"><span class="sr-l">Kosten</span><span class="sr-v">2 credits</span></div>
       </div>
-
-    </div><!-- /wiz-content -->
-
-    <div class="wiz-nav">
-      <button class="btn-wiz-back" id="wizBack" onclick="wBack()" style="display:none;">Terug</button>
-      <button class="btn-wiz-next" id="wizNext" onclick="wNext()">
-        Volgende
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </button>
     </div>
-  </div><!-- /mobile-wizard -->
+    <div class="wiz-nav">
+      <button class="btn-back" id="wBk" onclick="wBack()" style="display:none;">Terug</button>
+      <button class="btn-next" id="wNx" onclick="wNext()">Volgende <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </div>
 
 </div><!-- /studio -->
 
 <script>
-  /* ---- Theme toggle ---- */
+  // Theme
   function toggleTheme() {
     const html = document.documentElement;
     const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     html.setAttribute('data-theme', next);
-    const ico = document.getElementById('themeIco');
-    if (next === 'light') {
-      ico.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-    } else {
-      ico.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
-    }
+    const ico = document.getElementById('thIco');
+    ico.innerHTML = next === 'light'
+      ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+      : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
   }
-
-  /* ---- Mode selector ---- */
-  function setMode(btn) {
-    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+  // Mode
+  function setMode(btn) { document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); }
+  // Tab
+  function setTab(btn) { document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); }
+  // Upload toggle
+  function toggleU(z) {
+    z.classList.toggle('loaded');
+    const lbl=z.querySelector('.u-lbl');
+    const ico=z.querySelector('.u-ico svg');
+    if(z.classList.contains('loaded')) { lbl.textContent='Geladen'; ico.innerHTML='<polyline points="20 6 9 17 4 12"/>'; }
+    else { lbl.textContent='Uploaden'; ico.innerHTML='<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>'; }
   }
-
-  /* ---- Clothing tabs ---- */
-  function setTab(btn) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+  // Accordion
+  function toggleAcc(id) { document.getElementById(id).classList.toggle('open'); }
+  // Chips — single select within group
+  function cSingle(chip) { chip.closest('.chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('on')); chip.classList.add('on'); }
+  // Single select by class within parent
+  function cSingleClass(el, cls) { el.closest('.acc-inner, .frow, .wiz-step').querySelectorAll('.'+cls).forEach(c=>c.classList.remove('on')); el.classList.add('on'); }
+  // Sliders
+  function updSl(el, id) { document.getElementById(id).textContent=el.value+' jaar'; }
+  function updSlCm(el, id) { document.getElementById(id).textContent=el.value+' cm'; }
+  function updBokeh(el) { document.getElementById('sv-bokeh').textContent='F/'+el.value; }
+  // Angle
+  function updAngle(el) {
+    const v=parseInt(el.value);
+    let label='';
+    if(v<23||v>337) label='Voorkant';
+    else if(v<113) label='Rechts';
+    else if(v<248) label='Achter';
+    else label='Links';
+    document.getElementById('ang-badge').textContent=v+'° ('+label+')';
   }
-
-  /* ---- Upload zone (demo toggle) ---- */
-  function toggleUpload(zone) {
-    zone.classList.toggle('loaded');
-    const lbl = zone.querySelector('.upload-lbl');
-    const ico = zone.querySelector('.upload-ico svg');
-    if (zone.classList.contains('loaded')) {
-      lbl.textContent = 'Bestand geladen';
-      ico.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
-    } else {
-      lbl.textContent = 'Afbeelding uploaden';
-      ico.innerHTML = '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>';
-    }
-  }
-
-  /* ---- Accordion ---- */
-  function toggleAcc(id) {
-    document.getElementById(id).classList.toggle('open');
-  }
-
-  /* ---- Chips (single select within group) ---- */
-  function chipSingle(chip) {
-    chip.closest('.chip-group').querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
-    chip.classList.add('on');
-  }
-
-  /* ---- Sliders ---- */
-  function updSlider(el, id) {
-    document.getElementById(id).textContent = el.value;
-  }
-
-  /* ---- Mobile wizard ---- */
-  let wStep = 1;
-  const wTotal = 4;
-
+  // Mobile wizard
+  let wS=1, wT=4;
   function wNext() {
-    if (wStep < wTotal) {
-      document.getElementById('ws' + wStep).classList.remove('active');
-      wStep++;
-      document.getElementById('ws' + wStep).classList.add('active');
-      syncWiz();
-    }
+    if(wS<wT){ document.getElementById('ws'+wS).classList.remove('on'); wS++; document.getElementById('ws'+wS).classList.add('on'); syncW(); }
   }
   function wBack() {
-    if (wStep > 1) {
-      document.getElementById('ws' + wStep).classList.remove('active');
-      wStep--;
-      document.getElementById('ws' + wStep).classList.add('active');
-      syncWiz();
-    }
+    if(wS>1){ document.getElementById('ws'+wS).classList.remove('on'); wS--; document.getElementById('ws'+wS).classList.add('on'); syncW(); }
   }
-  function syncWiz() {
-    document.getElementById('wizFill').style.width = (wStep / wTotal * 100) + '%';
-    for (let i = 1; i <= wTotal; i++) {
-      document.getElementById('wl' + i).classList.toggle('active', i === wStep);
-    }
-    document.getElementById('wizBack').style.display = wStep > 1 ? 'block' : 'none';
-    const nb = document.getElementById('wizNext');
-    if (wStep === wTotal) {
-      nb.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Genereren`;
-    } else {
-      nb.innerHTML = `Volgende <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`;
-    }
+  function syncW() {
+    document.getElementById('wFill').style.width=(wS/wT*100)+'%';
+    for(let i=1;i<=wT;i++) document.getElementById('wl'+i).classList.toggle('on',i===wS);
+    document.getElementById('wBk').style.display=wS>1?'block':'none';
+    const nb=document.getElementById('wNx');
+    nb.innerHTML=wS===wT
+      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Genereren'
+      : 'Volgende <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
   }
-
-  /* Type card selector (mobile) */
-  function selCard(card) {
-    card.closest('.type-cards').querySelectorAll('.type-card').forEach(c => c.classList.remove('sel'));
-    card.classList.add('sel');
-  }
+  function selCard(card) { card.closest('.type-cards').querySelectorAll('.type-card').forEach(c=>c.classList.remove('on')); card.classList.add('on'); }
 </script>
 </body>
 </html>
