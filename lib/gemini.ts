@@ -45,7 +45,7 @@ export async function generateVtonWithGemini(
     const ai = new GoogleGenAI({ apiKey });
 
     const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash-exp-image-generation',
+        model: 'gemini-3.1-flash-image-preview',
         contents: [
             {
                 role: 'user',
