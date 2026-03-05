@@ -69,9 +69,11 @@ interface SidebarProps {
     shopName?: string;
     tryonsUsed?: number;
     tryonsLimit?: number;
+    studioCreditsUsed?: number;
+    studioCreditsLimit?: number;
 }
 
-export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryonsLimit = 500 }: SidebarProps) {
+export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryonsLimit = 500, studioCreditsUsed = 0, studioCreditsLimit = 20 }: SidebarProps) {
     const pathname = usePathname();
     const router = useRouter();
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -149,29 +151,63 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
 
             {/* Usage indicator */}
             <div className="px-4 py-3 mx-3 mb-3">
-                <div className="bg-white/5 rounded-xl p-3 border border-white/5">
-                    <div className="flex justify-between items-center mb-2">
-                        <span className="text-[11px] font-semibold text-[#94A3B8]">Try-ons deze maand</span>
-                        <span className="text-[11px] font-bold text-white">{tryonsUsed} <span className="text-white/40 font-normal">/ {tryonsLimit}</span></span>
+                <div className="bg-white/5 rounded-xl p-3 border border-white/5 space-y-3">
+                    {/* Studio Credits */}
+                    <div>
+                        <div className="flex justify-between items-center mb-2">
+                            <span className="text-[11px] font-semibold text-[#94A3B8]">Studio credits</span>
+                            <span className="text-[11px] font-bold text-white">
+                                {studioCreditsLimit - studioCreditsUsed} <span className="text-white/40 font-normal">/ {studioCreditsLimit}</span>
+                            </span>
+                        </div>
+                        <div className="w-full h-1.5 bg-white/8 rounded-full overflow-hidden">
+                            <div
+                                className="h-full rounded-full transition-all duration-700 ease-out"
+                                style={{
+                                    width: `${Math.min((studioCreditsUsed / Math.max(studioCreditsLimit, 1)) * 100, 100)}%`,
+                                    background: studioCreditsUsed >= studioCreditsLimit
+                                        ? 'linear-gradient(90deg, #EF4444, #DC2626)'
+                                        : studioCreditsUsed / studioCreditsLimit > 0.75
+                                            ? 'linear-gradient(90deg, #F59E0B, #D97706)'
+                                            : 'linear-gradient(90deg, #1D6FD8, #3B9AF0)',
+                                }}
+                            />
+                        </div>
+                        {studioCreditsUsed >= studioCreditsLimit && (
+                            <a href="/dashboard/billing" className="text-[10px] text-amber-400 mt-1.5 font-medium hover:text-amber-300 transition-colors block">
+                                ⚠ Credits op · Upgrade →
+                            </a>
+                        )}
                     </div>
-                    <div className="w-full h-1.5 bg-white/8 rounded-full overflow-hidden">
-                        <div
-                            className="h-full rounded-full transition-all duration-700 ease-out"
-                            style={{
-                                width: `${usagePercent}%`,
-                                background: usagePercent > 90
-                                    ? 'linear-gradient(90deg, #EF4444, #DC2626)'
-                                    : usagePercent > 75
-                                        ? 'linear-gradient(90deg, #F59E0B, #D97706)'
-                                        : 'linear-gradient(90deg, #1D6FD8, #3B9AF0)',
-                            }}
-                        />
+
+                    {/* Divider */}
+                    <div className="h-px bg-white/8" />
+
+                    {/* Try-ons */}
+                    <div>
+                        <div className="flex justify-between items-center mb-2">
+                            <span className="text-[11px] font-semibold text-[#94A3B8]">Try-ons deze maand</span>
+                            <span className="text-[11px] font-bold text-white">{tryonsUsed} <span className="text-white/40 font-normal">/ {tryonsLimit}</span></span>
+                        </div>
+                        <div className="w-full h-1.5 bg-white/8 rounded-full overflow-hidden">
+                            <div
+                                className="h-full rounded-full transition-all duration-700 ease-out"
+                                style={{
+                                    width: `${usagePercent}%`,
+                                    background: usagePercent > 90
+                                        ? 'linear-gradient(90deg, #EF4444, #DC2626)'
+                                        : usagePercent > 75
+                                            ? 'linear-gradient(90deg, #F59E0B, #D97706)'
+                                            : 'linear-gradient(90deg, #1D6FD8, #3B9AF0)',
+                                }}
+                            />
+                        </div>
+                        {usagePercent > 80 && (
+                            <p className="text-[10px] text-amber-400 mt-1.5 font-medium">
+                                {usagePercent > 90 ? '⚠ Bijna vol' : 'Bijna op limiet'}
+                            </p>
+                        )}
                     </div>
-                    {usagePercent > 80 && (
-                        <p className="text-[10px] text-amber-400 mt-1.5 font-medium">
-                            {usagePercent > 90 ? '⚠ Bijna vol' : 'Bijna op limiet'}
-                        </p>
-                    )}
                 </div>
             </div>
 

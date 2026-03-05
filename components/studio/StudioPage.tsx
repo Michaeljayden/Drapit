@@ -898,7 +898,7 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
 
   const handleGenerate = async () => {
     if (!hasClothing) { setError('Upload minimaal één kledingstuk.'); return; }
-    if (!canGenerate) { setError('Onvoldoende credits. Koop extra credits of upgrade je abonnement.'); return; }
+    if (!canGenerate) { window.location.href = '/dashboard/billing'; return; }
 
     setIsLoading(true);
     setError(null);
@@ -1013,7 +1013,7 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
   // ---------------------------------------------------------------------------
 
   return (
-    <div className="flex flex-col min-h-screen -m-4 md:-m-8 pt-14 md:pt-0">
+    <div className="flex flex-col min-h-screen -m-4 md:-m-8 pt-14 md:pt-8">
       {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-6 py-4 bg-gradient-to-b from-white to-slate-50 border-b border-slate-100 shadow-[0_1px_3px_rgba(15,39,68,0.05)]">
         <div className="flex items-center gap-3 min-w-0">
@@ -1540,10 +1540,12 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
 
             <button
               onClick={handleGenerate}
-              disabled={isLoading || !hasClothing || !canGenerate}
-              className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all ${isLoading || !hasClothing || !canGenerate
+              disabled={isLoading || !hasClothing}
+              className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all ${isLoading || !hasClothing
                 ? 'bg-white/8 text-slate-500 cursor-not-allowed'
-                : 'bg-gradient-to-r from-[#1D6FD8] to-[#1558B0] text-white shadow-[0_4px_16px_rgba(29,111,216,0.4)] hover:shadow-[0_4px_24px_rgba(29,111,216,0.55)] active:scale-[0.98] transform'
+                : !canGenerate
+                  ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-[0_4px_16px_rgba(245,158,11,0.4)] hover:shadow-[0_4px_24px_rgba(245,158,11,0.55)] active:scale-[0.98] transform'
+                  : 'bg-gradient-to-r from-[#1D6FD8] to-[#1558B0] text-white shadow-[0_4px_16px_rgba(29,111,216,0.4)] hover:shadow-[0_4px_24px_rgba(29,111,216,0.55)] active:scale-[0.98] transform'
                 }`}
             >
               {isLoading
@@ -1556,11 +1558,20 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
                     Genereren...
                   </span>
                 )
-                : mode === 'video-360'
-                  ? `360° Genereren · ${totalCost} credits`
-                  : numVariations > 1
-                    ? `${numVariations}× Genereren · ${totalCost} credits`
-                    : `Genereren · ${totalCost} credit${totalCost > 1 ? 's' : ''}`
+                : !canGenerate
+                  ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                      Credits op · Abonnement kiezen →
+                    </span>
+                  )
+                  : mode === 'video-360'
+                    ? `360° Genereren · ${totalCost} credits`
+                    : numVariations > 1
+                      ? `${numVariations}× Genereren · ${totalCost} credits`
+                      : `Genereren · ${totalCost} credit${totalCost > 1 ? 's' : ''}`
               }
             </button>
 
@@ -1570,23 +1581,9 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
               </p>
             )}
             {!canGenerate && hasClothing && (
-              <div className="mt-3 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20 p-3 text-center space-y-2">
-                <p className="text-xs font-bold text-amber-300">
-                  Gratis credits zijn op
-                </p>
-                <p className="text-[10px] text-slate-400 leading-relaxed">
-                  Je hebt de 20 gratis credits gebruikt. Upgrade voor meer afbeeldingen.
-                </p>
-                <a
-                  href="/dashboard/billing"
-                  className="inline-flex items-center gap-1.5 bg-[#1D6FD8] hover:bg-[#1558B0] text-white text-[11px] font-semibold py-2 px-4 rounded-lg transition-colors"
-                >
-                  Abonnement kiezen
-                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                  </svg>
-                </a>
-              </div>
+              <p className="text-center text-[10px] text-amber-500/70 mt-2">
+                Je gratis credits zijn op — klik hierboven om te upgraden
+              </p>
             )}
           </div>
         </div>
