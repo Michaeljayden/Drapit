@@ -173,6 +173,63 @@ const toBase64 = (file: File): Promise<string> =>
   });
 
 // ---------------------------------------------------------------------------
+// Export format presets
+// ---------------------------------------------------------------------------
+
+interface ExportFormat {
+  id: string;
+  label: string;
+  sublabel: string;
+  width: number | null;
+  height: number | null;
+  icon: string;
+}
+
+const EXPORT_FORMATS: ExportFormat[] = [
+  { id: 'original', label: 'Origineel', sublabel: 'Ongewijzigd', width: null, height: null, icon: '✦' },
+  { id: 'webshop-square', label: 'Webshop Vierkant', sublabel: '1000 × 1000 px', width: 1000, height: 1000, icon: '🛍️' },
+  { id: 'webshop-portrait', label: 'Webshop Portret', sublabel: '1000 × 1333 px', width: 1000, height: 1333, icon: '🛍️' },
+  { id: 'instagram-post', label: 'Instagram Post', sublabel: '1080 × 1080 px', width: 1080, height: 1080, icon: '📷' },
+  { id: 'instagram-story', label: 'Instagram Story', sublabel: '1080 × 1920 px', width: 1080, height: 1920, icon: '📷' },
+  { id: 'tiktok', label: 'TikTok', sublabel: '1080 × 1920 px', width: 1080, height: 1920, icon: '🎵' },
+  { id: 'facebook-ad', label: 'Facebook Advertentie', sublabel: '1200 × 628 px', width: 1200, height: 628, icon: '👤' },
+  { id: 'pinterest', label: 'Pinterest', sublabel: '1000 × 1500 px', width: 1000, height: 1500, icon: '📌' },
+  { id: 'custom', label: 'Aangepast', sublabel: 'Eigen afmetingen', width: null, height: null, icon: '⚙️' },
+];
+
+/**
+ * Resize a base64/data-URL image to the given pixel dimensions using canvas.
+ * Returns a high-quality JPEG data URL.
+ */
+async function resizeImageForExport(
+  dataUrl: string,
+  width: number,
+  height: number
+): Promise<string> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d')!;
+      // Fill with white background first (for transparent PNGs)
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, width, height);
+      // Draw image scaled to fit while maintaining aspect ratio with letterboxing
+      const scale = Math.min(width / img.width, height / img.height);
+      const scaledW = img.width * scale;
+      const scaledH = img.height * scale;
+      const offsetX = (width - scaledW) / 2;
+      const offsetY = (height - scaledH) / 2;
+      ctx.drawImage(img, offsetX, offsetY, scaledW, scaledH);
+      resolve(canvas.toDataURL('image/jpeg', 0.95));
+    };
+    img.src = dataUrl;
+  });
+}
+
+// ---------------------------------------------------------------------------
 // Product uploader
 // ---------------------------------------------------------------------------
 
@@ -268,14 +325,44 @@ function ResultDisplay({
   loadingMessage,
   error,
   mode,
+  exportFormat,
+  customExportWidth,
+  customExportHeight,
 }: {
   images: string[];
   isLoading: boolean;
   loadingMessage: string;
   error: string | null;
   mode: StudioMode;
+  exportFormat: ExportFormat;
+  customExportWidth: number;
+  customExportHeight: number;
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
+
+  /**
+   * Trigger download for a single image, applying resize if needed.
+   */
+  const handleDownload = async (imgDataUrl: string, index?: number) => {
+    let finalUrl = imgDataUrl;
+    const suffix = index !== undefined ? `-${index + 1}` : '';
+    const filename = `drapit-studio-${Date.now()}${suffix}.jpg`;
+
+    if (exportFormat.id === 'original') {
+      // No resize needed
+    } else if (exportFormat.id === 'custom') {
+      if (customExportWidth > 0 && customExportHeight > 0) {
+        finalUrl = await resizeImageForExport(imgDataUrl, customExportWidth, customExportHeight);
+      }
+    } else if (exportFormat.width && exportFormat.height) {
+      finalUrl = await resizeImageForExport(imgDataUrl, exportFormat.width, exportFormat.height);
+    }
+
+    const a = document.createElement('a');
+    a.href = finalUrl;
+    a.download = filename;
+    a.click();
+  };
 
   if (isLoading) {
     return (
@@ -363,16 +450,15 @@ function ResultDisplay({
         )}
         {/* Download overlay */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-end justify-end p-3 opacity-0 group-hover:opacity-100">
-          <a
-            href={activeImage}
-            download={`drapit-studio-${Date.now()}.jpg`}
+          <button
+            onClick={() => handleDownload(activeImage)}
             className="bg-white text-[#0F2744] text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-2 shadow-xl hover:bg-blue-50 transition-colors"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
             Download
-          </a>
+          </button>
         </div>
       </div>
 
@@ -400,25 +486,26 @@ function ResultDisplay({
 
       {/* Download all button */}
       <div className="flex gap-2">
-        <a
-          href={activeImage}
-          download={`drapit-studio-${Date.now()}.jpg`}
+        <button
+          onClick={() => handleDownload(activeImage)}
           className="flex-1 flex items-center justify-center gap-2 bg-[#1D6FD8] hover:bg-[#1558B0] text-white text-xs font-bold py-2.5 rounded-xl transition-colors"
         >
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
-          Download
-        </a>
+          {exportFormat.id !== 'original'
+            ? `Download · ${exportFormat.id === 'custom' ? `${customExportWidth}×${customExportHeight}` : exportFormat.sublabel}`
+            : 'Download'
+          }
+        </button>
         {images.length > 1 && (
           <button
-            onClick={() => {
-              images.forEach((img, i) => {
-                const a = document.createElement('a');
-                a.href = img;
-                a.download = `drapit-studio-${Date.now()}-${i + 1}.jpg`;
-                a.click();
-              });
+            onClick={async () => {
+              for (let i = 0; i < images.length; i++) {
+                await handleDownload(images[i], i);
+                // small delay to avoid browser blocking multiple downloads
+                await new Promise(r => setTimeout(r, 200));
+              }
             }}
             className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 text-xs font-bold py-2.5 px-4 rounded-xl transition-colors"
           >
@@ -718,6 +805,12 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
     size: 4,
   });
 
+  // Export format
+  const [exportFormatId, setExportFormatId] = useState('original');
+  const [customExportWidth, setCustomExportWidth] = useState(1080);
+  const [customExportHeight, setCustomExportHeight] = useState(1080);
+  const activeExportFormat = EXPORT_FORMATS.find(f => f.id === exportFormatId) ?? EXPORT_FORMATS[0];
+
   // UI state
   const [openSection, setOpenSection] = useState<string>('clothing');
   const [isLoading, setIsLoading] = useState(false);
@@ -920,28 +1013,28 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
   // ---------------------------------------------------------------------------
 
   return (
-    <div className="flex flex-col min-h-screen -m-4 md:-m-8">
+    <div className="flex flex-col min-h-screen -m-4 md:-m-8 pt-14 md:pt-0">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-b from-white to-slate-50 border-b border-slate-100 shadow-[0_1px_3px_rgba(15,39,68,0.05)]">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1D6FD8] to-[#1558B0] flex items-center justify-center shadow-[0_4px_10px_rgba(29,111,216,0.35)]">
+      <div className="flex items-center justify-between px-4 md:px-6 py-4 bg-gradient-to-b from-white to-slate-50 border-b border-slate-100 shadow-[0_1px_3px_rgba(15,39,68,0.05)]">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-9 h-9 shrink-0 rounded-xl bg-gradient-to-br from-[#1D6FD8] to-[#1558B0] flex items-center justify-center shadow-[0_4px_10px_rgba(29,111,216,0.35)]">
             <svg className="w-4.5 h-4.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
             </svg>
           </div>
-          <div>
-            <h1 className="text-base font-bold text-slate-900">Drapit Studio</h1>
-            <p className="text-[11px] text-slate-400 font-medium">AI productfotografie</p>
+          <div className="min-w-0">
+            <h1 className="text-base font-bold text-slate-900 leading-tight">Drapit Studio</h1>
+            <p className="text-[11px] text-slate-400 font-medium leading-tight">AI productfotografie</p>
           </div>
         </div>
         {/* Credits badge */}
-        <div className="flex items-center gap-2">
-          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border ${remaining < 10
+        <div className="flex items-center gap-2 shrink-0 ml-2">
+          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border whitespace-nowrap ${remaining < 10
             ? 'bg-red-50 text-red-600 border-red-100'
             : 'bg-[#EBF3FF] text-[#1D6FD8] border-blue-100'
             }`}>
-            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="w-3 h-3 shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
             </svg>
             {remaining} credits
@@ -1243,6 +1336,91 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
               </AccordionSection>
             )}
 
+            {/* — EXPORT FORMAT — */}
+            <AccordionSection
+              title="Export Formaat"
+              icon={
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+              }
+              isOpen={openSection === 'export'}
+              onToggle={() => toggle('export')}
+            >
+              <div className="space-y-3">
+                <p className="text-[10px] text-slate-500 leading-relaxed">
+                  Kies het platform waarvoor je de afbeelding wilt opslaan. De afbeelding wordt automatisch naar de juiste resolutie geschaald bij het downloaden.
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  {EXPORT_FORMATS.map((fmt) => (
+                    <button
+                      key={fmt.id}
+                      onClick={() => setExportFormatId(fmt.id)}
+                      className={`flex flex-col items-start gap-0.5 px-3 py-2.5 rounded-xl border-2 text-left transition-all ${exportFormatId === fmt.id
+                        ? 'border-[#1D6FD8] bg-[#1D6FD8]/10'
+                        : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8'
+                        }`}
+                    >
+                      <span className="text-base leading-none">{fmt.icon}</span>
+                      <span className={`text-[10px] font-bold leading-tight mt-1 ${exportFormatId === fmt.id ? 'text-[#5BA8FF]' : 'text-slate-300'
+                        }`}>{fmt.label}</span>
+                      <span className="text-[9px] text-slate-600 font-medium">{fmt.sublabel}</span>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Custom dimensions */}
+                {exportFormatId === 'custom' && (
+                  <div className="space-y-2 p-3 bg-white/5 rounded-xl animate-in slide-in-from-top-2 duration-200">
+                    <SectionLabel>Eigen afmetingen (pixels)</SectionLabel>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1">
+                        <label className="text-[9px] text-slate-500 font-bold uppercase mb-1 block">Breedte</label>
+                        <input
+                          type="number"
+                          min={100}
+                          max={8000}
+                          value={customExportWidth}
+                          onChange={(e) => setCustomExportWidth(Math.max(100, Number(e.target.value)))}
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-[#1D6FD8]/50 text-center"
+                        />
+                      </div>
+                      <span className="text-slate-600 font-bold text-sm mt-4">×</span>
+                      <div className="flex-1">
+                        <label className="text-[9px] text-slate-500 font-bold uppercase mb-1 block">Hoogte</label>
+                        <input
+                          type="number"
+                          min={100}
+                          max={8000}
+                          value={customExportHeight}
+                          onChange={(e) => setCustomExportHeight(Math.max(100, Number(e.target.value)))}
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-[#1D6FD8]/50 text-center"
+                        />
+                      </div>
+                    </div>
+                    <p className="text-[9px] text-slate-600 text-center">
+                      Verhouding: {customExportWidth > 0 && customExportHeight > 0
+                        ? (customExportWidth / customExportHeight).toFixed(2)
+                        : '—'
+                      } : 1
+                    </p>
+                  </div>
+                )}
+
+                {/* Active format badge */}
+                {exportFormatId !== 'original' && exportFormatId !== 'custom' && (
+                  <div className="flex items-center gap-2 px-3 py-2 bg-[#1D6FD8]/10 rounded-xl border border-[#1D6FD8]/20">
+                    <svg className="w-3 h-3 text-[#1D6FD8] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                    <p className="text-[10px] text-[#5BA8FF] font-semibold">
+                      Opslaan als {activeExportFormat.sublabel}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </AccordionSection>
+
             {/* — EXTRAS — */}
             <AccordionSection
               title="Batch & Branding"
@@ -1421,6 +1599,9 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
             loadingMessage={loadingMsg}
             error={error}
             mode={mode}
+            exportFormat={activeExportFormat}
+            customExportWidth={customExportWidth}
+            customExportHeight={customExportHeight}
           />
         </div>
       </div>
