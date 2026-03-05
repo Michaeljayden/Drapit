@@ -804,13 +804,13 @@ export default function LandingPage() {
 
                         <div className="d-how-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 28 }}>
                             {[
-                                { num: '01', icon: '⬡', title: 'Script toevoegen', desc: 'Kopieer één regel code vanuit je Drapit dashboard en plak het in de <head> van je webshop. Geen plugin, geen developer vereist. Klaar in 5 minuten.', tag: '< 5 minuten', tagColor: '#22D3EE' },
-                                { num: '02', icon: '◈', title: 'Widget verschijnt', desc: 'De "Virtueel passen" knop verschijnt automatisch bij elk product met het juiste data-attribuut. Volledig aanpasbaar qua kleur en tekst via het dashboard.', tag: 'Zero-code setup', tagColor: '#8B5CF6' },
-                                { num: '03', icon: '◉', title: 'AI doet de rest', desc: 'Klant uploadt een foto. Onze AI verwerkt het kledingstuk virtueel om het lichaam. Resultaat binnen seconden, directe koopknop inbegrepen.', tag: 'State-of-art AI', tagColor: '#1D6FD8' },
+                                { num: '01', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>, title: 'Script toevoegen', desc: 'Kopieer één regel code vanuit je Drapit dashboard en plak het in de <head> van je webshop. Geen plugin, geen developer vereist. Klaar in 5 minuten.', tag: '< 5 minuten', tagColor: '#22D3EE' },
+                                { num: '02', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 9h6M9 12h6M9 15h4" /></svg>, title: 'Widget verschijnt', desc: 'De "Virtueel passen" knop verschijnt automatisch bij elk product met het juiste data-attribuut. Volledig aanpasbaar qua kleur en tekst via het dashboard.', tag: 'Zero-code setup', tagColor: '#8B5CF6' },
+                                { num: '03', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3" /><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" /></svg>, title: 'AI doet de rest', desc: 'Klant uploadt een foto. Onze AI verwerkt het kledingstuk virtueel om het lichaam. Resultaat binnen seconden, directe koopknop inbegrepen.', tag: 'State-of-art AI', tagColor: '#1D6FD8' },
                             ].map((step, i) => (
                                 <div key={i} className={`d-feat d-in d-d${i + 2} ${how.inView ? 'visible' : ''}`} style={{ background: 'rgba(13,24,41,0.6)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 20, padding: '32px 28px', backdropFilter: 'blur(10px)' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
-                                        <div style={{ width: 50, height: 50, borderRadius: 15, background: 'rgba(29,111,216,0.1)', border: '1px solid rgba(29,111,216,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, color: '#1D6FD8' }}>{step.icon}</div>
+                                        <div style={{ width: 50, height: 50, borderRadius: 15, background: 'rgba(29,111,216,0.1)', border: '1px solid rgba(29,111,216,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{step.icon}</div>
                                         <span style={{ fontSize: 52, fontWeight: 800, fontFamily: 'Plus Jakarta Sans, sans-serif', color: 'rgba(29,111,216,0.1)', lineHeight: 1 }}>{step.num}</span>
                                     </div>
                                     <h3 style={{ fontSize: 20, fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif', color: '#F1F5F9', marginBottom: 12, letterSpacing: '-0.015em' }}>{step.title}</h3>
@@ -878,9 +878,9 @@ export default function LandingPage() {
                             {/* Right: mini-stappen */}
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                                 {[
-                                    { step: '1', title: 'Installeer de app', desc: 'Zoek "Drapit" in de Shopify App Store en klik op installeren.', icon: '📦' },
-                                    { step: '2', title: 'Activeer in je theme', desc: 'De app configureert alles automatisch — geen code aanpassingen nodig.', icon: '⚡' },
-                                    { step: '3', title: 'Direct live', desc: 'Je klanten kunnen meteen virtueel kleding passen op je webshop.', icon: '🚀' },
+                                    { step: '1', title: 'Installeer de app', desc: 'Zoek "Drapit" in de Shopify App Store en klik op installeren.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /></svg> },
+                                    { step: '2', title: 'Activeer in je theme', desc: 'De app configureert alles automatisch — geen code aanpassingen nodig.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg> },
+                                    { step: '3', title: 'Direct live', desc: 'Je klanten kunnen meteen virtueel kleding passen op je webshop.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg> },
                                 ].map((item, i) => (
                                     <div key={i} style={{
                                         display: 'flex',
@@ -899,7 +899,6 @@ export default function LandingPage() {
                                             width: 40, height: 40, borderRadius: 12, flexShrink: 0,
                                             background: 'rgba(149,191,71,0.1)', border: '1px solid rgba(149,191,71,0.2)',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            fontSize: 18,
                                         }}>{item.icon}</div>
                                         <div>
                                             <div style={{ fontSize: 14, fontWeight: 700, color: '#F1F5F9', marginBottom: 4, fontFamily: 'Plus Jakarta Sans' }}>{item.title}</div>
@@ -924,15 +923,15 @@ export default function LandingPage() {
 
                         <div className="d-feat-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 18 }}>
                             {[
-                                { icon: '⚡', title: 'Platform-agnostisch', desc: 'Shopify, WooCommerce, Magento of maatwerk — als het HTML accepteert, werkt Drapit direct.', accent: '#F59E0B' },
-                                { icon: '🎨', title: 'Volledig aanpasbaar', desc: 'Pas kleur, tekst en stijl van de widget aan je merk aan vanuit het dashboard. Geen code.', accent: '#8B5CF6' },
-                                { icon: '📊', title: 'Real-time analytics', desc: 'Hoeveel try-ons per product, conversie-impact en trends — alles in één overzichtelijk dashboard.', accent: '#22D3EE' },
-                                { icon: '🔑', title: 'API-sleutels beheer', desc: 'Meerdere keys per shop, direct activeren of deactiveren, met gebruik- en datum-tracking.', accent: '#1D6FD8' },
-                                { icon: '🛡️', title: 'Privacy-first', desc: "Foto's worden na AI-verwerking niet opgeslagen. GDPR-compliant by design, geen datarisico.", accent: '#10B981' },
-                                { icon: '⚙️', title: 'Webhook integraties', desc: 'Koppel try-on events aan je CRM, analytics of retargeting tool via webhooks.', accent: '#EC4899' },
+                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" /></svg>, title: 'Platform-agnostisch', desc: 'Shopify, WooCommerce, Magento of maatwerk — als het HTML accepteert, werkt Drapit direct.', accent: '#F59E0B' },
+                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="#8B5CF6" /><circle cx="17.5" cy="10.5" r=".5" fill="#8B5CF6" /><circle cx="8.5" cy="7.5" r=".5" fill="#8B5CF6" /><circle cx="6.5" cy="12.5" r=".5" fill="#8B5CF6" /><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" /></svg>, title: 'Volledig aanpasbaar', desc: 'Pas kleur, tekst en stijl van de widget aan je merk aan vanuit het dashboard. Geen code.', accent: '#8B5CF6' },
+                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22D3EE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /></svg>, title: 'Real-time analytics', desc: 'Hoeveel try-ons per product, conversie-impact en trends — alles in één overzichtelijk dashboard.', accent: '#22D3EE' },
+                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21 2-1 1" /><path d="m3 22 1-1" /><path d="m10 11-7 7 2 2 7-7" /><path d="m10 11 4 4 6-6-4-4-6 6" /></svg>, title: 'API-sleutels beheer', desc: 'Meerdere keys per shop, direct activeren of deactiveren, met gebruik- en datum-tracking.', accent: '#1D6FD8' },
+                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /></svg>, title: 'Privacy-first', desc: "Foto's worden na AI-verwerking niet opgeslagen. GDPR-compliant by design, geen datarisico.", accent: '#10B981' },
+                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EC4899" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 20V10" /><path d="M12 20V4" /><path d="M6 20v-6" /><path d="M2 12c8 0 14-4 20-8" /></svg>, title: 'Webhook integraties', desc: 'Koppel try-on events aan je CRM, analytics of retargeting tool via webhooks.', accent: '#EC4899' },
                             ].map((f, i) => (
                                 <div key={i} className={`d-feat d-in d-d${(i % 3) + 1} ${feats.inView ? 'visible' : ''}`} style={{ background: 'rgba(13,24,41,0.5)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 16, padding: '26px 24px 30px' }}>
-                                    <div style={{ fontSize: 28, marginBottom: 14 }}>{f.icon}</div>
+                                    <div style={{ marginBottom: 14, display: 'flex' }}>{f.icon}</div>
                                     <h3 style={{ fontSize: 16, fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif', color: '#F1F5F9', marginBottom: 10, letterSpacing: '-0.01em' }}>{f.title}</h3>
                                     <p style={{ fontSize: 14, color: 'rgba(241,245,249,0.48)', lineHeight: 1.62, fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{f.desc}</p>
                                     <div style={{ marginTop: 18, height: 2, width: 36, background: `linear-gradient(90deg, ${f.accent}, transparent)`, borderRadius: 4 }} />
@@ -1089,7 +1088,8 @@ export default function LandingPage() {
                                     onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 14px 40px rgba(149,191,71,0.5)'; }}
                                     onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(149,191,71,0.35)'; }}
                                 >
-                                    📖 Bekijk de installatie handleiding →
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>
+                                    Bekijk de installatie handleiding →
                                 </Link>
 
                                 <a href="https://apps.shopify.com" target="_blank" rel="noopener noreferrer" style={{
