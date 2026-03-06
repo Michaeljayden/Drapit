@@ -40,6 +40,7 @@ interface StudioPageProps {
   shopId: string;
   creditsUsed: number;
   creditsLimit: number;
+  studioExtraCredits: number;
   hasStudio: boolean;
 }
 
@@ -754,7 +755,7 @@ const LOADING_MSGS = [
   'Finishing touch...',
 ];
 
-export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudio }: StudioPageProps) {
+export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioExtraCredits, hasStudio }: StudioPageProps) {
   // Mode
   const [mode, setMode] = useState<StudioMode>('virtual-model');
 
@@ -876,7 +877,8 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
   const COST_MAP: Record<StudioMode, number> = { 'virtual-model': 2, 'product-only': 1, 'video-360': 4 };
   const baseCost = COST_MAP[mode];
   const totalCost = mode === 'video-360' ? baseCost : baseCost * numVariations;
-  const remaining = creditsLimit - localCreditsUsed;
+  const totalLimit = creditsLimit + studioExtraCredits;
+  const remaining = totalLimit - localCreditsUsed;
   const canGenerate = remaining >= totalCost;
 
   const hasClothing =
@@ -1523,13 +1525,13 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, hasStudi
             <div className="mb-3">
               <div className="flex justify-between text-[10px] mb-1.5">
                 <span className="text-slate-500 font-medium">Studio credits</span>
-                <span className="text-slate-400 font-semibold">{localCreditsUsed} <span className="text-slate-600">/ {creditsLimit}</span></span>
+                <span className="text-slate-400 font-semibold">{localCreditsUsed} <span className="text-slate-600">/ {totalLimit}</span></span>
               </div>
               <div className="w-full h-1.5 bg-white/8 rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full transition-all duration-500"
                   style={{
-                    width: `${Math.min((localCreditsUsed / Math.max(creditsLimit, 1)) * 100, 100)}%`,
+                    width: `${Math.min((localCreditsUsed / Math.max(totalLimit, 1)) * 100, 100)}%`,
                     background: remaining < 10
                       ? 'linear-gradient(90deg, #EF4444, #DC2626)'
                       : 'linear-gradient(90deg, #1D6FD8, #3B9AF0)',

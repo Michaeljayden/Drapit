@@ -15,11 +15,12 @@ export default async function DashboardLayout({
     let tryonsLimit = 500;
     let studioCreditsUsed = 0;
     let studioCreditsLimit = 20;
+    let studioExtraCredits = 0;
 
     if (user) {
         const { data: shop } = await supabase
             .from('shops')
-            .select('name, tryons_this_month, monthly_tryon_limit, studio_credits_used, studio_credits_limit')
+            .select('name, tryons_this_month, monthly_tryon_limit, studio_credits_used, studio_credits_limit, studio_extra_credits')
             .eq('owner_id', user.id)
             .single();
 
@@ -29,6 +30,7 @@ export default async function DashboardLayout({
             tryonsLimit = shop.monthly_tryon_limit ?? 500;
             studioCreditsUsed = shop.studio_credits_used ?? 0;
             studioCreditsLimit = shop.studio_credits_limit ?? 20;
+            studioExtraCredits = shop.studio_extra_credits ?? 0;
         }
     }
 
@@ -40,6 +42,7 @@ export default async function DashboardLayout({
                 tryonsLimit={tryonsLimit}
                 studioCreditsUsed={studioCreditsUsed}
                 studioCreditsLimit={studioCreditsLimit}
+                studioExtraCredits={studioExtraCredits}
             />
             {/* Main content: offset for desktop sidebar + mobile top bar */}
             <main className="md:ml-64 bg-[#F8FAFC] min-h-screen pt-[72px] md:pt-0 p-4 md:p-8 overflow-y-auto">

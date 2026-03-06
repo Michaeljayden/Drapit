@@ -24,7 +24,7 @@ export default async function StudioPageRoute() {
   // Fetch shop data incl. Studio subscription & credits
   const { data: shop } = await supabase
     .from('shops')
-    .select('id, has_studio, studio_credits_used, studio_credits_limit')
+    .select('id, has_studio, studio_credits_used, studio_credits_limit, studio_extra_credits')
     .eq('owner_id', user.id)
     .single();
 
@@ -34,6 +34,7 @@ export default async function StudioPageRoute() {
   const hasStudio = isAdmin ? true : !!(shop?.has_studio);
   const creditsUsed = isAdmin ? 0 : ((shop?.studio_credits_used as number) ?? 0);
   const creditsLimit = isAdmin ? 99999 : ((shop?.studio_credits_limit as number) ?? 20);
+  const studioExtraCredits = isAdmin ? 0 : ((shop?.studio_extra_credits as number) ?? 0);
 
   return (
     <StudioPage
@@ -41,6 +42,7 @@ export default async function StudioPageRoute() {
       hasStudio={hasStudio}
       creditsUsed={creditsUsed}
       creditsLimit={creditsLimit}
+      studioExtraCredits={studioExtraCredits}
     />
   );
 }
