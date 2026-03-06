@@ -63,6 +63,17 @@ const navItems = [
             </svg>
         ),
     },
+    {
+        label: 'Instellingen',
+        href: '/dashboard/settings',
+        icon: (
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 12.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M14.5 9.5c0-.28.22-.5.5-.5.28 0 .5.22.5.5s-.22.5-.5.5c-.28 0-.5-.22-.5-.5zM3 9.5c0-.28-.22-.5-.5-.5-.28 0-.5.22-.5.5s.22.5.5.5c.28 0 .5-.22.5-.5zM9.5 14.5c.28 0 .5.22.5.5s-.22.5-.5.5c-.28 0-.5-.22-.5-.5 0-.28.22-.5.5-.5zM9.5 3c.28 0 .5.22.5.5s-.22.5-.5.5c-.28 0-.5-.22-.5-.5 0-.28.22-.5.5-.5z" stroke="currentColor" strokeWidth="1.5" />
+                <path d="M12.89 12.89a.5.5 0 01.71 0c.2.2.2.51 0 .71a.5.5 0 01-.71 0 .5.5 0 010-.71zM4.4 4.4a.5.5 0 01.71 0c.2.2.2.51 0 .71a.5.5 0 01-.71 0 .5.5 0 010-.71zM12.89 5.11a.5.5 0 010-.71.5.5 0 01.71 0c.2.2.2.51 0 .71a.5.5 0 01-.71 0zM4.4 13.6a.5.5 0 010-.71.5.5 0 01.71 0c.2.2.2.51 0 .71a.5.5 0 01-.71 0z" stroke="currentColor" strokeWidth="1.5" />
+            </svg>
+        ),
+    },
 ];
 
 interface SidebarProps {
