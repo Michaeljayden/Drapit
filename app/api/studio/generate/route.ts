@@ -33,9 +33,9 @@ function getAdmin() {
 // ---------------------------------------------------------------------------
 
 const CREDITS_COST: Record<string, number> = {
-  'virtual-model': 2,  // More complex — 2 credits
+  'virtual-model': 1,  // Simplified cost — 1 credit
   'product-only': 1,   // Simple product shot — 1 credit
-  'video-360': 4,      // 4 angle shots — 4 credits
+  'video-360': 2,      // 4 angles — 2 credits
 };
 
 // ---------------------------------------------------------------------------

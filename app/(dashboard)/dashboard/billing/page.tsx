@@ -292,9 +292,9 @@ export default async function BillingPage() {
                 <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t" style={{ borderColor: colors.gray100 }}>
                     <p className="text-xs w-full" style={{ color: colors.gray500 }}>Creditkosten per generatie:</p>
                     {[
-                        { label: 'Virtual Model', cost: 2 },
+                        { label: 'Virtual Model', cost: 1 },
                         { label: 'Product Only', cost: 1 },
-                        { label: '360° Rotatie', cost: 4 },
+                        { label: '360° Rotatie', cost: 2 },
                     ].map(item => (
                         <div
                             key={item.label}
@@ -467,7 +467,7 @@ export default async function BillingPage() {
                     {[
                         {
                             q: 'Wat is een credit?',
-                            a: 'Eén credit staat voor één AI-generatie in Drapit Studio. Virtual Model kost 2 credits, Product Only 1 credit, en 360° Rotatie 4 credits (4 hoeken × 1 credit).',
+                            a: 'Eén credit staat voor één AI-generatie in Drapit Studio. Virtual Model kost 1 credit, Product Only 1 credit, en 360° Rotatie 2 credits.',
                         },
                         {
                             q: 'Vervallen ongebruikte VTON try-ons?',

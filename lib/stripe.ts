@@ -123,7 +123,7 @@ export function getPlanConfig(plan: Plan): PlanConfig {
 // Studio plan definitions
 // ═════════════════════════════════════════════════════════════════════════════
 // Pricing based on ~€0.10-0.15/credit, aligning with VTON Starter margin.
-// Credit costs per mode: virtual-model=2, product-only=1, video-360=4
+// Credit costs per mode: virtual-model=1, product-only=1, video-360=2
 // ═════════════════════════════════════════════════════════════════════════════
 
 export type StudioPlan = 'studio_trial' | 'studio_starter' | 'studio_pro' | 'studio_scale';
