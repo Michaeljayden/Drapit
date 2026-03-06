@@ -43,6 +43,17 @@ const navItems = [
         ),
     },
     {
+        label: 'Studio Gids',
+        href: '/dashboard/guide',
+        icon: (
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 2H4a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V8l-4-6z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M10 2v6h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M6 11h6M6 14h6M6 8h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+        ),
+    },
+    {
         label: 'API-sleutels',
         href: '/dashboard/api-keys',
         icon: (

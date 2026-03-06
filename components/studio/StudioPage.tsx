@@ -100,7 +100,7 @@ function AccordionSection({
   );
 }
 
-function OptionGrid<T extends { id: string; label: string }>({
+function OptionGrid<T extends { id: string; label: string; description?: string }>({
   options,
   selected,
   onSelect,
@@ -115,16 +115,23 @@ function OptionGrid<T extends { id: string; label: string }>({
   return (
     <div className={`grid ${gridClass} gap-2`}>
       {options.map((opt) => (
-        <button
-          key={opt.id}
-          onClick={() => onSelect(opt.id)}
-          className={`px-2 py-2 rounded-lg text-xs font-semibold text-center transition-all border ${selected === opt.id
-            ? 'bg-[#1D6FD8] border-[#1D6FD8] text-white shadow-[0_0_12px_rgba(29,111,216,0.4)]'
-            : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:border-white/20'
-            }`}
-        >
-          {opt.label}
-        </button>
+        <div key={opt.id} className="relative group/tooltip">
+          <button
+            onClick={() => onSelect(opt.id)}
+            className={`w-full px-2 py-2 rounded-lg text-xs font-semibold text-center transition-all border ${selected === opt.id
+              ? 'bg-[#1D6FD8] border-[#1D6FD8] text-white shadow-[0_0_12px_rgba(29,111,216,0.4)]'
+              : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:border-white/20'
+              }`}
+          >
+            {opt.label}
+          </button>
+          {opt.description && (
+            <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-2.5 py-1.5 bg-[#1a2b4b] text-white text-[10px] rounded-lg opacity-0 group-hover/tooltip:opacity-100 pointer-events-none transition-all duration-200 z-[100] w-40 text-center shadow-2xl border border-white/10 leading-tight scale-95 group-hover/tooltip:scale-100 origin-bottom">
+              {opt.description}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#1a2b4b]" />
+            </div>
+          )}
+        </div>
       ))}
     </div>
   );
@@ -1308,17 +1315,24 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioEx
                     <SectionLabel>Lens (brandpuntsafstand)</SectionLabel>
                     <div className="grid grid-cols-3 gap-2">
                       {STUDIO_LENSES.map((l) => (
-                        <button
-                          key={l.id}
-                          onClick={() => setLens(l.id)}
-                          className={`flex flex-col items-center gap-1 py-3 rounded-xl border-2 transition-all ${lens === l.id
-                            ? 'border-[#1D6FD8] bg-[#1D6FD8]/10 text-[#1D6FD8]'
-                            : 'border-white/10 text-slate-400 hover:border-white/20'
-                            }`}
-                        >
-                          <span className="text-sm font-bold">{l.label}</span>
-                          <span className="text-[9px] font-medium opacity-70">{l.description}</span>
-                        </button>
+                        <div key={l.id} className="relative group/tooltip">
+                          <button
+                            onClick={() => setLens(l.id)}
+                            className={`w-full flex flex-col items-center gap-1 py-3 rounded-xl border-2 transition-all ${lens === l.id
+                              ? 'border-[#1D6FD8] bg-[#1D6FD8]/10 text-[#1D6FD8]'
+                              : 'border-white/10 text-slate-400 hover:border-white/20'
+                              }`}
+                          >
+                            <span className="text-sm font-bold">{l.label}</span>
+                            <span className="text-[9px] font-medium opacity-70">{l.description}</span>
+                          </button>
+                          {l.detailDescription && (
+                            <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 px-2.5 py-1.5 bg-[#1a2b4b] text-white text-[10px] rounded-lg opacity-0 group-hover/tooltip:opacity-100 pointer-events-none transition-all duration-200 z-[100] w-40 text-center shadow-2xl border border-white/10 leading-tight scale-95 group-hover/tooltip:scale-100 origin-bottom">
+                              {l.detailDescription}
+                              <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#1a2b4b]" />
+                            </div>
+                          )}
+                        </div>
                       ))}
                     </div>
                   </div>
