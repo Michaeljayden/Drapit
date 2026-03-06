@@ -86,7 +86,9 @@ export interface StudioGenerationResult {
 
 // Best available image generation model via Gemini API
 // gemini-3.1-flash-image-preview = "Nano Banana 2 Preview" (best all-round per Google docs)
-const GENERATION_MODEL = 'gemini-3.1-flash-image-preview';
+// Best available image generation model via Gemini API
+// gemini-2.0-flash = Newest multimodal model with image generation support
+const GENERATION_MODEL = 'gemini-2.0-flash';
 
 // Text-only model for garment analysis (fast, accurate)
 const ANALYSIS_MODEL = 'gemini-2.0-flash';
@@ -464,9 +466,8 @@ async function generateProductRotation(params: StudioGenerationParams): Promise<
   // ── Step 1: Analyse garment ONCE — reuse for all angles ──
   const garmentAnalysis = await analyseGarment(ai, params.clothing, params.clothingLogo);
 
-  const results: string[] = [];
-
-  for (const angle of ROTATION_ANGLES) {
+  // ── Step 2: Generate all angles in PARALLEL ──
+  const promises = ROTATION_ANGLES.map(async (angle) => {
     const prompt = `You are a world-class product photographer producing a consistent 360° product photography set.
 
 ══════════════════════════════════════════════════════
@@ -516,15 +517,18 @@ TECHNICAL
         config: { responseModalities: ['IMAGE', 'TEXT'] },
       });
 
-      const image = extractImage(response);
-      if (image) results.push(image);
+      return extractImage(response);
     } catch (err) {
       console.error(`[studio] Failed to generate ${angle.label} view:`, err);
+      return null;
     }
-  }
+  });
 
-  if (results.length === 0) throw new Error('Geen enkel 360°-beeld kon worden gegenereerd.');
-  return results;
+  const results = await Promise.all(promises);
+  const images = results.filter((img): img is string => img !== null);
+
+  if (images.length === 0) throw new Error('Geen enkel 360°-beeld kon worden gegenereerd.');
+  return images;
 }
 
 // ---------------------------------------------------------------------------
