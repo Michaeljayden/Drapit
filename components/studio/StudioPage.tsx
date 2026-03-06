@@ -340,6 +340,7 @@ function ResultDisplay({
   images: string[];
   isLoading: boolean;
   loadingMessage: string;
+  loadingTip: string;
   error: string | null;
   mode: StudioMode;
   exportFormat: ExportFormat;
@@ -381,9 +382,14 @@ function ResultDisplay({
             <div className="w-8 h-8 rounded-full border-2 border-white/5 border-t-white/30 animate-spin" style={{ animationDirection: 'reverse' }} />
           </div>
         </div>
-        <div className="text-center space-y-1">
+        <div className="text-center space-y-2">
           <p className="text-sm font-bold text-white">{loadingMessage}</p>
-          <p className="text-xs text-slate-400">Gemini AI is aan het werk...</p>
+          <div className="bg-[#1D6FD8]/10 border border-[#1D6FD8]/20 rounded-xl px-4 py-2.5 max-w-xs mx-auto animate-pulse">
+            <p className="text-xs text-[#5BA8FF] font-medium leading-relaxed italic">
+              {loadingTip}
+            </p>
+          </div>
+          <p className="text-[10px] text-slate-500 uppercase tracking-widest font-black pt-2">Gemini AI is aan het werk...</p>
         </div>
       </div>
     );
@@ -755,11 +761,19 @@ async function applyWatermarkToImage(
 // ---------------------------------------------------------------------------
 
 const LOADING_MSGS = [
-  'Studio wordt opgezet...',
-  'Gemini AI generatie...',
-  'Belichting berekenen...',
-  'Details verfijnen...',
-  'Finishing touch...',
+  'Drapit Studio stelt de set samen...',
+  'Drapit Studio kiest de beste hoek...',
+  'Drapit Studio verzorgt de belichting...',
+  'Drapit Studio verfijnt de AI details...',
+  'Drapit Studio legt de laatste hand...',
+];
+
+const LOADING_TIPS = [
+  'Wist je dat? Hoge kwaliteit foto\'s zorgen voor een scherper resultaat.',
+  'Probeer eens een andere achtergrond voor een compleet nieuwe vibe.',
+  'De 360° modus genereert direct een complete set voor je webshop.',
+  'Voeg je eigen logo toe via "Batch & Branding" voor een professionele look.',
+  'Speel met de Bokeh schuifregelaar voor een natuurlijke dieptewerking.',
 ];
 
 export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioExtraCredits, hasStudio }: StudioPageProps) {
@@ -823,6 +837,7 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioEx
   const [openSection, setOpenSection] = useState<string>('clothing');
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMsg, setLoadingMsg] = useState('');
+  const [loadingTip, setLoadingTip] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [generatedImages, setGeneratedImages] = useState<string[]>([]);
   const [localCreditsUsed, setLocalCreditsUsed] = useState(creditsUsed);
@@ -915,10 +930,12 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioEx
 
     let msgIdx = 0;
     setLoadingMsg(LOADING_MSGS[0]);
+    setLoadingTip(LOADING_TIPS[0]);
     const interval = setInterval(() => {
       msgIdx = (msgIdx + 1) % LOADING_MSGS.length;
       setLoadingMsg(LOADING_MSGS[msgIdx]);
-    }, 2500);
+      setLoadingTip(LOADING_TIPS[msgIdx]);
+    }, 3000);
 
     try {
       // Build clothing images
@@ -1610,6 +1627,7 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioEx
             images={generatedImages}
             isLoading={isLoading}
             loadingMessage={loadingMsg}
+            loadingTip={loadingTip}
             error={error}
             mode={mode}
             exportFormat={activeExportFormat}
@@ -1621,3 +1639,4 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioEx
     </div>
   );
 }
+```
