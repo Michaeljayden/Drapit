@@ -63,6 +63,7 @@ export interface StudioGenerationParams {
   lightingPrompt: string;
   timeOfDayPrompt?: string;
   propText?: string;
+  inspirationImage?: string; // base64 — reference image for style matching
 
   // Camera
   lensPrompt?: string;
@@ -228,6 +229,76 @@ Write in precise, technical English. Be exhaustive — this description will be 
 }
 
 // ---------------------------------------------------------------------------
+// Step 1b: Inspiration style analysis — describes visual style of reference
+// ---------------------------------------------------------------------------
+
+async function analyseInspirationStyle(
+  ai: GoogleGenAI,
+  inspirationImage: string
+): Promise<string> {
+  const analysisPrompt = `You are an expert visual style analyst and photography director.
+Carefully examine this reference/inspiration image and produce an EXTREMELY DETAILED description of its visual style.
+
+Your description MUST cover ALL of the following:
+
+1. BACKGROUND & SETTING
+   - Exact environment type (studio, outdoor, interior, etc.)
+   - Background elements, surfaces, textures
+   - Depth and spatial arrangement
+   - Any props or environmental details
+
+2. LIGHTING
+   - Light direction(s) and angle(s)
+   - Light quality (hard/soft, diffused/direct)
+   - Key light, fill light, rim/back light identification
+   - Shadow characteristics (depth, sharpness, direction)
+   - Color temperature of light sources
+
+3. COLOR PALETTE & GRADING
+   - Overall color mood (warm, cool, neutral, muted, vibrant)
+   - Dominant colors in the scene
+   - Color grading style (film-like, clean, vintage, etc.)
+   - Contrast level (high contrast, low contrast, flat)
+   - Saturation level
+   - Any color cast or tint
+
+4. MOOD & ATMOSPHERE
+   - Overall feel (luxurious, casual, editorial, lifestyle, etc.)
+   - Energy level (calm, dynamic, dramatic, serene)
+   - Season or time-of-day feeling
+
+5. COMPOSITION & FRAMING
+   - Camera angle and height
+   - Subject positioning within frame
+   - Use of negative space
+   - Any leading lines or compositional techniques
+
+Write in precise, technical English. This description will be used to replicate the EXACT visual style, atmosphere, and mood in a new photograph. Focus on the environment and photographic style — NOT on the clothing or person in the image.`;
+
+  const parts: GeminiPart[] = [
+    { text: analysisPrompt },
+    { text: 'INSPIRATION / REFERENCE IMAGE:' },
+    { inlineData: { mimeType: 'image/jpeg', data: inspirationImage } },
+  ];
+
+  const response = await ai.models.generateContent({
+    model: ANALYSIS_MODEL,
+    contents: [{ role: 'user', parts }],
+  });
+
+  const text = response.candidates?.[0]?.content?.parts
+    ?.filter((p: any) => p.text)
+    ?.map((p: any) => p.text)
+    ?.join('\n') ?? '';
+
+  if (!text || text.length < 50) {
+    return 'Match the visual style, lighting, background, and mood of the provided reference image.';
+  }
+
+  return text;
+}
+
+// ---------------------------------------------------------------------------
 // Extract image from Gemini response
 // ---------------------------------------------------------------------------
 
@@ -246,8 +317,13 @@ function extractImage(response: any): string | null {
 async function generateVirtualModelImage(params: StudioGenerationParams): Promise<string> {
   const ai = getClient();
 
-  // ── Step 1: Analyse garment ──
-  const garmentAnalysis = await analyseGarment(ai, params.clothing, params.clothingLogo);
+  // ── Step 1: Analyse garment + inspiration style (in parallel) ──
+  const [garmentAnalysis, inspirationAnalysis] = await Promise.all([
+    analyseGarment(ai, params.clothing, params.clothingLogo),
+    params.inspirationImage
+      ? analyseInspirationStyle(ai, params.inspirationImage)
+      : Promise.resolve(null),
+  ]);
 
   // ── Step 2: Generate image ──
   const bokehDesc =
@@ -321,11 +397,20 @@ SHOT COMPOSITION
 - Camera: ${params.lensPrompt || '50mm standard lens, natural perspective, no distortion'}
 - Depth of field: ${bokehDesc}${propInstruction}
 
+${inspirationAnalysis
+    ? `══════════════════════════════════════════════════════
+ENVIRONMENT (MATCHED TO INSPIRATION IMAGE)
 ══════════════════════════════════════════════════════
+An inspiration/reference image has been provided. You MUST replicate its visual style exactly:
+
+${inspirationAnalysis}
+
+CRITICAL: The background, lighting, color grading, mood, and atmosphere must closely match the inspiration image provided below. The reference image is your PRIMARY source for all environmental decisions. Replicate the same lighting setup, same color palette, same mood, same spatial feeling.`
+    : `══════════════════════════════════════════════════════
 ENVIRONMENT
 ══════════════════════════════════════════════════════
 - Background: ${params.backgroundPrompt}
-- Lighting: ${params.lightingPrompt}${timeInstruction}
+- Lighting: ${params.lightingPrompt}${timeInstruction}`}
 
 ══════════════════════════════════════════════════════
 TECHNICAL OUTPUT REQUIREMENTS
@@ -354,6 +439,11 @@ TECHNICAL OUTPUT REQUIREMENTS
     contents.push({ inlineData: { mimeType: 'image/jpeg', data: params.customModelImage } });
   }
 
+  if (params.inspirationImage) {
+    contents.push({ text: '\n── INSPIRATION / STYLE REFERENCE (replicate this visual style exactly) ──' });
+    contents.push({ inlineData: { mimeType: 'image/jpeg', data: params.inspirationImage } });
+  }
+
   const response = await ai.models.generateContent({
     model: GENERATION_MODEL,
     contents: [{ role: 'user', parts: contents }],
@@ -372,8 +462,13 @@ TECHNICAL OUTPUT REQUIREMENTS
 async function generateProductPhoto(params: StudioGenerationParams): Promise<string> {
   const ai = getClient();
 
-  // ── Step 1: Analyse garment ──
-  const garmentAnalysis = await analyseGarment(ai, params.clothing, params.clothingLogo);
+  // ── Step 1: Analyse garment + inspiration style (in parallel) ──
+  const [garmentAnalysis, inspirationAnalysis] = await Promise.all([
+    analyseGarment(ai, params.clothing, params.clothingLogo),
+    params.inspirationImage
+      ? analyseInspirationStyle(ai, params.inspirationImage)
+      : Promise.resolve(null),
+  ]);
 
   // ── Step 2: Generate image ──
   const logoPlacementInstruction = params.clothingLogo
@@ -409,12 +504,22 @@ PRESENTATION STYLE
 - All design details must be fully visible and in sharp focus
 - No model or person in the image
 
+${inspirationAnalysis
+    ? `══════════════════════════════════════════════════════
+ENVIRONMENT (MATCHED TO INSPIRATION IMAGE)
 ══════════════════════════════════════════════════════
+An inspiration/reference image has been provided. You MUST replicate its visual style exactly:
+
+${inspirationAnalysis}
+
+CRITICAL: The background, lighting, color grading, mood, and atmosphere must closely match the inspiration image provided below. The reference image is your PRIMARY source for all environmental decisions.
+- Camera: ${params.lensPrompt || '80–100mm macro-capable lens, no distortion, product photography standard'}`
+    : `══════════════════════════════════════════════════════
 ENVIRONMENT
 ══════════════════════════════════════════════════════
 - Background: ${params.backgroundPrompt}
 - Lighting: ${params.lightingPrompt} — illuminate the garment evenly to show true colours and texture with no harsh shadows obscuring details
-- Camera: ${params.lensPrompt || '80–100mm macro-capable lens, no distortion, product photography standard'}
+- Camera: ${params.lensPrompt || '80–100mm macro-capable lens, no distortion, product photography standard'}`}
 
 ══════════════════════════════════════════════════════
 TECHNICAL OUTPUT REQUIREMENTS
@@ -434,6 +539,11 @@ TECHNICAL OUTPUT REQUIREMENTS
   if (params.clothingLogo) {
     contents.push({ text: `\n── BRAND LOGO REFERENCE (position: "${params.clothingLogo.position.replace(/_/g, ' ')}") ──` });
     contents.push({ inlineData: { mimeType: 'image/jpeg', data: params.clothingLogo.image } });
+  }
+
+  if (params.inspirationImage) {
+    contents.push({ text: '\n── INSPIRATION / STYLE REFERENCE (replicate this visual style exactly) ──' });
+    contents.push({ inlineData: { mimeType: 'image/jpeg', data: params.inspirationImage } });
   }
 
   const response = await ai.models.generateContent({
@@ -461,8 +571,13 @@ const ROTATION_ANGLES = [
 async function generateProductRotation(params: StudioGenerationParams): Promise<string[]> {
   const ai = getClient();
 
-  // ── Step 1: Analyse garment ONCE — reuse for all angles ──
-  const garmentAnalysis = await analyseGarment(ai, params.clothing, params.clothingLogo);
+  // ── Step 1: Analyse garment + inspiration ONCE — reuse for all angles ──
+  const [garmentAnalysis, inspirationAnalysis] = await Promise.all([
+    analyseGarment(ai, params.clothing, params.clothingLogo),
+    params.inspirationImage
+      ? analyseInspirationStyle(ai, params.inspirationImage)
+      : Promise.resolve(null),
+  ]);
 
   // ── Step 2: Generate all angles in PARALLEL ──
   const promises = ROTATION_ANGLES.map(async (angle) => {
@@ -488,12 +603,22 @@ REPRODUCTION RULES (APPLY TO ALL ANGLES)
 - ghost mannequin presentation (no model, no body)
 - Consistent lighting and background across all angles (same studio session appearance)
 
+${inspirationAnalysis
+        ? `══════════════════════════════════════════════════════
+ENVIRONMENT (MATCHED TO INSPIRATION IMAGE — CONSISTENT ACROSS ALL SHOTS)
 ══════════════════════════════════════════════════════
+An inspiration/reference image has been provided. You MUST replicate its visual style exactly:
+
+${inspirationAnalysis}
+
+CRITICAL: The background, lighting, color grading, mood, and atmosphere must closely match the inspiration image provided below. Keep the style IDENTICAL across all angles.
+- Camera: consistent product photography setup — same focal length and distance as all other angles`
+        : `══════════════════════════════════════════════════════
 ENVIRONMENT (CONSISTENT ACROSS ALL SHOTS)
 ══════════════════════════════════════════════════════
 - Background: ${params.backgroundPrompt}
 - Lighting: ${params.lightingPrompt}
-- Camera: consistent product photography setup — same focal length and distance as all other angles
+- Camera: consistent product photography setup — same focal length and distance as all other angles`}
 
 ══════════════════════════════════════════════════════
 TECHNICAL
@@ -507,6 +632,11 @@ TECHNICAL
       { text: '\n\n── REFERENCE IMAGES ──' },
       ...buildClothingImageParts(params.clothing),
     ];
+
+    if (params.inspirationImage) {
+      contents.push({ text: '\n── INSPIRATION / STYLE REFERENCE (replicate this visual style exactly) ──' });
+      contents.push({ inlineData: { mimeType: 'image/jpeg', data: params.inspirationImage } });
+    }
 
     try {
       const response = await ai.models.generateContent({

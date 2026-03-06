@@ -80,6 +80,7 @@ const GenerateRequestSchema = z.object({
   lightingPrompt: z.string(),
   timeOfDayPrompt: z.string().optional(),
   propText: z.string().max(200).optional(),
+  inspirationImage: z.string().optional(),
 
   // Camera
   lensPrompt: z.string().optional(),
@@ -219,6 +220,7 @@ export async function POST(req: NextRequest) {
       lightingPrompt: params.lightingPrompt,
       timeOfDayPrompt: params.timeOfDayPrompt,
       propText: params.propText,
+      inspirationImage: params.inspirationImage,
       lensPrompt: params.lensPrompt,
       bokeh: params.bokeh,
       clothingLogo: params.clothingLogo,

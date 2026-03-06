@@ -874,6 +874,9 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioEx
   const [lighting, setLighting] = useState('studio-softbox');
   const [timeOfDay, setTimeOfDay] = useState('none');
   const [propText, setPropText] = useState('');
+  const [inspirationFile, setInspirationFile] = useState<File | null>(null);
+  const [inspirationPreview, setInspirationPreview] = useState<string | null>(null);
+  const inspirationRef = useRef<HTMLInputElement>(null);
 
   // Camera
   const [lens, setLens] = useState<LensType>('50mm');
@@ -1019,6 +1022,12 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioEx
         clothing.outerwear = { front: await toBase64(outerwearSlot.front.file) };
       }
 
+      // Build inspiration image
+      let inspirationImagePayload: string | undefined;
+      if (inspirationFile) {
+        inspirationImagePayload = await toBase64(inspirationFile);
+      }
+
       // Build clothing logo
       let clothingLogoPayload: { image: string; position: string } | undefined;
       if (clothingLogoFile) {
@@ -1057,6 +1066,7 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioEx
         lightingPrompt: lightingOpt?.prompt ?? 'studio lighting',
         timeOfDayPrompt: timeOpt?.prompt || undefined,
         propText: propText || undefined,
+        inspirationImage: inspirationImagePayload,
         lensPrompt: lensOpt?.prompt ?? '',
         bokeh,
         clothingLogo: clothingLogoPayload,
@@ -1364,17 +1374,82 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioEx
               onToggle={() => toggle('environment')}
             >
               <div className="space-y-5">
-                <div>
-                  <SectionLabel>Achtergrond</SectionLabel>
-                  <OptionGrid options={STUDIO_BACKGROUNDS} selected={background} onSelect={setBackground} cols={2} />
+                {/* Inspiration image upload */}
+                <div className="space-y-2">
+                  <SectionLabel>Inspiratiebeeld (optioneel)</SectionLabel>
+                  <p className="text-[10px] text-slate-500 leading-relaxed mb-2">
+                    Upload een referentiefoto en de AI kopieert de stijl: achtergrond, belichting, sfeer en kleurgrading.
+                  </p>
+                  <div className="flex gap-2 items-center">
+                    {inspirationPreview && (
+                      <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-white/10 shrink-0">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={inspirationPreview} alt="Inspiratie" className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                    <button
+                      onClick={() => inspirationRef.current?.click()}
+                      className="flex-1 py-2 rounded-lg border border-dashed border-white/20 text-[10px] text-slate-500 hover:border-white/30 hover:text-slate-400 transition-colors"
+                    >
+                      {inspirationFile ? 'Beeld vervangen' : 'Referentiefoto uploaden'}
+                    </button>
+                    {inspirationFile && (
+                      <button
+                        onClick={() => {
+                          setInspirationFile(null);
+                          if (inspirationPreview) URL.revokeObjectURL(inspirationPreview);
+                          setInspirationPreview(null);
+                        }}
+                        className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    )}
+                    <input
+                      ref={inspirationRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        setInspirationFile(file);
+                        if (inspirationPreview) URL.revokeObjectURL(inspirationPreview);
+                        setInspirationPreview(URL.createObjectURL(file));
+                        e.target.value = '';
+                      }}
+                    />
+                  </div>
+                  {inspirationFile && (
+                    <div className="flex items-center gap-2 px-3 py-2 bg-[#1D6FD8]/10 rounded-xl border border-[#1D6FD8]/20">
+                      <svg className="w-3 h-3 text-[#1D6FD8] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                      <p className="text-[10px] text-[#5BA8FF] font-semibold">
+                        Stijl wordt overgenomen uit je referentiefoto
+                      </p>
+                    </div>
+                  )}
                 </div>
-                <div>
-                  <SectionLabel>Belichting</SectionLabel>
-                  <OptionGrid options={STUDIO_LIGHTING} selected={lighting} onSelect={setLighting} cols={2} />
-                </div>
-                <div>
-                  <SectionLabel>Tijdstip (optioneel)</SectionLabel>
-                  <OptionGrid options={STUDIO_TIME_OF_DAY} selected={timeOfDay} onSelect={setTimeOfDay} cols={2} />
+
+                {inspirationFile && <div className="h-px bg-[#1D6FD8]/20 my-1" />}
+
+                {/* Environment presets — dimmed when inspiration is active */}
+                <div className={inspirationFile ? 'opacity-40 grayscale pointer-events-none' : ''}>
+                  <div>
+                    <SectionLabel>Achtergrond</SectionLabel>
+                    <OptionGrid options={STUDIO_BACKGROUNDS} selected={background} onSelect={setBackground} cols={2} />
+                  </div>
+                  <div className="mt-5">
+                    <SectionLabel>Belichting</SectionLabel>
+                    <OptionGrid options={STUDIO_LIGHTING} selected={lighting} onSelect={setLighting} cols={2} />
+                  </div>
+                  <div className="mt-5">
+                    <SectionLabel>Tijdstip (optioneel)</SectionLabel>
+                    <OptionGrid options={STUDIO_TIME_OF_DAY} selected={timeOfDay} onSelect={setTimeOfDay} cols={2} />
+                  </div>
                 </div>
               </div>
             </AccordionSection>
