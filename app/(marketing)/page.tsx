@@ -58,6 +58,45 @@ const PLANS = [
     },
 ];
 
+const STUDIO_PLANS = [
+    {
+        key: 'studio_trial',
+        name: 'Proef',
+        price: 0,
+        credits: '20',
+        features: ['20 gratis generaties', 'Alle 3 modi (model, product, 360°)', 'Watermark aanpassen', 'Download op hoge resolutie'],
+        popular: false,
+        cta: 'Gratis proberen',
+    },
+    {
+        key: 'studio_starter',
+        name: 'Starter',
+        price: 29,
+        credits: '200',
+        features: ['200 credits/maand', 'Alle 3 modi', 'Watermark aanpassen', 'Download op hoge resolutie', 'E-mail support'],
+        popular: false,
+        cta: 'Begin nu',
+    },
+    {
+        key: 'studio_pro',
+        name: 'Pro',
+        price: 59,
+        credits: '500',
+        features: ['500 credits/maand', 'Alle 3 modi', 'Watermark aanpassen', 'Download op hoge resolutie', 'Prioriteit support', 'Ongebruikte credits rollen over'],
+        popular: true,
+        cta: 'Populairste keuze',
+    },
+    {
+        key: 'studio_scale',
+        name: 'Scale',
+        price: 99,
+        credits: '1.000',
+        features: ['1.000 credits/maand', 'Alle 3 modi', 'Watermark aanpassen', 'Download op hoge resolutie', 'Prioriteit support', 'Ongebruikte credits rollen over'],
+        popular: false,
+        cta: 'Schaal op',
+    },
+];
+
 const FAQS = [
     {
         q: 'Hoe snel is de integratie klaar?',
@@ -336,6 +375,7 @@ export default function LandingPage() {
     const how = useInView(0.1);
     const feats = useInView(0.1);
     const pricing = useInView(0.08);
+    const studioPricing = useInView(0.08);
     const shopify = useInView(0.1);
     const faqSec = useInView(0.1);
     const ctaSec = useInView(0.1);
@@ -494,6 +534,7 @@ export default function LandingPage() {
                     .d-hero-grid  { grid-template-columns: 1fr !important; gap: 48px !important; }
                     .d-how-grid   { grid-template-columns: 1fr !important; }
                     .d-plans-grid { grid-template-columns: repeat(3, 1fr) !important; }
+                    .d-studio-grid { grid-template-columns: repeat(2, 1fr) !important; }
                     .d-feat-grid  { grid-template-columns: 1fr 1fr !important; }
                     .d-stats-grid { grid-template-columns: 1fr 1fr !important; }
                     .d-hero-title { font-size: clamp(34px, 7vw, 48px) !important; text-align: center; }
@@ -602,6 +643,7 @@ export default function LandingPage() {
                 }
                 @media (max-width: 540px) {
                     .d-plans-grid { grid-template-columns: 1fr !important; }
+                    .d-studio-grid { grid-template-columns: 1fr !important; }
                     .d-feat-grid  { grid-template-columns: 1fr !important; }
                     .d-stats-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
                 }
@@ -1019,6 +1061,116 @@ export default function LandingPage() {
 
                         <p style={{ textAlign: 'center', marginTop: 32, fontSize: 13, color: 'rgba(241,245,249,0.25)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
                             Alle plannen excl. BTW · Annuleer op elk moment · 14 dagen tevredenheidsgarantie
+                        </p>
+                    </div>
+                </section>
+
+                {/* ─── STUDIO PRICING ────────────────────────────────── */}
+                <section style={{ padding: '128px 28px 128px', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 900, height: 600, background: 'radial-gradient(ellipse, rgba(139,92,246,0.06) 0%, transparent 68%)', pointerEvents: 'none' }} />
+                    <div style={{ maxWidth: 1000, margin: '0 auto', position: 'relative' }}>
+                        <div ref={studioPricing.ref} style={{ textAlign: 'center', marginBottom: 64 }}>
+                            <div className={`d-in d-d1 ${studioPricing.inView ? 'visible' : ''}`} style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#8B5CF6', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 18 }}>DRAPIT STUDIO</div>
+                            <h2 className={`d-gradient d-in d-d2 ${studioPricing.inView ? 'visible' : ''}`} style={{ fontSize: 'clamp(28px, 3.5vw, 46px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.08, marginBottom: 18 }}>
+                                AI productfotografie
+                            </h2>
+                            <p className={`d-in d-d3 ${studioPricing.inView ? 'visible' : ''}`} style={{ fontSize: 17, color: 'rgba(241,245,249,0.45)', fontFamily: 'Plus Jakarta Sans, sans-serif', maxWidth: 480, margin: '0 auto' }}>
+                                Genereer professionele productfoto&apos;s met virtuele modellen, 360&deg; rotaties en meer &mdash; direct vanuit je dashboard.
+                            </p>
+                        </div>
+
+                        {/* Credit costs legend */}
+                        <div className={`d-in d-d2 ${studioPricing.inView ? 'visible' : ''}`} style={{ display: 'flex', justifyContent: 'center', gap: 24, marginBottom: 40, flexWrap: 'wrap' }}>
+                            {[
+                                { label: 'Virtueel Model', cost: '1 credit' },
+                                { label: 'Product Foto', cost: '1 credit' },
+                                { label: '360° Rotatie', cost: '4 credits' },
+                            ].map((item) => (
+                                <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.15)', borderRadius: 100, padding: '6px 16px' }}>
+                                    <span style={{ fontSize: 12, fontWeight: 600, color: 'rgba(241,245,249,0.6)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{item.label}</span>
+                                    <span style={{ fontSize: 11, fontWeight: 700, color: '#A78BFA', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{item.cost}</span>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="d-studio-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, alignItems: 'start' }}>
+                            {STUDIO_PLANS.map((plan, i) => (
+                                <div key={plan.key} className={`d-plan ${plan.popular ? 'd-plan-pop' : ''} d-in d-d${i + 1} ${studioPricing.inView ? 'visible' : ''}`}
+                                    style={{
+                                        background: plan.popular ? 'linear-gradient(180deg, rgba(139,92,246,0.16) 0%, rgba(13,24,41,0.96) 100%)' : 'rgba(13,24,41,0.72)',
+                                        border: plan.popular ? '1px solid rgba(139,92,246,0.5)' : '1px solid rgba(255,255,255,0.07)',
+                                        borderRadius: 22, padding: plan.popular ? '36px 24px' : '28px 22px',
+                                        position: 'relative', backdropFilter: 'blur(12px)',
+                                        boxShadow: plan.popular ? '0 28px 56px rgba(0,0,0,0.45), 0 0 40px rgba(139,92,246,0.14)' : '0 4px 16px rgba(0,0,0,0.22)',
+                                        marginTop: plan.popular ? -16 : 0,
+                                    }}>
+                                    {plan.popular && (
+                                        <div style={{ position: 'absolute', top: -14, left: '50%', transform: 'translateX(-50%)', background: 'linear-gradient(135deg, #8B5CF6, #7C3AED)', borderRadius: 100, padding: '5px 16px', fontSize: 10, fontWeight: 800, color: 'white', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.1em', whiteSpace: 'nowrap', boxShadow: '0 4px 20px rgba(139,92,246,0.55)' }}>
+                                            MEEST GEKOZEN
+                                        </div>
+                                    )}
+                                    <div style={{ marginBottom: 22 }}>
+                                        <div style={{ fontSize: 11, fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif', color: plan.popular ? '#C4B5FD' : 'rgba(241,245,249,0.4)', letterSpacing: '0.08em', marginBottom: 10 }}>{plan.name.toUpperCase()}</div>
+                                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                                            <span style={{ fontSize: 42, fontWeight: 800, fontFamily: 'Plus Jakarta Sans, sans-serif', color: '#F1F5F9', letterSpacing: '-0.028em', lineHeight: 1 }}>{plan.price === 0 ? 'Gratis' : `€${plan.price}`}</span>
+                                            {plan.price > 0 && <span style={{ fontSize: 13, color: 'rgba(241,245,249,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>/maand</span>}
+                                        </div>
+                                        <div style={{ marginTop: 8, fontSize: 13, color: 'rgba(241,245,249,0.4)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{plan.credits} credits/maand</div>
+                                    </div>
+
+                                    <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', marginBottom: 18 }} />
+
+                                    <ul style={{ listStyle: 'none', marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 9 }}>
+                                        {plan.features.map((f) => (
+                                            <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 9, fontSize: 13, color: 'rgba(241,245,249,0.62)', fontFamily: 'Plus Jakarta Sans, sans-serif', lineHeight: 1.4 }}>
+                                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ marginTop: 1, flexShrink: 0 }}>
+                                                    <circle cx="7" cy="7" r="6" fill={plan.popular ? 'rgba(139,92,246,0.18)' : 'rgba(255,255,255,0.05)'} />
+                                                    <path d="M4.5 7l2 2 3-3" stroke={plan.popular ? '#A78BFA' : '#64748B'} strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+                                                </svg>
+                                                {f}
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    <Link href="/dashboard/login"
+                                        style={{
+                                            display: 'block', textAlign: 'center', padding: '12px 0',
+                                            borderRadius: 12, fontSize: 13, fontWeight: 700,
+                                            fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.04em',
+                                            textDecoration: 'none',
+                                            ...(plan.popular ? {
+                                                background: 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)',
+                                                color: 'white',
+                                                boxShadow: '0 8px 28px rgba(139,92,246,0.45)',
+                                            } : {
+                                                background: 'rgba(255,255,255,0.05)',
+                                                color: 'rgba(241,245,249,0.72)',
+                                                border: '1px solid rgba(255,255,255,0.08)',
+                                                transition: 'all 0.2s',
+                                            }),
+                                        }}
+                                        onMouseEnter={!plan.popular ? (e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.09)'; e.currentTarget.style.color = '#F1F5F9'; } : undefined}
+                                        onMouseLeave={!plan.popular ? (e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'rgba(241,245,249,0.72)'; } : undefined}
+                                    >
+                                        {plan.popular ? plan.cta + ' →' : plan.cta}
+                                    </Link>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Extra credits info */}
+                        <div className={`d-in d-d3 ${studioPricing.inView ? 'visible' : ''}`} style={{ textAlign: 'center', marginTop: 40 }}>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, background: 'rgba(13,24,41,0.72)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 16, padding: '16px 28px' }}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                <div style={{ textAlign: 'left' }}>
+                                    <div style={{ fontSize: 13, fontWeight: 700, color: '#F1F5F9', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Extra credits nodig?</div>
+                                    <div style={{ fontSize: 12, color: 'rgba(241,245,249,0.4)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Koop losse credits vanaf €9 voor 50 stuks — verlopen niet.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p style={{ textAlign: 'center', marginTop: 24, fontSize: 13, color: 'rgba(241,245,249,0.25)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                            Alle plannen excl. BTW · Annuleer op elk moment
                         </p>
                     </div>
                 </section>
