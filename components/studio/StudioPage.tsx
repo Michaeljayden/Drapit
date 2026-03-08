@@ -1300,7 +1300,7 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioEx
                       <SectionLabel>Fysieke Kenmerken (Generiek)</SectionLabel>
                       <div className="space-y-4 pt-2">
                         <div>
-                          <SectionLabel>Geslacht</SectionLabel>
+                          <SectionLabel>Model Selectie</SectionLabel>
                           <OptionGrid options={STUDIO_MODELS} selected={gender} onSelect={setGender} cols={2} />
                         </div>
 

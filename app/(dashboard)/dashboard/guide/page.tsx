@@ -70,6 +70,15 @@ export default function GuidePage() {
                     </svg>
                 }
             >
+                <div className="col-span-full mb-2">
+                    <h3 className="text-xs font-black uppercase tracking-widest text-[#1D6FD8]">Personages</h3>
+                </div>
+                {STUDIO_MODELS.map((opt) => (
+                    <GuideCard key={opt.id} label={opt.label} description={opt.description} />
+                ))}
+                <div className="col-span-full mb-2 mt-4 border-t border-slate-50 pt-4">
+                    <h3 className="text-xs font-black uppercase tracking-widest text-[#1D6FD8]">Etniciteit</h3>
+                </div>
                 {STUDIO_ETHNICITIES.map((opt) => (
                     <GuideCard key={opt.id} label={opt.label} description={opt.description} />
                 ))}

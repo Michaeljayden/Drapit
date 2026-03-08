@@ -15,6 +15,10 @@ export type WatermarkPosition =
 export const STUDIO_MODELS = [
   { id: 'female', label: 'Vrouw', description: 'Een vrouwelijk model voor je kledingpresentatie.', prompt: 'woman, female model' },
   { id: 'male', label: 'Man', description: 'Een mannelijk model voor je kledingpresentatie.', prompt: 'man, male model' },
+  { id: 'couple-mw', label: 'Man & Vrouw', description: 'Een koppel (man en vrouw) samen op de foto.', prompt: 'a man and a woman, diverse couple, fashion models' },
+  { id: 'couple-ww', label: 'Vrouw & Vrouw', description: 'Twee vrouwelijke modellen samen op de foto.', prompt: 'two women, diverse female models together' },
+  { id: 'vrouw-kind', label: 'Vrouw & Kind', description: 'Een vrouw met een kind voor familie-collecties.', prompt: 'a woman and a child, mother and child, family fashion' },
+  { id: 'vrouw-kinderen', label: 'Vrouw & Kinderen', description: 'Een vrouw met meerdere kinderen.', prompt: 'a woman and multiple children, family group shot' },
 ] as const;
 
 // ---------------------------------------------------------------------------
