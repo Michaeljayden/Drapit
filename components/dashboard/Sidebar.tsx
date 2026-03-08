@@ -41,29 +41,42 @@ const navItems = [
                 <circle cx="13.5" cy="5.5" r="0.5" fill="currentColor" />
             </svg>
         ),
-    },
-    {
-        label: 'Galerij',
-        href: '/dashboard/studio/gallery',
-        icon: (
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="1" y="3" width="16" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" />
-                <path d="M1 12l4-4a1.5 1.5 0 012.1 0L11 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M11 11l1.5-1.5a1.5 1.5 0 012.1 0L17 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <circle cx="12.5" cy="7" r="1" fill="currentColor" />
-            </svg>
-        ),
-    },
-    {
-        label: 'Studio Gids',
-        href: '/dashboard/guide',
-        icon: (
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 2H4a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V8l-4-6z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M10 2v6h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M6 11h6M6 14h6M6 8h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-        ),
+        children: [
+            {
+                label: 'Studio',
+                href: '/dashboard/studio',
+                icon: (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="10" y1="10" x2="14" y2="14" />
+                        <line x1="14" y1="10" x2="10" y2="14" />
+                        <circle cx="12" cy="12" r="10" />
+                    </svg>
+                ),
+            },
+            {
+                label: 'Galerij',
+                href: '/dashboard/studio/gallery',
+                icon: (
+                    <svg width="16" height="16" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="1" y="3" width="16" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" />
+                        <path d="M1 12l4-4a1.5 1.5 0 012.1 0L11 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M11 11l1.5-1.5a1.5 1.5 0 012.1 0L17 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        <circle cx="12.5" cy="7" r="1" fill="currentColor" />
+                    </svg>
+                ),
+            },
+            {
+                label: 'Studio Gids',
+                href: '/dashboard/guide',
+                icon: (
+                    <svg width="16" height="16" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 2H4a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V8l-4-6z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M10 2v6h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M6 11h6M6 14h6M6 8h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                ),
+            },
+        ]
     },
     {
         label: 'API-sleutels',
@@ -156,30 +169,70 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
             <div className="mx-4 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-3" />
 
             {/* Navigation */}
-            <nav className="flex-1 px-3 space-y-0.5">
+            <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto">
                 {navItems.map((item) => {
-                    const isActive =
+                    const isParentActive =
                         item.href === '/dashboard'
                             ? pathname === '/dashboard'
                             : pathname.startsWith(item.href);
 
+                    const hasChildren = 'children' in item && item.children;
+
                     return (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            className={`flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-150 ${isActive
-                                ? 'bg-gradient-to-r from-[#1D6FD8] to-[#1558B0] text-white shadow-[0_4px_12px_rgba(29,111,216,0.35)]'
-                                : 'text-[#94A3B8] hover:bg-white/8 hover:text-white'
-                                }`}
-                        >
-                            <span className={isActive ? 'text-white' : 'text-[#94A3B8]'}>{item.icon}</span>
-                            <span className="flex-1">{item.label}</span>
-                            {'badge' in item && item.badge && (
-                                <span className="text-[9px] font-black uppercase tracking-wider bg-emerald-500 text-white px-1.5 py-0.5 rounded-full leading-none">
-                                    {item.badge}
-                                </span>
+                        <div key={item.href} className="flex flex-col gap-0.5">
+                            <Link
+                                href={item.href}
+                                className={`flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-150 ${isParentActive
+                                    ? 'bg-gradient-to-r from-[#1D6FD8] to-[#1558B0] text-white shadow-[0_4px_12px_rgba(29,111,216,0.35)]'
+                                    : 'text-[#94A3B8] hover:bg-white/8 hover:text-white'
+                                    }`}
+                            >
+                                <span className={isParentActive ? 'text-white' : 'text-[#94A3B8]'}>{item.icon}</span>
+                                <span className="flex-1">{item.label}</span>
+                                {'badge' in item && item.badge && (
+                                    <span className="text-[9px] font-black uppercase tracking-wider bg-emerald-500 text-white px-1.5 py-0.5 rounded-full leading-none">
+                                        {item.badge}
+                                    </span>
+                                )}
+                                {hasChildren && (
+                                    <svg
+                                        width="12"
+                                        height="12"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="3"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className={`transition-transform duration-200 ${isParentActive ? 'rotate-90' : ''}`}
+                                    >
+                                        <polyline points="9 18 15 12 9 6" />
+                                    </svg>
+                                )}
+                            </Link>
+
+                            {/* Sub items - only show if parent is active */}
+                            {hasChildren && isParentActive && (
+                                <div className="ml-4 pl-4 border-l border-white/10 flex flex-col gap-0.5 mt-0.5 mb-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                                    {item.children.map((child) => {
+                                        const isChildActive = pathname === child.href;
+                                        return (
+                                            <Link
+                                                key={child.href}
+                                                href={child.href}
+                                                className={`flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium transition-all duration-150 ${isChildActive
+                                                    ? 'bg-white/10 text-white'
+                                                    : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'
+                                                    }`}
+                                            >
+                                                <span className={isChildActive ? 'text-[#3B9AF0]' : 'text-[#94A3B8]/60'}>{child.icon}</span>
+                                                <span>{child.label}</span>
+                                            </Link>
+                                        );
+                                    })}
+                                </div>
                             )}
-                        </Link>
+                        </div>
                     );
                 })}
             </nav>
