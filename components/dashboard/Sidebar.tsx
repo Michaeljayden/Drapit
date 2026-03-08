@@ -43,6 +43,18 @@ const navItems = [
         ),
     },
     {
+        label: 'Galerij',
+        href: '/dashboard/studio/gallery',
+        icon: (
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="1" y="3" width="16" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" />
+                <path d="M1 12l4-4a1.5 1.5 0 012.1 0L11 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M11 11l1.5-1.5a1.5 1.5 0 012.1 0L17 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="12.5" cy="7" r="1" fill="currentColor" />
+            </svg>
+        ),
+    },
+    {
         label: 'Studio Gids',
         href: '/dashboard/guide',
         icon: (
