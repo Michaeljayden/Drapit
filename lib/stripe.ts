@@ -57,9 +57,9 @@ export const PLANS: Record<Plan, PlanConfig> = {
         ],
     },
     growth: {
-        price_id: process.env.STRIPE_PRICE_GROWTH || 'price_1T4eXjQf4cE06T91YwBQAUWT',
+        price_id: process.env.STRIPE_PRICE_GROWTH || 'price_1T90HkQf4cE06T91QKCF4E59',
         limit: 2500,
-        price: 149,
+        price: 199,
         name: 'Pro',
         popular: true,
         features: [
@@ -72,9 +72,9 @@ export const PLANS: Record<Plan, PlanConfig> = {
         ],
     },
     scale: {
-        price_id: process.env.STRIPE_PRICE_SCALE || 'price_1T4eYtQf4cE06T91fYyeFyil',
+        price_id: process.env.STRIPE_PRICE_SCALE || 'price_1T90HmQf4cE06T91k24nRnII',
         limit: 5000,
-        price: 249,
+        price: 399,
         name: 'Scale',
         features: [
             '5.000 try-ons per maand',
@@ -87,9 +87,9 @@ export const PLANS: Record<Plan, PlanConfig> = {
         ],
     },
     enterprise: {
-        price_id: process.env.STRIPE_PRICE_ENTERPRISE || 'price_1T4eZtQf4cE06T919zzx0lVE',
+        price_id: process.env.STRIPE_PRICE_ENTERPRISE || 'price_1T90HnQf4cE06T919U4tZzbs',
         limit: 10_000,
-        price: 399,
+        price: 799,
         name: 'Business',
         features: [
             '10.000 try-ons per maand',
