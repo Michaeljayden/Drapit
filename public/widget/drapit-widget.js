@@ -218,13 +218,86 @@
             font-size: 14px;
         }
 
-        /* ── Upload hint bottom ────────────────────────── */
-        .drapit-upload-hint-bottom {
-            text-align: center;
-            font-size: 12px;
-            color: #94A3B8;
-            margin-top: 12px;
+        /* ── Photo Tips ────────────────────────────────── */
+        .drapit-tips-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #FFFBEB;
+            border: 1px solid #FDE68A;
+            border-radius: 10px;
         }
+        .drapit-tips-bar-text {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11.5px;
+            color: #92400E;
+            flex: 1;
+            line-height: 1.4;
+        }
+        .drapit-tips-bar-text svg { width: 14px; height: 14px; flex-shrink: 0; stroke: #F59E0B; fill: none; }
+        .drapit-tips-toggle {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            background: none;
+            border: none;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #D97706;
+            cursor: pointer;
+            padding: 0;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .drapit-tips-toggle svg { width: 12px; height: 12px; stroke: currentColor; fill: none; transition: transform 0.2s; }
+        .drapit-tips-toggle.open svg { transform: rotate(180deg); }
+
+        .drapit-tips-panel {
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.28s ease, opacity 0.2s;
+        }
+        .drapit-tips-panel.open {
+            max-height: 260px;
+            opacity: 1;
+        }
+        .drapit-tips-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            padding: 10px 12px 12px;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+        }
+        .drapit-tip-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            font-size: 11.5px;
+            color: #475569;
+            line-height: 1.4;
+        }
+        .drapit-tip-check, .drapit-tip-cross {
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            font-size: 9px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .drapit-tip-check { background: #DCFCE7; color: #16A34A; }
+        .drapit-tip-cross { background: #FEE2E2; color: #DC2626; }
 
         /* ── Submit Button ─────────────────────────────── */
         .drapit-submit {
@@ -381,6 +454,8 @@
     const ICON_CART = `<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="6" cy="14" r="1" fill="currentColor"/><circle cx="12" cy="14" r="1" fill="currentColor"/><path d="M1 1h2l1.5 8h8L14 4H5" stroke="currentColor" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
     const ICON_ERROR = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01" stroke-linecap="round"/></svg>`;
     const ICON_DOWNLOAD = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12m0 0l-4-4m4 4l4-4"/><path d="M4 18h16"/></svg>`;
+    const ICON_BULB = `<svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.4-1.4 4.5-3 5.7V17a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2.3C7.4 13.5 6 11.4 6 9a6 6 0 0 1 6-6z"/></svg>`;
+    const ICON_CHEVRON = `<svg viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
     const ICON_WHATSAPP = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.09.539 4.06 1.486 5.775L.057 23.07a.75.75 0 00.914.914l5.308-1.428A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22.5c-1.98 0-3.838-.538-5.435-1.479l-.39-.23-4.034 1.085 1.086-4.02-.24-.4A10.454 10.454 0 011.5 12C1.5 6.201 6.201 1.5 12 1.5S22.5 6.201 22.5 12 17.799 22.5 12 22.5z"/></svg>`;
     const ICON_SHARE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`;
 
@@ -462,9 +537,28 @@
                             <div class="drapit-upload-hint">Sleep een foto hierheen of klik om te uploaden</div>
                             <input type="file" accept="image/*" id="drapit-file-input" />
                         </div>
+                        <div class="drapit-tips-bar">
+                            <span class="drapit-tips-bar-text">
+                                ${ICON_BULB} Volledige lichaamsfoto geeft het beste resultaat
+                            </span>
+                            <button class="drapit-tips-toggle" id="drapit-tips-toggle">
+                                Tips ${ICON_CHEVRON}
+                            </button>
+                        </div>
+                        <div class="drapit-tips-panel" id="drapit-tips-panel">
+                            <div class="drapit-tips-grid">
+                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> Volledig lichaam zichtbaar</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> Alleen hoofd of bovenlichaam</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> Neutrale, egale achtergrond</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> Drukke of donkere achtergrond</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> Goede, zachte belichting</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> Tegenlicht of harde schaduwen</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> Rechtopstaand, naar voren</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> Zijwaartse of scheve pose</div>
+                            </div>
+                        </div>
                     </div>
                     <div class="drapit-preview-section" style="display:none"></div>
-                    <div class="drapit-upload-hint-bottom">Selecteer een foto om verder te gaan</div>
                     <button class="drapit-submit" style="display:none;margin-top:16px">
                         ${ICON_TRYON} Pas dit item
                     </button>
@@ -493,7 +587,14 @@
         const submitBtn = overlay.querySelector('.drapit-submit');
         const uploadSection = overlay.querySelector('.drapit-upload-section');
         const previewSection = overlay.querySelector('.drapit-preview-section');
-        const hintBottom = overlay.querySelector('.drapit-upload-hint-bottom');
+
+        // Tips toggle
+        const tipsToggle = overlay.querySelector('#drapit-tips-toggle');
+        const tipsPanel = overlay.querySelector('#drapit-tips-panel');
+        tipsToggle?.addEventListener('click', () => {
+            const isOpen = tipsPanel.classList.toggle('open');
+            tipsToggle.classList.toggle('open', isOpen);
+        });
 
         dropzone.addEventListener('click', () => fileInput.click());
 
@@ -517,7 +618,6 @@
             userPhotoFile = file;
             userPhotoDataUrl = await fileToDataUrl(file);
             uploadSection.style.display = 'none';
-            hintBottom.style.display = 'none';
             previewSection.style.display = 'block';
             previewSection.innerHTML = `
                 <div class="drapit-preview-wrap">
@@ -531,7 +631,6 @@
                 userPhotoDataUrl = null;
                 userPhotoFile = null;
                 uploadSection.style.display = 'block';
-                hintBottom.style.display = 'block';
                 previewSection.style.display = 'none';
                 submitBtn.style.display = 'none';
             });
