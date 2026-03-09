@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drapit License — Enterprise Virtual Try-On</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black:   #04060f;
+      --navy:    #080c1a;
+      --blue:    #4a8af4;
+      --blue-dim: #2a5bbf;
+      --gold:    #c9a66a;
+      --gold-dim: #7a6240;
+      --white:   #f4f4f2;
+      --muted:   #8a8fa0;
+      --border:  rgba(74,138,244,0.12);
+      --border-gold: rgba(201,166,106,0.2);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    .cursor {
+      position: fixed; top: 0; left: 0;
+      width: 10px; height: 10px;
+      background: var(--blue);
+      border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, background 0.3s;
+      mix-blend-mode: screen;
+    }
+    .cursor-ring {
+      position: fixed; top: 0; left: 0;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(74,138,244,0.5);
+      border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: all 0.15s ease;
+    }
+
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 1; opacity: 0.4;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 60px;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.4s, background 0.4s, backdrop-filter 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(4,6,15,0.85);
+      backdrop-filter: blur(20px);
+      border-color: var(--border);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem; font-weight: 700;
+      letter-spacing: 0.02em; color: var(--white);
+      text-decoration: none;
+    }
+    .nav-logo svg { width: 22px; height: 22px; }
+    .nav-badge {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.62rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--border-gold);
+      padding: 3px 9px; border-radius: 2px;
+    }
+    .nav-cta {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--white); text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 10px 24px; border-radius: 2px;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .nav-cta:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 2; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 60px 100px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 60% 40%, rgba(74,138,244,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 20% 80%, rgba(201,166,106,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 50% at 80% 70%, rgba(74,138,244,0.05) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(74,138,244,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74,138,244,0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 0%, transparent 80%);
+    }
+    .hero-tag {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 32px;
+      display: flex; align-items: center; gap: 12px;
+      opacity: 0; animation: fadeUp 1s ease 0.3s forwards;
+    }
+    .hero-tag::before {
+      content: ''; display: block;
+      width: 40px; height: 1px;
+      background: var(--gold);
+    }
+    .hero-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      font-weight: 300; line-height: 0.92;
+      letter-spacing: -0.02em;
+      max-width: 900px;
+      opacity: 0; animation: fadeUp 1.2s ease 0.5s forwards;
+    }
+    .hero-headline em {
+      font-style: italic; color: var(--blue);
+    }
+    .hero-headline .gold { color: var(--gold); }
+    .hero-sub {
+      font-size: 1rem; font-weight: 300;
+      color: var(--muted); line-height: 1.7;
+      max-width: 460px; margin-top: 32px;
+      opacity: 0; animation: fadeUp 1s ease 0.8s forwards;
+    }
+    .hero-actions {
+      display: flex; align-items: center; gap: 24px;
+      margin-top: 48px;
+      opacity: 0; animation: fadeUp 1s ease 1s forwards;
+    }
+    .btn-primary {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--black);
+      background: linear-gradient(135deg, var(--blue), var(--blue-dim));
+      padding: 16px 36px; border: none;
+      border-radius: 2px; cursor: none;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .btn-primary::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(74,138,244,0.4); }
+    .btn-primary:hover::after { opacity: 1; }
+    .btn-ghost {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+      transition: color 0.3s;
+    }
+    .btn-ghost:hover { color: var(--white); }
+    .hero-clients {
+      position: absolute; right: 60px; bottom: 100px;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+      opacity: 0; animation: fadeLeft 1s ease 1.2s forwards;
+    }
+    .hero-clients-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.6rem; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    .hero-client-names {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+    }
+    .hero-client-names span {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-weight: 300;
+      letter-spacing: 0.08em; color: rgba(244,244,242,0.35);
+      transition: color 0.3s;
+    }
+    .hero-client-names span:hover { color: var(--white); }
+
+    /* ── SCROLL INDICATOR ── */
+    .scroll-line {
+      position: absolute; bottom: 40px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      opacity: 0; animation: fadeUp 1s ease 1.5s forwards;
+    }
+    .scroll-line span {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    .scroll-line-bar {
+      width: 1px; height: 50px;
+      background: linear-gradient(var(--blue), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    /* ── FOR SECTION ── */
+    .for-section {
+      padding: 160px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 100px;
+      align-items: center;
+    }
+    .for-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.63rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 28px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .for-label::before {
+      content: ''; width: 30px; height: 1px; background: var(--gold);
+    }
+    .for-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 4vw, 3.8rem);
+      font-weight: 300; line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+    .for-heading em { font-style: italic; color: var(--blue); }
+    .for-body {
+      font-size: 0.95rem; line-height: 1.85; color: var(--muted);
+      margin-top: 24px; max-width: 420px;
+    }
+    .for-cards {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+    .for-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      padding: 36px 32px;
+      position: relative; overflow: hidden;
+      transition: background 0.4s, border-color 0.4s;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease, background 0.3s, border-color 0.3s;
+    }
+    .for-card.visible { opacity: 1; transform: none; }
+    .for-card:hover {
+      background: rgba(74,138,244,0.04);
+      border-color: rgba(74,138,244,0.25);
+    }
+    .for-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--blue), transparent);
+      opacity: 0; transition: opacity 0.4s;
+    }
+    .for-card:hover::before { opacity: 1; }
+    .for-card-icon {
+      font-size: 1.4rem; margin-bottom: 16px;
+      filter: grayscale(0.3);
+    }
+    .for-card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      color: var(--white); margin-bottom: 8px;
+    }
+    .for-card-desc {
+      font-size: 0.82rem; line-height: 1.6;
+      color: var(--muted);
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent 5%, var(--border) 30%, var(--border-gold) 50%, var(--border) 70%, transparent 95%);
+      margin: 0 60px;
+      width: calc(100% - 120px);
+    }
+
+    /* ── FEATURES SECTION ── */
+    .features-section {
+      padding: 160px 60px;
+    }
+    .section-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 80px;
+    }
+    .section-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.63rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-label::before {
+      content: ''; width: 30px; height: 1px; background: var(--gold);
+    }
+    .section-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 3.5vw, 3.4rem);
+      font-weight: 300; line-height: 1.1;
+      letter-spacing: -0.01em; max-width: 500px;
+    }
+    .section-heading em { font-style: italic; color: var(--blue); }
+    .section-note {
+      font-size: 0.85rem; color: var(--muted);
+      line-height: 1.7; max-width: 280px;
+      text-align: right;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .feature-card {
+      background: rgba(255,255,255,0.015);
+      border: 1px solid var(--border);
+      padding: 48px 40px;
+      position: relative; overflow: hidden;
+      transition: background 0.4s, border-color 0.4s;
+      opacity: 0; transform: translateY(24px);
+    }
+    .feature-card.visible { opacity: 1; transform: none; transition: opacity 0.7s ease, transform 0.7s ease, background 0.3s, border-color 0.3s; }
+    .feature-card:hover {
+      background: rgba(74,138,244,0.035);
+      border-color: rgba(74,138,244,0.2);
+    }
+    .feature-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem; font-weight: 300;
+      color: rgba(74,138,244,0.08);
+      line-height: 1;
+      position: absolute; top: 20px; right: 28px;
+    }
+    .feature-icon {
+      width: 40px; height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 28px;
+      background: rgba(74,138,244,0.05);
+      font-size: 1.1rem;
+    }
+    .feature-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem; font-weight: 700;
+      letter-spacing: 0.03em;
+      color: var(--white); margin-bottom: 12px;
+    }
+    .feature-desc {
+      font-size: 0.85rem; line-height: 1.75;
+      color: var(--muted);
+    }
+    .feature-tag {
+      display: inline-block; margin-top: 20px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.58rem; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 2px;
+    }
+    .tag-core { background: rgba(74,138,244,0.1); color: var(--blue); }
+    .tag-gold { background: rgba(201,166,106,0.1); color: var(--gold); }
+    .tag-infra { background: rgba(255,255,255,0.05); color: var(--muted); }
+
+    /* ── NUMBERS BAND ── */
+    .numbers-band {
+      padding: 80px 60px;
+      background: linear-gradient(135deg, rgba(74,138,244,0.04), rgba(201,166,106,0.03));
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+    .number-item {
+      padding: 40px;
+      border-right: 1px solid var(--border);
+      text-align: center;
+      opacity: 0; transform: translateY(16px);
+    }
+    .number-item:last-child { border-right: none; }
+    .number-item.visible { opacity: 1; transform: none; transition: opacity 0.6s ease, transform 0.6s ease; }
+    .number-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem; font-weight: 300;
+      color: var(--white); line-height: 1;
+      margin-bottom: 8px;
+    }
+    .number-value span { color: var(--blue); }
+    .number-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── PRIVACY SECTION ── */
+    .privacy-section {
+      padding: 160px 60px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 100px; align-items: center;
+    }
+    .privacy-visual {
+      position: relative;
+      height: 420px;
+    }
+    .privacy-box {
+      position: absolute;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.015);
+      border-radius: 4px;
+      padding: 24px 28px;
+      font-family: 'Syne', sans-serif;
+    }
+    .privacy-box.main {
+      top: 0; left: 0; right: 0;
+      border-color: rgba(74,138,244,0.25);
+      background: rgba(74,138,244,0.04);
+    }
+    .privacy-box-title {
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: 16px;
+    }
+    .privacy-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.78rem;
+    }
+    .privacy-row:last-child { border-bottom: none; }
+    .privacy-row-label { color: var(--muted); }
+    .privacy-row-val {
+      color: var(--white);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .dot-green { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; flex-shrink: 0; }
+    .dot-blue { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); flex-shrink: 0; }
+    .privacy-box.cert {
+      bottom: 0; right: 0; width: 200px;
+      background: rgba(201,166,106,0.04);
+      border-color: var(--border-gold);
+    }
+    .cert-icon { font-size: 2rem; margin-bottom: 8px; }
+    .cert-label {
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold);
+    }
+    .cert-sub { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+
+    /* ── SUPPORT SECTION ── */
+    .support-section {
+      padding: 160px 60px;
+      background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(74,138,244,0.05), transparent);
+    }
+    .support-inner {
+      max-width: 900px; margin: 0 auto; text-align: center;
+    }
+    .support-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 5vw, 4.5rem);
+      font-weight: 300; line-height: 1.05;
+      letter-spacing: -0.02em; margin-bottom: 24px;
+    }
+    .support-heading em { font-style: italic; color: var(--gold); }
+    .support-sub {
+      font-size: 1rem; color: var(--muted);
+      line-height: 1.8; max-width: 520px; margin: 0 auto 64px;
+    }
+    .support-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2px; margin-bottom: 64px;
+    }
+    .support-item {
+      padding: 40px 32px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.015);
+      text-align: left;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .support-item:hover {
+      border-color: rgba(201,166,106,0.3);
+      background: rgba(201,166,106,0.03);
+    }
+    .support-item-icon { font-size: 1.5rem; margin-bottom: 20px; }
+    .support-item-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem; font-weight: 700;
+      color: var(--white); margin-bottom: 8px;
+    }
+    .support-item-desc {
+      font-size: 0.8rem; line-height: 1.7; color: var(--muted);
+    }
+
+    /* ── FORM SECTION ── */
+    .form-section {
+      padding: 160px 60px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 120px; align-items: start;
+    }
+    .form-left-tag {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.63rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 28px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .form-left-tag::before {
+      content: ''; width: 30px; height: 1px; background: var(--gold);
+    }
+    .form-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 4vw, 3.8rem);
+      font-weight: 300; line-height: 1.1;
+      letter-spacing: -0.01em; margin-bottom: 24px;
+    }
+    .form-heading em { font-style: italic; color: var(--blue); }
+    .form-body {
+      font-size: 0.9rem; color: var(--muted);
+      line-height: 1.8; margin-bottom: 48px;
+    }
+    .form-promise {
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .promise-item {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.82rem; color: var(--muted);
+    }
+    .promise-dot {
+      width: 6px; height: 6px; flex-shrink: 0;
+      border-radius: 50%; background: var(--blue);
+    }
+    form {
+      display: flex; flex-direction: column; gap: 0;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.015);
+      padding: 48px 40px;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+    .field {
+      display: flex; flex-direction: column;
+      margin-bottom: 2px;
+    }
+    .field label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.6rem; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--muted);
+      padding: 16px 16px 8px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-bottom: none;
+    }
+    .field input, .field select, .field textarea {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem; font-weight: 300;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.3s, background 0.3s;
+      appearance: none;
+      cursor: none;
+    }
+    .field select option { background: var(--navy); color: var(--white); }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: rgba(74,138,244,0.5);
+      background: rgba(74,138,244,0.03);
+    }
+    .field input::placeholder, .field textarea::placeholder { color: rgba(138,143,160,0.5); }
+    .field textarea { resize: none; min-height: 100px; }
+    .submit-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 24px; gap: 20px;
+    }
+    .submit-note {
+      font-size: 0.72rem; color: var(--muted); line-height: 1.5;
+    }
+    .btn-submit {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--black);
+      background: linear-gradient(135deg, var(--blue), var(--blue-dim));
+      padding: 16px 32px; border: none;
+      border-radius: 2px; cursor: none; white-space: nowrap;
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(74,138,244,0.4); }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 60px 60px 40px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+    }
+    .footer-left {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .footer-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--white); text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .footer-note {
+      font-size: 0.75rem; color: var(--muted);
+    }
+    .footer-links {
+      display: flex; gap: 32px;
+    }
+    .footer-links a {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--white); }
+    .footer-cta {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--white); text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid var(--blue);
+      padding-bottom: 2px;
+      transition: gap 0.3s;
+    }
+    .footer-cta:hover { gap: 14px; }
+    .footer-sub {
+      width: 100%;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.7rem; color: var(--muted);
+    }
+    .footer-pricing-link {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 1px; transition: border-color 0.3s, color 0.3s;
+    }
+    .footer-pricing-link:hover { color: var(--white); border-color: var(--muted); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeLeft {
+      from { opacity: 0; transform: translateX(30px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; height: 50px; }
+      50%       { opacity: 1;   height: 70px; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .hero { padding: 0 24px 80px; }
+      .hero-clients { display: none; }
+      .for-section { grid-template-columns: 1fr; gap: 60px; padding: 100px 24px; }
+      .for-cards { grid-template-columns: 1fr; }
+      .features-section { padding: 100px 24px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .section-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .section-note { text-align: left; }
+      .numbers-band { grid-template-columns: 1fr 1fr; padding: 60px 24px; }
+      .privacy-section { grid-template-columns: 1fr; gap: 60px; padding: 100px 24px; }
+      .privacy-visual { display: none; }
+      .support-section { padding: 100px 24px; }
+      .support-grid { grid-template-columns: 1fr; }
+      .form-section { grid-template-columns: 1fr; gap: 60px; padding: 100px 24px; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { padding: 40px 24px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CURSOR -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="https://drapit.io" class="nav-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 2L4 7v10l8 5 8-5V7L12 2z"/>
+        <path d="M12 2v20M4 7l8 5 8-5"/>
+      </svg>
+      Drapit
+    </a>
+    <span class="nav-badge">License</span>
+    <a href="#contact" class="nav-cta">Contact Sales</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+
+    <div class="hero-tag">Drapit License — Enterprise</div>
+
+    <h1 class="hero-headline">
+      Built for fashion's<br/>
+      most <em>ambitious</em><br/>
+      <span class="gold">platforms.</span>
+    </h1>
+
+    <p class="hero-sub">
+      A bespoke licensing agreement for enterprise fashion platforms that demand more than a widget — API-first infrastructure, white-label output, and a dedicated team behind every pixel.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Contact Sales →</a>
+      <a href="#features" class="btn-ghost">
+        Explore capabilities
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="hero-clients">
+      <span class="hero-clients-label">Designed for</span>
+      <div class="hero-client-names">
+        <span>Fashion Platforms</span>
+        <span>Luxury Houses</span>
+        <span>Multibrand Retailers</span>
+        <span>Global Marketplaces</span>
+      </div>
+    </div>
+
+    <div class="scroll-line">
+      <span>Scroll</span>
+      <div class="scroll-line-bar"></div>
+    </div>
+  </section>
+
+  <!-- FOR WHO -->
+  <section class="for-section">
+    <div>
+      <div class="for-label">Who it's for</div>
+      <h2 class="for-heading">
+        Not for everyone.<br/>
+        <em>Built for the best.</em>
+      </h2>
+      <p class="for-body">
+        Drapit License is not a subscription plan. It's a partnership engineered for the scale, complexity, and brand integrity demands of the world's leading fashion companies.
+      </p>
+    </div>
+    <div class="for-cards">
+      <div class="for-card">
+        <div class="for-card-icon">🏬</div>
+        <div class="for-card-title">Fashion Platforms</div>
+        <div class="for-card-desc">Large-scale multi-brand platforms with millions of monthly visitors and complex technical infrastructure.</div>
+      </div>
+      <div class="for-card" style="transition-delay:0.1s">
+        <div class="for-card-icon">✦</div>
+        <div class="for-card-title">Luxury Houses</div>
+        <div class="for-card-desc">Heritage brands where every customer touchpoint must reflect the highest standards of quality and presentation.</div>
+      </div>
+      <div class="for-card" style="transition-delay:0.2s">
+        <div class="for-card-icon">🌐</div>
+        <div class="for-card-title">Global Marketplaces</div>
+        <div class="for-card-desc">Cross-border commerce platforms operating across multiple regions, languages, and regulatory environments.</div>
+      </div>
+      <div class="for-card" style="transition-delay:0.3s">
+        <div class="for-card-icon">⚙️</div>
+        <div class="for-card-title">Own Platform Tech</div>
+        <div class="for-card-desc">Companies running proprietary e-commerce infrastructure who need direct API access rather than plugin solutions.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FEATURES -->
+  <section class="features-section" id="features">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Capabilities</div>
+        <h2 class="section-heading">
+          Every feature,<br/>
+          <em>engineered</em> for scale.
+        </h2>
+      </div>
+      <p class="section-note">
+        All capabilities are included in the license. Custom development is available on request through your dedicated engineer.
+      </p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-number">01</div>
+        <div class="feature-icon">🔗</div>
+        <div class="feature-title">Direct API Integration</div>
+        <div class="feature-desc">Platform-agnostic REST API that integrates into any existing stack. No Shopify required. Full documentation and a dedicated engineer from day one.</div>
+        <span class="feature-tag tag-core">Core</span>
+      </div>
+      <div class="feature-card" style="transition-delay:0.08s">
+        <div class="feature-number">02</div>
+        <div class="feature-icon">🏷</div>
+        <div class="feature-title">White-Label Output</div>
+        <div class="feature-desc">Every VTON-generated image carries your brand — logo placement, article number, and any overlay elements you require. Invisible infrastructure, visible brand.</div>
+        <span class="feature-tag tag-gold">Branding</span>
+      </div>
+      <div class="feature-card" style="transition-delay:0.16s">
+        <div class="feature-number">03</div>
+        <div class="feature-icon">🗂</div>
+        <div class="feature-title">Saved Looks</div>
+        <div class="feature-desc">Shoppers save their virtual try-ons to their account or wishlist and return to review them later. Dramatically increases intent-to-purchase rates.</div>
+        <span class="feature-tag tag-core">Core</span>
+      </div>
+      <div class="feature-card" style="transition-delay:0.24s">
+        <div class="feature-number">04</div>
+        <div class="feature-icon">🧠</div>
+        <div class="feature-title">Custom AI Model</div>
+        <div class="feature-desc">Optional fine-tuned model trained specifically on your product catalog, models, and brand aesthetic. Higher accuracy, faster generation, better results.</div>
+        <span class="feature-tag tag-gold">Add-on</span>
+      </div>
+      <div class="feature-card" style="transition-delay:0.32s">
+        <div class="feature-number">05</div>
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Analytics Dashboard</div>
+        <div class="feature-desc">Real-time insights into VTON adoption, conversion lift per product, try-on frequency, and user engagement. Data you can act on.</div>
+        <span class="feature-tag tag-infra">Analytics</span>
+      </div>
+      <div class="feature-card" style="transition-delay:0.4s">
+        <div class="feature-number">06</div>
+        <div class="feature-icon">📦</div>
+        <div class="feature-title">Bulk Garment Upload</div>
+        <div class="feature-desc">Ingest thousands of products automatically via API. Batch-process your entire catalog. Webhooks for real-time status updates.</div>
+        <span class="feature-tag tag-infra">Infrastructure</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- NUMBERS -->
+  <div class="numbers-band">
+    <div class="number-item">
+      <div class="number-value">99<span>.9%</span></div>
+      <div class="number-label">Guaranteed Uptime SLA</div>
+    </div>
+    <div class="number-item" style="transition-delay:0.1s">
+      <div class="number-value">&lt;<span>4h</span></div>
+      <div class="number-label">Priority Response Time</div>
+    </div>
+    <div class="number-item" style="transition-delay:0.2s">
+      <div class="number-value">24<span>/7</span></div>
+      <div class="number-label">Human + AI Support</div>
+    </div>
+    <div class="number-item" style="transition-delay:0.3s">
+      <div class="number-value">EU<span>✓</span></div>
+      <div class="number-label">Data Residency Guaranteed</div>
+    </div>
+  </div>
+
+  <!-- PRIVACY -->
+  <section class="privacy-section">
+    <div>
+      <div class="section-label">Data & Compliance</div>
+      <h2 class="for-heading">
+        Enterprise-grade<br/>
+        <em>trust</em> by default.
+      </h2>
+      <p class="for-body">
+        Built for the regulatory and security standards demanded by major EU platforms and luxury houses. Your data is isolated, protected, and never shared.
+      </p>
+      <br/>
+      <div class="form-promise">
+        <div class="promise-item"><div class="promise-dot"></div>Fully isolated infrastructure — no data mixing with other clients</div>
+        <div class="promise-item"><div class="promise-dot"></div>GDPR Data Processing Agreement (DPA) included as standard</div>
+        <div class="promise-item"><div class="promise-dot"></div>EU data residency — your data stays in Europe</div>
+        <div class="promise-item"><div class="promise-dot"></div>User images not stored after session (unless Saved Looks is active)</div>
+        <div class="promise-item"><div class="promise-dot" style="background:var(--gold)"></div>Private cloud deployment available for the largest contracts</div>
+      </div>
+    </div>
+    <div class="privacy-visual">
+      <div class="privacy-box main">
+        <div class="privacy-box-title">Infrastructure Status</div>
+        <div class="privacy-row">
+          <span class="privacy-row-label">Data Isolation</span>
+          <span class="privacy-row-val"><div class="dot-green"></div> Dedicated</span>
+        </div>
+        <div class="privacy-row">
+          <span class="privacy-row-label">Data Region</span>
+          <span class="privacy-row-val"><div class="dot-blue"></div> EU (Frankfurt)</span>
+        </div>
+        <div class="privacy-row">
+          <span class="privacy-row-label">GDPR DPA</span>
+          <span class="privacy-row-val"><div class="dot-green"></div> Signed</span>
+        </div>
+        <div class="privacy-row">
+          <span class="privacy-row-label">Image Retention</span>
+          <span class="privacy-row-val"><div class="dot-green"></div> Session-only</span>
+        </div>
+        <div class="privacy-row">
+          <span class="privacy-row-label">Uptime</span>
+          <span class="privacy-row-val"><div class="dot-green"></div> 99.9% SLA</span>
+        </div>
+        <div class="privacy-row">
+          <span class="privacy-row-label">Encryption</span>
+          <span class="privacy-row-val"><div class="dot-green"></div> AES-256 / TLS 1.3</span>
+        </div>
+      </div>
+      <div class="privacy-box cert">
+        <div class="cert-icon">🛡</div>
+        <div class="cert-label">Enterprise Ready</div>
+        <div class="cert-sub">Security & compliance package included</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SUPPORT -->
+  <section class="support-section">
+    <div class="support-inner">
+      <div class="section-label" style="justify-content:center">Support & Partnership</div>
+      <h2 class="support-heading">
+        No ticket queue.<br/>
+        <em>A direct line.</em>
+      </h2>
+      <p class="support-sub">
+        Drapit License is a partnership, not a subscription. You get the people and systems to match.
+      </p>
+      <div class="support-grid">
+        <div class="support-item">
+          <div class="support-item-icon">🕐</div>
+          <div class="support-item-title">24/7 Hybrid Support</div>
+          <div class="support-item-desc">Always-on AI support with instant escalation to human engineers. Critical issues resolved within 4 hours, guaranteed.</div>
+        </div>
+        <div class="support-item">
+          <div class="support-item-icon">💬</div>
+          <div class="support-item-title">Dedicated Channels</div>
+          <div class="support-item-desc">Direct Slack and WhatsApp access to your account manager and technical lead. Real conversations, not email threads.</div>
+        </div>
+        <div class="support-item">
+          <div class="support-item-icon">👨‍💻</div>
+          <div class="support-item-title">Dedicated Developer</div>
+          <div class="support-item-desc">A dedicated engineer who knows your platform inside out. Custom development available on post-calculation billing.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section class="form-section" id="contact">
+    <div>
+      <div class="form-left-tag">Contact Sales</div>
+      <h2 class="form-heading">
+        Let's build<br/>
+        something <em>exceptional</em><br/>
+        together.
+      </h2>
+      <p class="form-body">
+        Tell us about your platform. We'll calculate a license tailored to your exact volume, requirements, and growth trajectory — and get back to you within 48 hours.
+      </p>
+      <div class="form-promise">
+        <div class="promise-item"><div class="promise-dot"></div>Custom pricing — no public rates</div>
+        <div class="promise-item"><div class="promise-dot"></div>Response within 48 business hours</div>
+        <div class="promise-item"><div class="promise-dot"></div>No obligations, no sales pressure</div>
+        <div class="promise-item"><div class="promise-dot" style="background:var(--gold)"></div>Annual license + volume model</div>
+      </div>
+    </div>
+
+    <form id="licenseForm" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="field">
+          <label>Company Name *</label>
+          <input type="text" placeholder="Zalando SE" required />
+        </div>
+        <div class="field">
+          <label>Website *</label>
+          <input type="url" placeholder="https://your-platform.com" required />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>Your Name *</label>
+          <input type="text" placeholder="First & last name" required />
+        </div>
+        <div class="field">
+          <label>Job Title *</label>
+          <input type="text" placeholder="Head of E-commerce" required />
+        </div>
+      </div>
+      <div class="field">
+        <label>Business Email *</label>
+        <input type="email" placeholder="you@company.com" required />
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>Monthly Website Visitors</label>
+          <select>
+            <option value="" disabled selected>Select range</option>
+            <option>100K – 500K</option>
+            <option>500K – 2M</option>
+            <option>2M – 10M</option>
+            <option>10M+</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Platform Type</label>
+          <select>
+            <option value="" disabled selected>Select type</option>
+            <option>Own technology stack</option>
+            <option>Fashion marketplace</option>
+            <option>Luxury brand</option>
+            <option>Multibrand retailer</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>What are you looking for?</label>
+        <textarea placeholder="Tell us about your platform, your current try-on challenges, and what you'd like to achieve with Drapit License..."></textarea>
+      </div>
+      <div class="submit-row">
+        <span class="submit-note">All information is treated<br/>with strict confidentiality.</span>
+        <button type="submit" class="btn-submit">Submit Request →</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-left">
+      <a href="https://drapit.io" class="footer-logo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 2L4 7v10l8 5 8-5V7L12 2z"/>
+          <path d="M12 2v20M4 7l8 5 8-5"/>
+        </svg>
+        Drapit
+      </a>
+      <span class="footer-note">AI Virtual Try-On · Built for fashion's future</span>
+    </div>
+    <div class="footer-links">
+      <a href="https://drapit.io">Home</a>
+      <a href="https://drapit.io#prijzen">Pricing</a>
+      <a href="https://drapit.io/faq">FAQ</a>
+      <a href="mailto:hello@drapit.io">Contact</a>
+    </div>
+    <a href="#contact" class="footer-cta">
+      Contact Sales
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </a>
+    <div class="footer-sub">
+      <span>© 2026 Drapit — All rights reserved</span>
+      <a href="https://drapit.io#prijzen" class="footer-pricing-link">
+        Looking for a smaller plan? → View standard pricing
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    // CURSOR
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    function animCursor() {
+      cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+      rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(animCursor);
+    }
+    animCursor();
+    document.querySelectorAll('a,button,.for-card,.feature-card,.support-item').forEach(el => {
+      el.addEventListener('mouseenter', () => { ring.style.transform = 'translate(-50%,-50%) scale(1.6)'; ring.style.borderColor = 'rgba(201,166,106,0.5)'; });
+      el.addEventListener('mouseleave', () => { ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(74,138,244,0.5)'; });
+    });
+
+    // SCROLLED NAV
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // INTERSECTION OBSERVER — reveal on scroll
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.for-card,.feature-card,.number-item').forEach(el => observer.observe(el));
+
+    // FORM SUBMIT
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = document.querySelector('.btn-submit');
+      btn.textContent = '✓ Request Sent';
+      btn.style.background = 'linear-gradient(135deg, #4ade80, #22c55e)';
+      btn.style.color = '#000';
+      setTimeout(() => {
+        btn.textContent = 'Submit Request →';
+        btn.style.background = '';
+        btn.style.color = '';
+        e.target.reset();
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
