@@ -32,7 +32,7 @@ const PLANS = [
     {
         key: 'pro',
         name: 'Pro',
-        price: 149,
+        price: 199,
         limit: '2.500',
         features: ['2.500 try-ons/maand', 'Onbeperkt API-sleutels', 'Analytics dashboard', 'Webhook integraties', 'Prioriteit support', 'Widget personalisatie'],
         popular: true,
@@ -41,7 +41,7 @@ const PLANS = [
     {
         key: 'scale',
         name: 'Scale',
-        price: 249,
+        price: 399,
         limit: '5.000',
         features: ['5.000 try-ons/maand', 'Onbeperkt API-sleutels', 'Custom branding', 'Analytics dashboard', 'Webhook integraties', 'SLA garantie'],
         popular: false,
@@ -50,7 +50,7 @@ const PLANS = [
     {
         key: 'business',
         name: 'Business',
-        price: 399,
+        price: 799,
         limit: '10.000',
         features: ['10.000 try-ons/maand', 'Dedicated support', 'Custom integratie hulp', 'Custom branding', 'SLA garantie', 'Onbeperkt alles'],
         popular: false,

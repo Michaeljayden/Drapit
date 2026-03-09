@@ -31,7 +31,7 @@ const ONBOARDING_PLANS: {
         {
             key: 'growth',
             name: 'Pro',
-            price: 149,
+            price: 199,
             limit: '2.500',
             popular: true,
             features: ['2.500 try-ons per maand', 'Onbeperkt API-sleutels', 'Prioriteit support', 'Analytics dashboard', 'Webhook integraties'],
@@ -39,14 +39,14 @@ const ONBOARDING_PLANS: {
         {
             key: 'scale',
             name: 'Scale',
-            price: 249,
+            price: 399,
             limit: '5.000',
             features: ['5.000 try-ons per maand', 'Onbeperkt API-sleutels', 'Custom branding', 'Analytics dashboard', 'SLA garantie'],
         },
         {
             key: 'enterprise',
             name: 'Business',
-            price: 399,
+            price: 799,
             limit: '10.000',
             features: ['10.000 try-ons per maand', 'Onbeperkt API-sleutels', 'Dedicated support', 'Custom branding', 'Custom integratie hulp'],
         },
