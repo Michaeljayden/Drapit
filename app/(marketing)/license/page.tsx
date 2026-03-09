@@ -137,8 +137,16 @@ function StatItem({ value, accent, label, delay }: { value: string; accent: stri
 
 /* ── Main Page ────────────────────────────────────────────────────────── */
 export default function LicensePage() {
+    const [scrolled, setScrolled] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [formState, setFormState] = useState<'idle' | 'sent'>('idle');
     const [formData, setFormData] = useState({ company: '', website: '', name: '', title: '', email: '', visitors: '', platform: '', message: '' });
+
+    useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 40);
+        window.addEventListener('scroll', onScroll);
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -162,6 +170,111 @@ export default function LicensePage() {
 
             {/* Starfield */}
             <Starfield />
+
+            {/* ── NAV ──────────────────────────────────────────────── */}
+            <nav style={{
+                position: 'fixed', top: 0, left: 0, right: 0, zIndex: 300,
+                background: scrolled ? 'rgba(4,6,15,0.92)' : 'transparent',
+                backdropFilter: scrolled ? 'blur(24px) saturate(1.4)' : 'none',
+                borderBottom: scrolled ? '1px solid rgba(201,166,106,0.1)' : 'none',
+                transition: 'all 0.4s ease',
+            }}>
+                <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 28px', height: 70, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+
+                    {/* Logo */}
+                    <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <svg width="22" height="22" viewBox="0 0 16 16" fill="none">
+                            <path d="M9.5 3.5C9.5 2.67 8.83 2 8 2S6.5 2.67 6.5 3.5" stroke="#1D6FD8" strokeWidth="1.5" strokeLinecap="round" />
+                            <path d="M8 5L2.5 10.5C2.18 10.77 2 11.15 2 11.56C2 12.35 2.65 13 3.44 13H12.56C13.35 13 14 12.35 14 11.56C14 11.15 13.82 10.77 13.5 10.5L8 5Z" stroke="#1D6FD8" strokeWidth="1.5" strokeLinejoin="round" />
+                        </svg>
+                        <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 20, color: '#F1F5F9', letterSpacing: '-0.015em' }}>drapit</span>
+                        <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#C9A66A', border: '1px solid rgba(201,166,106,0.35)', padding: '3px 8px', borderRadius: 2 }}>License</span>
+                    </Link>
+
+                    {/* Desktop links */}
+                    <div className="ln-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                        {[
+                            ['/shopify', 'Shopify'],
+                            ['/studio', 'Studio'],
+                            ['/license', 'License'],
+                            ['/contact', 'Contact'],
+                        ].map(([href, label]) => (
+                            <Link key={label} href={href} className="ln-nav-link">{label}</Link>
+                        ))}
+                        <Link href="/dashboard/login" className="ln-nav-link" style={{ marginLeft: 8, padding: '9px 18px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10 }}>
+                            Inloggen
+                        </Link>
+                        <Link href="#contact"
+                            onClick={e => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}
+                            style={{ marginLeft: 4, padding: '9px 20px', fontSize: 14, fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif', background: 'linear-gradient(135deg, #C9A66A 0%, #A8845A 100%)', color: '#04060F', borderRadius: 10, textDecoration: 'none', letterSpacing: '0.01em', transition: 'opacity 0.2s' }}
+                            onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+                            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+                        >
+                            Contact Sales →
+                        </Link>
+                    </div>
+
+                    {/* Mobile hamburger */}
+                    <div className="ln-nav-mobile" style={{ display: 'none', alignItems: 'center', gap: 8 }}>
+                        <Link href="#contact"
+                            onClick={e => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenuOpen(false); }}
+                            style={{ padding: '8px 14px', fontSize: 12, fontWeight: 700, background: 'linear-gradient(135deg, #C9A66A 0%, #A8845A 100%)', color: '#04060F', borderRadius: 8, textDecoration: 'none' }}
+                        >
+                            Contact Sales
+                        </Link>
+                        <button
+                            className={`ln-hamburger ${mobileMenuOpen ? 'open' : ''}`}
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            aria-label="Menu openen"
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8, display: 'flex', flexDirection: 'column', gap: 5 }}
+                        >
+                            <span style={{ display: 'block', width: 22, height: 2, background: '#F1F5F9', transition: 'all 0.3s', transformOrigin: 'center', transform: mobileMenuOpen ? 'rotate(45deg) translate(5px, 5px)' : 'none' }} />
+                            <span style={{ display: 'block', width: 22, height: 2, background: '#F1F5F9', transition: 'all 0.3s', opacity: mobileMenuOpen ? 0 : 1 }} />
+                            <span style={{ display: 'block', width: 22, height: 2, background: '#F1F5F9', transition: 'all 0.3s', transformOrigin: 'center', transform: mobileMenuOpen ? 'rotate(-45deg) translate(5px, -5px)' : 'none' }} />
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
+            {/* Mobile overlay */}
+            {mobileMenuOpen && (
+                <div onClick={() => setMobileMenuOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(4,6,15,0.6)', zIndex: 298, backdropFilter: 'blur(4px)' }} />
+            )}
+
+            {/* Mobile drawer */}
+            <div style={{
+                position: 'fixed', top: 0, right: 0, bottom: 0, width: 280, zIndex: 299,
+                background: '#07090F', borderLeft: '1px solid rgba(201,166,106,0.12)',
+                transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(100%)',
+                transition: 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
+                display: 'flex', flexDirection: 'column', padding: '24px 20px',
+            }}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 32 }}>
+                    <button onClick={() => setMobileMenuOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#F1F5F9', fontSize: 22 }}>✕</button>
+                </div>
+                <nav style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
+                    {[
+                        ['/shopify', 'Shopify'],
+                        ['/studio', 'Studio'],
+                        ['/license', 'License'],
+                        ['/contact', 'Contact'],
+                    ].map(([href, label]) => (
+                        <Link key={label} href={href} onClick={() => setMobileMenuOpen(false)}
+                            style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 15, fontWeight: 600, color: 'rgba(241,245,249,0.8)', padding: '12px 16px', borderRadius: 8, textDecoration: 'none', transition: 'background 0.2s, color 0.2s' }}
+                        >{label}</Link>
+                    ))}
+                    <div style={{ height: 1, background: 'rgba(201,166,106,0.12)', margin: '12px 0' }} />
+                    <Link href="/dashboard/login" onClick={() => setMobileMenuOpen(false)}
+                        style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 15, fontWeight: 600, color: 'rgba(241,245,249,0.8)', padding: '12px 16px', borderRadius: 8, textDecoration: 'none' }}
+                    >Inloggen</Link>
+                </nav>
+                <Link href="#contact"
+                    onClick={e => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenuOpen(false); }}
+                    style={{ display: 'block', textAlign: 'center', padding: '14px 0', fontSize: 15, fontWeight: 700, background: 'linear-gradient(135deg, #C9A66A 0%, #A8845A 100%)', color: '#04060F', borderRadius: 10, textDecoration: 'none' }}
+                >
+                    Contact Sales →
+                </Link>
+            </div>
 
             {/* ── HERO ─────────────────────────────────────────────── */}
             <section style={{ position: 'relative', zIndex: 2, minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '70px 56px 100px' }}>
@@ -509,6 +622,19 @@ export default function LicensePage() {
                 ::-webkit-scrollbar-thumb { background: rgba(29,111,216,0.25); border-radius: 3px; }
                 input, select, textarea { font-family: 'Plus Jakarta Sans', sans-serif !important; }
                 input::placeholder, textarea::placeholder { color: rgba(148,163,184,0.35) !important; }
+                .ln-nav-link {
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    font-size: 14px; font-weight: 500;
+                    color: rgba(241,245,249,0.65);
+                    text-decoration: none;
+                    padding: 8px 14px; border-radius: 8px;
+                    transition: color 0.2s, background 0.2s;
+                }
+                .ln-nav-link:hover { color: #F1F5F9; background: rgba(201,166,106,0.06); }
+                @media (max-width: 768px) {
+                    .ln-nav-links { display: none !important; }
+                    .ln-nav-mobile { display: flex !important; }
+                }
             `}</style>
         </div>
     );
