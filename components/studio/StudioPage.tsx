@@ -339,6 +339,7 @@ function ResultDisplay({
   customExportWidth,
   customExportHeight,
   onSave,
+  onSaveAsModel,
 }: {
   images: string[];
   isLoading: boolean;
@@ -350,6 +351,7 @@ function ResultDisplay({
   customExportWidth: number;
   customExportHeight: number;
   onSave: (imageDataUrl: string) => void;
+  onSaveAsModel: (imageDataUrl: string) => void;
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -533,6 +535,16 @@ function ResultDisplay({
         {/* Download + Save overlay */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-end justify-end p-3 gap-2 opacity-0 group-hover:opacity-100">
           <button
+            onClick={(e) => { e.stopPropagation(); onSaveAsModel(activeImage); }}
+            className="bg-white/90 text-[#6D28D9] text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-2 shadow-xl hover:bg-purple-50 transition-colors pointer-events-auto"
+            title="Sla dit model op voor toekomstige fotoshoots"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+            Model opslaan
+          </button>
+          <button
             onClick={(e) => { e.stopPropagation(); onSave(activeImage); }}
             className="bg-white/90 text-[#0F2744] text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-2 shadow-xl hover:bg-blue-50 transition-colors pointer-events-auto"
           >
@@ -580,6 +592,16 @@ function ResultDisplay({
       {/* Action buttons */}
       <div className="flex gap-2">
         <button
+          onClick={() => onSaveAsModel(activeImage)}
+          className="flex items-center justify-center gap-2 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 text-purple-300 text-xs font-bold py-2.5 px-3 rounded-xl transition-colors"
+          title="Model opslaan voor hergebruik"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+          </svg>
+          Model
+        </button>
+        <button
           onClick={() => onSave(activeImage)}
           className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 text-xs font-bold py-2.5 px-4 rounded-xl transition-colors"
         >
@@ -588,7 +610,7 @@ function ResultDisplay({
             <polyline points="17 21 17 13 7 13 7 21" />
             <polyline points="7 3 7 8 15 8" />
           </svg>
-          Opslaan
+          Galerij
         </button>
         <button
           onClick={() => handleDownload(activeImage)}
@@ -938,6 +960,13 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioEx
   const [imageToSave, setImageToSave] = useState('');
   const [savedNotice, setSavedNotice] = useState(false);
 
+  // Save-as-model dialog
+  const [showSaveModelDialog, setShowSaveModelDialog] = useState(false);
+  const [modelToSave, setModelToSave] = useState('');
+  const [modelSaveName, setModelSaveName] = useState('');
+  const [isSavingModel, setIsSavingModel] = useState(false);
+  const [savedModelNotice, setSavedModelNotice] = useState(false);
+
   const logoRef = useRef<HTMLInputElement>(null);
 
   const toggle = (s: string) => setOpenSection(openSection === s ? '' : s);
@@ -988,6 +1017,32 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioEx
       if (selectedModelId === id) setSelectedModelId(null);
     } catch (err) {
       console.error('[StudioPage] Delete model error:', err);
+    }
+  };
+
+  // Sla gegenereerd model op in de Modellen Bibliotheek
+  const handleSaveModelConfirm = async () => {
+    if (!modelSaveName.trim() || !modelToSave) return;
+    setIsSavingModel(true);
+    try {
+      const res = await fetch('/api/studio/models', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: modelSaveName.trim(), image: modelToSave }),
+      });
+      const data = await res.json();
+      if (data.model) {
+        setCustomModels(prev => [data.model, ...prev]);
+        setShowSaveModelDialog(false);
+        setModelToSave('');
+        setModelSaveName('');
+        setSavedModelNotice(true);
+        setTimeout(() => setSavedModelNotice(false), 3000);
+      }
+    } catch (err) {
+      console.error('[StudioPage] Save model error:', err);
+    } finally {
+      setIsSavingModel(false);
     }
   };
 
@@ -1805,9 +1860,14 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioEx
               setImageToSave(imgDataUrl);
               setShowSaveDialog(true);
             }}
+            onSaveAsModel={(imgDataUrl) => {
+              setModelToSave(imgDataUrl);
+              setModelSaveName(`Model ${customModels.length + 1}`);
+              setShowSaveModelDialog(true);
+            }}
           />
 
-          {/* Saved notice */}
+          {/* Galerij opgeslagen notice */}
           {savedNotice && (
             <div className="fixed bottom-6 right-6 z-50 bg-emerald-500 text-white text-sm font-bold px-4 py-2.5 rounded-xl shadow-xl flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -1816,10 +1876,20 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioEx
               Opgeslagen in galerij
             </div>
           )}
+
+          {/* Model opgeslagen notice */}
+          {savedModelNotice && (
+            <div className="fixed bottom-6 right-6 z-50 bg-purple-600 text-white text-sm font-bold px-4 py-2.5 rounded-xl shadow-xl flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+              </svg>
+              Model opgeslagen in bibliotheek
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Save dialog */}
+      {/* Galerij save dialog */}
       <SaveImageDialog
         open={showSaveDialog}
         onClose={() => setShowSaveDialog(false)}
@@ -1829,6 +1899,88 @@ export default function StudioPage({ shopId, creditsUsed, creditsLimit, studioEx
         }}
         imageDataUrl={imageToSave}
       />
+
+      {/* Model opslaan dialog */}
+      {showSaveModelDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-[#0B1E38] border border-white/10 rounded-2xl shadow-2xl w-full max-w-sm p-6 animate-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-10 h-10 rounded-xl bg-purple-500/15 flex items-center justify-center">
+                <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white">Model opslaan</h3>
+                <p className="text-[11px] text-slate-400">Hergebruik dit model in toekomstige fotoshoots</p>
+              </div>
+            </div>
+
+            {/* Preview + naam */}
+            <div className="flex gap-3 items-start mb-5">
+              {modelToSave && (
+                <div className="w-16 h-16 rounded-xl overflow-hidden border border-white/10 shrink-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={modelToSave} alt="Model preview" className="w-full h-full object-cover" />
+                </div>
+              )}
+              <div className="flex-1">
+                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5 block">
+                  Naam
+                </label>
+                <input
+                  type="text"
+                  value={modelSaveName}
+                  onChange={(e) => setModelSaveName(e.target.value)}
+                  placeholder="Bv. Sophie – zomercampagne"
+                  maxLength={50}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20"
+                  onKeyDown={(e) => { if (e.key === 'Enter') handleSaveModelConfirm(); }}
+                  autoFocus
+                />
+                <p className="text-[10px] text-slate-600 mt-1">
+                  Dit model verschijnt in je Modellen Bibliotheek
+                </p>
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setShowSaveModelDialog(false);
+                  setModelToSave('');
+                  setModelSaveName('');
+                }}
+                disabled={isSavingModel}
+                className="flex-1 py-2.5 rounded-xl border border-white/10 text-slate-400 text-xs font-bold hover:bg-white/5 transition-colors disabled:opacity-50"
+              >
+                Annuleren
+              </button>
+              <button
+                onClick={handleSaveModelConfirm}
+                disabled={isSavingModel || !modelSaveName.trim()}
+                className="flex-1 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {isSavingModel ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Opslaan...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Opslaan
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
