@@ -137,15 +137,8 @@ function StatItem({ value, accent, label, delay }: { value: string; accent: stri
 
 /* ── Main Page ────────────────────────────────────────────────────────── */
 export default function LicensePage() {
-    const [scrolled, setScrolled] = useState(false);
     const [formState, setFormState] = useState<'idle' | 'sent'>('idle');
     const [formData, setFormData] = useState({ company: '', website: '', name: '', title: '', email: '', visitors: '', platform: '', message: '' });
-
-    useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 40);
-        window.addEventListener('scroll', onScroll);
-        return () => window.removeEventListener('scroll', onScroll);
-    }, []);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -170,29 +163,8 @@ export default function LicensePage() {
             {/* Starfield */}
             <Starfield />
 
-            {/* ── NAV ──────────────────────────────────────────────── */}
-            <nav style={{
-                position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                padding: '20px 56px',
-                background: scrolled ? 'rgba(4,6,15,0.88)' : 'transparent',
-                backdropFilter: scrolled ? 'blur(20px)' : 'none',
-                borderBottom: scrolled ? '1px solid rgba(255,255,255,0.05)' : '1px solid transparent',
-                transition: 'all 0.4s ease',
-            }}>
-                <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ fontSize: 17, fontWeight: 800, color: '#F1F5F9', letterSpacing: '-0.3px' }}>drapit</span>
-                    <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#C9A66A', border: '1px solid rgba(201,166,106,0.3)', padding: '3px 8px' }}>License</span>
-                </Link>
-                <Link href="#contact" scroll={false} onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#F1F5F9', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.2)', padding: '10px 24px', transition: 'border-color 0.3s, color 0.3s' }}
-                    onMouseEnter={e => { (e.target as HTMLElement).style.borderColor = '#1D6FD8'; (e.target as HTMLElement).style.color = '#4A8AF4'; }}
-                    onMouseLeave={e => { (e.target as HTMLElement).style.borderColor = 'rgba(255,255,255,0.2)'; (e.target as HTMLElement).style.color = '#F1F5F9'; }}>
-                    Contact Sales
-                </Link>
-            </nav>
-
             {/* ── HERO ─────────────────────────────────────────────── */}
-            <section style={{ position: 'relative', zIndex: 2, minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '0 56px 100px' }}>
+            <section style={{ position: 'relative', zIndex: 2, minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '70px 56px 100px' }}>
 
                 {/* Ambient glows */}
                 <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 70% 55% at 55% 40%, rgba(29,111,216,0.07) 0%, transparent 70%)', pointerEvents: 'none' }} />
