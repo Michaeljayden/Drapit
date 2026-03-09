@@ -315,6 +315,34 @@
         }
         .drapit-result-retry:hover { background: #F8FAFC; }
 
+        .drapit-share-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .drapit-share-btn {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            background: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            color: #475569;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .drapit-share-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+        .drapit-share-btn:hover { background: #F8FAFC; border-color: #CBD5E1; }
+        .drapit-share-btn.whatsapp { color: #25D366; border-color: #25D36630; }
+        .drapit-share-btn.whatsapp:hover { background: #F0FDF4; border-color: #25D366; }
+        .drapit-share-btn.save { color: #6366F1; border-color: #6366F130; }
+        .drapit-share-btn.save:hover { background: #EEF2FF; border-color: #6366F1; }
+
         .drapit-error {
             text-align: center;
             padding: 20px 0;
@@ -352,6 +380,9 @@
     const ICON_CLOSE = `<svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
     const ICON_CART = `<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="6" cy="14" r="1" fill="currentColor"/><circle cx="12" cy="14" r="1" fill="currentColor"/><path d="M1 1h2l1.5 8h8L14 4H5" stroke="currentColor" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
     const ICON_ERROR = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01" stroke-linecap="round"/></svg>`;
+    const ICON_DOWNLOAD = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12m0 0l-4-4m4 4l4-4"/><path d="M4 18h16"/></svg>`;
+    const ICON_WHATSAPP = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.09.539 4.06 1.486 5.775L.057 23.07a.75.75 0 00.914.914l5.308-1.428A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22.5c-1.98 0-3.838-.538-5.435-1.479l-.39-.23-4.034 1.085 1.086-4.02-.24-.4A10.454 10.454 0 011.5 12C1.5 6.201 6.201 1.5 12 1.5S22.5 6.201 22.5 12 17.799 22.5 12 22.5z"/></svg>`;
+    const ICON_SHARE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`;
 
     // ── State ─────────────────────────────────────────────────────────────
     let currentModal = null;
@@ -640,6 +671,11 @@
 
     // ── Show Result ───────────────────────────────────────────────────────
     function showResult(body, resultUrl, product, overlay) {
+        const hasNativeShare = !!navigator.share;
+        const shareLabel = hasNativeShare ? 'Delen' : 'WhatsApp';
+        const shareIcon = hasNativeShare ? ICON_SHARE : ICON_WHATSAPP;
+        const shareBtnClass = hasNativeShare ? '' : 'whatsapp';
+
         body.innerHTML = `
             <div class="drapit-result">
                 <img src="${resultUrl}" alt="Try-on resultaat" class="drapit-result-img" />
@@ -654,11 +690,66 @@
             }
                     <button class="drapit-result-retry">Opnieuw</button>
                 </div>
+                <div class="drapit-share-actions">
+                    <button class="drapit-share-btn save" id="drapit-save-btn">
+                        ${ICON_DOWNLOAD} Opslaan
+                    </button>
+                    <button class="drapit-share-btn ${shareBtnClass}" id="drapit-share-btn">
+                        ${shareIcon} ${shareLabel}
+                    </button>
+                </div>
             </div>
         `;
 
         body.querySelector('.drapit-result-retry')?.addEventListener('click', () => {
             openModal(overlay.getRootNode().host?.shadowRoot || overlay.parentNode, product);
+        });
+
+        // ── Save / Download ──────────────────────────────
+        body.querySelector('#drapit-save-btn')?.addEventListener('click', async () => {
+            try {
+                const res = await fetch(resultUrl);
+                const blob = await res.blob();
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = 'drapit-tryon.jpg';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+            } catch {
+                // CORS fallback: open in new tab
+                window.open(resultUrl, '_blank');
+            }
+        });
+
+        // ── Share ────────────────────────────────────────
+        body.querySelector('#drapit-share-btn')?.addEventListener('click', async () => {
+            const shareText = `Kijk hoe ik er uitzie in ${product.productName}! 👕`;
+            const shareUrl = product.buyUrl || window.location.href;
+
+            if (navigator.share) {
+                try {
+                    // Try to share the actual image file if fetch works
+                    let shareData = { title: 'Mijn virtual try-on', text: shareText, url: shareUrl };
+                    try {
+                        const imgRes = await fetch(resultUrl);
+                        const imgBlob = await imgRes.blob();
+                        const imgFile = new File([imgBlob], 'drapit-tryon.jpg', { type: 'image/jpeg' });
+                        if (navigator.canShare && navigator.canShare({ files: [imgFile] })) {
+                            shareData = { title: 'Mijn virtual try-on', text: shareText, files: [imgFile] };
+                        }
+                    } catch { /* image fetch failed, share URL only */ }
+                    await navigator.share(shareData);
+                } catch (err) {
+                    if (err.name !== 'AbortError') console.warn('[Drapit] Share failed:', err);
+                }
+            } else {
+                // Fallback: WhatsApp web
+                const waText = `${shareText}\n${shareUrl}`;
+                window.open(`https://wa.me/?text=${encodeURIComponent(waText)}`, '_blank');
+            }
         });
     }
 
