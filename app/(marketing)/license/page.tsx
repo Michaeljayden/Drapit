@@ -277,7 +277,19 @@ export default function LicensePage() {
             </div>
 
             {/* ── HERO ─────────────────────────────────────────────── */}
-            <section style={{ position: 'relative', zIndex: 2, minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '70px 56px 100px' }}>
+            <section style={{
+                position: 'relative',
+                zIndex: 2,
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                padding: '120px 24px 100px',
+                '@media (min-width: 768px)': {
+                    justifyContent: 'flex-end',
+                    padding: '70px 56px 100px',
+                }
+            } as any}>
 
                 {/* Ambient glows */}
                 <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 70% 55% at 55% 40%, rgba(29,111,216,0.07) 0%, transparent 70%)', pointerEvents: 'none' }} />
@@ -304,10 +316,10 @@ export default function LicensePage() {
                 </p>
 
                 {/* CTAs */}
-                <div {...heroCta} style={{ ...heroCta.style, display: 'flex', alignItems: 'center', gap: 24, marginTop: 48 }}>
+                <div {...heroCta} style={{ ...heroCta.style, display: 'flex', alignItems: 'center', gap: 16, marginTop: 48, flexWrap: 'wrap' }}>
                     <button
                         onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                        style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 13, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#fff', background: 'linear-gradient(135deg, #1D6FD8, #1558B0)', border: 'none', padding: '16px 36px', cursor: 'pointer' }}
+                        style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 13, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#fff', background: 'linear-gradient(135deg, #1D6FD8, #1558B0)', border: 'none', padding: '16px 36px', cursor: 'pointer', width: '100%', maxWidth: 'max-content' } as any}
                         onMouseEnter={e => { (e.target as HTMLElement).style.boxShadow = '0 12px 40px rgba(29,111,216,0.45)'; (e.target as HTMLElement).style.transform = 'translateY(-2px)'; }}
                         onMouseLeave={e => { (e.target as HTMLElement).style.boxShadow = 'none'; (e.target as HTMLElement).style.transform = 'none'; }}
                     >
@@ -315,7 +327,7 @@ export default function LicensePage() {
                     </button>
                     <button
                         onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-                        style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 13, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(148,163,184,0.6)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}
+                        style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 13, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(148,163,184,0.6)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 } as any}
                         onMouseEnter={e => { (e.currentTarget).style.color = '#F1F5F9'; }}
                         onMouseLeave={e => { (e.currentTarget).style.color = 'rgba(148,163,184,0.6)'; }}
                     >
@@ -324,8 +336,17 @@ export default function LicensePage() {
                     </button>
                 </div>
 
-                {/* Right side — designed for */}
-                <div style={{ position: 'absolute', right: 56, bottom: 100, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 10 }}>
+                {/* Right side — designed for - Hidden on mobile */}
+                <div style={{
+                    position: 'absolute',
+                    right: 56,
+                    bottom: 100,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-end',
+                    gap: 10,
+                    '@media (max-width: 1024px)': { display: 'none' }
+                } as any}>
                     <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(148,163,184,0.4)' }}>Designed for</span>
                     {['Fashion Platforms', 'Luxury Houses', 'Multibrand Retailers', 'Global Marketplaces'].map((name, i) => (
                         <span key={name} style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 15, fontWeight: 300, color: `rgba(241,245,249,${0.18 + i * 0.06})`, letterSpacing: '0.04em', fontStyle: 'italic' }}>{name}</span>
@@ -340,7 +361,20 @@ export default function LicensePage() {
             </section>
 
             {/* ── FOR WHO ───────────────────────────────────────────── */}
-            <section style={{ position: 'relative', zIndex: 2, padding: '140px 56px', display: 'grid', gridTemplateColumns: '1fr 1.15fr', gap: 100, alignItems: 'center' }}>
+            <section style={{
+                position: 'relative',
+                zIndex: 2,
+                padding: '80px 24px',
+                display: 'grid',
+                gridTemplateColumns: 'minmax(0, 1fr)',
+                gap: 48,
+                alignItems: 'center',
+                '@media (min-width: 1024px)': {
+                    padding: '140px 56px',
+                    gridTemplateColumns: '1fr 1.15fr',
+                    gap: 100,
+                }
+            } as any}>
                 <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
                         <div style={{ width: 28, height: 1, background: '#C9A66A' }} />
@@ -355,7 +389,14 @@ export default function LicensePage() {
                     </p>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(1, 1fr)',
+                    gap: 2,
+                    '@media (min-width: 640px)': {
+                        gridTemplateColumns: 'repeat(2, 1fr)',
+                    }
+                } as any}>
                     <ForCard icon="🏬" title="Fashion Platforms" desc="Large-scale multi-brand platforms with millions of monthly visitors and complex technical infrastructure." delay={0} />
                     <ForCard icon="✦" title="Luxury Houses" desc="Heritage brands where every customer touchpoint must reflect the highest standards of quality." delay={100} />
                     <ForCard icon="🌐" title="Global Marketplaces" desc="Cross-border commerce operating across multiple regions, languages, and regulatory environments." delay={200} />
@@ -368,7 +409,15 @@ export default function LicensePage() {
 
             {/* ── FEATURES ─────────────────────────────────────────── */}
             <section id="features" style={{ position: 'relative', zIndex: 2, padding: '140px 56px' }}>
-                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 72, flexWrap: 'wrap', gap: 24 }}>
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    justifyContent: 'space-between',
+                    marginBottom: 72,
+                    flexWrap: 'wrap',
+                    gap: 24,
+                    textAlign: 'left',
+                } as any}>
                     <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
                             <div style={{ width: 28, height: 1, background: '#C9A66A' }} />
@@ -379,12 +428,31 @@ export default function LicensePage() {
                             <span style={{ fontStyle: 'italic', fontWeight: 300, color: '#4A8AF4' }}>engineered</span> for scale.
                         </h2>
                     </div>
-                    <p style={{ fontSize: 14, color: 'rgba(148,163,184,0.55)', lineHeight: 1.75, maxWidth: 280, textAlign: 'right' }}>
+                    <p style={{
+                        fontSize: 14,
+                        color: 'rgba(148,163,184,0.55)',
+                        lineHeight: 1.75,
+                        maxWidth: 280,
+                        textAlign: 'left',
+                        '@media (min-width: 1024px)': {
+                            textAlign: 'right',
+                        }
+                    } as any}>
                         All capabilities included in the license. Custom development available on request through your dedicated engineer.
                     </p>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2 }}>
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(1, 1fr)',
+                    gap: 2,
+                    '@media (min-width: 640px)': {
+                        gridTemplateColumns: 'repeat(2, 1fr)',
+                    },
+                    '@media (min-width: 1024px)': {
+                        gridTemplateColumns: 'repeat(3, 1fr)',
+                    }
+                } as any}>
                     <FeatureCard num="01" icon="🔗" title="Direct API Integration" desc="Platform-agnostic REST API that integrates into any existing stack. No Shopify required. Full documentation and a dedicated engineer from day one." tag="Core" tagColor="blue" delay={0} />
                     <FeatureCard num="02" icon="🏷" title="White-Label Output" desc="Every VTON-generated image carries your brand — logo placement, article number, and overlay elements you require. Invisible infrastructure, visible brand." tag="Branding" tagColor="gold" delay={80} />
                     <FeatureCard num="03" icon="🗂" title="Saved Looks" desc="Shoppers save their virtual try-ons to their account or wishlist and return later. Dramatically increases intent-to-purchase rates." tag="Core" tagColor="blue" delay={160} />
@@ -395,12 +463,23 @@ export default function LicensePage() {
             </section>
 
             {/* ── STATS BAND ───────────────────────────────────────── */}
-            <div style={{ position: 'relative', zIndex: 2, background: 'linear-gradient(135deg, rgba(29,111,216,0.04), rgba(201,166,106,0.025))', borderTop: '1px solid rgba(255,255,255,0.055)', borderBottom: '1px solid rgba(255,255,255,0.055)', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+            <div style={{
+                position: 'relative',
+                zIndex: 2,
+                background: 'linear-gradient(135deg, rgba(29,111,216,0.04), rgba(201,166,106,0.025))',
+                borderTop: '1px solid rgba(255,255,255,0.055)',
+                borderBottom: '1px solid rgba(255,255,255,0.055)',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                '@media (min-width: 768px)': {
+                    gridTemplateColumns: 'repeat(4, 1fr)',
+                }
+            } as any}>
                 <StatItem value="99" accent=".9%" label="Guaranteed Uptime SLA" delay={0} />
                 <StatItem value="<" accent="4h" label="Priority Response Time" delay={100} />
                 <StatItem value="24" accent="/7" label="Human + AI Support" delay={200} />
                 <div style={{ padding: '48px 40px', textAlign: 'center' }}>
-                    <div style={{ fontSize: 52, fontWeight: 800, color: '#F1F5F9', lineHeight: 1, marginBottom: 8, letterSpacing: '-0.04em' }}>
+                    <div style={{ fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 800, color: '#F1F5F9', lineHeight: 1, marginBottom: 8, letterSpacing: '-0.04em' }}>
                         EU<span style={{ color: '#C9A66A' }}> ✓</span>
                     </div>
                     <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(148,163,184,0.55)' }}>Data Residency Guaranteed</div>
@@ -408,7 +487,20 @@ export default function LicensePage() {
             </div>
 
             {/* ── PRIVACY & DATA ────────────────────────────────────── */}
-            <section style={{ position: 'relative', zIndex: 2, padding: '140px 56px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 100, alignItems: 'center' }}>
+            <section style={{
+                position: 'relative',
+                zIndex: 2,
+                padding: '80px 24px',
+                display: 'grid',
+                gridTemplateColumns: 'minmax(0, 1fr)',
+                gap: 64,
+                alignItems: 'center',
+                '@media (min-width: 1024px)': {
+                    padding: '140px 56px',
+                    gridTemplateColumns: '1fr 1fr',
+                    gap: 100,
+                }
+            } as any}>
                 <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
                         <div style={{ width: 28, height: 1, background: '#C9A66A' }} />
@@ -472,7 +564,15 @@ export default function LicensePage() {
             <div style={{ margin: '0 56px', height: 1, background: 'linear-gradient(90deg, transparent 5%, rgba(29,111,216,0.12) 30%, rgba(201,166,106,0.15) 50%, rgba(29,111,216,0.12) 70%, transparent 95%)' }} />
 
             {/* ── SUPPORT ───────────────────────────────────────────── */}
-            <section style={{ position: 'relative', zIndex: 2, padding: '140px 56px', background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(29,111,216,0.04), transparent)' }}>
+            <section style={{
+                position: 'relative',
+                zIndex: 2,
+                padding: '80px 24px',
+                background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(29,111,216,0.04), transparent)',
+                '@media (min-width: 1024px)': {
+                    padding: '140px 56px',
+                }
+            } as any}>
                 <div style={{ maxWidth: 860, margin: '0 auto', textAlign: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 28 }}>
                         <div style={{ width: 28, height: 1, background: '#C9A66A' }} />
@@ -487,7 +587,18 @@ export default function LicensePage() {
                         Drapit License is a partnership, not a subscription. You get the people and systems to match.
                     </p>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2, marginBottom: 0 }}>
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(1, 1fr)',
+                        gap: 2,
+                        marginBottom: 0,
+                        '@media (min-width: 640px)': {
+                            gridTemplateColumns: 'repeat(2, 1fr)',
+                        },
+                        '@media (min-width: 1024px)': {
+                            gridTemplateColumns: 'repeat(3, 1fr)',
+                        }
+                    } as any}>
                         <SupportCard icon="🕐" title="24/7 Hybrid Support" desc="Always-on AI support with instant escalation to human engineers. Critical issues resolved within 4 hours, guaranteed." delay={0} />
                         <SupportCard icon="💬" title="Dedicated Channels" desc="Direct Slack and WhatsApp access to your account manager and technical lead. Real conversations, not email threads." delay={120} />
                         <SupportCard icon="👨‍💻" title="Dedicated Developer" desc="An engineer who knows your platform inside out. Custom development available on post-calculation billing." delay={240} />
@@ -496,7 +607,20 @@ export default function LicensePage() {
             </section>
 
             {/* ── CONTACT FORM ─────────────────────────────────────── */}
-            <section id="contact" style={{ position: 'relative', zIndex: 2, padding: '140px 56px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 100, alignItems: 'start' }}>
+            <section id="contact" style={{
+                position: 'relative',
+                zIndex: 2,
+                padding: '80px 24px',
+                display: 'grid',
+                gridTemplateColumns: 'minmax(0, 1fr)',
+                gap: 64,
+                alignItems: 'start',
+                '@media (min-width: 1024px)': {
+                    padding: '140px 56px',
+                    gridTemplateColumns: '1fr 1fr',
+                    gap: 100,
+                }
+            } as any}>
 
                 {/* Left */}
                 <div>
@@ -540,7 +664,15 @@ export default function LicensePage() {
                             </div>
                         ) : (
                             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 2 }}>
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(1, 1fr)',
+                                    gap: 2,
+                                    marginBottom: 2,
+                                    '@media (min-width: 640px)': {
+                                        gridTemplateColumns: 'repeat(2, 1fr)',
+                                    }
+                                } as any}>
                                     <Field label="Company Name *">
                                         <input type="text" placeholder="Zalando SE" required {...inp('company')} style={inputStyle} />
                                     </Field>
@@ -548,7 +680,15 @@ export default function LicensePage() {
                                         <input type="url" placeholder="https://your-platform.com" required {...inp('website')} style={inputStyle} />
                                     </Field>
                                 </div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 2 }}>
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(1, 1fr)',
+                                    gap: 2,
+                                    marginBottom: 2,
+                                    '@media (min-width: 640px)': {
+                                        gridTemplateColumns: 'repeat(2, 1fr)',
+                                    }
+                                } as any}>
                                     <Field label="Your Name *">
                                         <input type="text" placeholder="First & last name" required {...inp('name')} style={inputStyle} />
                                     </Field>
@@ -561,7 +701,15 @@ export default function LicensePage() {
                                         <input type="email" placeholder="you@company.com" required {...inp('email')} style={inputStyle} />
                                     </Field>
                                 </div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 2 }}>
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(1, 1fr)',
+                                    gap: 2,
+                                    marginBottom: 2,
+                                    '@media (min-width: 640px)': {
+                                        gridTemplateColumns: 'repeat(2, 1fr)',
+                                    }
+                                } as any}>
                                     <Field label="Monthly Visitors">
                                         <select {...inp('visitors')} style={{ ...inputStyle, appearance: 'none' as const }}>
                                             <option value="">Select range</option>
@@ -587,9 +735,20 @@ export default function LicensePage() {
                                         <textarea placeholder="Tell us about your platform, your current try-on challenges, and what you'd like to achieve with Drapit License..." {...inp('message')} rows={4} style={{ ...inputStyle, resize: 'none' as const }} />
                                     </Field>
                                 </div>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, paddingTop: 24 }}>
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: 16,
+                                    paddingTop: 24,
+                                    '@media (min-width: 640px)': {
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        gap: 20
+                                    }
+                                } as any}>
                                     <span style={{ fontSize: 12, color: 'rgba(148,163,184,0.45)', lineHeight: 1.5 }}>All information treated<br />with strict confidentiality.</span>
-                                    <button type="submit" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 12, fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', background: 'linear-gradient(135deg, #1D6FD8, #1558B0)', border: 'none', padding: '15px 30px', cursor: 'pointer', whiteSpace: 'nowrap' as const }}
+                                    <button type="submit" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 12, fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', background: 'linear-gradient(135deg, #1D6FD8, #1558B0)', border: 'none', padding: '15px 30px', cursor: 'pointer', whiteSpace: 'nowrap' as const, width: '100%', maxWidth: 'max-content' } as any}
                                         onMouseEnter={e => { (e.currentTarget).style.boxShadow = '0 8px 28px rgba(29,111,216,0.45)'; (e.currentTarget).style.transform = 'translateY(-2px)'; }}
                                         onMouseLeave={e => { (e.currentTarget).style.boxShadow = 'none'; (e.currentTarget).style.transform = 'none'; }}>
                                         Submit Request →
@@ -602,16 +761,29 @@ export default function LicensePage() {
             </section>
 
             {/* ── FOOTER STRIP ─────────────────────────────────────── */}
-            <div style={{ position: 'relative', zIndex: 2, borderTop: '1px solid rgba(255,255,255,0.05)', padding: '36px 56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+            <div style={{
+                position: 'relative',
+                zIndex: 2,
+                borderTop: '1px solid rgba(255,255,255,0.05)',
+                padding: '36px 24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: 24,
+                '@media (min-width: 1024px)': {
+                    padding: '36px 56px',
+                }
+            } as any}>
                 <Link href="/" style={{ textDecoration: 'none' }}>
                     <span style={{ fontSize: 16, fontWeight: 800, color: 'rgba(241,245,249,0.4)', letterSpacing: '-0.3px' }}>drapit</span>
                 </Link>
-                <Link href="/#prijzen" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(148,163,184,0.4)', textDecoration: 'none', borderBottom: '1px solid transparent', paddingBottom: 1 }}
+                <Link href="/#prijzen" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(148,163,184,0.4)', textDecoration: 'none', borderBottom: '1px solid transparent', paddingBottom: 1, order: 3, width: '100%', textAlign: 'center', '@media (min-width: 768px)': { order: 2, width: 'auto', textAlign: 'left' } } as any}
                     onMouseEnter={e => { (e.target as HTMLElement).style.color = 'rgba(148,163,184,0.8)'; (e.target as HTMLElement).style.borderColor = 'rgba(148,163,184,0.4)'; }}
                     onMouseLeave={e => { (e.target as HTMLElement).style.color = 'rgba(148,163,184,0.4)'; (e.target as HTMLElement).style.borderColor = 'transparent'; }}>
                     ← Looking for a smaller plan? View standard pricing
                 </Link>
-                <p style={{ fontSize: 12, color: 'rgba(148,163,184,0.3)', margin: 0 }}>© 2026 Drapit — All rights reserved</p>
+                <p style={{ fontSize: 12, color: 'rgba(148,163,184,0.3)', margin: 0, order: 2, '@media (min-width: 768px)': { order: 3 } } as any}>© 2026 Drapit — All rights reserved</p>
             </div>
 
             <style>{`
