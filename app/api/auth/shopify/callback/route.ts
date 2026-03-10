@@ -60,9 +60,17 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const code = searchParams.get('code');
     const shop = searchParams.get('shop');
+    const state = searchParams.get('state');
 
     if (!code || !shop) {
         return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 });
+    }
+
+    // 0. Verify CSRF state nonce
+    const storedState = request.cookies.get('shopify_oauth_state')?.value;
+    if (!state || !storedState || state !== storedState) {
+        console.error('[shopify/callback] State mismatch — possible CSRF attack for shop:', shop);
+        return NextResponse.json({ error: 'Invalid state parameter' }, { status: 403 });
     }
 
     // 1. Verify HMAC signature
@@ -122,6 +130,7 @@ export async function GET(request: NextRequest) {
             shopify_domain: shop,
             shopify_access_token: access_token,
             shopify_app_installed: true,
+            billing_source: 'shopify',   // Shopify App Store installs always use Shopify billing
             name: shopDisplayName,
             email: shopEmail,
         }, { onConflict: 'shopify_domain' })
@@ -138,6 +147,14 @@ export async function GET(request: NextRequest) {
         sendWelcomeEmail(shopEmail, shopDisplayName).catch(console.error);
     }
 
-    // 7. Redirect to dashboard
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/dashboard?shop_id=${data.id}`);
+    // 7. Redirect: nieuwe installs gaan naar billing om een plan te kiezen,
+    //    heraanmeldingen gaan direct naar het dashboard.
+    const redirectUrl = isNewInstall
+        ? `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/billing?new_install=true&shop_id=${data.id}`
+        : `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?shop_id=${data.id}`;
+
+    const redirectResponse = NextResponse.redirect(redirectUrl);
+    // Clear the OAuth state cookie — one-time use only
+    redirectResponse.cookies.set('shopify_oauth_state', '', { maxAge: 0, path: '/' });
+    return redirectResponse;
 }

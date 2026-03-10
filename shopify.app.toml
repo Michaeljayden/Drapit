@@ -1,7 +1,7 @@
 name = "Drapit Virtual Try-On"
 client_id = "b4be0e4c410809e0f2b872950484cae1"
-application_url = "https://drapit.io"
-embedded = true
+application_url = "https://drapit.io/dashboard"
+embedded = false
 
 [auth]
 redirect_urls = [
@@ -10,10 +10,26 @@ redirect_urls = [
 ]
 
 [access_scopes]
-scopes = "write_products,read_themes,write_themes"
+scopes = "read_themes,write_themes"
 
 [webhooks]
-api_version = "2024-01"
+api_version = "2026-01"
+
+  [[webhooks.subscriptions]]
+  topics = ["customers/data_request"]
+  uri = "/api/webhook/shopify/customers/data_request"
+
+  [[webhooks.subscriptions]]
+  topics = ["customers/redact"]
+  uri = "/api/webhook/shopify/customers/redact"
+
+  [[webhooks.subscriptions]]
+  topics = ["shop/redact"]
+  uri = "/api/webhook/shopify/shop/redact"
+
+  [[webhooks.subscriptions]]
+  topics = ["app/uninstalled"]
+  uri = "/api/webhook/shopify/app/uninstalled"
 
 [pos]
 embedded = false

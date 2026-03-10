@@ -106,8 +106,8 @@ export default function Footer() {
                             <ul style={footerListStyle}>
                                 <li><a href="#" style={footerLinkStyle}>Over Ons</a></li>
                                 <li><a href="#faq" style={footerLinkStyle}>FAQ</a></li>
-                                <li><a href="#" style={footerLinkStyle}>Privacy Policy</a></li>
-                                <li><a href="#" style={footerLinkStyle}>Cookie Beleid</a></li>
+                                <li><Link href="/privacy" style={footerLinkStyle}>Privacy Policy</Link></li>
+                                <li><Link href="/privacy#8" style={footerLinkStyle}>Cookie Beleid</Link></li>
                             </ul>
                         </div>
 
@@ -172,8 +172,8 @@ export default function Footer() {
                         © 2026 Drapit. Alle rechten voorbehouden.
                     </p>
                     <div style={{ display: 'flex', gap: '24px' }}>
-                        <a href="#" style={bottomLinkStyle}>Privacy</a>
-                        <a href="#" style={bottomLinkStyle}>Voorwaarden</a>
+                        <Link href="/privacy" style={bottomLinkStyle}>Privacy</Link>
+                        <Link href="/privacy" style={bottomLinkStyle}>Voorwaarden</Link>
                         <a href="#faq" style={bottomLinkStyle}>FAQ</a>
                     </div>
                 </div>
