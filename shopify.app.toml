@@ -16,20 +16,20 @@ scopes = "read_themes,write_themes"
 api_version = "2026-01"
 
   [[webhooks.subscriptions]]
-  topics = ["customers/data_request"]
-  uri = "/api/webhook/shopify/customers/data_request"
+  compliance_topics = ["customers/data_request"]
+  uri = "https://drapit.io/api/webhook/shopify/customers/data_request"
 
   [[webhooks.subscriptions]]
-  topics = ["customers/redact"]
-  uri = "/api/webhook/shopify/customers/redact"
+  compliance_topics = ["customers/redact"]
+  uri = "https://drapit.io/api/webhook/shopify/customers/redact"
 
   [[webhooks.subscriptions]]
-  topics = ["shop/redact"]
-  uri = "/api/webhook/shopify/shop/redact"
+  compliance_topics = ["shop/redact"]
+  uri = "https://drapit.io/api/webhook/shopify/shop/redact"
 
   [[webhooks.subscriptions]]
   topics = ["app/uninstalled"]
-  uri = "/api/webhook/shopify/app/uninstalled"
+  uri = "https://drapit.io/api/webhook/shopify/app/uninstalled"
 
 [pos]
 embedded = false
