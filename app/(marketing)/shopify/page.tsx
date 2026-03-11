@@ -2,6 +2,22 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { 
+    UserPlus, 
+    Key, 
+    ShoppingBag, 
+    Shirt, 
+    Rocket, 
+    Palette, 
+    Store, 
+    BarChart3, 
+    HelpCircle, 
+    Lightbulb, 
+    ChevronDown,
+    Plus,
+    Clock,
+    Layout
+} from 'lucide-react';
 
 /* ─────────────────────────────────────────────────────────────────────────────
    DRAPIT — SHOPIFY INSTALLATIE GIDS
@@ -60,7 +76,9 @@ function FAQItem({ q, a, isOpen, onToggle }: { q: string; a: string; isOpen: boo
         <div onClick={onToggle} style={{ borderBottom: '1px solid rgba(255,255,255,0.07)', padding: '22px 0', cursor: 'pointer' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
                 <span style={{ fontSize: 16, fontWeight: 600, color: '#F1F5F9', fontFamily: 'Plus Jakarta Sans, sans-serif', lineHeight: 1.3 }}>{q}</span>
-                <div style={{ width: 30, height: 30, borderRadius: '50%', flexShrink: 0, border: '1px solid rgba(149,191,71,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#95BF47', fontSize: 20, transition: 'transform 0.3s', transform: isOpen ? 'rotate(45deg)' : 'none', fontWeight: 300 }}>+</div>
+                <div style={{ width: 30, height: 30, borderRadius: '50%', flexShrink: 0, border: '1px solid rgba(149,191,71,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#95BF47', transition: 'transform 0.3s', transform: isOpen ? 'rotate(45deg)' : 'none' }}>
+                    <Plus size={18} strokeWidth={2.5} />
+                </div>
             </div>
             <div style={{ overflow: 'hidden', maxHeight: isOpen ? 200 : 0, transition: 'max-height 0.35s ease', marginTop: isOpen ? 12 : 0 }}>
                 <p style={{ fontSize: 15, color: 'rgba(241,245,249,0.55)', lineHeight: 1.7, fontFamily: 'Plus Jakarta Sans, sans-serif', margin: 0, paddingRight: 40 }}>{a}</p>
@@ -89,7 +107,7 @@ export default function ShopifyGuidePage() {
         {
             num: '01',
             title: 'Maak een Drapit account aan',
-            icon: '👤',
+            icon: <UserPlus size={24} />,
             color: '#22D3EE',
             substeps: [
                 {
@@ -109,7 +127,7 @@ export default function ShopifyGuidePage() {
         {
             num: '02',
             title: 'Kopieer je persoonlijke code',
-            icon: '🔑',
+            icon: <Key size={24} />,
             color: '#8B5CF6',
             substeps: [
                 {
@@ -133,7 +151,7 @@ export default function ShopifyGuidePage() {
         {
             num: '03',
             title: 'Plak de code in je Shopify winkel',
-            icon: '🛍️',
+            icon: <ShoppingBag size={24} />,
             color: '#95BF47',
             substeps: [
                 {
@@ -169,7 +187,7 @@ export default function ShopifyGuidePage() {
         {
             num: '04',
             title: 'Producten koppelen',
-            icon: '👕',
+            icon: <Shirt size={24} />,
             color: '#F59E0B',
             substeps: [
                 {
@@ -201,7 +219,7 @@ export default function ShopifyGuidePage() {
         {
             num: '05',
             title: 'Testen en live gaan!',
-            icon: '🚀',
+            icon: <Rocket size={24} />,
             color: '#1D6FD8',
             substeps: [
                 {
@@ -462,9 +480,7 @@ export default function ShopifyGuidePage() {
 
                         {/* Time estimate */}
                         <div className={`d-in d-d4 ${hero.inView ? 'visible' : ''}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(149,191,71,0.08)', border: '1px solid rgba(149,191,71,0.15)', borderRadius: 100, padding: '10px 24px', marginBottom: 40 }}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
-                            </svg>
+                            <Clock size={16} color="#95BF47" />
                             <span style={{ fontSize: 14, fontWeight: 600, color: '#95BF47', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Geschatte tijd: 10 minuten</span>
                         </div>
 
@@ -572,12 +588,12 @@ export default function ShopifyGuidePage() {
                                             width: 36, height: 36, borderRadius: '50%',
                                             border: `1px solid ${step.color}40`,
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            color: step.color, fontSize: 18,
+                                            color: step.color,
                                             transition: 'transform 0.3s',
                                             transform: activeStep === i ? 'rotate(180deg)' : 'none',
                                             flexShrink: 0,
                                         }}>
-                                            ↓
+                                            <ChevronDown size={20} />
                                         </div>
                                     </div>
 
@@ -660,16 +676,18 @@ export default function ShopifyGuidePage() {
                             padding: '48px 40px',
                         }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
-                                <div style={{ width: 44, height: 44, borderRadius: 14, background: 'rgba(149,191,71,0.15)', border: '1px solid rgba(149,191,71,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>💡</div>
+                                <div style={{ width: 44, height: 44, borderRadius: 14, background: 'rgba(149,191,71,0.15)', border: '1px solid rgba(149,191,71,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#95BF47' }}>
+                                    <Lightbulb size={22} />
+                                </div>
                                 <h3 style={{ fontSize: 22, fontWeight: 800, color: '#F1F5F9', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Handige tips</h3>
                             </div>
 
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 20 }}>
-                                {[
-                                    { title: 'Widget aanpassen', desc: 'Ga naar je Drapit dashboard om de kleur en tekst van de "Virtueel passen" knop te veranderen zodat het past bij je huisstijl.', icon: '🎨' },
-                                    { title: 'Meerdere winkels', desc: 'Heb je meer dan één Shopify winkel? Maak per winkel een aparte API-sleutel aan in je dashboard, zo hou je alles netjes gescheiden.', icon: '🏪' },
-                                    { title: 'Analytics bekijken', desc: 'In je Drapit dashboard kun je precies zien hoeveel keer de "Virtueel passen" functie is gebruikt en welke producten het populairst zijn.', icon: '📊' },
-                                    { title: 'Hulp nodig?', desc: 'Loop je ergens vast? Stuur ons een mail op info@drapit.io of gebruik het contactformulier. We helpen je graag persoonlijk verder!', icon: '🤝' },
+                                [
+                                    { title: 'Widget aanpassen', desc: 'Ga naar je Drapit dashboard om de kleur en tekst van de "Virtueel passen" knop te veranderen zodat het past bij je huisstijl.', icon: <Palette size={24} color="#95BF47" /> },
+                                    { title: 'Meerdere winkels', desc: 'Heb je meer dan één Shopify winkel? Maak per winkel een aparte API-sleutel aan in je dashboard, zo hou je alles netjes gescheiden.', icon: <Store size={24} color="#95BF47" /> },
+                                    { title: 'Analytics bekijken', desc: 'In je Drapit dashboard kun je precies zien hoeveel keer de "Virtueel passen" functie is gebruikt en welke producten het populairst zijn.', icon: <BarChart3 size={24} color="#95BF47" /> },
+                                    { title: 'Hulp nodig?', desc: 'Loop je ergens vast? Stuur ons een mail op info@drapit.io of gebruik het contactformulier. We helpen je graag persoonlijk verder!', icon: <HelpCircle size={24} color="#95BF47" /> },
                                 ].map((tip, i) => (
                                     <div key={i} style={{
                                         background: 'rgba(255,255,255,0.03)',
@@ -677,7 +695,7 @@ export default function ShopifyGuidePage() {
                                         borderRadius: 16,
                                         padding: '20px',
                                     }}>
-                                        <div style={{ fontSize: 24, marginBottom: 10 }}>{tip.icon}</div>
+                                        <div style={{ marginBottom: 10 }}>{tip.icon}</div>
                                         <div style={{ fontSize: 15, fontWeight: 700, color: '#F1F5F9', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 8 }}>{tip.title}</div>
                                         <p style={{ fontSize: 13, color: 'rgba(241,245,249,0.48)', lineHeight: 1.6, fontFamily: 'Plus Jakarta Sans, sans-serif', margin: 0 }}>{tip.desc}</p>
                                     </div>

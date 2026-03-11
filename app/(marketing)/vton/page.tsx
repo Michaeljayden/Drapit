@@ -342,6 +342,79 @@ export default function VtonPage() {
                     </div>
                 </section>
 
+                {/* ─── SOCIAL SHARING & BRAND IMPACT ──────────────────── */}
+                <section style={{ padding: '100px 28px', background: 'rgba(29,111,216,0.02)', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 60, alignItems: 'center' }}>
+                            
+                            <div className={`d-in d-d1 ${processSection.inView ? 'visible' : ''}`}>
+                                <div style={{ position: 'relative', borderRadius: 40, padding: '2px', background: 'linear-gradient(135deg, rgba(29,111,216,0.5), transparent)', boxShadow: '0 40px 80px rgba(0,0,0,0.5)' }}>
+                                    <div style={{ background: '#0D1421', borderRadius: 38, overflow: 'hidden' }}>
+                                        <img 
+                                            src="/images/Schermafbeelding 2026-03-11 130519.png" 
+                                            alt="VTON Sharing Features" 
+                                            style={{ width: '100%', height: 'auto', display: 'block' }} 
+                                        />
+                                    </div>
+                                    
+                                    {/* Floating Badge */}
+                                    <div style={{ position: 'absolute', bottom: -20, right: -20, background: '#1D6FD8', color: 'white', padding: '16px 24px', borderRadius: 20, fontWeight: 700, boxShadow: '0 20px 40px rgba(29,111,216,0.4)', fontSize: 14 }}>
+                                        100% Organische Reclame
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className={`d-in d-d2 ${processSection.inView ? 'visible' : ''}`}>
+                                <div style={{ background: 'rgba(29,111,216,0.1)', border: '1px solid rgba(29,111,216,0.2)', display: 'inline-block', padding: '6px 14px', borderRadius: 8, fontSize: 12, fontWeight: 700, color: '#93C5FD', marginBottom: 24, letterSpacing: '0.05em' }}>
+                                    MAXIMALE EXPOSURE
+                                </div>
+                                <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 800, lineHeight: 1.1, marginBottom: 28 }}>
+                                    Van passen naar<br />
+                                    <span style={{ color: '#1D6FD8' }}>wereldwijde exposure.</span>
+                                </h2>
+                                <p style={{ fontSize: 18, color: 'rgba(241,245,249,0.55)', lineHeight: 1.7, marginBottom: 32 }}>
+                                    Drapit VTON is niet alleen een tool voor conversie, het is een krachtige marketingmachine. Gebruikers kunnen hun virtuele pasfoto direct downloaden, afdrukken of met één tik delen op Instagram, TikTok en WhatsApp. 
+                                </p>
+                                
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 20, marginBottom: 40 }}>
+                                    <div style={{ display: 'flex', gap: 16 }}>
+                                        <div style={{ width: 44, height: 44, background: 'rgba(29,111,216,0.1)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+                                        </div>
+                                        <div>
+                                            <h4 style={{ fontSize: 17, fontWeight: 700, marginBottom: 4 }}>Direct Delen & Downloaden</h4>
+                                            <p style={{ fontSize: 14, color: 'rgba(241,245,249,0.45)' }}>Maak het je klanten gemakkelijk om hun nieuwe look aan vrienden te laten zien.</p>
+                                        </div>
+                                    </div>
+                                    <div style={{ display: 'flex', gap: 16 }}>
+                                        <div style={{ width: 44, height: 44, background: 'rgba(29,111,216,0.1)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                        </div>
+                                        <div>
+                                            <h4 style={{ fontSize: 17, fontWeight: 700, marginBottom: 4 }}>Viraliteit door User Generated Content</h4>
+                                            <p style={{ fontSize: 14, color: 'rgba(241,245,249,0.45)' }}>Je merk verspreidt zich organisch als gratis reclame via de feed van je klanten.</p>
+                                        </div>
+                                    </div>
+                                    <div style={{ display: 'flex', gap: 16 }}>
+                                        <div style={{ width: 44, height: 44, background: 'rgba(29,111,216,0.1)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                                        </div>
+                                        <div>
+                                            <h4 style={{ fontSize: 17, fontWeight: 700, marginBottom: 4 }}>Directe "Buy Now" Conversie</h4>
+                                            <p style={{ fontSize: 14, color: 'rgba(241,245,249,0.45)' }}>De drempel is weg. Met de geïntegreerde bestelknop gaat de klant van passessie direct naar check-out.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <Link href="/dashboard/login" className="d-btn-primary" style={{ padding: '18px 40px', fontSize: 16, width: '100%', textAlign: 'center' }}>
+                                    Zet VTON in voor jouw merk →
+                                </Link>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
                 {/* ─── FAQ ─────────────────────────────────────────────── */}
                 <section style={{ padding: '100px 28px' }}>
                     <div style={{ maxWidth: 740, margin: '0 auto' }}>
