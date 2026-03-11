@@ -523,7 +523,7 @@
         overlay.innerHTML = `
             <div class="drapit-modal">
                 <div class="drapit-modal-header">
-                    <span class="drapit-modal-title">Virtueel passen</span>
+                    <span class="drapit-modal-title">Virtueel passen | Virtual Fitting</span>
                     <button class="drapit-close">${ICON_CLOSE}</button>
                 </div>
                 <div class="drapit-modal-body">
@@ -537,8 +537,8 @@
                     <div class="drapit-upload-section">
                         <div class="drapit-upload" id="drapit-dropzone">
                             <div class="drapit-upload-icon">${ICON_UPLOAD}</div>
-                            <div class="drapit-upload-title">Upload je foto</div>
-                            <div class="drapit-upload-hint">Sleep een foto hierheen of klik om te uploaden</div>
+                            <div class="drapit-upload-title">Upload je foto | Upload your photo</div>
+                            <div class="drapit-upload-hint">Sleep een foto hierheen of klik om te uploaden | Drag a photo here or click to upload</div>
                             <input type="file" accept="image/*" id="drapit-file-input" />
                         </div>
                         <div class="drapit-tips-bar">
@@ -564,7 +564,7 @@
                     </div>
                     <div class="drapit-preview-section" style="display:none"></div>
                     <button class="drapit-submit" style="display:none;margin-top:16px">
-                        ${ICON_TRYON} Pas dit item
+                        ${ICON_TRYON} Pas dit item | Try on this item
                     </button>
                 </div>
                 <div class="drapit-powered">Powered by <a href="https://drapit.io" target="_blank" rel="noopener">Drapit</a></div>
@@ -673,10 +673,23 @@
             </div>
             <div class="drapit-loading">
                 <div class="drapit-spinner"></div>
-                <div class="drapit-loading-text">Bezig met virtueel passen…</div>
-                <div class="drapit-loading-sub">Dit duurt meestal 15–30 seconden</div>
+                <div class="drapit-loading-text" id="drapit-loading-msg">Bezig met virtueel passen…</div>
+                <div class="drapit-loading-sub" id="drapit-loading-sub">Dit duurt meestal 15–30 seconden</div>
             </div>
         `;
+
+        const loadingMsg = body.querySelector('#drapit-loading-msg');
+        const loadingSub = body.querySelector('#drapit-loading-sub');
+        const messages = [
+            { main: 'Bezig met virtueel passen…', sub: 'Dit duurt meestal 15–30 seconden' },
+            { main: 'Virtually trying on…', sub: 'This usually takes 15–30 seconds' }
+        ];
+        let msgIndex = 0;
+        const msgInterval = setInterval(() => {
+            msgIndex = (msgIndex + 1) % messages.length;
+            if (loadingMsg) loadingMsg.textContent = messages[msgIndex].main;
+            if (loadingSub) loadingSub.textContent = messages[msgIndex].sub;
+        }, 3500);
 
         try {
             const uploadUrl = await uploadUserPhoto(userPhotoFile);
@@ -712,6 +725,8 @@
         } catch (err) {
             console.error('[Drapit] Try-on error:', err);
             showError(body, err.message, product, overlay);
+        } finally {
+            clearInterval(msgInterval);
         }
     }
 
@@ -727,7 +742,7 @@
         });
 
         if (!res.ok) {
-            throw new Error('Foto upload mislukt. Probeer het opnieuw.');
+            throw new Error('Foto upload mislukt | Photo upload failed. Probeer het opnieuw | Please try again.');
         }
 
         const data = await res.json();
@@ -775,7 +790,7 @@
     // ── Show Result ───────────────────────────────────────────────────────
     function showResult(body, resultUrl, product, overlay) {
         const hasNativeShare = !!navigator.share;
-        const shareLabel = hasNativeShare ? 'Delen' : 'WhatsApp';
+        const shareLabel = hasNativeShare ? 'Delen | Share' : 'WhatsApp';
         const shareIcon = hasNativeShare ? ICON_SHARE : ICON_WHATSAPP;
         const shareBtnClass = hasNativeShare ? '' : 'whatsapp';
 
@@ -785,17 +800,17 @@
                 <div class="drapit-result-actions">
                     ${product.buyUrl
                 ? `<a href="${product.buyUrl}" class="drapit-result-buy" target="_blank" rel="noopener">
-                            ${ICON_CART} Koop dit item
+                            ${ICON_CART} Koop dit item | Buy this item
                            </a>`
                 : `<button class="drapit-result-buy" onclick="this.closest('.drapit-overlay')?.remove()">
-                            Sluiten
+                            Sluiten | Close
                            </button>`
             }
-                    <button class="drapit-result-retry">Opnieuw</button>
+                    <button class="drapit-result-retry">Opnieuw | Retry</button>
                 </div>
                 <div class="drapit-share-actions">
                     <button class="drapit-share-btn save" id="drapit-save-btn">
-                        ${ICON_DOWNLOAD} Opslaan
+                        ${ICON_DOWNLOAD} Opslaan | Save
                     </button>
                     <button class="drapit-share-btn ${shareBtnClass}" id="drapit-share-btn">
                         ${shareIcon} ${shareLabel}
@@ -861,10 +876,10 @@
         body.innerHTML = `
             <div class="drapit-error">
                 <div class="drapit-error-icon">${ICON_ERROR}</div>
-                <div class="drapit-error-text">Er ging iets mis</div>
+                <div class="drapit-error-text">Er ging iets mis | Something went wrong</div>
                 <div class="drapit-error-sub">${escapeHtml(message)}</div>
             </div>
-            <button class="drapit-submit" style="margin-top:16px">Opnieuw proberen</button>
+            <button class="drapit-submit" style="margin-top:16px">Opnieuw proberen | Try again</button>
         `;
 
         body.querySelector('.drapit-submit')?.addEventListener('click', () => {
