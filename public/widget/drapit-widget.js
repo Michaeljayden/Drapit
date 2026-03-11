@@ -1,5 +1,5 @@
 // =============================================================================
-// Drapit Widget v1.0.0 — Embeddable Virtual Try-On
+// Drapit Widget v1.1.0 — Embeddable Virtual Try-On
 // =============================================================================
 // Usage:
 //   <script
@@ -26,7 +26,7 @@
     const SCRIPT_EL = document.currentScript;
     const API_KEY = SCRIPT_EL?.getAttribute('data-drapit-key') || '';
     const PRIMARY_COLOR = SCRIPT_EL?.getAttribute('data-drapit-color') || '#1D6FD8';
-    const CTA_TEXT = SCRIPT_EL?.getAttribute('data-drapit-cta') || 'Virtueel passen';
+    const CTA_TEXT = SCRIPT_EL?.getAttribute('data-drapit-cta') || 'Virtueel passen | Virtual try-on';
     const API_BASE = SCRIPT_EL?.src
         ? new URL(SCRIPT_EL.src).origin
         : window.location.origin;
@@ -38,7 +38,7 @@
         return;
     }
 
-    console.log('[Drapit Widget] v1.0.0 loaded — key: ' + API_KEY.substring(0, 12) + '…');
+    console.log('[Drapit Widget] v1.1.0 (Bilingual) loaded — key: ' + API_KEY.substring(0, 12) + '…');
 
     // ── CSS ───────────────────────────────────────────────────────────────
     const STYLES = `
