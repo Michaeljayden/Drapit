@@ -415,6 +415,7 @@ export default function ShopifyGuidePage() {
                             <a href="#installatie" className="d-nav-link">Installatie</a>
                             <a href="#faq" className="d-nav-link">FAQ</a>
                             <Link href="/studio" className="d-nav-link">Studio</Link>
+                            <Link href="/vton" className="d-nav-link">VTON</Link>
                             <Link href="/dashboard/login" style={{ marginLeft: 8, padding: '9px 18px', fontSize: 14, fontWeight: 600, color: 'rgba(241,245,249,0.75)', fontFamily: 'Plus Jakarta Sans, sans-serif', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, textDecoration: 'none', transition: 'all 0.2s' }}
                                 onMouseEnter={(e) => { e.currentTarget.style.color = '#F1F5F9'; e.currentTarget.style.borderColor = 'rgba(149,191,71,0.4)'; }}
                                 onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(241,245,249,0.75)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}

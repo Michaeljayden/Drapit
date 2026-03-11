@@ -346,6 +346,7 @@ export default function StudioPage() {
                             <Link href="/" className="d-nav-link">Home</Link>
                             <Link href="/shopify" className="d-nav-link">Shopify</Link>
                             <Link href="/studio" className="d-nav-link d-nav-link-active">Studio</Link>
+                            <Link href="/vton" className="d-nav-link">VTON</Link>
                             <Link href="/contact" className="d-nav-link">Contact</Link>
                             <Link href="/dashboard/login" style={{ marginLeft: 8, padding: '9px 18px', fontSize: 14, fontWeight: 600, color: 'rgba(241,245,249,0.75)', fontFamily: 'Plus Jakarta Sans, sans-serif', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, textDecoration: 'none', transition: 'all 0.2s' }}
                                 onMouseEnter={(e) => { e.currentTarget.style.color = '#F1F5F9'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.4)'; }}
@@ -387,6 +388,7 @@ export default function StudioPage() {
                         <Link href="/" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>Home</Link>
                         <Link href="/shopify" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>Shopify</Link>
                         <Link href="/studio" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)} style={{ color: '#A5B4FC', background: 'rgba(99,102,241,0.08)' }}>Studio</Link>
+                        <Link href="/vton" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>VTON</Link>
                         <Link href="/contact" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
                         <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '12px 0' }} />
                         <Link href="/dashboard/login" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>Inloggen</Link>
