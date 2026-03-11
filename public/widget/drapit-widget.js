@@ -199,8 +199,9 @@
         .drapit-preview-img {
             width: 100%;
             border-radius: 12px;
-            object-fit: cover;
-            max-height: 300px;
+            object-fit: contain;
+            max-height: 500px;
+            background: #F8FAFC;
         }
         .drapit-preview-remove {
             position: absolute;
@@ -352,6 +353,9 @@
             border-radius: 14px;
             margin-bottom: 16px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            object-fit: contain;
+            max-height: 500px;
+            background: #F8FAFC;
         }
         .drapit-result-actions {
             display: flex;
