@@ -683,7 +683,7 @@ export default function ShopifyGuidePage() {
                             </div>
 
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 20 }}>
-                                [
+                                {[
                                     { title: 'Widget aanpassen', desc: 'Ga naar je Drapit dashboard om de kleur en tekst van de "Virtueel passen" knop te veranderen zodat het past bij je huisstijl.', icon: <Palette size={24} color="#95BF47" /> },
                                     { title: 'Meerdere winkels', desc: 'Heb je meer dan één Shopify winkel? Maak per winkel een aparte API-sleutel aan in je dashboard, zo hou je alles netjes gescheiden.', icon: <Store size={24} color="#95BF47" /> },
                                     { title: 'Analytics bekijken', desc: 'In je Drapit dashboard kun je precies zien hoeveel keer de "Virtueel passen" functie is gebruikt en welke producten het populairst zijn.', icon: <BarChart3 size={24} color="#95BF47" /> },
