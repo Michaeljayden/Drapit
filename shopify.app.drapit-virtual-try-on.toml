@@ -9,12 +9,23 @@ embedded = false
 api_version = "2026-04"
 
   [[webhooks.subscriptions]]
-  compliance_topics = ["customers/data_request", "customers/redact", "shop/redact"]
-  uri = "https://drapit.io/api/webhook/shopify"
+  compliance_topics = ["customers/data_request"]
+  uri = "https://drapit.io/api/webhook/shopify/customers/data_request"
+
+  [[webhooks.subscriptions]]
+  compliance_topics = ["customers/redact"]
+  uri = "https://drapit.io/api/webhook/shopify/customers/redact"
+
+  [[webhooks.subscriptions]]
+  compliance_topics = ["shop/redact"]
+  uri = "https://drapit.io/api/webhook/shopify/shop/redact"
+
+  [[webhooks.subscriptions]]
+  topics = ["app/uninstalled"]
+  uri = "https://drapit.io/api/webhook/shopify/app/uninstalled"
 
 [access_scopes]
-# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = ""
+scopes = "read_themes,write_themes"
 
 [auth]
 redirect_urls = [
