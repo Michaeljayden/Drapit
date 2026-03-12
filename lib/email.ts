@@ -139,7 +139,42 @@ export async function sendUsageAlertEmail(
 }
 
 // ---------------------------------------------------------------------------
-// 3. Contact form — melding naar info@drapit.io wanneer iemand het formulier stuurt
+// 3. New merchant signup — admin notificatie naar info@drapit.io
+// ---------------------------------------------------------------------------
+export async function sendNewMerchantNotification(params: {
+    merchantEmail: string;
+    merchantName: string;
+    shopName: string;
+    domain: string;
+    phone?: string;
+    plan: string;
+}): Promise<void> {
+    const templateId = process.env.EMAILJS_TEMPLATE_SIGNUP_ADMIN;
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://drapit.io';
+
+    if (!templateId) {
+        console.warn('[email] EMAILJS_TEMPLATE_SIGNUP_ADMIN not configured — skipping admin signup notification');
+        return;
+    }
+
+    const sent = await sendEmail(templateId, {
+        to_email: 'info@drapit.io',
+        merchant_email: params.merchantEmail,
+        merchant_name: params.merchantName || params.merchantEmail,
+        shop_name: params.shopName,
+        domain: params.domain,
+        phone: params.phone || 'Niet opgegeven',
+        plan: params.plan,
+        admin_url: `${appUrl}/admin`,
+    });
+
+    if (sent) {
+        console.log(`[email] Admin signup notification sent for ${params.merchantEmail} (${params.shopName})`);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 4. Contact form — melding naar info@drapit.io wanneer iemand het formulier stuurt
 // ---------------------------------------------------------------------------
 export async function sendContactEmail(params: {
     fromName: string;

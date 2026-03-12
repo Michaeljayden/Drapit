@@ -79,9 +79,30 @@ export default function SignupForm() {
         });
 
         if (authError) {
-            setError(authError.message);
+            // Check if it's an email configuration error
+            if (authError.message.toLowerCase().includes('email') || authError.message.toLowerCase().includes('smtp')) {
+                setError('Fout bij het verzenden van de bevestigingsmail. Controleer de SMTP-instellingen in Supabase.');
+            } else {
+                setError(authError.message);
+            }
             setLoading(false);
             return;
+        }
+
+        // 2. Notify admin immediately (fire-and-forget)
+        if (authData.user) {
+            fetch('/api/auth/signup-notify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    merchantEmail: email,
+                    merchantName: contactPerson || shopName,
+                    shopName: shopName,
+                    domain: domain,
+                    phone: phone,
+                    plan: 'trial',
+                }),
+            }).catch(err => console.error('Failed to send admin notification:', err));
         }
 
         if (authData.user && authData.session) {
