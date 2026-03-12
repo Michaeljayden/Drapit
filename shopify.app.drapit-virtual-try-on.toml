@@ -2,15 +2,22 @@
 
 client_id = "15c8afc4a1e0648dde6da5870549dcb0"
 name = "Drapit Virtual Try-On"
-application_url = "https://shopify.dev/apps/default-app-home"
-embedded = true
+application_url = "https://drapit.io/dashboard"
+embedded = false
 
 [webhooks]
 api_version = "2026-04"
+
+  [[webhooks.subscriptions]]
+  compliance_topics = ["customers/data_request", "customers/redact", "shop/redact"]
+  uri = "https://drapit.io/api/webhook/shopify"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = ""
 
 [auth]
-redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth" ]
+redirect_urls = [
+  "https://drapit.io/api/auth/callback",
+  "https://drapit.io/api/auth/shopify/callback"
+]
