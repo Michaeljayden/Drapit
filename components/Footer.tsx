@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import LanguageSwitcher from './LanguageSwitcher';
 
 /* ─────────────────────────────────────────────────────────────────────────────
    DRAPIT — FOOTER
@@ -171,10 +172,13 @@ export default function Footer() {
                     }}>
                         © 2026 Drapit. Alle rechten voorbehouden.
                     </p>
-                    <div style={{ display: 'flex', gap: '24px' }}>
+                    <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
                         <Link href="/privacy" style={bottomLinkStyle}>Privacy</Link>
                         <Link href="/privacy" style={bottomLinkStyle}>Voorwaarden</Link>
                         <a href="#faq" style={bottomLinkStyle}>FAQ</a>
+                        <div style={{ marginLeft: '12px' }}>
+                            <LanguageSwitcher />
+                        </div>
                     </div>
                 </div>
             </div>

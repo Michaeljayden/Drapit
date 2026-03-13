@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import Logo from '@/components/ui/Logo';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const navItems = [
     {
@@ -299,6 +300,13 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
                             </p>
                         )}
                     </div>
+                </div>
+            </div>
+
+            {/* Language Switcher */}
+            <div className="p-3 pt-0">
+                <div className="flex justify-center">
+                    <LanguageSwitcher />
                 </div>
             </div>
 

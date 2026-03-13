@@ -3,10 +3,15 @@
 import { useState } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import Logo from '@/components/ui/Logo';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function SignupForm() {
+    const t = useTranslations('signup');
+    const tCommon = useTranslations('buttons');
+
     // Account gegevens
     const [shopName, setShopName] = useState('');
     const [domain, setDomain] = useState('');
@@ -44,22 +49,22 @@ export default function SignupForm() {
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            setError('Wachtwoorden komen niet overeen.');
+            setError(t('errors.passwordMismatch'));
             return;
         }
 
         if (password.length < 6) {
-            setError('Wachtwoord moet minimaal 6 tekens bevatten.');
+            setError(t('errors.passwordTooShort'));
             return;
         }
 
         if (!phone.trim()) {
-            setError('Telefoonnummer is verplicht.');
+            setError(t('errors.phoneRequired'));
             return;
         }
 
         if (!domain.trim()) {
-            setError('Webshop URL is verplicht.');
+            setError(t('errors.domainRequired'));
             return;
         }
 
@@ -81,7 +86,7 @@ export default function SignupForm() {
         if (authError) {
             // Check if it's an email configuration error
             if (authError.message.toLowerCase().includes('email') || authError.message.toLowerCase().includes('smtp')) {
-                setError('Fout bij het verzenden van de bevestigingsmail. Controleer de SMTP-instellingen in Supabase.');
+                setError(t('errors.emailError'));
             } else {
                 setError(authError.message);
             }
@@ -149,16 +154,16 @@ export default function SignupForm() {
                                 <path d="M22 2L11 13" /><path d="M22 2L15 22L11 13L2 9L22 2Z" />
                             </svg>
                         </div>
-                        <h2 className="text-2xl font-bold text-[#0F172A] mb-3">Check je e-mail</h2>
+                        <h2 className="text-2xl font-bold text-[#0F172A] mb-3">{t('successTitle')}</h2>
                         <p className="text-[#64748B] mb-8">
-                            We hebben een bevestigingslink gestuurd naar <strong className="text-[#0F172A]">{email}</strong>.
-                            Klik op de link in de mail om je account te activeren.
+                            {t('successMessage')} <strong className="text-[#0F172A]">{email}</strong>.
+                            {' '}{t('successInstruction')}
                         </p>
                         <Link
                             href="/dashboard/login"
                             className="inline-block w-full bg-[#1D6FD8] hover:bg-[#1558B0] text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors duration-200"
                         >
-                            Naar inloggen
+                            {t('goToLogin')}
                         </Link>
                     </div>
                 </div>
@@ -169,7 +174,7 @@ export default function SignupForm() {
     const inputClass = "w-full border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D6FD8] focus:border-transparent placeholder:text-[#94A3B8] bg-white";
     const labelClass = "block text-sm font-medium text-[#0F172A] mb-1.5";
     const sectionTitleClass = "text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-3";
-    const optionalBadge = <span className="ml-1 text-xs font-normal text-[#94A3B8]">(optioneel)</span>;
+    const optionalBadge = <span className="ml-1 text-xs font-normal text-[#94A3B8]">{t('optional')}</span>;
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC] px-4 py-12">
@@ -180,8 +185,11 @@ export default function SignupForm() {
                         <Logo size="lg" />
                     </div>
                     <p className="text-sm text-[#64748B]">
-                        Maak je Drapit account aan
+                        {t('title')}
                     </p>
+                    <div className="flex justify-center mt-4">
+                        <LanguageSwitcher />
+                    </div>
                 </div>
 
                 {/* Card */}
@@ -195,19 +203,19 @@ export default function SignupForm() {
                     <form onSubmit={handleSignup} className="space-y-6">
                         {/* ── Section 1: Account gegevens ── */}
                         <div>
-                            <h3 className={sectionTitleClass}>Account gegevens</h3>
+                            <h3 className={sectionTitleClass}>{t('sectionAccount')}</h3>
                             <div className="space-y-4">
                                 {/* Shop Name */}
                                 <div>
                                     <label htmlFor="shop-name" className={labelClass}>
-                                        Webshop naam <span className="text-[#DC2626]">*</span>
+                                        {t('shopName')} <span className="text-[#DC2626]">{t('required')}</span>
                                     </label>
                                     <input
                                         id="shop-name"
                                         type="text"
                                         value={shopName}
                                         onChange={(e) => setShopName(e.target.value)}
-                                        placeholder="Bijv. Modern Fashion"
+                                        placeholder={t('shopNamePlaceholder')}
                                         required
                                         className={inputClass}
                                     />
@@ -216,14 +224,14 @@ export default function SignupForm() {
                                 {/* Webshop URL */}
                                 <div>
                                     <label htmlFor="domain" className={labelClass}>
-                                        Webshop URL <span className="text-[#DC2626]">*</span>
+                                        {t('domain')} <span className="text-[#DC2626]">{t('required')}</span>
                                     </label>
                                     <input
                                         id="domain"
                                         type="url"
                                         value={domain}
                                         onChange={(e) => setDomain(e.target.value)}
-                                        placeholder="https://www.jouwwebshop.nl"
+                                        placeholder={t('domainPlaceholder')}
                                         required
                                         className={inputClass}
                                     />
@@ -232,14 +240,14 @@ export default function SignupForm() {
                                 {/* Email */}
                                 <div>
                                     <label htmlFor="signup-email" className={labelClass}>
-                                        E-mailadres <span className="text-[#DC2626]">*</span>
+                                        {t('email')} <span className="text-[#DC2626]">{t('required')}</span>
                                     </label>
                                     <input
                                         id="signup-email"
                                         type="email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        placeholder="naam@bedrijf.nl"
+                                        placeholder={t('emailPlaceholder')}
                                         required
                                         className={inputClass}
                                     />
@@ -249,28 +257,28 @@ export default function SignupForm() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label htmlFor="signup-password" className={labelClass}>
-                                            Wachtwoord <span className="text-[#DC2626]">*</span>
+                                            {t('password')} <span className="text-[#DC2626]">{t('required')}</span>
                                         </label>
                                         <input
                                             id="signup-password"
                                             type="password"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
-                                            placeholder="••••••••"
+                                            placeholder={t('passwordPlaceholder')}
                                             required
                                             className={inputClass}
                                         />
                                     </div>
                                     <div>
                                         <label htmlFor="confirm-password" className={labelClass}>
-                                            Bevestig wachtwoord <span className="text-[#DC2626]">*</span>
+                                            {t('confirmPassword')} <span className="text-[#DC2626]">{t('required')}</span>
                                         </label>
                                         <input
                                             id="confirm-password"
                                             type="password"
                                             value={confirmPassword}
                                             onChange={(e) => setConfirmPassword(e.target.value)}
-                                            placeholder="••••••••"
+                                            placeholder={t('passwordPlaceholder')}
                                             required
                                             className={inputClass}
                                         />
@@ -283,20 +291,20 @@ export default function SignupForm() {
 
                         {/* ── Section 2: Contactgegevens ── */}
                         <div>
-                            <h3 className={sectionTitleClass}>Contactgegevens</h3>
+                            <h3 className={sectionTitleClass}>{t('sectionContact')}</h3>
                             <div className="space-y-4">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     {/* Contact Person */}
                                     <div>
                                         <label htmlFor="contact-person" className={labelClass}>
-                                            Contactpersoon {optionalBadge}
+                                            {t('contactPerson')} {optionalBadge}
                                         </label>
                                         <input
                                             id="contact-person"
                                             type="text"
                                             value={contactPerson}
                                             onChange={(e) => setContactPerson(e.target.value)}
-                                            placeholder="Voornaam Achternaam"
+                                            placeholder={t('contactPersonPlaceholder')}
                                             className={inputClass}
                                         />
                                     </div>
@@ -304,14 +312,14 @@ export default function SignupForm() {
                                     {/* Phone */}
                                     <div>
                                         <label htmlFor="phone" className={labelClass}>
-                                            Telefoonnummer <span className="text-[#DC2626]">*</span>
+                                            {t('phone')} <span className="text-[#DC2626]">{t('required')}</span>
                                         </label>
                                         <input
                                             id="phone"
                                             type="tel"
                                             value={phone}
                                             onChange={(e) => setPhone(e.target.value)}
-                                            placeholder="+31 6 12345678"
+                                            placeholder={t('phonePlaceholder')}
                                             required
                                             className={inputClass}
                                         />
@@ -324,19 +332,19 @@ export default function SignupForm() {
 
                         {/* ── Section 3: Bedrijfsgegevens (optioneel) ── */}
                         <div>
-                            <h3 className={sectionTitleClass}>Bedrijfsgegevens <span className="text-[#94A3B8] font-normal normal-case tracking-normal">— optioneel</span></h3>
+                            <h3 className={sectionTitleClass}>{t('sectionCompany')} <span className="text-[#94A3B8] font-normal normal-case tracking-normal">{t('optionalSection')}</span></h3>
                             <div className="space-y-4">
                                 {/* Company Name */}
                                 <div>
                                     <label htmlFor="company-name" className={labelClass}>
-                                        Bedrijfsnaam {optionalBadge}
+                                        {t('companyName')} {optionalBadge}
                                     </label>
                                     <input
                                         id="company-name"
                                         type="text"
                                         value={companyName}
                                         onChange={(e) => setCompanyName(e.target.value)}
-                                        placeholder="Bijv. Fashion B.V."
+                                        placeholder={t('companyNamePlaceholder')}
                                         className={inputClass}
                                     />
                                 </div>
@@ -345,14 +353,14 @@ export default function SignupForm() {
                                     {/* KVK Number */}
                                     <div>
                                         <label htmlFor="kvk-number" className={labelClass}>
-                                            KVK-nummer {optionalBadge}
+                                            {t('kvkNumber')} {optionalBadge}
                                         </label>
                                         <input
                                             id="kvk-number"
                                             type="text"
                                             value={kvkNumber}
                                             onChange={(e) => setKvkNumber(e.target.value)}
-                                            placeholder="12345678"
+                                            placeholder={t('kvkNumberPlaceholder')}
                                             maxLength={8}
                                             className={inputClass}
                                         />
@@ -361,14 +369,14 @@ export default function SignupForm() {
                                     {/* VAT Number */}
                                     <div>
                                         <label htmlFor="vat-number" className={labelClass}>
-                                            BTW-nummer {optionalBadge}
+                                            {t('vatNumber')} {optionalBadge}
                                         </label>
                                         <input
                                             id="vat-number"
                                             type="text"
                                             value={vatNumber}
                                             onChange={(e) => setVatNumber(e.target.value)}
-                                            placeholder="NL123456789B01"
+                                            placeholder={t('vatNumberPlaceholder')}
                                             className={inputClass}
                                         />
                                     </div>
@@ -380,19 +388,19 @@ export default function SignupForm() {
 
                         {/* ── Section 4: Adres (optioneel) ── */}
                         <div>
-                            <h3 className={sectionTitleClass}>Adres <span className="text-[#94A3B8] font-normal normal-case tracking-normal">— optioneel</span></h3>
+                            <h3 className={sectionTitleClass}>{t('sectionAddress')} <span className="text-[#94A3B8] font-normal normal-case tracking-normal">{t('optionalSection')}</span></h3>
                             <div className="space-y-4">
                                 {/* Street + house number */}
                                 <div>
                                     <label htmlFor="address" className={labelClass}>
-                                        Straat + huisnummer {optionalBadge}
+                                        {t('address')} {optionalBadge}
                                     </label>
                                     <input
                                         id="address"
                                         type="text"
                                         value={address}
                                         onChange={(e) => setAddress(e.target.value)}
-                                        placeholder="Hoofdstraat 1"
+                                        placeholder={t('addressPlaceholder')}
                                         className={inputClass}
                                     />
                                 </div>
@@ -401,14 +409,14 @@ export default function SignupForm() {
                                     {/* Postal Code */}
                                     <div>
                                         <label htmlFor="postal-code" className={labelClass}>
-                                            Postcode {optionalBadge}
+                                            {t('postalCode')} {optionalBadge}
                                         </label>
                                         <input
                                             id="postal-code"
                                             type="text"
                                             value={postalCode}
                                             onChange={(e) => setPostalCode(e.target.value)}
-                                            placeholder="1234 AB"
+                                            placeholder={t('postalCodePlaceholder')}
                                             maxLength={7}
                                             className={inputClass}
                                         />
@@ -417,14 +425,14 @@ export default function SignupForm() {
                                     {/* City */}
                                     <div>
                                         <label htmlFor="city" className={labelClass}>
-                                            Stad {optionalBadge}
+                                            {t('city')} {optionalBadge}
                                         </label>
                                         <input
                                             id="city"
                                             type="text"
                                             value={city}
                                             onChange={(e) => setCity(e.target.value)}
-                                            placeholder="Amsterdam"
+                                            placeholder={t('cityPlaceholder')}
                                             className={inputClass}
                                         />
                                     </div>
@@ -432,14 +440,14 @@ export default function SignupForm() {
                                     {/* Country */}
                                     <div>
                                         <label htmlFor="country" className={labelClass}>
-                                            Land {optionalBadge}
+                                            {t('country')} {optionalBadge}
                                         </label>
                                         <input
                                             id="country"
                                             type="text"
                                             value={country}
                                             onChange={(e) => setCountry(e.target.value)}
-                                            placeholder="Nederland"
+                                            placeholder={t('countryPlaceholder')}
                                             className={inputClass}
                                         />
                                     </div>
@@ -459,17 +467,17 @@ export default function SignupForm() {
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                                     </svg>
-                                    Account aanmaken...
+                                    {t('creatingAccount')}
                                 </span>
-                            ) : 'Aanmelden'}
+                            ) : t('createAccount')}
                         </button>
                     </form>
 
                     <div className="mt-6 pt-6 border-t border-[#F1F5F9] text-center">
                         <p className="text-sm text-[#64748B]">
-                            Heb je al een account?{' '}
+                            {t('hasAccount')}{' '}
                             <Link href="/dashboard/login" className="font-medium text-[#1D6FD8] hover:underline">
-                                Inloggen
+                                {t('loginLink')}
                             </Link>
                         </p>
                     </div>
@@ -477,10 +485,10 @@ export default function SignupForm() {
 
                 {/* Footer */}
                 <p className="text-center text-xs text-[#64748B] mt-6">
-                    Bij aanmelding ga je akkoord met onze{' '}
-                    <button className="underline hover:text-[#0F172A]">Voorwaarden</button>
-                    {' '}en{' '}
-                    <button className="underline hover:text-[#0F172A]">Privacybeleid</button>.
+                    {t('termsText')}{' '}
+                    <button className="underline hover:text-[#0F172A]">{t('termsLink')}</button>
+                    {' '}{t('and')}{' '}
+                    <button className="underline hover:text-[#0F172A]">{t('privacyLink')}</button>.
                 </p>
             </div>
         </div>
