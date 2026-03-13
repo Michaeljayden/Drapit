@@ -55,7 +55,7 @@ function useInView(threshold = 0.12) {
 }
 
 function TryOnVisual() {
-    const t = useTranslations('widget');
+    const t = useTranslations();
     const [phase, setPhase] = useState(0);
     useEffect(() => {
         const interval = setInterval(() => setPhase(p => (p + 1) % 4), 1800);
@@ -85,7 +85,7 @@ function TryOnVisual() {
                     <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#FFBD2E' }} />
                     <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#28CA41' }} />
                     <div style={{ flex: 1, marginLeft: 8, height: 22, borderRadius: 6, background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', paddingLeft: 10 }}>
-                        <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{t('demoUrl')}</span>
+                        <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{t('widget.demoUrl')}</span>
                     </div>
                 </div>
 
@@ -106,7 +106,7 @@ function TryOnVisual() {
                             <path d="M26 82 L23 112" stroke="rgba(255,255,255,0.1)" strokeWidth="6" strokeLinecap="round" />
                             <path d="M46 82 L49 112" stroke="rgba(255,255,255,0.1)" strokeWidth="6" strokeLinecap="round" />
                         </svg>
-                        <div style={{ position: 'absolute', bottom: 8, left: 0, right: 0, textAlign: 'center', fontSize: 9, color: 'rgba(255,255,255,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.06em' }}>{t('customerPhoto')}</div>
+                        <div style={{ position: 'absolute', bottom: 8, left: 0, right: 0, textAlign: 'center', fontSize: 9, color: 'rgba(255,255,255,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.06em' }}>{t('widget.customerPhoto')}</div>
                     </div>
 
                     {/* Result panel */}
@@ -120,7 +120,7 @@ function TryOnVisual() {
                         {phase < 2 ? (
                             <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 8 }}>
                                 <div style={{ width: 30, height: 30, borderRadius: '50%', border: '2px solid rgba(29,111,216,0.4)', borderTopColor: '#1D6FD8', animation: 'drapit-spin 0.9s linear infinite' }} />
-                                <span style={{ fontSize: 9, color: 'rgba(29,111,216,0.7)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.04em' }}>{t('processing')}</span>
+                                <span style={{ fontSize: 9, color: 'rgba(29,111,216,0.7)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.04em' }}>{t('widget.processing')}</span>
                                 <div style={{ position: 'absolute', left: 0, right: 0, height: 2, background: 'linear-gradient(90deg, transparent, rgba(29,111,216,0.9), transparent)', animation: 'drapit-scan 1.6s ease-in-out infinite', boxShadow: '0 0 10px rgba(29,111,216,0.7)' }} />
                             </div>
                         ) : (
@@ -135,19 +135,19 @@ function TryOnVisual() {
                                     <path d="M46 82 L49 112" stroke="rgba(255,255,255,0.1)" strokeWidth="6" strokeLinecap="round" />
                                 </svg>
                                 {phase === 3 && (
-                                    <div style={{ position: 'absolute', top: 10, right: 10, background: 'rgba(22,163,74,0.9)', borderRadius: 20, padding: '3px 9px', fontSize: 9, color: 'white', fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.04em', animation: 'drapit-fadein 0.4s ease' }}>{t('complete')}</div>
+                                    <div style={{ position: 'absolute', top: 10, right: 10, background: 'rgba(22,163,74,0.9)', borderRadius: 20, padding: '3px 9px', fontSize: 9, color: 'white', fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.04em', animation: 'drapit-fadein 0.4s ease' }}>{t('widget.complete')}</div>
                                 )}
                             </>
                         )}
                         <div style={{ position: 'absolute', bottom: 8, left: 0, right: 0, textAlign: 'center', fontSize: 9, color: phase >= 2 ? 'rgba(29,111,216,0.85)' : 'rgba(255,255,255,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.06em', transition: 'color 0.4s' }}>
-                            {phase >= 2 ? t('result') : t('processingShort')}
+                            {phase >= 2 ? t('widget.result') : t('widget.processingShort')}
                         </div>
                     </div>
                 </div>
 
                 {/* Product swatches */}
                 <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
-                    {[{ color: '#1D6FD8', label: t('products.blazer') }, { color: '#7C3AED', label: t('products.dress') }, { color: '#DC2626', label: t('products.jacket') }, { color: '#059669', label: t('products.shirt') }].map((item, i) => (
+                    {[{ color: '#1D6FD8', label: t('widget.products.blazer') }, { color: '#7C3AED', label: t('widget.products.dress') }, { color: '#DC2626', label: t('widget.products.jacket') }, { color: '#059669', label: t('widget.products.shirt') }].map((item, i) => (
                         <div key={i} style={{ flex: 1, height: 34, borderRadius: 8, background: `linear-gradient(135deg, ${item.color}33, ${item.color}66)`, border: `1px solid ${item.color}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                             <span style={{ fontSize: 8, color: 'rgba(255,255,255,0.65)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{item.label}</span>
                         </div>
@@ -156,13 +156,13 @@ function TryOnVisual() {
 
                 {/* CTA button */}
                 <button style={{ marginTop: 12, width: '100%', padding: '10px 0', borderRadius: 10, background: 'linear-gradient(135deg, #1D6FD8, #2563EB)', border: 'none', color: 'white', fontSize: 12, fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.06em', cursor: 'pointer', boxShadow: '0 4px 20px rgba(29,111,216,0.45)' }}>
-                    {t('cta')}
+                    {t('widget.cta')}
                 </button>
             </div>
 
             {/* Floating badge */}
             <div style={{ position: 'absolute', top: -16, right: -16, background: 'linear-gradient(135deg, #1D6FD8, #0EA5E9)', borderRadius: 12, padding: '8px 14px', boxShadow: '0 8px 24px rgba(29,111,216,0.55)', fontSize: 11, fontWeight: 800, color: 'white', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>
-                {t('badge')}
+                {t('widget.badge')}
             </div>
         </div>
     );
