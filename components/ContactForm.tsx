@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 /* ─────────────────────────────────────────────────────────────────────────────
    ContactForm — Dark luxury-tech stijl passend bij de Drapit landingspagina
@@ -19,15 +20,17 @@ interface FormState {
     message: string;
 }
 
-const SUBJECTS = [
-    'Ik heb een vraag over Drapit',
-    'Ik wil een demo aanvragen',
-    'Technische ondersteuning',
-    'Samenwerking / partnership',
-    'Iets anders',
-];
-
 export default function ContactForm() {
+    const t = useTranslations('contact');
+
+    const SUBJECTS = [
+        t('subjects.question'),
+        t('subjects.demo'),
+        t('subjects.support'),
+        t('subjects.partnership'),
+        t('subjects.other'),
+    ];
+
     const [form, setForm] = useState<FormState>({
         name: '',
         email: '',
@@ -47,10 +50,10 @@ export default function ContactForm() {
 
     function validate(): boolean {
         const newErrors: Partial<Record<Field, string>> = {};
-        if (!form.name.trim()) newErrors.name = 'Naam is verplicht';
-        if (!form.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) newErrors.email = 'Ongeldig e-mailadres';
-        if (!form.subject) newErrors.subject = 'Kies een onderwerp';
-        if (form.message.trim().length < 10) newErrors.message = 'Schrijf minimaal 10 tekens';
+        if (!form.name.trim()) newErrors.name = t('errors.nameRequired');
+        if (!form.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) newErrors.email = t('errors.invalidEmail');
+        if (!form.subject) newErrors.subject = t('errors.subjectRequired');
+        if (form.message.trim().length < 10) newErrors.message = t('errors.messageTooShort');
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     }
@@ -127,11 +130,11 @@ export default function ContactForm() {
                     ✓
                 </div>
                 <h3 style={{ color: '#F1F5F9', fontSize: 22, fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif', margin: '0 0 10px' }}>
-                    Bericht ontvangen!
+                    {t('successTitle')}
                 </h3>
                 <p style={{ color: 'rgba(241,245,249,0.50)', fontSize: 15, fontFamily: 'Plus Jakarta Sans, sans-serif', margin: 0, lineHeight: 1.6 }}>
-                    We nemen zo snel mogelijk contact met je op via <strong style={{ color: 'rgba(241,245,249,0.75)' }}>{form.email || 'je e-mail'}</strong>.
-                    Normaal gesproken reageren we binnen één werkdag.
+                    {t('successMessage')} <strong style={{ color: 'rgba(241,245,249,0.75)' }}>{form.email || 'je e-mail'}</strong>.
+                    {' '}{t('successNote')}
                 </p>
             </div>
         );
@@ -145,12 +148,12 @@ export default function ContactForm() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
                 {/* Name */}
                 <div>
-                    <label style={labelStyle}>Naam</label>
+                    <label style={labelStyle}>{t('name')}</label>
                     <input
                         type="text"
                         value={form.name}
                         onChange={e => update('name', e.target.value)}
-                        placeholder="Jan de Vries"
+                        placeholder={t('namePlaceholder')}
                         style={{ ...inputStyle, ...(errors.name ? { borderColor: '#F87171' } : {}) }}
                         onFocus={e => { e.target.style.borderColor = 'rgba(29,111,216,0.6)'; e.target.style.background = 'rgba(255,255,255,0.06)'; }}
                         onBlur={e => { e.target.style.borderColor = errors.name ? '#F87171' : 'rgba(255,255,255,0.10)'; e.target.style.background = 'rgba(255,255,255,0.04)'; }}
@@ -160,12 +163,12 @@ export default function ContactForm() {
 
                 {/* Email */}
                 <div>
-                    <label style={labelStyle}>E-mailadres</label>
+                    <label style={labelStyle}>{t('email')}</label>
                     <input
                         type="email"
                         value={form.email}
                         onChange={e => update('email', e.target.value)}
-                        placeholder="jan@mijnshop.nl"
+                        placeholder={t('emailPlaceholder')}
                         style={{ ...inputStyle, ...(errors.email ? { borderColor: '#F87171' } : {}) }}
                         onFocus={e => { e.target.style.borderColor = 'rgba(29,111,216,0.6)'; e.target.style.background = 'rgba(255,255,255,0.06)'; }}
                         onBlur={e => { e.target.style.borderColor = errors.email ? '#F87171' : 'rgba(255,255,255,0.10)'; e.target.style.background = 'rgba(255,255,255,0.04)'; }}
@@ -178,12 +181,12 @@ export default function ContactForm() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
                 {/* Phone */}
                 <div>
-                    <label style={labelStyle}>Telefoonnummer <span style={{ color: 'rgba(241,245,249,0.25)', fontWeight: 400 }}>(optioneel)</span></label>
+                    <label style={labelStyle}>{t('phone')} <span style={{ color: 'rgba(241,245,249,0.25)', fontWeight: 400 }}>{t('optional')}</span></label>
                     <input
                         type="tel"
                         value={form.phone}
                         onChange={e => update('phone', e.target.value)}
-                        placeholder="+31 6 12345678"
+                        placeholder={t('phonePlaceholder')}
                         style={inputStyle}
                         onFocus={e => { e.target.style.borderColor = 'rgba(29,111,216,0.6)'; e.target.style.background = 'rgba(255,255,255,0.06)'; }}
                         onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.10)'; e.target.style.background = 'rgba(255,255,255,0.04)'; }}
@@ -192,12 +195,12 @@ export default function ContactForm() {
 
                 {/* Webshop name */}
                 <div>
-                    <label style={labelStyle}>Webshopnaam <span style={{ color: 'rgba(241,245,249,0.25)', fontWeight: 400 }}>(optioneel)</span></label>
+                    <label style={labelStyle}>{t('webshopName')} <span style={{ color: 'rgba(241,245,249,0.25)', fontWeight: 400 }}>{t('optional')}</span></label>
                     <input
                         type="text"
                         value={form.webshopName}
                         onChange={e => update('webshopName', e.target.value)}
-                        placeholder="Mijn Webshop"
+                        placeholder={t('webshopNamePlaceholder')}
                         style={inputStyle}
                         onFocus={e => { e.target.style.borderColor = 'rgba(29,111,216,0.6)'; e.target.style.background = 'rgba(255,255,255,0.06)'; }}
                         onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.10)'; e.target.style.background = 'rgba(255,255,255,0.04)'; }}
@@ -207,9 +210,9 @@ export default function ContactForm() {
 
             {/* Brand clothing */}
             <div>
-                <label style={labelStyle}>Verkoopt u merkkleding? <span style={{ color: 'rgba(241,245,249,0.25)', fontWeight: 400 }}>(optioneel)</span></label>
+                <label style={labelStyle}>{t('brandClothing')} <span style={{ color: 'rgba(241,245,249,0.25)', fontWeight: 400 }}>{t('optional')}</span></label>
                 <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                    {['Ja', 'Nee', 'Gedeeltelijk'].map(option => (
+                    {[t('brandClothingYes'), t('brandClothingNo'), t('brandClothingPartial')].map(option => (
                         <button
                             key={option}
                             type="button"
@@ -238,7 +241,7 @@ export default function ContactForm() {
 
             {/* Subject */}
             <div>
-                <label style={labelStyle}>Onderwerp</label>
+                <label style={labelStyle}>{t('subject')}</label>
                 <select
                     value={form.subject}
                     onChange={e => update('subject', e.target.value)}
@@ -260,11 +263,11 @@ export default function ContactForm() {
 
             {/* Message */}
             <div>
-                <label style={labelStyle}>Bericht</label>
+                <label style={labelStyle}>{t('message')}</label>
                 <textarea
                     value={form.message}
                     onChange={e => update('message', e.target.value)}
-                    placeholder="Vertel ons waar je mee kunt helpen..."
+                    placeholder={t('messagePlaceholder')}
                     rows={5}
                     style={{
                         ...inputStyle,
@@ -284,7 +287,7 @@ export default function ContactForm() {
             {/* Error banner */}
             {status === 'error' && (
                 <div style={{ padding: '12px 16px', background: 'rgba(248,113,113,0.08)', border: '1px solid rgba(248,113,113,0.20)', borderRadius: 10, color: '#FCA5A5', fontSize: 14, fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-                    Verzenden mislukt. Controleer je verbinding en probeer het opnieuw.
+                    {t('errorBanner')}
                 </div>
             )}
 
@@ -321,11 +324,11 @@ export default function ContactForm() {
                         <svg style={{ animation: 'spin 1s linear infinite' }} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                             <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
                         </svg>
-                        Verzenden...
+                        {t('sending')}
                     </>
                 ) : (
                     <>
-                        Stuur bericht →
+                        {t('send')}
                     </>
                 )}
             </button>

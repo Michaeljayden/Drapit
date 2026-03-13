@@ -79,17 +79,42 @@
   },
   "contact": {
     "name": "Name",
-    "email": "Email",
+    "namePlaceholder": "John Doe",
+    "email": "Email address",
+    "emailPlaceholder": "john@myshop.com",
+    "phone": "Phone number",
+    "phonePlaceholder": "+1 234 567 8900",
+    "webshopName": "Shop name",
+    "webshopNamePlaceholder": "My Shop",
+    "brandClothing": "Do you sell branded clothing?",
+    "brandClothingYes": "Yes",
+    "brandClothingNo": "No",
+    "brandClothingPartial": "Partially",
     "subject": "Subject",
+    "subjects": {
+      "question": "I have a question about Drapit",
+      "demo": "I want to request a demo",
+      "support": "Technical support",
+      "partnership": "Collaboration / partnership",
+      "other": "Something else"
+    },
     "message": "Message",
-    "send": "Send",
+    "messagePlaceholder": "Tell us how we can help you...",
+    "messageCounter": "{count}/5000",
+    "send": "Send message →",
+    "sending": "Sending...",
+    "successTitle": "Message received!",
+    "successMessage": "We'll get back to you as soon as possible via",
+    "successNote": "Normally we respond within one business day.",
+    "errorBanner": "Sending failed. Check your connection and try again.",
+    "optional": "(optional)",
     "errors": {
       "nameRequired": "Name is required",
       "emailRequired": "Email address is required",
       "invalidEmail": "Invalid email address",
-      "subjectRequired": "Subject is required",
+      "subjectRequired": "Choose a subject",
       "messageRequired": "Message is required",
-      "messageTooShort": "Message must be at least 10 characters"
+      "messageTooShort": "Write at least 10 characters"
     }
   },
   "validation": {

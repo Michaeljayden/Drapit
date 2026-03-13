@@ -4,12 +4,29 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
+import { useTranslations } from 'next-intl';
 import Logo from '@/components/ui/Logo';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
-const navItems = [
+interface SidebarProps {
+    shopName?: string;
+    tryonsUsed?: number;
+    tryonsLimit?: number;
+    studioCreditsUsed?: number;
+    studioCreditsLimit?: number;
+    studioExtraCredits?: number;
+}
+
+export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryonsLimit = 500, studioCreditsUsed = 0, studioCreditsLimit = 20, studioExtraCredits = 0 }: SidebarProps) {
+    const t = useTranslations('nav');
+    const tCommon = useTranslations('buttons');
+    const pathname = usePathname();
+    const router = useRouter();
+    const [mobileOpen, setMobileOpen] = useState(false);
+
+    const navItems = [
     {
-        label: 'Overzicht',
+        label: t('overview'),
         href: '/dashboard',
         icon: (
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -21,7 +38,7 @@ const navItems = [
         ),
     },
     {
-        label: 'Widget',
+        label: t('widget'),
         href: '/dashboard/widget',
         icon: (
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -32,9 +49,9 @@ const navItems = [
         ),
     },
     {
-        label: 'Studio',
+        label: t('studio'),
         href: '/dashboard/studio',
-        badge: 'Nieuw',
+        badge: t('new'),
         icon: (
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M3 13V5.5A1.5 1.5 0 014.5 4h.75L6 2.5h6L12.75 4h.75A1.5 1.5 0 0115 5.5V13a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 013 13z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -44,7 +61,7 @@ const navItems = [
         ),
         children: [
             {
-                label: 'Studio',
+                label: t('studio'),
                 href: '/dashboard/studio',
                 icon: (
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -55,7 +72,7 @@ const navItems = [
                 ),
             },
             {
-                label: 'Galerij',
+                label: t('gallery'),
                 href: '/dashboard/studio/gallery',
                 icon: (
                     <svg width="16" height="16" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -67,7 +84,7 @@ const navItems = [
                 ),
             },
             {
-                label: 'Studio Gids',
+                label: t('guide'),
                 href: '/dashboard/guide',
                 icon: (
                     <svg width="16" height="16" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -80,7 +97,7 @@ const navItems = [
         ]
     },
     {
-        label: 'API-sleutels',
+        label: t('apiKeys'),
         href: '/dashboard/api-keys',
         icon: (
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -90,7 +107,7 @@ const navItems = [
         ),
     },
     {
-        label: 'Abonnement',
+        label: t('billing'),
         href: '/dashboard/billing',
         icon: (
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -101,7 +118,7 @@ const navItems = [
         ),
     },
     {
-        label: 'Instellingen',
+        label: t('settings'),
         href: '/dashboard/settings',
         icon: (
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -112,20 +129,6 @@ const navItems = [
         ),
     },
 ];
-
-interface SidebarProps {
-    shopName?: string;
-    tryonsUsed?: number;
-    tryonsLimit?: number;
-    studioCreditsUsed?: number;
-    studioCreditsLimit?: number;
-    studioExtraCredits?: number;
-}
-
-export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryonsLimit = 500, studioCreditsUsed = 0, studioCreditsLimit = 20, studioExtraCredits = 0 }: SidebarProps) {
-    const pathname = usePathname();
-    const router = useRouter();
-    const [mobileOpen, setMobileOpen] = useState(false);
 
     const usagePercent = tryonsLimit > 0 ? Math.min((tryonsUsed / tryonsLimit) * 100, 100) : 0;
     const usageColor = usagePercent > 90 ? '#EF4444' : usagePercent > 75 ? '#F59E0B' : '#1D6FD8';
@@ -322,7 +325,7 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
                         <path d="M12 12.5L16 9L12 5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         <line x1="16" y1="9" x2="7" y2="9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                     </svg>
-                    Uitloggen
+                    {tCommon('logout')}
                 </button>
             </div>
         </>

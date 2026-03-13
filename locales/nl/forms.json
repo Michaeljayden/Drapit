@@ -79,17 +79,42 @@
   },
   "contact": {
     "name": "Naam",
-    "email": "E-mail",
+    "namePlaceholder": "Jan de Vries",
+    "email": "E-mailadres",
+    "emailPlaceholder": "jan@mijnshop.nl",
+    "phone": "Telefoonnummer",
+    "phonePlaceholder": "+31 6 12345678",
+    "webshopName": "Webshopnaam",
+    "webshopNamePlaceholder": "Mijn Webshop",
+    "brandClothing": "Verkoopt u merkkleding?",
+    "brandClothingYes": "Ja",
+    "brandClothingNo": "Nee",
+    "brandClothingPartial": "Gedeeltelijk",
     "subject": "Onderwerp",
+    "subjects": {
+      "question": "Ik heb een vraag over Drapit",
+      "demo": "Ik wil een demo aanvragen",
+      "support": "Technische ondersteuning",
+      "partnership": "Samenwerking / partnership",
+      "other": "Iets anders"
+    },
     "message": "Bericht",
-    "send": "Versturen",
+    "messagePlaceholder": "Vertel ons waar je mee kunt helpen...",
+    "messageCounter": "{count}/5000",
+    "send": "Stuur bericht →",
+    "sending": "Verzenden...",
+    "successTitle": "Bericht ontvangen!",
+    "successMessage": "We nemen zo snel mogelijk contact met je op via",
+    "successNote": "Normaal gesproken reageren we binnen één werkdag.",
+    "errorBanner": "Verzenden mislukt. Controleer je verbinding en probeer het opnieuw.",
+    "optional": "(optioneel)",
     "errors": {
       "nameRequired": "Naam is verplicht",
       "emailRequired": "E-mailadres is verplicht",
       "invalidEmail": "Ongeldig e-mailadres",
-      "subjectRequired": "Onderwerp is verplicht",
+      "subjectRequired": "Kies een onderwerp",
       "messageRequired": "Bericht is verplicht",
-      "messageTooShort": "Bericht moet minimaal 10 tekens bevatten"
+      "messageTooShort": "Schrijf minimaal 10 tekens"
     }
   },
   "validation": {
