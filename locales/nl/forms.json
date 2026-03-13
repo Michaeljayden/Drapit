@@ -1,0 +1,72 @@
+{
+  "login": {
+    "title": "Log in op je dashboard",
+    "email": "E-mailadres",
+    "emailPlaceholder": "naam@bedrijf.nl",
+    "password": "Wachtwoord",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "Vergeten?",
+    "loginButton": "Inloggen",
+    "magicLink": "Magic link",
+    "sendMagicLink": "Stuur magic link",
+    "checkInbox": "Check je inbox",
+    "magicLinkSent": "We hebben een inloglink gestuurd naar",
+    "backToLogin": "Terug naar inloggen",
+    "noAccount": "Nog geen account?",
+    "signupLink": "Aanmelden",
+    "passwordMode": "Wachtwoord",
+    "errors": {
+      "invalidCredentials": "Ongeldige inloggegevens. Controleer je e-mail en wachtwoord.",
+      "emailRequired": "E-mailadres is verplicht",
+      "passwordRequired": "Wachtwoord is verplicht"
+    }
+  },
+  "signup": {
+    "title": "Account aanmaken",
+    "shopName": "Webshop naam",
+    "domain": "Webshop URL",
+    "email": "E-mailadres",
+    "password": "Wachtwoord",
+    "confirmPassword": "Bevestig wachtwoord",
+    "contactPerson": "Contactpersoon",
+    "phone": "Telefoonnummer",
+    "companyName": "Bedrijfsnaam",
+    "kvkNumber": "KvK-nummer",
+    "vatNumber": "BTW-nummer",
+    "address": "Adres",
+    "postalCode": "Postcode",
+    "city": "Plaats",
+    "country": "Land",
+    "createAccount": "Account aanmaken",
+    "hasAccount": "Heb je al een account?",
+    "loginLink": "Inloggen",
+    "errors": {
+      "passwordMismatch": "Wachtwoorden komen niet overeen.",
+      "passwordTooShort": "Wachtwoord moet minimaal 6 tekens bevatten.",
+      "phoneRequired": "Telefoonnummer is verplicht.",
+      "domainRequired": "Webshop URL is verplicht.",
+      "emailError": "Fout bij het verzenden van de bevestigingsmail. Controleer de SMTP-instellingen in Supabase."
+    }
+  },
+  "contact": {
+    "name": "Naam",
+    "email": "E-mail",
+    "subject": "Onderwerp",
+    "message": "Bericht",
+    "send": "Versturen",
+    "errors": {
+      "nameRequired": "Naam is verplicht",
+      "emailRequired": "E-mailadres is verplicht",
+      "invalidEmail": "Ongeldig e-mailadres",
+      "subjectRequired": "Onderwerp is verplicht",
+      "messageRequired": "Bericht is verplicht",
+      "messageTooShort": "Bericht moet minimaal 10 tekens bevatten"
+    }
+  },
+  "validation": {
+    "required": "Dit veld is verplicht",
+    "invalidEmail": "Ongeldig e-mailadres",
+    "passwordTooShort": "Wachtwoord te kort",
+    "passwordMismatch": "Wachtwoorden komen niet overeen"
+  }
+}

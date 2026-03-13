@@ -1,0 +1,44 @@
+{
+  "nav": {
+    "overview": "Overzicht",
+    "widget": "Widget",
+    "studio": "Studio",
+    "apiKeys": "API-sleutels",
+    "billing": "Abonnement",
+    "settings": "Instellingen",
+    "tryons": "Try-ons",
+    "analytics": "Analytics",
+    "guide": "Handleiding",
+    "gallery": "Galerij",
+    "new": "Nieuw"
+  },
+  "buttons": {
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "delete": "Verwijderen",
+    "submit": "Versturen",
+    "login": "Inloggen",
+    "signup": "Registreren",
+    "logout": "Uitloggen",
+    "loading": "Bezig...",
+    "confirm": "Bevestigen",
+    "close": "Sluiten",
+    "edit": "Bewerken",
+    "create": "Aanmaken",
+    "back": "Terug"
+  },
+  "status": {
+    "pending": "In afwachting",
+    "succeeded": "Gelukt",
+    "failed": "Mislukt",
+    "active": "Actief",
+    "inactive": "Inactief",
+    "processing": "Verwerken"
+  },
+  "footer": {
+    "copyright": "© 2026 Drapit. Alle rechten voorbehouden.",
+    "privacy": "Privacy Policy",
+    "terms": "Voorwaarden",
+    "contact": "Contact"
+  }
+}

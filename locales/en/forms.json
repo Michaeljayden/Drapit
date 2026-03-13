@@ -1,0 +1,72 @@
+{
+  "login": {
+    "title": "Log in to your dashboard",
+    "email": "Email address",
+    "emailPlaceholder": "name@company.com",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "Forgot?",
+    "loginButton": "Log in",
+    "magicLink": "Magic link",
+    "sendMagicLink": "Send magic link",
+    "checkInbox": "Check your inbox",
+    "magicLinkSent": "We've sent a login link to",
+    "backToLogin": "Back to login",
+    "noAccount": "Don't have an account?",
+    "signupLink": "Sign up",
+    "passwordMode": "Password",
+    "errors": {
+      "invalidCredentials": "Invalid login credentials. Check your email and password.",
+      "emailRequired": "Email address is required",
+      "passwordRequired": "Password is required"
+    }
+  },
+  "signup": {
+    "title": "Create account",
+    "shopName": "Shop name",
+    "domain": "Shop URL",
+    "email": "Email address",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "contactPerson": "Contact person",
+    "phone": "Phone number",
+    "companyName": "Company name",
+    "kvkNumber": "Chamber of Commerce number",
+    "vatNumber": "VAT number",
+    "address": "Address",
+    "postalCode": "Postal code",
+    "city": "City",
+    "country": "Country",
+    "createAccount": "Create account",
+    "hasAccount": "Already have an account?",
+    "loginLink": "Log in",
+    "errors": {
+      "passwordMismatch": "Passwords do not match.",
+      "passwordTooShort": "Password must be at least 6 characters.",
+      "phoneRequired": "Phone number is required.",
+      "domainRequired": "Shop URL is required.",
+      "emailError": "Error sending confirmation email. Check the SMTP settings in Supabase."
+    }
+  },
+  "contact": {
+    "name": "Name",
+    "email": "Email",
+    "subject": "Subject",
+    "message": "Message",
+    "send": "Send",
+    "errors": {
+      "nameRequired": "Name is required",
+      "emailRequired": "Email address is required",
+      "invalidEmail": "Invalid email address",
+      "subjectRequired": "Subject is required",
+      "messageRequired": "Message is required",
+      "messageTooShort": "Message must be at least 10 characters"
+    }
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "passwordTooShort": "Password too short",
+    "passwordMismatch": "Passwords do not match"
+  }
+}

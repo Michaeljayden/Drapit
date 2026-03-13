@@ -3,10 +3,16 @@
 import { useState, useEffect } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import Logo from '@/components/ui/Logo';
 import Link from 'next/link';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function LoginForm() {
+    const t = useTranslations('login');
+    const tCommon = useTranslations('buttons');
+    const tFooter = useTranslations('footer');
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [mode, setMode] = useState<'password' | 'magic'>('password');
@@ -40,7 +46,7 @@ export default function LoginForm() {
 
         if (error) {
             setError(error.message === 'Invalid login credentials'
-                ? 'Ongeldige inloggegevens. Controleer je e-mail en wachtwoord.'
+                ? t('errors.invalidCredentials')
                 : error.message
             );
             setLoading(false);
@@ -82,8 +88,11 @@ export default function LoginForm() {
                         <Logo size="lg" />
                     </div>
                     <p className="text-sm text-[#64748B]">
-                        Log in op je dashboard
+                        {t('title')}
                     </p>
+                    <div className="flex justify-center mt-4">
+                        <LanguageSwitcher />
+                    </div>
                 </div>
 
                 {/* Card */}
@@ -96,15 +105,15 @@ export default function LoginForm() {
                                     <path d="M22 2L11 13" /><path d="M22 2L15 22L11 13L2 9L22 2Z" />
                                 </svg>
                             </div>
-                            <h2 className="text-lg font-bold text-[#0F172A] mb-2">Check je inbox</h2>
+                            <h2 className="text-lg font-bold text-[#0F172A] mb-2">{t('checkInbox')}</h2>
                             <p className="text-sm text-[#64748B] mb-6">
-                                We hebben een inloglink gestuurd naar <strong className="text-[#0F172A]">{email}</strong>
+                                {t('magicLinkSent')} <strong className="text-[#0F172A]">{email}</strong>
                             </p>
                             <button
                                 onClick={() => { setMagicSent(false); setMode('password'); }}
                                 className="text-sm font-medium text-[#1D6FD8] hover:underline"
                             >
-                                Terug naar inloggen
+                                {t('backToLogin')}
                             </button>
                         </div>
                     ) : (
@@ -118,7 +127,7 @@ export default function LoginForm() {
                                         : 'text-[#64748B] hover:text-[#0F172A]'
                                         }`}
                                 >
-                                    Wachtwoord
+                                    {t('passwordMode')}
                                 </button>
                                 <button
                                     onClick={() => setMode('magic')}
@@ -127,7 +136,7 @@ export default function LoginForm() {
                                         : 'text-[#64748B] hover:text-[#0F172A]'
                                         }`}
                                 >
-                                    Magic link
+                                    {t('magicLink')}
                                 </button>
                             </div>
 
@@ -142,14 +151,14 @@ export default function LoginForm() {
                                 {/* Email */}
                                 <div className="mb-4">
                                     <label htmlFor="login-email" className="block text-sm font-medium text-[#0F172A] mb-1.5">
-                                        E-mailadres
+                                        {t('email')}
                                     </label>
                                     <input
                                         id="login-email"
                                         type="email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        placeholder="naam@bedrijf.nl"
+                                        placeholder={t('emailPlaceholder')}
                                         required
                                         className="w-full border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D6FD8] focus:border-transparent placeholder:text-[#94A3B8] bg-white"
                                     />
@@ -160,10 +169,10 @@ export default function LoginForm() {
                                     <div className="mb-6">
                                         <div className="flex items-center justify-between mb-1.5">
                                             <label htmlFor="login-password" className="block text-sm font-medium text-[#0F172A]">
-                                                Wachtwoord
+                                                {t('password')}
                                             </label>
                                             <button type="button" className="text-xs font-medium text-[#1D6FD8] hover:underline">
-                                                Vergeten?
+                                                {t('forgotPassword')}
                                             </button>
                                         </div>
                                         <input
@@ -171,7 +180,7 @@ export default function LoginForm() {
                                             type="password"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
-                                            placeholder="••••••••"
+                                            placeholder={t('passwordPlaceholder')}
                                             required
                                             className="w-full border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D6FD8] focus:border-transparent placeholder:text-[#94A3B8] bg-white"
                                         />
@@ -194,17 +203,17 @@ export default function LoginForm() {
                                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                                             </svg>
-                                            Bezig...
+                                            {tCommon('loading')}
                                         </span>
-                                    ) : mode === 'password' ? 'Inloggen' : 'Stuur magic link'}
+                                    ) : mode === 'password' ? t('loginButton') : t('sendMagicLink')}
                                 </button>
                             </form>
 
                             <div className="mt-6 pt-6 border-t border-[#F1F5F9] text-center">
                                 <p className="text-sm text-[#64748B]">
-                                    Nog geen account?{' '}
+                                    {t('noAccount')}{' '}
                                     <Link href="/auth/signup" className="font-medium text-[#1D6FD8] hover:underline">
-                                        Aanmelden
+                                        {t('signupLink')}
                                     </Link>
                                 </p>
                             </div>
@@ -214,7 +223,7 @@ export default function LoginForm() {
 
                 {/* Footer */}
                 <p className="text-center text-xs text-[#64748B] mt-6">
-                    © 2026 Drapit. Alle rechten voorbehouden.
+                    {tFooter('copyright')}
                 </p>
             </div>
         </div>

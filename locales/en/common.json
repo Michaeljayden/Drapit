@@ -1,0 +1,44 @@
+{
+  "nav": {
+    "overview": "Overview",
+    "widget": "Widget",
+    "studio": "Studio",
+    "apiKeys": "API Keys",
+    "billing": "Billing",
+    "settings": "Settings",
+    "tryons": "Try-ons",
+    "analytics": "Analytics",
+    "guide": "Guide",
+    "gallery": "Gallery",
+    "new": "New"
+  },
+  "buttons": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "submit": "Submit",
+    "login": "Log in",
+    "signup": "Sign up",
+    "logout": "Log out",
+    "loading": "Loading...",
+    "confirm": "Confirm",
+    "close": "Close",
+    "edit": "Edit",
+    "create": "Create",
+    "back": "Back"
+  },
+  "status": {
+    "pending": "Pending",
+    "succeeded": "Succeeded",
+    "failed": "Failed",
+    "active": "Active",
+    "inactive": "Inactive",
+    "processing": "Processing"
+  },
+  "footer": {
+    "copyright": "© 2026 Drapit. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms",
+    "contact": "Contact"
+  }
+}
