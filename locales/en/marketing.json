@@ -47,61 +47,51 @@
         "name": "Trial",
         "limit": "20",
         "cta": "Start free",
-        "features": [
-          "20 try-ons/month",
-          "1 API key",
-          "Email support"
-        ]
+        "feature0": "20 try-ons/month",
+        "feature1": "1 API key",
+        "feature2": "Email support"
       },
       "starter": {
         "name": "Starter",
         "limit": "500",
         "cta": "Get started",
-        "features": [
-          "500 try-ons/month",
-          "1 API key",
-          "Widget customization",
-          "Email support"
-        ]
+        "feature0": "500 try-ons/month",
+        "feature1": "1 API key",
+        "feature2": "Widget customization",
+        "feature3": "Email support"
       },
       "pro": {
         "name": "Pro",
         "limit": "2,500",
         "cta": "Most popular",
-        "features": [
-          "2,500 try-ons/month",
-          "Unlimited API keys",
-          "Analytics dashboard",
-          "Webhook integrations",
-          "Priority support",
-          "Widget customization"
-        ]
+        "feature0": "2,500 try-ons/month",
+        "feature1": "Unlimited API keys",
+        "feature2": "Analytics dashboard",
+        "feature3": "Webhook integrations",
+        "feature4": "Priority support",
+        "feature5": "Widget customization"
       },
       "scale": {
         "name": "Scale",
         "limit": "5,000",
         "cta": "Scale up",
-        "features": [
-          "5,000 try-ons/month",
-          "Unlimited API keys",
-          "Custom branding",
-          "Analytics dashboard",
-          "Webhook integrations",
-          "SLA guarantee"
-        ]
+        "feature0": "5,000 try-ons/month",
+        "feature1": "Unlimited API keys",
+        "feature2": "Custom branding",
+        "feature3": "Analytics dashboard",
+        "feature4": "Webhook integrations",
+        "feature5": "SLA guarantee"
       },
       "business": {
         "name": "Business",
         "limit": "10,000",
         "cta": "Contact us",
-        "features": [
-          "10,000 try-ons/month",
-          "Dedicated support",
-          "Custom integration help",
-          "Custom branding",
-          "SLA guarantee",
-          "Unlimited everything"
-        ]
+        "feature0": "10,000 try-ons/month",
+        "feature1": "Dedicated support",
+        "feature2": "Custom integration help",
+        "feature3": "Custom branding",
+        "feature4": "SLA guarantee",
+        "feature5": "Unlimited everything"
       }
     }
   },
@@ -126,50 +116,42 @@
         "name": "Trial",
         "credits": "20",
         "cta": "Try free",
-        "features": [
-          "20 free generations",
-          "All 3 modes (model, product, 360°)",
-          "Customize watermark",
-          "High-resolution download"
-        ]
+        "feature0": "20 free generations",
+        "feature1": "All 3 modes (model, product, 360°)",
+        "feature2": "Customize watermark",
+        "feature3": "High-resolution download"
       },
       "starter": {
         "name": "Starter",
         "credits": "200",
         "cta": "Get started",
-        "features": [
-          "200 credits/month",
-          "All 3 modes",
-          "Customize watermark",
-          "High-resolution download",
-          "Email support"
-        ]
+        "feature0": "200 credits/month",
+        "feature1": "All 3 modes",
+        "feature2": "Customize watermark",
+        "feature3": "High-resolution download",
+        "feature4": "Email support"
       },
       "pro": {
         "name": "Pro",
         "credits": "500",
         "cta": "Most popular",
-        "features": [
-          "500 credits/month",
-          "All 3 modes",
-          "Customize watermark",
-          "High-resolution download",
-          "Priority support",
-          "Unused credits roll over"
-        ]
+        "feature0": "500 credits/month",
+        "feature1": "All 3 modes",
+        "feature2": "Customize watermark",
+        "feature3": "High-resolution download",
+        "feature4": "Priority support",
+        "feature5": "Unused credits roll over"
       },
       "scale": {
         "name": "Scale",
         "credits": "1,000",
         "cta": "Scale up",
-        "features": [
-          "1,000 credits/month",
-          "All 3 modes",
-          "Customize watermark",
-          "High-resolution download",
-          "Priority support",
-          "Unused credits roll over"
-        ]
+        "feature0": "1,000 credits/month",
+        "feature1": "All 3 modes",
+        "feature2": "Customize watermark",
+        "feature3": "High-resolution download",
+        "feature4": "Priority support",
+        "feature5": "Unused credits roll over"
       }
     }
   }

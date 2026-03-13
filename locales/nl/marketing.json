@@ -47,61 +47,51 @@
         "name": "Proef",
         "limit": "20",
         "cta": "Gratis starten",
-        "features": [
-          "20 try-ons/maand",
-          "1 API-sleutel",
-          "E-mail support"
-        ]
+        "feature0": "20 try-ons/maand",
+        "feature1": "1 API-sleutel",
+        "feature2": "E-mail support"
       },
       "starter": {
         "name": "Starter",
         "limit": "500",
         "cta": "Begin nu",
-        "features": [
-          "500 try-ons/maand",
-          "1 API-sleutel",
-          "Widget personalisatie",
-          "E-mail support"
-        ]
+        "feature0": "500 try-ons/maand",
+        "feature1": "1 API-sleutel",
+        "feature2": "Widget personalisatie",
+        "feature3": "E-mail support"
       },
       "pro": {
         "name": "Pro",
         "limit": "2.500",
         "cta": "Populairste keuze",
-        "features": [
-          "2.500 try-ons/maand",
-          "Onbeperkt API-sleutels",
-          "Analytics dashboard",
-          "Webhook integraties",
-          "Prioriteit support",
-          "Widget personalisatie"
-        ]
+        "feature0": "2.500 try-ons/maand",
+        "feature1": "Onbeperkt API-sleutels",
+        "feature2": "Analytics dashboard",
+        "feature3": "Webhook integraties",
+        "feature4": "Prioriteit support",
+        "feature5": "Widget personalisatie"
       },
       "scale": {
         "name": "Scale",
         "limit": "5.000",
         "cta": "Schaal op",
-        "features": [
-          "5.000 try-ons/maand",
-          "Onbeperkt API-sleutels",
-          "Custom branding",
-          "Analytics dashboard",
-          "Webhook integraties",
-          "SLA garantie"
-        ]
+        "feature0": "5.000 try-ons/maand",
+        "feature1": "Onbeperkt API-sleutels",
+        "feature2": "Custom branding",
+        "feature3": "Analytics dashboard",
+        "feature4": "Webhook integraties",
+        "feature5": "SLA garantie"
       },
       "business": {
         "name": "Business",
         "limit": "10.000",
         "cta": "Neem contact op",
-        "features": [
-          "10.000 try-ons/maand",
-          "Dedicated support",
-          "Custom integratie hulp",
-          "Custom branding",
-          "SLA garantie",
-          "Onbeperkt alles"
-        ]
+        "feature0": "10.000 try-ons/maand",
+        "feature1": "Dedicated support",
+        "feature2": "Custom integratie hulp",
+        "feature3": "Custom branding",
+        "feature4": "SLA garantie",
+        "feature5": "Onbeperkt alles"
       }
     }
   },
@@ -126,50 +116,42 @@
         "name": "Proef",
         "credits": "20",
         "cta": "Gratis proberen",
-        "features": [
-          "20 gratis generaties",
-          "Alle 3 modi (model, product, 360°)",
-          "Watermark aanpassen",
-          "Download op hoge resolutie"
-        ]
+        "feature0": "20 gratis generaties",
+        "feature1": "Alle 3 modi (model, product, 360°)",
+        "feature2": "Watermark aanpassen",
+        "feature3": "Download op hoge resolutie"
       },
       "starter": {
         "name": "Starter",
         "credits": "200",
         "cta": "Begin nu",
-        "features": [
-          "200 credits/maand",
-          "Alle 3 modi",
-          "Watermark aanpassen",
-          "Download op hoge resolutie",
-          "E-mail support"
-        ]
+        "feature0": "200 credits/maand",
+        "feature1": "Alle 3 modi",
+        "feature2": "Watermark aanpassen",
+        "feature3": "Download op hoge resolutie",
+        "feature4": "E-mail support"
       },
       "pro": {
         "name": "Pro",
         "credits": "500",
         "cta": "Populairste keuze",
-        "features": [
-          "500 credits/maand",
-          "Alle 3 modi",
-          "Watermark aanpassen",
-          "Download op hoge resolutie",
-          "Prioriteit support",
-          "Ongebruikte credits rollen over"
-        ]
+        "feature0": "500 credits/maand",
+        "feature1": "Alle 3 modi",
+        "feature2": "Watermark aanpassen",
+        "feature3": "Download op hoge resolutie",
+        "feature4": "Prioriteit support",
+        "feature5": "Ongebruikte credits rollen over"
       },
       "scale": {
         "name": "Scale",
         "credits": "1.000",
         "cta": "Schaal op",
-        "features": [
-          "1.000 credits/maand",
-          "Alle 3 modi",
-          "Watermark aanpassen",
-          "Download op hoge resolutie",
-          "Prioriteit support",
-          "Ongebruikte credits rollen over"
-        ]
+        "feature0": "1.000 credits/maand",
+        "feature1": "Alle 3 modi",
+        "feature2": "Watermark aanpassen",
+        "feature3": "Download op hoge resolutie",
+        "feature4": "Prioriteit support",
+        "feature5": "Ongebruikte credits rollen over"
       }
     }
   }
