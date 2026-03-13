@@ -38,6 +38,7 @@
     "title": "Simple. Predictable. No surprises.",
     "subtitle": "Choose the plan that fits your sales volume. Upgrade or downgrade at any time.",
     "disclaimer": "All plans excl. VAT · Cancel anytime · 14-day satisfaction guarantee",
+    "notSure": "Not sure which plan? Try our calculator",
     "perMonth": "/month",
     "tryOns": "try-ons",
     "free": "Free",
@@ -94,6 +95,29 @@
         "feature5": "Unlimited everything"
       }
     }
+  },
+  "calculator": {
+    "eyebrow": "TRY-ON CALCULATOR",
+    "title": "How many try-ons does your store need?",
+    "subtitle": "Enter your store metrics and we'll recommend the perfect plan.",
+    "visitors": "Monthly visitors",
+    "products": "Number of products",
+    "conversionRate": "Widget conversion rate",
+    "showAdvanced": "Adjust conversion rate",
+    "hideAdvanced": "Use default rate",
+    "estimated": "ESTIMATED MONTHLY TRY-ONS",
+    "recommended": "RECOMMENDED",
+    "bestFit": "BEST FIT FOR YOUR STORE",
+    "costPerTryon": "per try-on",
+    "perMonth": "month",
+    "month": "month",
+    "tryOns": "try-ons",
+    "tryOn": "try-on",
+    "free": "Free",
+    "cta": "Start with {plan} →",
+    "overLimit": "Your store needs a custom plan",
+    "overLimitCta": "Contact us →",
+    "disclaimer": "Estimates based on industry averages. Actual usage may vary."
   },
   "studioPricing": {
     "eyebrow": "DRAPIT STUDIO",

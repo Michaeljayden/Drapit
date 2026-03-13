@@ -38,6 +38,7 @@
     "title": "Simpel. Voorspelbaar. Geen verrassingen.",
     "subtitle": "Kies het plan dat past bij je verkoop volume. Upgrade of downgrade op elk moment.",
     "disclaimer": "Alle plannen excl. BTW · Annuleer op elk moment · 14 dagen tevredenheidsgarantie",
+    "notSure": "Twijfel je? Probeer onze calculator",
     "perMonth": "/maand",
     "tryOns": "try-ons",
     "free": "Gratis",
@@ -94,6 +95,29 @@
         "feature5": "Onbeperkt alles"
       }
     }
+  },
+  "calculator": {
+    "eyebrow": "TRY-ON CALCULATOR",
+    "title": "Hoeveel try-ons heeft jouw webshop nodig?",
+    "subtitle": "Vul je webshop gegevens in en wij adviseren het perfecte plan.",
+    "visitors": "Maandelijkse bezoekers",
+    "products": "Aantal producten",
+    "conversionRate": "Widget conversie percentage",
+    "showAdvanced": "Conversie percentage aanpassen",
+    "hideAdvanced": "Standaard percentage gebruiken",
+    "estimated": "GESCHATTE MAANDELIJKSE TRY-ONS",
+    "recommended": "AANBEVOLEN",
+    "bestFit": "PAST BIJ JOUW WEBSHOP",
+    "costPerTryon": "per try-on",
+    "perMonth": "maand",
+    "month": "maand",
+    "tryOns": "try-ons",
+    "tryOn": "try-on",
+    "free": "Gratis",
+    "cta": "Start met {plan} →",
+    "overLimit": "Je webshop heeft een maatwerkplan nodig",
+    "overLimitCta": "Neem contact op →",
+    "disclaimer": "Schattingen gebaseerd op branchegemiddelden. Werkelijk gebruik kan afwijken."
   },
   "studioPricing": {
     "eyebrow": "DRAPIT STUDIO",

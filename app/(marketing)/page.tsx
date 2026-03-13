@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import ContactForm from '@/components/ContactForm';
+import TryOnCalculator from '@/components/marketing/TryOnCalculator';
 import { useTranslations } from 'next-intl';
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -295,6 +296,7 @@ export default function LandingPage() {
     const how = useInView(0.1);
     const feats = useInView(0.1);
     const pricing = useInView(0.08);
+    const calc = useInView(0.1);
     const studioPricing = useInView(0.08);
     const shopify = useInView(0.1);
     const faqSec = useInView(0.1);
@@ -593,6 +595,32 @@ export default function LandingPage() {
                 }
                 .d-nav-link:hover { color: #F1F5F9; background: rgba(255,255,255,0.05); }
 
+                /* Calculator slider styling */
+                .d-calc-slider::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    background: #1D6FD8;
+                    cursor: pointer;
+                    border: 3px solid #0D1829;
+                    box-shadow: 0 0 12px rgba(29,111,216,0.5);
+                    transition: box-shadow 0.2s;
+                }
+                .d-calc-slider::-webkit-slider-thumb:hover {
+                    box-shadow: 0 0 20px rgba(29,111,216,0.7);
+                }
+                .d-calc-slider::-moz-range-thumb {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    background: #1D6FD8;
+                    cursor: pointer;
+                    border: 3px solid #0D1829;
+                    box-shadow: 0 0 12px rgba(29,111,216,0.5);
+                }
+
                 @media (max-width: 960px) {
                     .d-hero-grid  { grid-template-columns: 1fr !important; gap: 48px !important; }
                     .d-how-grid   { grid-template-columns: 1fr !important; }
@@ -600,6 +628,8 @@ export default function LandingPage() {
                     .d-studio-grid { grid-template-columns: repeat(2, 1fr) !important; }
                     .d-feat-grid  { grid-template-columns: 1fr 1fr !important; }
                     .d-stats-grid { grid-template-columns: 1fr 1fr !important; }
+                    .d-calc-grid  { grid-template-columns: 1fr !important; gap: 32px !important; }
+                    .d-calc-plans { grid-template-columns: repeat(3, 1fr) !important; }
                     .d-shopify-card { grid-template-columns: 1fr !important; gap: 40px !important; padding: 48px 36px !important; }
                     .d-hero-title { font-size: clamp(34px, 7vw, 48px) !important; text-align: center; }
                     .d-hero-p     { text-align: center; margin-left: auto; margin-right: auto; }
@@ -707,11 +737,13 @@ export default function LandingPage() {
                     .d-shopify-install { grid-template-columns: 1fr !important; padding: 28px 20px !important; }
                     .d-plans-grid { grid-template-columns: repeat(2, 1fr) !important; }
                     .d-studio-grid { grid-template-columns: repeat(2, 1fr) !important; }
+                    .d-calc-plans { grid-template-columns: repeat(2, 1fr) !important; }
                     .d-contact-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
                 }
                 @media (max-width: 540px) {
                     .d-plans-grid { grid-template-columns: 1fr !important; }
                     .d-studio-grid { grid-template-columns: 1fr !important; }
+                    .d-calc-plans { grid-template-columns: 1fr !important; }
                     .d-feat-grid  { grid-template-columns: 1fr !important; }
                     .d-stats-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
                     .d-shopify-card { padding: 28px 18px !important; }
@@ -1139,6 +1171,26 @@ export default function LandingPage() {
                         <p style={{ textAlign: 'center', marginTop: 32, fontSize: 13, color: 'rgba(241,245,249,0.25)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
                             {t('pricing.disclaimer')}
                         </p>
+
+                        <div style={{ textAlign: 'center', marginTop: 20 }}>
+                            <a href="#calculator" style={{
+                                fontSize: 14, color: '#1D6FD8', textDecoration: 'none',
+                                fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 600,
+                                transition: 'opacity 0.2s',
+                            }}>
+                                {t('pricing.notSure')} ↓
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                {/* ─── TRY-ON CALCULATOR ────────────────────────────── */}
+                <section id="calculator" className="d-section-lg" style={{ padding: '128px 28px', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 800, height: 500, background: 'radial-gradient(ellipse, rgba(29,111,216,0.05) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                    <div ref={calc.ref} style={{ maxWidth: 960, margin: '0 auto', position: 'relative' }}>
+                        <div className={`d-in d-d1 ${calc.inView ? 'visible' : ''}`}>
+                            <TryOnCalculator />
+                        </div>
                     </div>
                 </section>
 
