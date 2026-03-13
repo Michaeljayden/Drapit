@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const locales = ['nl', 'en'];
-const files = ['common.json', 'forms.json'];
+const files = ['common.json', 'forms.json', 'marketing.json'];
 
 function flattenKeys(obj, prefix = '') {
   let keys = [];

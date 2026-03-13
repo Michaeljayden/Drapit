@@ -1,0 +1,176 @@
+{
+  "nav": {
+    "howItWorks": "Hoe het werkt",
+    "pricing": "Prijzen",
+    "faq": "FAQ",
+    "shopify": "Shopify",
+    "studio": "Studio",
+    "vton": "VTON"
+  },
+  "hero": {
+    "eyebrow": "AI VIRTUAL TRY-ON VOOR WEBSHOPS",
+    "titleStart": "Laat klanten kleding",
+    "titleHighlight": "virtueel passen",
+    "titleEnd": "in seconden.",
+    "subtitle": "Eén script-tag. Elke webshop. Klanten uploaden een foto en zien zichzelf in elk kledingstuk — aangedreven door state-of-the-art AI diffusion technologie.",
+    "ctaPrimary": "Begin gratis →",
+    "ctaSecondary": "Bekijk live demo",
+    "socialProof": "2.000+ webshops gebruiken Drapit"
+  },
+  "widget": {
+    "demoUrl": "drapit.io/widget — live demo",
+    "customerPhoto": "KLANT FOTO",
+    "processing": "AI VERWERKT...",
+    "processingShort": "VERWERKEN...",
+    "result": "AI RESULTAAT",
+    "complete": "✓ KLAAR",
+    "cta": "VIRTUEEL PASSEN →",
+    "badge": "AI-POWERED",
+    "products": {
+      "blazer": "Blazer",
+      "dress": "Jurk",
+      "jacket": "Jas",
+      "shirt": "Shirt"
+    }
+  },
+  "pricing": {
+    "eyebrow": "TRANSPARANTE PRIJZEN",
+    "title": "Simpel. Voorspelbaar. Geen verrassingen.",
+    "subtitle": "Kies het plan dat past bij je verkoop volume. Upgrade of downgrade op elk moment.",
+    "disclaimer": "Alle plannen excl. BTW · Annuleer op elk moment · 14 dagen tevredenheidsgarantie",
+    "perMonth": "/maand",
+    "tryOns": "try-ons",
+    "free": "Gratis",
+    "mostPopular": "MEEST GEKOZEN",
+    "plans": {
+      "trial": {
+        "name": "Proef",
+        "limit": "20",
+        "cta": "Gratis starten",
+        "features": [
+          "20 try-ons/maand",
+          "1 API-sleutel",
+          "E-mail support"
+        ]
+      },
+      "starter": {
+        "name": "Starter",
+        "limit": "500",
+        "cta": "Begin nu",
+        "features": [
+          "500 try-ons/maand",
+          "1 API-sleutel",
+          "Widget personalisatie",
+          "E-mail support"
+        ]
+      },
+      "pro": {
+        "name": "Pro",
+        "limit": "2.500",
+        "cta": "Populairste keuze",
+        "features": [
+          "2.500 try-ons/maand",
+          "Onbeperkt API-sleutels",
+          "Analytics dashboard",
+          "Webhook integraties",
+          "Prioriteit support",
+          "Widget personalisatie"
+        ]
+      },
+      "scale": {
+        "name": "Scale",
+        "limit": "5.000",
+        "cta": "Schaal op",
+        "features": [
+          "5.000 try-ons/maand",
+          "Onbeperkt API-sleutels",
+          "Custom branding",
+          "Analytics dashboard",
+          "Webhook integraties",
+          "SLA garantie"
+        ]
+      },
+      "business": {
+        "name": "Business",
+        "limit": "10.000",
+        "cta": "Neem contact op",
+        "features": [
+          "10.000 try-ons/maand",
+          "Dedicated support",
+          "Custom integratie hulp",
+          "Custom branding",
+          "SLA garantie",
+          "Onbeperkt alles"
+        ]
+      }
+    }
+  },
+  "studioPricing": {
+    "eyebrow": "DRAPIT STUDIO",
+    "title": "AI productfotografie",
+    "subtitle": "Genereer professionele productfoto's met virtuele modellen, 360° rotaties en meer — direct vanuit je dashboard.",
+    "creditCosts": {
+      "virtualModel": "Virtueel Model",
+      "productPhoto": "Product Foto",
+      "rotation360": "360° Rotatie",
+      "creditSingular": "credit",
+      "creditPlural": "credits"
+    },
+    "extraCredits": {
+      "title": "Extra credits nodig?",
+      "subtitle": "Koop losse credits vanaf €9 voor 50 stuks — verlopen niet."
+    },
+    "perMonth": "/maand",
+    "plans": {
+      "trial": {
+        "name": "Proef",
+        "credits": "20",
+        "cta": "Gratis proberen",
+        "features": [
+          "20 gratis generaties",
+          "Alle 3 modi (model, product, 360°)",
+          "Watermark aanpassen",
+          "Download op hoge resolutie"
+        ]
+      },
+      "starter": {
+        "name": "Starter",
+        "credits": "200",
+        "cta": "Begin nu",
+        "features": [
+          "200 credits/maand",
+          "Alle 3 modi",
+          "Watermark aanpassen",
+          "Download op hoge resolutie",
+          "E-mail support"
+        ]
+      },
+      "pro": {
+        "name": "Pro",
+        "credits": "500",
+        "cta": "Populairste keuze",
+        "features": [
+          "500 credits/maand",
+          "Alle 3 modi",
+          "Watermark aanpassen",
+          "Download op hoge resolutie",
+          "Prioriteit support",
+          "Ongebruikte credits rollen over"
+        ]
+      },
+      "scale": {
+        "name": "Scale",
+        "credits": "1.000",
+        "cta": "Schaal op",
+        "features": [
+          "1.000 credits/maand",
+          "Alle 3 modi",
+          "Watermark aanpassen",
+          "Download op hoge resolutie",
+          "Prioriteit support",
+          "Ongebruikte credits rollen over"
+        ]
+      }
+    }
+  }
+}

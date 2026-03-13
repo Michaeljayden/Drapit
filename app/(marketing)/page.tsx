@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import ContactForm from '@/components/ContactForm';
+import { useTranslations } from 'next-intl';
 
 /* ─────────────────────────────────────────────────────────────────────────────
    DRAPIT — LANDING PAGE
@@ -10,92 +11,9 @@ import ContactForm from '@/components/ContactForm';
    Fonts: Plus Jakarta Sans (display + body — single family, maximum readability)
 ───────────────────────────────────────────────────────────────────────────── */
 
-const PLANS = [
-    {
-        key: 'trial',
-        name: 'Proef',
-        price: 0,
-        limit: '20',
-        features: ['20 try-ons/maand', '1 API-sleutel', 'E-mail support'],
-        popular: false,
-        cta: 'Gratis starten',
-    },
-    {
-        key: 'starter',
-        name: 'Starter',
-        price: 49,
-        limit: '500',
-        features: ['500 try-ons/maand', '1 API-sleutel', 'Widget personalisatie', 'E-mail support'],
-        popular: false,
-        cta: 'Begin nu',
-    },
-    {
-        key: 'pro',
-        name: 'Pro',
-        price: 199,
-        limit: '2.500',
-        features: ['2.500 try-ons/maand', 'Onbeperkt API-sleutels', 'Analytics dashboard', 'Webhook integraties', 'Prioriteit support', 'Widget personalisatie'],
-        popular: true,
-        cta: 'Populairste keuze',
-    },
-    {
-        key: 'scale',
-        name: 'Scale',
-        price: 399,
-        limit: '5.000',
-        features: ['5.000 try-ons/maand', 'Onbeperkt API-sleutels', 'Custom branding', 'Analytics dashboard', 'Webhook integraties', 'SLA garantie'],
-        popular: false,
-        cta: 'Schaal op',
-    },
-    {
-        key: 'business',
-        name: 'Business',
-        price: 799,
-        limit: '10.000',
-        features: ['10.000 try-ons/maand', 'Dedicated support', 'Custom integratie hulp', 'Custom branding', 'SLA garantie', 'Onbeperkt alles'],
-        popular: false,
-        cta: 'Neem contact op',
-    },
-];
+// Note: PLANS moved inside LandingPage component to use translations
 
-const STUDIO_PLANS = [
-    {
-        key: 'studio_trial',
-        name: 'Proef',
-        price: 0,
-        credits: '20',
-        features: ['20 gratis generaties', 'Alle 3 modi (model, product, 360°)', 'Watermark aanpassen', 'Download op hoge resolutie'],
-        popular: false,
-        cta: 'Gratis proberen',
-    },
-    {
-        key: 'studio_starter',
-        name: 'Starter',
-        price: 29,
-        credits: '200',
-        features: ['200 credits/maand', 'Alle 3 modi', 'Watermark aanpassen', 'Download op hoge resolutie', 'E-mail support'],
-        popular: false,
-        cta: 'Begin nu',
-    },
-    {
-        key: 'studio_pro',
-        name: 'Pro',
-        price: 59,
-        credits: '500',
-        features: ['500 credits/maand', 'Alle 3 modi', 'Watermark aanpassen', 'Download op hoge resolutie', 'Prioriteit support', 'Ongebruikte credits rollen over'],
-        popular: true,
-        cta: 'Populairste keuze',
-    },
-    {
-        key: 'studio_scale',
-        name: 'Scale',
-        price: 99,
-        credits: '1.000',
-        features: ['1.000 credits/maand', 'Alle 3 modi', 'Watermark aanpassen', 'Download op hoge resolutie', 'Prioriteit support', 'Ongebruikte credits rollen over'],
-        popular: false,
-        cta: 'Schaal op',
-    },
-];
+// Note: STUDIO_PLANS moved inside LandingPage component to use translations
 
 const FAQS = [
     {
@@ -137,10 +55,11 @@ function useInView(threshold = 0.12) {
 }
 
 function TryOnVisual() {
+    const t = useTranslations('widget');
     const [phase, setPhase] = useState(0);
     useEffect(() => {
-        const t = setInterval(() => setPhase(p => (p + 1) % 4), 1800);
-        return () => clearInterval(t);
+        const interval = setInterval(() => setPhase(p => (p + 1) % 4), 1800);
+        return () => clearInterval(interval);
     }, []);
 
     return (
@@ -166,7 +85,7 @@ function TryOnVisual() {
                     <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#FFBD2E' }} />
                     <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#28CA41' }} />
                     <div style={{ flex: 1, marginLeft: 8, height: 22, borderRadius: 6, background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', paddingLeft: 10 }}>
-                        <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>drapit.io/widget — live demo</span>
+                        <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{t('demoUrl')}</span>
                     </div>
                 </div>
 
@@ -187,7 +106,7 @@ function TryOnVisual() {
                             <path d="M26 82 L23 112" stroke="rgba(255,255,255,0.1)" strokeWidth="6" strokeLinecap="round" />
                             <path d="M46 82 L49 112" stroke="rgba(255,255,255,0.1)" strokeWidth="6" strokeLinecap="round" />
                         </svg>
-                        <div style={{ position: 'absolute', bottom: 8, left: 0, right: 0, textAlign: 'center', fontSize: 9, color: 'rgba(255,255,255,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.06em' }}>KLANT FOTO</div>
+                        <div style={{ position: 'absolute', bottom: 8, left: 0, right: 0, textAlign: 'center', fontSize: 9, color: 'rgba(255,255,255,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.06em' }}>{t('customerPhoto')}</div>
                     </div>
 
                     {/* Result panel */}
@@ -201,7 +120,7 @@ function TryOnVisual() {
                         {phase < 2 ? (
                             <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 8 }}>
                                 <div style={{ width: 30, height: 30, borderRadius: '50%', border: '2px solid rgba(29,111,216,0.4)', borderTopColor: '#1D6FD8', animation: 'drapit-spin 0.9s linear infinite' }} />
-                                <span style={{ fontSize: 9, color: 'rgba(29,111,216,0.7)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.04em' }}>AI VERWERKT...</span>
+                                <span style={{ fontSize: 9, color: 'rgba(29,111,216,0.7)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.04em' }}>{t('processing')}</span>
                                 <div style={{ position: 'absolute', left: 0, right: 0, height: 2, background: 'linear-gradient(90deg, transparent, rgba(29,111,216,0.9), transparent)', animation: 'drapit-scan 1.6s ease-in-out infinite', boxShadow: '0 0 10px rgba(29,111,216,0.7)' }} />
                             </div>
                         ) : (
@@ -216,19 +135,19 @@ function TryOnVisual() {
                                     <path d="M46 82 L49 112" stroke="rgba(255,255,255,0.1)" strokeWidth="6" strokeLinecap="round" />
                                 </svg>
                                 {phase === 3 && (
-                                    <div style={{ position: 'absolute', top: 10, right: 10, background: 'rgba(22,163,74,0.9)', borderRadius: 20, padding: '3px 9px', fontSize: 9, color: 'white', fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.04em', animation: 'drapit-fadein 0.4s ease' }}>✓ KLAAR</div>
+                                    <div style={{ position: 'absolute', top: 10, right: 10, background: 'rgba(22,163,74,0.9)', borderRadius: 20, padding: '3px 9px', fontSize: 9, color: 'white', fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.04em', animation: 'drapit-fadein 0.4s ease' }}>{t('complete')}</div>
                                 )}
                             </>
                         )}
                         <div style={{ position: 'absolute', bottom: 8, left: 0, right: 0, textAlign: 'center', fontSize: 9, color: phase >= 2 ? 'rgba(29,111,216,0.85)' : 'rgba(255,255,255,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.06em', transition: 'color 0.4s' }}>
-                            {phase >= 2 ? 'AI RESULTAAT' : 'VERWERKEN...'}
+                            {phase >= 2 ? t('result') : t('processingShort')}
                         </div>
                     </div>
                 </div>
 
                 {/* Product swatches */}
                 <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
-                    {[{ color: '#1D6FD8', label: 'Blazer' }, { color: '#7C3AED', label: 'Jurk' }, { color: '#DC2626', label: 'Jas' }, { color: '#059669', label: 'Shirt' }].map((item, i) => (
+                    {[{ color: '#1D6FD8', label: t('products.blazer') }, { color: '#7C3AED', label: t('products.dress') }, { color: '#DC2626', label: t('products.jacket') }, { color: '#059669', label: t('products.shirt') }].map((item, i) => (
                         <div key={i} style={{ flex: 1, height: 34, borderRadius: 8, background: `linear-gradient(135deg, ${item.color}33, ${item.color}66)`, border: `1px solid ${item.color}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                             <span style={{ fontSize: 8, color: 'rgba(255,255,255,0.65)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{item.label}</span>
                         </div>
@@ -237,13 +156,13 @@ function TryOnVisual() {
 
                 {/* CTA button */}
                 <button style={{ marginTop: 12, width: '100%', padding: '10px 0', borderRadius: 10, background: 'linear-gradient(135deg, #1D6FD8, #2563EB)', border: 'none', color: 'white', fontSize: 12, fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.06em', cursor: 'pointer', boxShadow: '0 4px 20px rgba(29,111,216,0.45)' }}>
-                    VIRTUEEL PASSEN →
+                    {t('cta')}
                 </button>
             </div>
 
             {/* Floating badge */}
             <div style={{ position: 'absolute', top: -16, right: -16, background: 'linear-gradient(135deg, #1D6FD8, #0EA5E9)', borderRadius: 12, padding: '8px 14px', boxShadow: '0 8px 24px rgba(29,111,216,0.55)', fontSize: 11, fontWeight: 800, color: 'white', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>
-                AI-POWERED
+                {t('badge')}
             </div>
         </div>
     );
@@ -366,6 +285,7 @@ function PlatformLogos() {
 }
 
 export default function LandingPage() {
+    const t = useTranslations();
     const [openFaq, setOpenFaq] = useState<number | null>(null);
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -385,6 +305,94 @@ export default function LandingPage() {
         window.addEventListener('scroll', fn, { passive: true });
         return () => window.removeEventListener('scroll', fn);
     }, []);
+
+    // Pricing plans with translations
+    const PLANS = [
+        {
+            key: 'trial',
+            name: t('pricing.plans.trial.name'),
+            price: 0,
+            limit: t('pricing.plans.trial.limit'),
+            features: t('pricing.plans.trial.features') as unknown as string[],
+            popular: false,
+            cta: t('pricing.plans.trial.cta'),
+        },
+        {
+            key: 'starter',
+            name: t('pricing.plans.starter.name'),
+            price: 49,
+            limit: t('pricing.plans.starter.limit'),
+            features: t('pricing.plans.starter.features') as unknown as string[],
+            popular: false,
+            cta: t('pricing.plans.starter.cta'),
+        },
+        {
+            key: 'pro',
+            name: t('pricing.plans.pro.name'),
+            price: 199,
+            limit: t('pricing.plans.pro.limit'),
+            features: t('pricing.plans.pro.features') as unknown as string[],
+            popular: true,
+            cta: t('pricing.plans.pro.cta'),
+        },
+        {
+            key: 'scale',
+            name: t('pricing.plans.scale.name'),
+            price: 399,
+            limit: t('pricing.plans.scale.limit'),
+            features: t('pricing.plans.scale.features') as unknown as string[],
+            popular: false,
+            cta: t('pricing.plans.scale.cta'),
+        },
+        {
+            key: 'business',
+            name: t('pricing.plans.business.name'),
+            price: 799,
+            limit: t('pricing.plans.business.limit'),
+            features: t('pricing.plans.business.features') as unknown as string[],
+            popular: false,
+            cta: t('pricing.plans.business.cta'),
+        },
+    ];
+
+    const STUDIO_PLANS = [
+        {
+            key: 'studio_trial',
+            name: t('studioPricing.plans.trial.name'),
+            price: 0,
+            credits: t('studioPricing.plans.trial.credits'),
+            features: t('studioPricing.plans.trial.features') as unknown as string[],
+            popular: false,
+            cta: t('studioPricing.plans.trial.cta'),
+        },
+        {
+            key: 'studio_starter',
+            name: t('studioPricing.plans.starter.name'),
+            price: 29,
+            credits: t('studioPricing.plans.starter.credits'),
+            features: t('studioPricing.plans.starter.features') as unknown as string[],
+            popular: false,
+            cta: t('studioPricing.plans.starter.cta'),
+        },
+        {
+            key: 'studio_pro',
+            name: t('studioPricing.plans.pro.name'),
+            price: 59,
+            credits: t('studioPricing.plans.pro.credits'),
+            features: t('studioPricing.plans.pro.features') as unknown as string[],
+            popular: true,
+            cta: t('studioPricing.plans.pro.cta'),
+        },
+        {
+            key: 'studio_scale',
+            name: t('studioPricing.plans.scale.name'),
+            price: 99,
+            credits: t('studioPricing.plans.scale.credits'),
+            features: t('studioPricing.plans.scale.features') as unknown as string[],
+            popular: false,
+            cta: t('studioPricing.plans.scale.cta'),
+        },
+    ];
 
     return (
         <>
@@ -669,7 +677,7 @@ export default function LandingPage() {
                         </a>
 
                         <div className="d-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                            {[['Hoe het werkt', '#hoe-het-werkt'], ['Prijzen', '#prijzen'], ['FAQ', '#faq']].map(([label, href]) => (
+                            {[[t('nav.howItWorks'), '#hoe-het-werkt'], [t('nav.pricing'), '#prijzen'], [t('nav.faq'), '#faq']].map(([label, href]) => (
                                 <a key={label} href={href} className="d-nav-link">{label}</a>
                             ))}
                             <Link href="/shopify" className="d-nav-link">Shopify</Link>
@@ -726,7 +734,7 @@ export default function LandingPage() {
                     </div>
 
                     <nav style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
-                        {[['Hoe het werkt', '#hoe-het-werkt'], ['Prijzen', '#prijzen'], ['FAQ', '#faq']].map(([label, href]) => (
+                        {[[t('nav.howItWorks'), '#hoe-het-werkt'], [t('nav.pricing'), '#prijzen'], [t('nav.faq'), '#faq']].map(([label, href]) => (
                             <a key={label} href={href} className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>{label}</a>
                         ))}
                         <Link href="/shopify" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>Shopify</Link>
@@ -764,31 +772,31 @@ export default function LandingPage() {
                                 {/* Eyebrow chip */}
                                 <div className={`d-in d-d1 ${hero.inView ? 'visible' : ''}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(29,111,216,0.1)', border: '1px solid rgba(29,111,216,0.22)', borderRadius: 100, padding: '6px 16px', marginBottom: 30 }}>
                                     <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#22D3EE', boxShadow: '0 0 8px #22D3EE', animation: 'drapit-pulse 2s ease-in-out infinite' }} />
-                                    <span style={{ fontSize: 11, fontWeight: 700, color: '#93C5FD', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.1em' }}>AI VIRTUAL TRY-ON VOOR WEBSHOPS</span>
+                                    <span style={{ fontSize: 11, fontWeight: 700, color: '#93C5FD', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.1em' }}>{t('hero.eyebrow')}</span>
                                 </div>
 
                                 {/* Headline */}
                                 <h1 className={`d-hero-title d-in d-d2 ${hero.inView ? 'visible' : ''}`} style={{ fontSize: 'clamp(40px, 4.5vw, 70px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, lineHeight: 1.03, letterSpacing: '-0.025em', marginBottom: 26, color: '#F1F5F9' }}>
-                                    Laat klanten kleding{' '}
-                                    <span className="d-shimmer">virtueel passen</span>
-                                    <br />in seconden.
+                                    {t('hero.titleStart')}{' '}
+                                    <span className="d-shimmer">{t('hero.titleHighlight')}</span>
+                                    <br />{t('hero.titleEnd')}
                                 </h1>
 
                                 {/* Body */}
                                 <p className={`d-hero-p d-in d-d3 ${hero.inView ? 'visible' : ''}`} style={{ fontSize: 18, color: 'rgba(241,245,249,0.58)', lineHeight: 1.72, marginBottom: 40, maxWidth: 460, fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 400 }}>
-                                    Eén script-tag. Elke webshop. Klanten uploaden een foto en zien zichzelf in elk kledingstuk — aangedreven door state-of-the-art AI diffusion technologie.
+                                    {t('hero.subtitle')}
                                 </p>
 
                                 {/* CTAs */}
                                 <div className={`d-hero-ctas d-in d-d4 ${hero.inView ? 'visible' : ''}`} style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
                                     <Link href="/dashboard/login" className="d-btn-primary" style={{ padding: '14px 30px', fontSize: 16 }}>
-                                        Begin gratis →
+                                        {t('hero.ctaPrimary')}
                                     </Link>
                                     <a href="#hoe-het-werkt" style={{ padding: '14px 28px', fontSize: 16, fontWeight: 500, color: 'rgba(241,245,249,0.72)', fontFamily: 'Plus Jakarta Sans, sans-serif', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 12, textDecoration: 'none', transition: 'all 0.2s' }}
                                         onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#F1F5F9'; }}
                                         onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = 'rgba(241,245,249,0.72)'; }}
                                     >
-                                        Bekijk hoe het werkt ↓
+                                        {t('hero.ctaSecondary')}
                                     </a>
                                 </div>
 
@@ -800,7 +808,7 @@ export default function LandingPage() {
                                         ))}
                                     </div>
                                     <span style={{ fontSize: 13, color: 'rgba(241,245,249,0.42)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-                                        Vertrouwd door groeiende fashion webshops
+                                        {t('hero.socialProof')}
                                     </span>
                                 </div>
                             </div>
@@ -992,12 +1000,12 @@ export default function LandingPage() {
                     <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 900, height: 600, background: 'radial-gradient(ellipse, rgba(29,111,216,0.065) 0%, transparent 68%)', pointerEvents: 'none' }} />
                     <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative' }}>
                         <div ref={pricing.ref} style={{ textAlign: 'center', marginBottom: 64 }}>
-                            <div className={`d-in d-d1 ${pricing.inView ? 'visible' : ''}`} style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#1D6FD8', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 18 }}>TRANSPARANTE PRIJZEN</div>
+                            <div className={`d-in d-d1 ${pricing.inView ? 'visible' : ''}`} style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#1D6FD8', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 18 }}>{t('pricing.eyebrow')}</div>
                             <h2 className={`d-gradient d-in d-d2 ${pricing.inView ? 'visible' : ''}`} style={{ fontSize: 'clamp(30px, 4vw, 52px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.08, marginBottom: 18 }}>
-                                Schaal mee met je webshop
+                                {t('pricing.title')}
                             </h2>
                             <p className={`d-in d-d3 ${pricing.inView ? 'visible' : ''}`} style={{ fontSize: 17, color: 'rgba(241,245,249,0.45)', fontFamily: 'Plus Jakarta Sans, sans-serif', maxWidth: 440, margin: '0 auto' }}>
-                                Geen setupkosten. Geen verborgen fees. Betaal per maand, stop wanneer je wilt.
+                                {t('pricing.subtitle')}
                             </p>
                         </div>
 
@@ -1014,16 +1022,16 @@ export default function LandingPage() {
                                     }}>
                                     {plan.popular && (
                                         <div style={{ position: 'absolute', top: -14, left: '50%', transform: 'translateX(-50%)', background: 'linear-gradient(135deg, #1D6FD8, #2563EB)', borderRadius: 100, padding: '5px 16px', fontSize: 10, fontWeight: 800, color: 'white', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.1em', whiteSpace: 'nowrap', boxShadow: '0 4px 20px rgba(29,111,216,0.55)' }}>
-                                            MEEST GEKOZEN
+                                            {t('pricing.mostPopular')}
                                         </div>
                                     )}
                                     <div style={{ marginBottom: 22 }}>
                                         <div style={{ fontSize: 11, fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif', color: plan.popular ? '#93C5FD' : 'rgba(241,245,249,0.4)', letterSpacing: '0.08em', marginBottom: 10 }}>{plan.name.toUpperCase()}</div>
                                         <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                                            <span style={{ fontSize: 42, fontWeight: 800, fontFamily: 'Plus Jakarta Sans, sans-serif', color: '#F1F5F9', letterSpacing: '-0.028em', lineHeight: 1 }}>{plan.price === 0 ? 'Gratis' : `€${plan.price}`}</span>
-                                            {plan.price > 0 && <span style={{ fontSize: 13, color: 'rgba(241,245,249,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>/maand</span>}
+                                            <span style={{ fontSize: 42, fontWeight: 800, fontFamily: 'Plus Jakarta Sans, sans-serif', color: '#F1F5F9', letterSpacing: '-0.028em', lineHeight: 1 }}>{plan.price === 0 ? t('pricing.free') : `€${plan.price}`}</span>
+                                            {plan.price > 0 && <span style={{ fontSize: 13, color: 'rgba(241,245,249,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{t('pricing.perMonth')}</span>}
                                         </div>
-                                        <div style={{ marginTop: 8, fontSize: 13, color: 'rgba(241,245,249,0.4)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{plan.limit} try-ons/maand</div>
+                                        <div style={{ marginTop: 8, fontSize: 13, color: 'rgba(241,245,249,0.4)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{plan.limit} {t('pricing.tryOns')}{t('pricing.perMonth')}</div>
                                     </div>
 
                                     <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', marginBottom: 18 }} />
@@ -1064,7 +1072,7 @@ export default function LandingPage() {
                         </div>
 
                         <p style={{ textAlign: 'center', marginTop: 32, fontSize: 13, color: 'rgba(241,245,249,0.25)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-                            Alle plannen excl. BTW · Annuleer op elk moment · 14 dagen tevredenheidsgarantie
+                            {t('pricing.disclaimer')}
                         </p>
                     </div>
                 </section>
@@ -1074,21 +1082,21 @@ export default function LandingPage() {
                     <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 900, height: 600, background: 'radial-gradient(ellipse, rgba(139,92,246,0.06) 0%, transparent 68%)', pointerEvents: 'none' }} />
                     <div style={{ maxWidth: 1000, margin: '0 auto', position: 'relative' }}>
                         <div ref={studioPricing.ref} style={{ textAlign: 'center', marginBottom: 64 }}>
-                            <div className={`d-in d-d1 ${studioPricing.inView ? 'visible' : ''}`} style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#8B5CF6', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 18 }}>DRAPIT STUDIO</div>
+                            <div className={`d-in d-d1 ${studioPricing.inView ? 'visible' : ''}`} style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#8B5CF6', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 18 }}>{t('studioPricing.eyebrow')}</div>
                             <h2 className={`d-gradient d-in d-d2 ${studioPricing.inView ? 'visible' : ''}`} style={{ fontSize: 'clamp(28px, 3.5vw, 46px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.08, marginBottom: 18 }}>
-                                AI productfotografie
+                                {t('studioPricing.title')}
                             </h2>
                             <p className={`d-in d-d3 ${studioPricing.inView ? 'visible' : ''}`} style={{ fontSize: 17, color: 'rgba(241,245,249,0.45)', fontFamily: 'Plus Jakarta Sans, sans-serif', maxWidth: 480, margin: '0 auto' }}>
-                                Genereer professionele productfoto&apos;s met virtuele modellen, 360&deg; rotaties en meer &mdash; direct vanuit je dashboard.
+                                {t('studioPricing.subtitle')}
                             </p>
                         </div>
 
                         {/* Credit costs legend */}
                         <div className={`d-in d-d2 ${studioPricing.inView ? 'visible' : ''}`} style={{ display: 'flex', justifyContent: 'center', gap: 24, marginBottom: 40, flexWrap: 'wrap' }}>
                             {[
-                                { label: 'Virtueel Model', cost: '1 credit' },
-                                { label: 'Product Foto', cost: '1 credit' },
-                                { label: '360° Rotatie', cost: '4 credits' },
+                                { label: t('studioPricing.creditCosts.virtualModel'), cost: `1 ${t('studioPricing.creditCosts.creditSingular')}` },
+                                { label: t('studioPricing.creditCosts.productPhoto'), cost: `1 ${t('studioPricing.creditCosts.creditSingular')}` },
+                                { label: t('studioPricing.creditCosts.rotation360'), cost: `4 ${t('studioPricing.creditCosts.creditPlural')}` },
                             ].map((item) => (
                                 <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.15)', borderRadius: 100, padding: '6px 16px' }}>
                                     <span style={{ fontSize: 12, fontWeight: 600, color: 'rgba(241,245,249,0.6)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{item.label}</span>
@@ -1110,16 +1118,16 @@ export default function LandingPage() {
                                     }}>
                                     {plan.popular && (
                                         <div style={{ position: 'absolute', top: -14, left: '50%', transform: 'translateX(-50%)', background: 'linear-gradient(135deg, #8B5CF6, #7C3AED)', borderRadius: 100, padding: '5px 16px', fontSize: 10, fontWeight: 800, color: 'white', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.1em', whiteSpace: 'nowrap', boxShadow: '0 4px 20px rgba(139,92,246,0.55)' }}>
-                                            MEEST GEKOZEN
+                                            {t('pricing.mostPopular')}
                                         </div>
                                     )}
                                     <div style={{ marginBottom: 22 }}>
                                         <div style={{ fontSize: 11, fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif', color: plan.popular ? '#C4B5FD' : 'rgba(241,245,249,0.4)', letterSpacing: '0.08em', marginBottom: 10 }}>{plan.name.toUpperCase()}</div>
                                         <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                                            <span style={{ fontSize: 42, fontWeight: 800, fontFamily: 'Plus Jakarta Sans, sans-serif', color: '#F1F5F9', letterSpacing: '-0.028em', lineHeight: 1 }}>{plan.price === 0 ? 'Gratis' : `€${plan.price}`}</span>
-                                            {plan.price > 0 && <span style={{ fontSize: 13, color: 'rgba(241,245,249,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>/maand</span>}
+                                            <span style={{ fontSize: 42, fontWeight: 800, fontFamily: 'Plus Jakarta Sans, sans-serif', color: '#F1F5F9', letterSpacing: '-0.028em', lineHeight: 1 }}>{plan.price === 0 ? t('pricing.free') : `€${plan.price}`}</span>
+                                            {plan.price > 0 && <span style={{ fontSize: 13, color: 'rgba(241,245,249,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{t('studioPricing.perMonth')}</span>}
                                         </div>
-                                        <div style={{ marginTop: 8, fontSize: 13, color: 'rgba(241,245,249,0.4)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{plan.credits} credits/maand</div>
+                                        <div style={{ marginTop: 8, fontSize: 13, color: 'rgba(241,245,249,0.4)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{plan.credits} {t('studioPricing.creditCosts.creditPlural')}{t('studioPricing.perMonth')}</div>
                                     </div>
 
                                     <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', marginBottom: 18 }} />
@@ -1167,8 +1175,8 @@ export default function LandingPage() {
                             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, background: 'rgba(13,24,41,0.72)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 16, padding: '16px 28px' }}>
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                                 <div style={{ textAlign: 'left' }}>
-                                    <div style={{ fontSize: 13, fontWeight: 700, color: '#F1F5F9', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Extra credits nodig?</div>
-                                    <div style={{ fontSize: 12, color: 'rgba(241,245,249,0.4)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Koop losse credits vanaf €9 voor 50 stuks — verlopen niet.</div>
+                                    <div style={{ fontSize: 13, fontWeight: 700, color: '#F1F5F9', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{t('studioPricing.extraCredits.title')}</div>
+                                    <div style={{ fontSize: 12, color: 'rgba(241,245,249,0.4)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{t('studioPricing.extraCredits.subtitle')}</div>
                                 </div>
                             </div>
                         </div>

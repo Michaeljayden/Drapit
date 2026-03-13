@@ -1,0 +1,176 @@
+{
+  "nav": {
+    "howItWorks": "How it works",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "shopify": "Shopify",
+    "studio": "Studio",
+    "vton": "VTON"
+  },
+  "hero": {
+    "eyebrow": "AI VIRTUAL TRY-ON FOR ONLINE STORES",
+    "titleStart": "Let customers try on clothes",
+    "titleHighlight": "virtually",
+    "titleEnd": "in seconds.",
+    "subtitle": "One script tag. Any online store. Customers upload a photo and see themselves in any garment — powered by state-of-the-art AI diffusion technology.",
+    "ctaPrimary": "Start free →",
+    "ctaSecondary": "See live demo",
+    "socialProof": "2,000+ stores use Drapit"
+  },
+  "widget": {
+    "demoUrl": "drapit.io/widget — live demo",
+    "customerPhoto": "CUSTOMER PHOTO",
+    "processing": "AI PROCESSING...",
+    "processingShort": "PROCESSING...",
+    "result": "AI RESULT",
+    "complete": "✓ DONE",
+    "cta": "TRY ON VIRTUALLY →",
+    "badge": "AI-POWERED",
+    "products": {
+      "blazer": "Blazer",
+      "dress": "Dress",
+      "jacket": "Jacket",
+      "shirt": "Shirt"
+    }
+  },
+  "pricing": {
+    "eyebrow": "TRANSPARENT PRICING",
+    "title": "Simple. Predictable. No surprises.",
+    "subtitle": "Choose the plan that fits your sales volume. Upgrade or downgrade at any time.",
+    "disclaimer": "All plans excl. VAT · Cancel anytime · 14-day satisfaction guarantee",
+    "perMonth": "/month",
+    "tryOns": "try-ons",
+    "free": "Free",
+    "mostPopular": "MOST POPULAR",
+    "plans": {
+      "trial": {
+        "name": "Trial",
+        "limit": "20",
+        "cta": "Start free",
+        "features": [
+          "20 try-ons/month",
+          "1 API key",
+          "Email support"
+        ]
+      },
+      "starter": {
+        "name": "Starter",
+        "limit": "500",
+        "cta": "Get started",
+        "features": [
+          "500 try-ons/month",
+          "1 API key",
+          "Widget customization",
+          "Email support"
+        ]
+      },
+      "pro": {
+        "name": "Pro",
+        "limit": "2,500",
+        "cta": "Most popular",
+        "features": [
+          "2,500 try-ons/month",
+          "Unlimited API keys",
+          "Analytics dashboard",
+          "Webhook integrations",
+          "Priority support",
+          "Widget customization"
+        ]
+      },
+      "scale": {
+        "name": "Scale",
+        "limit": "5,000",
+        "cta": "Scale up",
+        "features": [
+          "5,000 try-ons/month",
+          "Unlimited API keys",
+          "Custom branding",
+          "Analytics dashboard",
+          "Webhook integrations",
+          "SLA guarantee"
+        ]
+      },
+      "business": {
+        "name": "Business",
+        "limit": "10,000",
+        "cta": "Contact us",
+        "features": [
+          "10,000 try-ons/month",
+          "Dedicated support",
+          "Custom integration help",
+          "Custom branding",
+          "SLA guarantee",
+          "Unlimited everything"
+        ]
+      }
+    }
+  },
+  "studioPricing": {
+    "eyebrow": "DRAPIT STUDIO",
+    "title": "AI product photography",
+    "subtitle": "Generate professional product photos with virtual models, 360° rotations and more — directly from your dashboard.",
+    "creditCosts": {
+      "virtualModel": "Virtual Model",
+      "productPhoto": "Product Photo",
+      "rotation360": "360° Rotation",
+      "creditSingular": "credit",
+      "creditPlural": "credits"
+    },
+    "extraCredits": {
+      "title": "Need extra credits?",
+      "subtitle": "Buy individual credits starting at €9 for 50 — never expire."
+    },
+    "perMonth": "/month",
+    "plans": {
+      "trial": {
+        "name": "Trial",
+        "credits": "20",
+        "cta": "Try free",
+        "features": [
+          "20 free generations",
+          "All 3 modes (model, product, 360°)",
+          "Customize watermark",
+          "High-resolution download"
+        ]
+      },
+      "starter": {
+        "name": "Starter",
+        "credits": "200",
+        "cta": "Get started",
+        "features": [
+          "200 credits/month",
+          "All 3 modes",
+          "Customize watermark",
+          "High-resolution download",
+          "Email support"
+        ]
+      },
+      "pro": {
+        "name": "Pro",
+        "credits": "500",
+        "cta": "Most popular",
+        "features": [
+          "500 credits/month",
+          "All 3 modes",
+          "Customize watermark",
+          "High-resolution download",
+          "Priority support",
+          "Unused credits roll over"
+        ]
+      },
+      "scale": {
+        "name": "Scale",
+        "credits": "1,000",
+        "cta": "Scale up",
+        "features": [
+          "1,000 credits/month",
+          "All 3 modes",
+          "Customize watermark",
+          "High-resolution download",
+          "Priority support",
+          "Unused credits roll over"
+        ]
+      }
+    }
+  }
+}

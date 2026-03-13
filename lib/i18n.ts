@@ -10,9 +10,10 @@ export default getRequestConfig(async () => {
   const locale = (cookieStore.get('NEXT_LOCALE')?.value || defaultLocale) as Locale;
 
   // Load all translation files
-  const [common, forms] = await Promise.all([
+  const [common, forms, marketing] = await Promise.all([
     import(`../locales/${locale}/common.json`),
     import(`../locales/${locale}/forms.json`),
+    import(`../locales/${locale}/marketing.json`),
   ]);
 
   return {
@@ -20,6 +21,7 @@ export default getRequestConfig(async () => {
     messages: {
       ...common.default,
       ...forms.default,
+      ...marketing.default,
     },
   };
 });
