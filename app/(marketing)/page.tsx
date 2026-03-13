@@ -600,12 +600,13 @@ export default function LandingPage() {
                     .d-studio-grid { grid-template-columns: repeat(2, 1fr) !important; }
                     .d-feat-grid  { grid-template-columns: 1fr 1fr !important; }
                     .d-stats-grid { grid-template-columns: 1fr 1fr !important; }
+                    .d-shopify-card { grid-template-columns: 1fr !important; gap: 40px !important; padding: 48px 36px !important; }
                     .d-hero-title { font-size: clamp(34px, 7vw, 48px) !important; text-align: center; }
                     .d-hero-p     { text-align: center; margin-left: auto; margin-right: auto; }
                     .d-hero-ctas  { justify-content: center; }
                     .d-hero-proof { justify-content: center; }
                     .d-hero-visual { order: -1; margin-bottom: 20px; }
-                        .d-nav-links  { display: none !important; }
+                    .d-nav-links  { display: none !important; }
                     .d-nav-mobile { display: flex !important; }
                 }
 
@@ -701,14 +702,23 @@ export default function LandingPage() {
                 }
                 @media (max-width: 768px) {
                     .d-shopify-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-                    .d-shopify-card { padding: 40px 24px !important; }
+                    .d-shopify-card { grid-template-columns: 1fr !important; gap: 40px !important; padding: 40px 24px !important; overflow: hidden; }
+                    .d-shopify-card-features { grid-template-columns: 1fr !important; gap: 20px !important; }
                     .d-shopify-install { grid-template-columns: 1fr !important; padding: 28px 20px !important; }
+                    .d-plans-grid { grid-template-columns: repeat(2, 1fr) !important; }
+                    .d-studio-grid { grid-template-columns: repeat(2, 1fr) !important; }
+                    .d-contact-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
                 }
                 @media (max-width: 540px) {
                     .d-plans-grid { grid-template-columns: 1fr !important; }
                     .d-studio-grid { grid-template-columns: 1fr !important; }
                     .d-feat-grid  { grid-template-columns: 1fr !important; }
                     .d-stats-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
+                    .d-shopify-card { padding: 28px 18px !important; }
+                    .d-hero-grid { gap: 28px !important; }
+                    .d-hero-section { padding-top: 110px !important; padding-bottom: 80px !important; }
+                    .d-platforms { margin-top: -30px !important; margin-bottom: 60px !important; }
+                    .d-section-lg { padding-top: 80px !important; padding-bottom: 80px !important; }
                 }
             `}</style>
 
@@ -814,7 +824,7 @@ export default function LandingPage() {
                 </div>
 
                 {/* ─── HERO ───────────────────────────────────────────── */}
-                <section className="drapit-grid-bg" style={{ paddingTop: 148, paddingBottom: 128, position: 'relative', overflow: 'hidden' }}>
+                <section className="drapit-grid-bg d-hero-section" style={{ paddingTop: 148, paddingBottom: 128, position: 'relative', overflow: 'hidden' }}>
                     {/* Ambient orbs */}
                     <div style={{ position: 'absolute', top: '5%', left: '-5%', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(29,111,216,0.14) 0%, transparent 68%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
                     <div style={{ position: 'absolute', bottom: '-10%', right: '-5%', width: 480, height: 480, borderRadius: '50%', background: 'radial-gradient(circle, rgba(34,211,238,0.07) 0%, transparent 65%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
@@ -877,7 +887,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* ─── PLATFORMS ─────────────────────────────────────────── */}
-                <div style={{ maxWidth: 1200, margin: '-60px auto 100px', position: 'relative', zIndex: 10 }}>
+                <div className="d-platforms" style={{ maxWidth: 1200, margin: '-60px auto 100px', position: 'relative', zIndex: 10 }}>
                     <PlatformLogos />
                 </div>
 
@@ -900,7 +910,7 @@ export default function LandingPage() {
                 </div>
 
                 {/* ─── HOW IT WORKS ──────────────────────────────────── */}
-                <section id="hoe-het-werkt" style={{ padding: '128px 28px', position: 'relative' }}>
+                <section id="hoe-het-werkt" className="d-section-lg" style={{ padding: '128px 28px', position: 'relative' }}>
                     <div style={{ maxWidth: 1200, margin: '0 auto' }}>
                         <div ref={how.ref} style={{ textAlign: 'center', marginBottom: 72 }}>
                             <div className={`d-in d-d1 ${how.inView ? 'visible' : ''}`} style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#1D6FD8', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 18, textTransform: 'uppercase' }}>
@@ -1051,7 +1061,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* ─── PRICING ───────────────────────────────────────── */}
-                <section id="prijzen" style={{ padding: '128px 28px', background: 'rgba(13,24,41,0.4)', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', position: 'relative', overflow: 'hidden' }}>
+                <section id="prijzen" className="d-section-lg" style={{ padding: '128px 28px', background: 'rgba(13,24,41,0.4)', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 900, height: 600, background: 'radial-gradient(ellipse, rgba(29,111,216,0.065) 0%, transparent 68%)', pointerEvents: 'none' }} />
                     <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative' }}>
                         <div ref={pricing.ref} style={{ textAlign: 'center', marginBottom: 64 }}>
@@ -1133,7 +1143,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* ─── STUDIO PRICING ────────────────────────────────── */}
-                <section style={{ padding: '128px 28px 128px', position: 'relative', overflow: 'hidden' }}>
+                <section className="d-section-lg" style={{ padding: '128px 28px 128px', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 900, height: 600, background: 'radial-gradient(ellipse, rgba(139,92,246,0.06) 0%, transparent 68%)', pointerEvents: 'none' }} />
                     <div style={{ maxWidth: 1000, margin: '0 auto', position: 'relative' }}>
                         <div ref={studioPricing.ref} style={{ textAlign: 'center', marginBottom: 64 }}>
@@ -1243,7 +1253,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* ─── SHOPIFY PARTNER ────────────────────────────────── */}
-                <section id="shopify" style={{ padding: '80px 28px 128px', position: 'relative', overflow: 'hidden' }}>
+                <section id="shopify" className="d-section-lg" style={{ padding: '80px 28px 128px', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ position: 'absolute', top: '10%', right: '5%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(149,191,71,0.08) 0%, transparent 70%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
 
                     <div ref={shopify.ref} style={{ maxWidth: 1200, margin: '0 auto' }}>
@@ -1275,7 +1285,7 @@ export default function LandingPage() {
                                     Wij zijn trots officieel Shopify Partner te zijn. Onze technologie is ontworpen om naadloos te integreren met jouw Shopify-omgeving, zodat je klanten direct kunnen profiteren van de toekomst van online fashion retail.
                                 </p>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 48 }}>
+                                <div className="d-shopify-card-features" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 48 }}>
                                     {[
                                         { title: 'Shopify App Store', desc: 'Download Drapit rechtstreeks en start in minuten. Geen handmatige code nodig.' },
                                         { title: 'Naadloze Installatie', desc: 'Onze app voegt de benodigde script-tags automatisch toe aan je theme.' }
@@ -1331,7 +1341,7 @@ export default function LandingPage() {
                             </div>
 
                             {/* Visual/Tech Card */}
-                            <div style={{ position: 'relative' }}>
+                            <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 24 }}>
                                 <div style={{
                                     background: 'rgba(29,111,216,0.03)',
                                     border: '1px solid rgba(255,255,255,0.05)',
@@ -1374,7 +1384,7 @@ export default function LandingPage() {
 
                                 {/* Absolute floating elements */}
                                 <div style={{
-                                    position: 'absolute', top: -20, right: -20,
+                                    position: 'absolute', top: 10, right: 10,
                                     background: 'linear-gradient(135deg, #95BF47, #5E8E3E)',
                                     borderRadius: 16, padding: '12px 16px',
                                     boxShadow: '0 10px 30px rgba(149,191,71,0.3)',
@@ -1387,7 +1397,7 @@ export default function LandingPage() {
                         </div>
                     </div>
                 </section>
-                <section id="faq" style={{ padding: '128px 28px' }}>
+                <section id="faq" className="d-section-lg" style={{ padding: '128px 28px' }}>
                     <div style={{ maxWidth: 740, margin: '0 auto' }}>
                         <div ref={faqSec.ref} style={{ textAlign: 'center', marginBottom: 60 }}>
                             <div className={`d-in d-d1 ${faqSec.inView ? 'visible' : ''}`} style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#1D6FD8', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 18 }}>FAQ</div>
@@ -1406,7 +1416,7 @@ export default function LandingPage() {
                 {/* ─── CONTACT ───────────────────────────────────────── */}
                 <section id="contact" style={{ padding: '100px 28px', position: 'relative' }}>
                     <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 30% 50%, rgba(29,111,216,0.06) 0%, transparent 60%)', pointerEvents: 'none' }} />
-                    <div style={{ maxWidth: 1080, margin: '0 auto', position: 'relative', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 64, alignItems: 'start' }}>
+                    <div className="d-contact-grid" style={{ maxWidth: 1080, margin: '0 auto', position: 'relative', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 64, alignItems: 'start' }}>
 
                         {/* Left — tekst */}
                         <div>
