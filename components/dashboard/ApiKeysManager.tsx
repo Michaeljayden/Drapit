@@ -13,9 +13,11 @@ interface ApiKeyItem {
 interface ApiKeysManagerProps {
     initialKeys: ApiKeyItem[];
     shopId: string;
+    maxApiKeys: number;
+    planName: string;
 }
 
-export default function ApiKeysManager({ initialKeys, shopId }: ApiKeysManagerProps) {
+export default function ApiKeysManager({ initialKeys, shopId, maxApiKeys, planName }: ApiKeysManagerProps) {
     const [keys, setKeys] = useState<ApiKeyItem[]>(initialKeys);
     const [creating, setCreating] = useState(false);
     const [newKeyName, setNewKeyName] = useState('');
@@ -23,6 +25,9 @@ export default function ApiKeysManager({ initialKeys, shopId }: ApiKeysManagerPr
     const [newKeyValue, setNewKeyValue] = useState<string | null>(null);
     const [newKeyCopied, setNewKeyCopied] = useState(false);
     const [revoking, setRevoking] = useState<string | null>(null);
+
+    const activeKeysCount = keys.filter(k => k.isActive).length;
+    const isLimitReached = activeKeysCount >= maxApiKeys;
 
     async function handleCreateKey() {
         if (!newKeyName.trim()) return;
@@ -95,11 +100,12 @@ export default function ApiKeysManager({ initialKeys, shopId }: ApiKeysManagerPr
                         value={newKeyName}
                         onChange={(e) => setNewKeyName(e.target.value)}
                         placeholder="Naam (bijv. 'Productie' of 'Test')"
-                        className="flex-1 border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D6FD8] focus:border-transparent placeholder:text-[#94A3B8]"
+                        disabled={isLimitReached}
+                        className="flex-1 border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D6FD8] focus:border-transparent placeholder:text-[#94A3B8] disabled:bg-[#F8FAFC] disabled:text-[#94A3B8]"
                     />
                     <button
                         onClick={handleCreateKey}
-                        disabled={creating || !newKeyName.trim()}
+                        disabled={creating || !newKeyName.trim() || isLimitReached}
                         className="bg-[#1D6FD8] hover:bg-[#1558B0] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors duration-150 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                     >
                         {creating ? (
@@ -115,6 +121,21 @@ export default function ApiKeysManager({ initialKeys, shopId }: ApiKeysManagerPr
                         )}
                     </button>
                 </div>
+                {isLimitReached && (
+                    <p className="text-sm text-[#EAB308] mt-3 bg-[#FEFCE8] border border-[#FEF08A] rounded-xl px-4 py-3 flex gap-2 items-center">
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" className="shrink-0">
+                             <path d="M10 2L2 18h16L10 2z" stroke="#CA8A04" strokeWidth="1.5" strokeLinejoin="round" fill="none" />
+                             <line x1="10" y1="8" x2="10" y2="12" stroke="#CA8A04" strokeWidth="1.5" strokeLinecap="round" />
+                             <circle cx="10" cy="15" r="0.5" fill="#CA8A04" stroke="#CA8A04" strokeWidth="1" />
+                        </svg>
+                        Je hebt de limiet bereikt van {maxApiKeys} actieve API-sleutel{maxApiKeys === 1 ? '' : 's'} voor je huidige "{planName}" plan. Upgrade je plan of trek een sleutel in.
+                    </p>
+                )}
+                {!isLimitReached && (
+                     <p className="text-xs text-[#64748B] mt-3 ml-1">
+                        {activeKeysCount} van {maxApiKeys} actieve API-sleutels in gebruik
+                     </p>
+                )}
             </div>
 
             {/* Active keys list */}

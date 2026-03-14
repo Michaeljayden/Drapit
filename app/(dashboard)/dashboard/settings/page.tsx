@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import SettingsClient from '@/components/dashboard/SettingsClient';
 import { redirect } from 'next/navigation';
+import { PLAN_TIERS } from '@/lib/plans-config';
 
 export default async function SettingsPage() {
     const supabase = await createClient();
@@ -42,10 +43,15 @@ export default async function SettingsPage() {
         createdAt: k.created_at,
     }));
 
+    const planKey = shop.plan || 'starter';
+    const planInfo = PLAN_TIERS.find(p => p.key === planKey) || PLAN_TIERS.find(p => p.key === 'starter')!;
+
     return (
         <SettingsClient
             shop={shop}
             initialApiKeys={apiKeys}
+            maxApiKeys={planInfo.maxApiKeys}
+            planName={planInfo.key}
         />
     );
 }

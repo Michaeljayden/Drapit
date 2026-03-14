@@ -38,6 +38,42 @@ export async function POST(request: NextRequest) {
 
         const supabase = getSupabaseAdmin();
 
+        // Check plan limits
+        const { data: shop, error: shopError } = await supabase
+            .from('shops')
+            .select('plan')
+            .eq('id', shop_id)
+            .single();
+
+        if (shopError || !shop) {
+            return NextResponse.json({ error: 'Shop not found' }, { status: 404 });
+        }
+
+        const planKey = shop.plan || 'starter';
+        
+        // Import inline or dynamically to avoid route errors or just use the local import
+        const { PLAN_TIERS } = await import('@/lib/plans-config');
+        const planInfo = PLAN_TIERS.find(p => p.key === planKey) || PLAN_TIERS.find(p => p.key === 'starter')!;
+        
+        // Count active keys
+        const { count, error: countError } = await supabase
+            .from('api_keys')
+            .select('*', { count: 'exact', head: true })
+            .eq('shop_id', shop_id)
+            .eq('is_active', true);
+
+        if (countError) {
+            console.error('[api/keys] Count error:', countError);
+            return NextResponse.json({ error: 'Failed to check limits' }, { status: 500 });
+        }
+
+        if (count !== null && count >= planInfo.maxApiKeys) {
+            return NextResponse.json({ 
+                error: 'Limit reached', 
+                message: `Je huidige plan (${planInfo.key}) ondersteunt maximaal ${planInfo.maxApiKeys} API-sleutel(s). Upgrade je plan voor meer sleutels.`
+            }, { status: 403 });
+        }
+
         // Generate key
         const rawKey = generateApiKey();
         const keyHash = await hashKey(rawKey);

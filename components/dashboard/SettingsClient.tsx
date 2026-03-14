@@ -8,12 +8,14 @@ import Link from 'next/link';
 interface SettingsClientProps {
     shop: any;
     initialApiKeys: any[];
+    maxApiKeys: number;
+    planName: string;
 }
 
 const tabs = ['Account', 'API-sleutels', 'Abonnement'] as const;
 type Tab = (typeof tabs)[number];
 
-export default function SettingsClient({ shop, initialApiKeys }: SettingsClientProps) {
+export default function SettingsClient({ shop, initialApiKeys, maxApiKeys, planName }: SettingsClientProps) {
     const [activeTab, setActiveTab] = useState<Tab>('Account');
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
@@ -283,7 +285,12 @@ export default function SettingsClient({ shop, initialApiKeys }: SettingsClientP
                             Gebruik API keys om de Drapit widget te authenticeren op je webshop.
                         </p>
                     </div>
-                    <ApiKeysManager initialKeys={initialApiKeys} shopId={shop.id} />
+                    <ApiKeysManager 
+                        initialKeys={initialApiKeys} 
+                        shopId={shop.id} 
+                        maxApiKeys={maxApiKeys}
+                        planName={planName}
+                    />
                 </div>
             )}
 

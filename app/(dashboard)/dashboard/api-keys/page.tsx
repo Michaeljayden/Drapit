@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import ApiKeysManager from '@/components/dashboard/ApiKeysManager';
+import { PLAN_TIERS } from '@/lib/plans-config';
 
 export default async function ApiKeysPage() {
     const supabase = await createClient();
@@ -10,11 +11,14 @@ export default async function ApiKeysPage() {
     // Fetch shop
     const { data: shop } = await supabase
         .from('shops')
-        .select('id')
+        .select('id, plan')
         .eq('owner_id', user.id)
         .single();
 
     const shopId = shop?.id || '';
+    const planKey = shop?.plan || 'starter';
+    const planInfo = PLAN_TIERS.find(p => p.key === planKey) || PLAN_TIERS.find(p => p.key === 'starter')!;
+    const maxApiKeys = planInfo.maxApiKeys;
 
     // Fetch API keys
     const { data: keys } = shopId
@@ -43,7 +47,12 @@ export default async function ApiKeysPage() {
                 </p>
             </div>
 
-            <ApiKeysManager initialKeys={apiKeys} shopId={shopId} />
+            <ApiKeysManager 
+                initialKeys={apiKeys} 
+                shopId={shopId} 
+                maxApiKeys={maxApiKeys}
+                planName={planInfo.key}
+            />
         </div>
     );
 }
