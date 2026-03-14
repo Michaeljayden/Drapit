@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import ContactForm from '@/components/ContactForm';
 import TryOnCalculator from '@/components/marketing/TryOnCalculator';
+import VideoModal from '@/components/marketing/VideoModal';
 import { useTranslations } from 'next-intl';
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -290,6 +291,7 @@ export default function LandingPage() {
     const [openFaq, setOpenFaq] = useState<number | null>(null);
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [isVideoOpen, setIsVideoOpen] = useState(false);
 
     const hero = useInView(0.05);
     const stats = useInView(0.1);
@@ -889,12 +891,12 @@ export default function LandingPage() {
                                     <Link href="/dashboard/login" className="d-btn-primary" style={{ padding: '14px 30px', fontSize: 16 }}>
                                         {t('hero.ctaPrimary')}
                                     </Link>
-                                    <a href="#hoe-het-werkt" style={{ padding: '14px 28px', fontSize: 16, fontWeight: 500, color: 'rgba(241,245,249,0.72)', fontFamily: 'Plus Jakarta Sans, sans-serif', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 12, textDecoration: 'none', transition: 'all 0.2s' }}
+                                    <button onClick={() => setIsVideoOpen(true)} style={{ padding: '14px 28px', fontSize: 16, fontWeight: 500, color: 'rgba(241,245,249,0.72)', fontFamily: 'Plus Jakarta Sans, sans-serif', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 12, textDecoration: 'none', transition: 'all 0.2s', cursor: 'pointer' }}
                                         onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#F1F5F9'; }}
                                         onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = 'rgba(241,245,249,0.72)'; }}
                                     >
                                         {t('hero.ctaSecondary')}
-                                    </a>
+                                    </button>
                                 </div>
 
                                 {/* Social proof */}
@@ -1539,7 +1541,11 @@ export default function LandingPage() {
                     </div>
                 </section>
 
-
+                <VideoModal 
+                    isOpen={isVideoOpen} 
+                    onClose={() => setIsVideoOpen(false)} 
+                    videoSrc="/images/Drapit%20final%20v1%20ENG.mp4" 
+                />
             </div>
         </>
     );
