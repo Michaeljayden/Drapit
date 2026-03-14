@@ -7,9 +7,12 @@ import Logo from '@/components/ui/Logo';
 type PlanKey = 'trial' | 'starter' | 'growth' | 'scale' | 'enterprise';
 
 const ONBOARDING_PLANS: {
-    key: PlanKey;
+    id?: string;
+    key?: PlanKey;
     name: string;
-    price: number;
+    price: number | string;
+    period?: string;
+    subtitle?: string;
     limit: string;
     features: string[];
     popular?: boolean;
@@ -29,19 +32,23 @@ const ONBOARDING_PLANS: {
             features: ['500 try-ons per maand', '1 API-sleutel', 'E-mail support', 'Widget personalisatie'],
         },
         {
-            key: 'growth',
+            id: 'growth', // Changed from key to id
             name: 'Pro',
-            price: 199,
-            limit: '2.500',
+            price: '199', // Changed to string
+            period: '/maand', // Added new field
+            subtitle: '2.500 try-ons/maand', // Added new field
             popular: true,
-            features: ['2.500 try-ons per maand', 'Onbeperkt API-sleutels', 'Prioriteit support', 'Analytics dashboard', 'Webhook integraties'],
+            limit: '2.500', // Kept existing limit
+            features: ['2.500 try-ons per maand', '3 API-sleutels', 'Prioriteit support', 'Analytics dashboard', 'Webhook integraties'], // Updated API key count
         },
         {
-            key: 'scale',
+            id: 'scale', // Changed from key to id
             name: 'Scale',
-            price: 399,
-            limit: '5.000',
-            features: ['5.000 try-ons per maand', 'Onbeperkt API-sleutels', 'Custom branding', 'Analytics dashboard', 'SLA garantie'],
+            price: '399', // Changed to string
+            period: '/maand', // Added new field
+            subtitle: '5.000 try-ons/maand', // Added new field
+            limit: '5.000', // Kept existing limit
+            features: ['5.000 try-ons per maand', '10 API-sleutels', 'Custom branding', 'Analytics dashboard', 'SLA garantie'], // Updated API key count
         },
         {
             key: 'enterprise',
@@ -198,12 +205,12 @@ export default function OnboardingForm({ email, initialData }: { email: string, 
                     <>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                             {ONBOARDING_PLANS.map((plan) => {
-                                const isSelected = selectedPlan === plan.key;
+                                const isSelected = selectedPlan === (plan.key || plan.id);
                                 return (
                                     <button
-                                        key={plan.key}
+                                        key={plan.key || plan.id}
                                         type="button"
-                                        onClick={() => setSelectedPlan(plan.key)}
+                                        onClick={() => setSelectedPlan((plan.key || plan.id) as PlanKey)}
                                         className="relative text-left rounded-2xl border-2 p-5 transition-all duration-200 bg-white hover:shadow-md"
                                         style={{
                                             borderColor: isSelected
@@ -241,7 +248,7 @@ export default function OnboardingForm({ email, initialData }: { email: string, 
                                                 <span className="text-2xl font-bold text-[#0F172A]">
                                                     {plan.price === 0 ? 'Gratis' : `€${plan.price}`}
                                                 </span>
-                                                {plan.price > 0 && (
+                                                {Number(plan.price) > 0 && (
                                                     <span className="text-sm text-[#64748B]">/maand</span>
                                                 )}
                                             </div>

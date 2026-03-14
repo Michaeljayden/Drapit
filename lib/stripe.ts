@@ -78,7 +78,7 @@ export const PLANS: Record<Plan, PlanConfig> = {
         name: 'Scale',
         features: [
             '5.000 try-ons per maand',
-            'Onbeperkt API-sleutels',
+            '10 API-sleutels',
             'Prioriteit support',
             'Custom branding',
             'Analytics dashboard',
