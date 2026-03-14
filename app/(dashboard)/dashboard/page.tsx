@@ -67,7 +67,7 @@ export default async function DashboardPage() {
     const { data: allTryons } = shopId
         ? await supabase
             .from('tryons')
-            .select('id, product_id, status, created_at, buy_url')
+            .select('id, product_id, status, created_at')
             .eq('shop_id', shopId)
             .gte('created_at', thirtyDaysAgo.toISOString())
             .order('created_at', { ascending: false })
