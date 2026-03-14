@@ -16,12 +16,35 @@ export default getRequestConfig(async () => {
     import(`../locales/${locale}/marketing.json`),
   ]);
 
+  // Deep merge function to avoid namespace collisions (e.g. 'nav')
+  function deepMerge(target: any, source: any) {
+    const output = Object.assign({}, target);
+    if (itemIsObject(target) && itemIsObject(source)) {
+      Object.keys(source).forEach(key => {
+        if (itemIsObject(source[key])) {
+          if (!(key in target))
+            Object.assign(output, { [key]: source[key] });
+          else
+            output[key] = deepMerge(target[key], source[key]);
+        } else {
+          Object.assign(output, { [key]: source[key] });
+        }
+      });
+    }
+    return output;
+  }
+
+  function itemIsObject(item: any) {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+  }
+
+  const messages = deepMerge(
+    deepMerge(common.default, forms.default),
+    marketing.default
+  );
+
   return {
     locale,
-    messages: {
-      ...common.default,
-      ...forms.default,
-      ...marketing.default,
-    },
+    messages,
   };
 });
