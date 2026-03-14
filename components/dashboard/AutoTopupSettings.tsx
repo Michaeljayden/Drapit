@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { colors, componentStyles } from '@/lib/design-tokens';
 import { TRYON_PACKS } from '@/lib/stripe';
+import BillingActions from './BillingActions';
 
 interface AutoTopupSettingsProps {
     shopId: string;
@@ -99,9 +100,14 @@ export default function AutoTopupSettings({
                 </p>
             )}
             {!hasStripeCustomer && !isTrial && !isShopify && (
-                <p className="text-sm text-gray-500">
-                    Voeg eerst een betaalmethode toe om auto top-up te gebruiken.
-                </p>
+                <div className="space-y-3">
+                    <p className="text-sm text-gray-500">
+                        Voeg eerst een betaalmethode toe om auto top-up te gebruiken.
+                    </p>
+                    <div className="w-fit">
+                        <BillingActions action="portal" />
+                    </div>
+                </div>
             )}
 
             {!isDisabled && (
@@ -225,12 +231,19 @@ export default function AutoTopupSettings({
 
                     {/* Feedback message */}
                     {message && (
-                        <p
-                            className="mt-3 text-sm font-medium"
-                            style={{ color: message.type === 'success' ? colors.green : colors.red }}
-                        >
-                            {message.text}
-                        </p>
+                        <div className="mt-4 space-y-3">
+                            <p
+                                className="text-sm font-medium"
+                                style={{ color: message.type === 'success' ? colors.green : colors.red }}
+                            >
+                                {message.text}
+                            </p>
+                            {message.type === 'error' && message.text.includes('Stripe Portal') && (
+                                <div className="w-fit">
+                                    <BillingActions action="portal" />
+                                </div>
+                            )}
+                        </div>
                     )}
 
                     {/* Info text */}
