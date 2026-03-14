@@ -15,6 +15,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { sendUsageAlertEmail } from '@/lib/email';
+import { maybeAutoTopup } from '@/lib/auto-topup';
 
 // ---------------------------------------------------------------------------
 // CORS helpers — widget runs on external domains (Shopify, WooCommerce, etc.)
@@ -155,7 +156,7 @@ export async function POST(request: NextRequest) {
         // ---------------------------------------------------------------
         const { data: shop, error: shopError } = await supabase
             .from('shops')
-            .select('id, tryons_this_month, monthly_tryon_limit, rollover_tryons, email, name')
+            .select('id, tryons_this_month, monthly_tryon_limit, rollover_tryons, extra_tryons, email, name, auto_topup_enabled, auto_topup_threshold_pct, auto_topup_pack_index, auto_topup_monthly_cap, auto_topup_spent_this_month, stripe_customer_id, billing_source')
             .eq('id', shopId)
             .single();
 
@@ -166,8 +167,11 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Effective limit = plan limit + rolled-over try-ons from previous month
-        const effectiveLimit = shop.monthly_tryon_limit + ((shop as Record<string, unknown>).rollover_tryons as number ?? 0);
+        // Effective limit = plan limit + rollover + extra purchased try-ons
+        const rollover = (shop as Record<string, unknown>).rollover_tryons as number ?? 0;
+        const extraTryons = (shop as Record<string, unknown>).extra_tryons as number ?? 0;
+        const planLimit = shop.monthly_tryon_limit + rollover;
+        const effectiveLimit = planLimit + extraTryons;
 
         if (shop.tryons_this_month >= effectiveLimit) {
             return NextResponse.json(
@@ -309,20 +313,33 @@ export async function POST(request: NextRequest) {
         // ---------------------------------------------------------------
         // 8. INCREMENT tryons_this_month + usage alerts
         // ---------------------------------------------------------------
-        await supabase.rpc('increment_tryons_count', { shop_row_id: shopId });
+        await supabase.rpc('increment_tryons_count_v2', { shop_row_id: shopId });
+
+        // Fire auto top-up check (fire-and-forget — does not block response)
+        maybeAutoTopup(shopId, shop.tryons_this_month, planLimit, extraTryons, {
+            auto_topup_enabled: (shop as Record<string, unknown>).auto_topup_enabled as boolean ?? false,
+            auto_topup_threshold_pct: (shop as Record<string, unknown>).auto_topup_threshold_pct as number ?? 90,
+            auto_topup_pack_index: (shop as Record<string, unknown>).auto_topup_pack_index as number ?? 1,
+            auto_topup_monthly_cap: (shop as Record<string, unknown>).auto_topup_monthly_cap as number ?? 100,
+            auto_topup_spent_this_month: (shop as Record<string, unknown>).auto_topup_spent_this_month as number ?? 0,
+            stripe_customer_id: (shop as Record<string, unknown>).stripe_customer_id as string | null,
+            billing_source: (shop as Record<string, unknown>).billing_source as string | null,
+            email: shop.email as string | null,
+            name: (shop.name as string) || null,
+        }).catch(err => console.error('[tryon] Auto top-up error:', err));
 
         // Fire usage alert emails at exactly 80% and 100% thresholds (fire-and-forget)
-        // Use effectiveLimit (plan limit + rollover) so alerts are accurate
+        // Use planLimit (plan + rollover, without extra) so alerts are about the subscription
         const newCount = shop.tryons_this_month + 1;
         const shopEmail = shop.email as string | null;
         const shopName = (shop.name as string) || 'Drapit merchant';
 
         if (shopEmail && !shopEmail.includes('shopify-placeholder')) {
-            const eightyPct = Math.floor(effectiveLimit * 0.8);
+            const eightyPct = Math.floor(planLimit * 0.8);
             if (newCount === eightyPct) {
-                sendUsageAlertEmail(shopEmail, shopName, newCount, effectiveLimit, 80).catch(console.error);
-            } else if (newCount >= effectiveLimit) {
-                sendUsageAlertEmail(shopEmail, shopName, newCount, effectiveLimit, 100).catch(console.error);
+                sendUsageAlertEmail(shopEmail, shopName, newCount, planLimit, 80).catch(console.error);
+            } else if (newCount >= planLimit) {
+                sendUsageAlertEmail(shopEmail, shopName, newCount, planLimit, 100).catch(console.error);
             }
         }
 

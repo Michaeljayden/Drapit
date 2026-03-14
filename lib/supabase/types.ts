@@ -110,6 +110,12 @@ export type Database = {
           stripe_subscription_id: string | null
           rollover_tryons: number
           tryons_this_month: number
+          extra_tryons: number
+          auto_topup_enabled: boolean
+          auto_topup_threshold_pct: number
+          auto_topup_pack_index: number
+          auto_topup_monthly_cap: number
+          auto_topup_spent_this_month: number
         }
         Insert: {
           created_at?: string
@@ -124,6 +130,12 @@ export type Database = {
           stripe_subscription_id?: string | null
           rollover_tryons?: number
           tryons_this_month?: number
+          extra_tryons?: number
+          auto_topup_enabled?: boolean
+          auto_topup_threshold_pct?: number
+          auto_topup_pack_index?: number
+          auto_topup_monthly_cap?: number
+          auto_topup_spent_this_month?: number
         }
         Update: {
           created_at?: string
@@ -138,8 +150,58 @@ export type Database = {
           stripe_subscription_id?: string | null
           rollover_tryons?: number
           tryons_this_month?: number
+          extra_tryons?: number
+          auto_topup_enabled?: boolean
+          auto_topup_threshold_pct?: number
+          auto_topup_pack_index?: number
+          auto_topup_monthly_cap?: number
+          auto_topup_spent_this_month?: number
         }
         Relationships: []
+      }
+      topup_transactions: {
+        Row: {
+          id: string
+          shop_id: string
+          created_at: string
+          tryons_added: number
+          amount_eur: number
+          stripe_payment_intent_id: string | null
+          status: string
+          trigger_type: string
+          failure_reason: string | null
+        }
+        Insert: {
+          id?: string
+          shop_id: string
+          created_at?: string
+          tryons_added: number
+          amount_eur: number
+          stripe_payment_intent_id?: string | null
+          status?: string
+          trigger_type?: string
+          failure_reason?: string | null
+        }
+        Update: {
+          id?: string
+          shop_id?: string
+          created_at?: string
+          tryons_added?: number
+          amount_eur?: number
+          stripe_payment_intent_id?: string | null
+          status?: string
+          trigger_type?: string
+          failure_reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "topup_transactions_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tryons: {
         Row: {
@@ -275,6 +337,10 @@ export type Database = {
     Functions: {
       cleanup_expired_tryon_images: { Args: never; Returns: undefined }
       increment_tryons_count: {
+        Args: { shop_row_id: string }
+        Returns: undefined
+      }
+      increment_tryons_count_v2: {
         Args: { shop_row_id: string }
         Returns: undefined
       }

@@ -247,3 +247,42 @@ export function creditPackByPriceId(priceId: string): CreditPackConfig | null {
 export function getStudioPlanConfig(plan: StudioPlan): StudioPlanConfig {
     return STUDIO_PLANS[plan] ?? STUDIO_PLANS.studio_trial;
 }
+
+// ═════════════════════════════════════════════════════════════════════════════
+// VTON try-on packs (auto top-up)
+// ═════════════════════════════════════════════════════════════════════════════
+// Priced at €0.07 per try-on, matching the average subscription per-unit cost.
+// ═════════════════════════════════════════════════════════════════════════════
+
+export interface TryonPackConfig {
+    price_id: string;
+    tryons: number;
+    price: number;       // EUR, one-time
+    name: string;
+}
+
+export const TRYON_PACKS: TryonPackConfig[] = [
+    {
+        price_id: process.env.STRIPE_PRICE_TRYONS_100 || 'price_tryons_100_placeholder',
+        tryons: 100,
+        price: 7,
+        name: '100 try-ons',
+    },
+    {
+        price_id: process.env.STRIPE_PRICE_TRYONS_500 || 'price_tryons_500_placeholder',
+        tryons: 500,
+        price: 35,
+        name: '500 try-ons',
+    },
+    {
+        price_id: process.env.STRIPE_PRICE_TRYONS_1000 || 'price_tryons_1000_placeholder',
+        tryons: 1000,
+        price: 70,
+        name: '1.000 try-ons',
+    },
+];
+
+/** Find a TryonPackConfig by its Stripe Price ID */
+export function tryonPackByPriceId(priceId: string): TryonPackConfig | null {
+    return TRYON_PACKS.find(p => p.price_id === priceId) ?? null;
+}

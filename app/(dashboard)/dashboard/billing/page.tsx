@@ -4,6 +4,7 @@ import { colors, typography, componentStyles } from '@/lib/design-tokens';
 import type { Plan, StudioPlan } from '@/lib/supabase/types';
 import BillingActions from '@/components/dashboard/BillingActions';
 import StudioBillingActions from '@/components/dashboard/StudioBillingActions';
+import AutoTopupSettings from '@/components/dashboard/AutoTopupSettings';
 
 const planOrder: Plan[] = ['trial', 'starter', 'growth', 'scale', 'enterprise'];
 const studioPlanOrder: StudioPlan[] = ['studio_trial', 'studio_starter', 'studio_pro', 'studio_scale'];
@@ -15,16 +16,28 @@ export default async function BillingPage() {
 
     const { data: shop } = await supabase
         .from('shops')
-        .select('id, plan, tryons_this_month, monthly_tryon_limit, stripe_customer_id, has_studio, studio_plan, studio_credits_used, studio_credits_limit, studio_extra_credits, studio_subscription_id')
+        .select('id, plan, tryons_this_month, monthly_tryon_limit, rollover_tryons, extra_tryons, stripe_customer_id, billing_source, has_studio, studio_plan, studio_credits_used, studio_credits_limit, studio_extra_credits, studio_subscription_id, auto_topup_enabled, auto_topup_threshold_pct, auto_topup_pack_index, auto_topup_monthly_cap, auto_topup_spent_this_month')
         .eq('owner_id', user.id)
         .single();
 
     // ── VTON data ────────────────────────────────────────────────────────
     const currentPlan = ((shop?.plan as string) || 'starter') as Plan;
     const hasStripe = !!(shop?.stripe_customer_id);
+    const billingSource = (shop?.billing_source as string | null) ?? null;
     const tryonsUsed = (shop?.tryons_this_month as number) ?? 0;
     const tryonsLimit = (shop?.monthly_tryon_limit as number) ?? 500;
-    const usagePct = tryonsLimit > 0 ? Math.min((tryonsUsed / tryonsLimit) * 100, 100) : 0;
+    const rolloverTryons = (shop?.rollover_tryons as number) ?? 0;
+    const extraTryons = (shop?.extra_tryons as number) ?? 0;
+    const effectivePlanLimit = tryonsLimit + rolloverTryons;
+    const totalLimit = effectivePlanLimit + extraTryons;
+    const usagePct = totalLimit > 0 ? Math.min((tryonsUsed / totalLimit) * 100, 100) : 0;
+
+    // ── Auto top-up data ───────────────────────────────────────────────
+    const autoTopupEnabled = (shop?.auto_topup_enabled as boolean) ?? false;
+    const autoTopupThresholdPct = (shop?.auto_topup_threshold_pct as number) ?? 90;
+    const autoTopupPackIndex = (shop?.auto_topup_pack_index as number) ?? 1;
+    const autoTopupMonthlyCap = (shop?.auto_topup_monthly_cap as number) ?? 100;
+    const autoTopupSpentThisMonth = (shop?.auto_topup_spent_this_month as number) ?? 0;
 
     // ── Studio data ──────────────────────────────────────────────────────
     const studioPlan = ((shop?.studio_plan as string) || 'studio_trial') as StudioPlan;
@@ -88,6 +101,9 @@ export default async function BillingPage() {
                         </div>
                         <p className="text-xs" style={{ color: colors.gray500 }}>
                             {tryonsUsed.toLocaleString('nl-NL')} van {tryonsLimit.toLocaleString('nl-NL')} try-ons gebruikt deze maand
+                            {extraTryons > 0 && (
+                                <> · <span style={{ color: colors.blue }}>+ {extraTryons} extra</span></>
+                            )}
                         </p>
                     </div>
                     {hasStripe && (
@@ -98,7 +114,7 @@ export default async function BillingPage() {
                 <div className="mb-2">
                     <div className="flex justify-between text-xs mb-1.5" style={{ color: colors.gray500 }}>
                         <span>{tryonsUsed.toLocaleString('nl-NL')} try-ons</span>
-                        <span>{tryonsLimit.toLocaleString('nl-NL')} limit</span>
+                        <span>{totalLimit.toLocaleString('nl-NL')} limiet{extraTryons > 0 ? ` (incl. ${extraTryons} extra)` : ''}</span>
                     </div>
                     <div
                         className="w-full h-3 rounded-full overflow-hidden"
@@ -111,6 +127,20 @@ export default async function BillingPage() {
                     </div>
                 </div>
             </div>
+
+            {/* Auto top-up settings */}
+            <AutoTopupSettings
+                shopId={shop?.id as string ?? ''}
+                autoTopupEnabled={autoTopupEnabled}
+                autoTopupThresholdPct={autoTopupThresholdPct}
+                autoTopupPackIndex={autoTopupPackIndex}
+                autoTopupMonthlyCap={autoTopupMonthlyCap}
+                autoTopupSpentThisMonth={autoTopupSpentThisMonth}
+                extraTryons={extraTryons}
+                billingSource={billingSource}
+                hasStripeCustomer={hasStripe}
+                plan={currentPlan}
+            />
 
             {/* VTON Plans grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -480,6 +510,10 @@ export default async function BillingPage() {
                         {
                             q: 'Kan ik op elk moment annuleren?',
                             a: 'Ja, je kunt beide abonnementen onafhankelijk annuleren via de Stripe Portal. Je houdt toegang tot het einde van je huidige factureringsperiode.',
+                        },
+                        {
+                            q: 'Hoe werkt automatisch bijvullen?',
+                            a: 'Als je auto top-up inschakelt, worden extra try-ons automatisch bijgekocht wanneer je verbruik een bepaald percentage bereikt. De kosten worden afgeschreven via je opgeslagen betaalmethode. Extra try-ons vervallen niet.',
                         },
                         {
                             q: 'Zijn VTON en Studio losse abonnementen?',

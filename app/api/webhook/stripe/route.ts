@@ -361,11 +361,12 @@ export async function POST(request: NextRequest) {
                     await updateShopByCustomer(customerId, {
                         tryons_this_month: 0,
                         rollover_tryons: newRollover,
+                        auto_topup_spent_this_month: 0,
                     });
 
                     console.log(
                         `[stripe/webhook] ✅ VTON monthly reset for ${customerId}: ` +
-                        `used ${used}/${effectiveLimit}, rollover → ${newRollover}`
+                        `used ${used}/${effectiveLimit}, rollover → ${newRollover}, auto_topup_spent reset`
                     );
                 }
                 break;
