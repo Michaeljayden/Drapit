@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import LanguageSwitcher from './LanguageSwitcher';
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -164,14 +165,38 @@ export default function Footer() {
                     flexWrap: 'wrap',
                     gap: '20px'
                 }}>
-                    <p style={{
-                        fontSize: '13px',
-                        color: 'rgba(241,245,249,0.3)',
-                        fontFamily: 'Plus Jakarta Sans, sans-serif',
-                        margin: 0
-                    }}>
-                        © 2026 Drapit. Alle rechten voorbehouden.
-                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                        <p style={{
+                            fontSize: '13px',
+                            color: 'rgba(241,245,249,0.3)',
+                            fontFamily: 'Plus Jakarta Sans, sans-serif',
+                            margin: 0
+                        }}>
+                            © 2026 Drapit. Alle rechten voorbehouden.
+                        </p>
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px',
+                            paddingLeft: '12px',
+                            borderLeft: '1px solid rgba(255,255,255,0.08)'
+                        }}>
+                            <Image
+                                src="/images/ideal wero.png"
+                                alt="iDeal / Wero"
+                                width={60}
+                                height={28}
+                                style={{ objectFit: 'contain', opacity: 0.7 }}
+                            />
+                            <Image
+                                src="/images/visa-brandmark-blue-1960x622.png"
+                                alt="Visa"
+                                width={45}
+                                height={28}
+                                style={{ objectFit: 'contain', opacity: 0.7 }}
+                            />
+                        </div>
+                    </div>
                     <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
                         <Link href="/privacy" style={bottomLinkStyle}>Privacy</Link>
                         <Link href="/privacy" style={bottomLinkStyle}>Voorwaarden</Link>

@@ -1,44 +1,105 @@
 'use client';
 
 /**
- * SupportChat.jsx — Drapit Support Chatbot
+ * SupportChat.jsx — Drapit Support Chatbot (Light Theme)
  *
  * Props:
  *   apiEndpoint  - string  - URL of your backend proxy (default: "/api/support-chat")
- *
- * Backend verwacht een POST request met body:
- *   { system, messages, model, max_tokens }
- * En stuurt terug:
- *   { content: [{ type: "text", text: "..." }] }
- *
- * Zie SupportChat.server-example.js voor een kant-en-klare Express route.
  */
 
 import { useState, useRef, useEffect, useCallback } from "react";
 
+// ─── SVG Icons ────────────────────────────────────────────────────────────────
+
+function IconSupport({ size = 20, color = "#fff" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
+  );
+}
+
+function IconStore({ size = 22, color = "#1D6FD8" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9l1-4h16l1 4" />
+      <path d="M3 9v1a3 3 0 0 0 6 0V9" />
+      <path d="M9 9v1a3 3 0 0 0 6 0V9" />
+      <path d="M15 9v1a3 3 0 0 0 6 0V9" />
+      <path d="M4 10v10h16V10" />
+      <path d="M9 20v-6h6v6" />
+    </svg>
+  );
+}
+
+function IconMonitor({ size = 22, color = "#1D6FD8" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+      <line x1="8" y1="21" x2="16" y2="21" />
+      <line x1="12" y1="17" x2="12" y2="21" />
+    </svg>
+  );
+}
+
+function IconWrench({ size = 22, color = "#1D6FD8" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+    </svg>
+  );
+}
+
+function IconPaperclip({ size = 18, color = "#94A3B8" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.49" />
+    </svg>
+  );
+}
+
+function IconImage({ size = 32, color = "#1D6FD8" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+      <circle cx="8.5" cy="8.5" r="1.5" />
+      <polyline points="21 15 16 10 5 21" />
+    </svg>
+  );
+}
+
+function IconSend({ size = 16, color = "#fff" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </svg>
+  );
+}
+
+function IconX({ size = 10, color = "#fff" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
+
 // ─── Styles ───────────────────────────────────────────────────────────────────
 
 const CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
   .sc-root * { box-sizing: border-box; }
 
   @keyframes sc-bounce {
     0%, 60%, 100% { transform: translateY(0); }
-    30%            { transform: translateY(-6px); }
+    30%            { transform: translateY(-5px); }
   }
   @keyframes sc-fade-up {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes sc-pulse-ring {
-    0%   { box-shadow: 0 0 0 0 rgba(0, 229, 196, 0.4); }
-    70%  { box-shadow: 0 0 0 8px rgba(0, 229, 196, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(0, 229, 196, 0); }
-  }
-  @keyframes sc-shimmer {
-    0%   { background-position: -400px 0; }
-    100% { background-position: 400px 0; }
   }
   @keyframes sc-spin {
     to { transform: rotate(360deg); }
@@ -46,9 +107,10 @@ const CSS = `
 
   .sc-message-wrap { animation: sc-fade-up 0.25s ease forwards; }
 
-  .sc-scroll::-webkit-scrollbar { width: 4px; }
+  .sc-scroll::-webkit-scrollbar { width: 5px; }
   .sc-scroll::-webkit-scrollbar-track { background: transparent; }
-  .sc-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+  .sc-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 3px; }
+  .sc-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.14); }
 
   .sc-textarea {
     background: transparent;
@@ -56,32 +118,31 @@ const CSS = `
     outline: none;
     resize: none;
     width: 100%;
-    color: #E8EDF8;
+    color: #0F172A;
     font-size: 14px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     line-height: 1.5;
     min-height: 24px;
     max-height: 120px;
     overflow-y: auto;
   }
-  .sc-textarea::placeholder { color: #3D4A63; }
+  .sc-textarea::placeholder { color: #94A3B8; }
 
   .sc-send-btn {
-    width: 38px; height: 38px;
-    border-radius: 50%;
+    width: 36px; height: 36px;
+    border-radius: 10px;
     border: none; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
     transition: all 0.2s ease;
     flex-shrink: 0;
   }
-  .sc-send-btn:hover { transform: scale(1.08); }
-  .sc-send-btn:active { transform: scale(0.95); }
+  .sc-send-btn:hover { transform: scale(1.05); }
+  .sc-send-btn:active { transform: scale(0.96); }
 
   .sc-quick-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 14px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
     padding: 16px;
     cursor: pointer;
     text-align: left;
@@ -90,9 +151,9 @@ const CSS = `
     min-width: 140px;
   }
   .sc-quick-card:hover {
-    background: rgba(0,229,196,0.07);
-    border-color: rgba(0,229,196,0.25);
-    transform: translateY(-2px);
+    border-color: #1D6FD8;
+    box-shadow: 0 2px 8px rgba(29, 111, 216, 0.1);
+    transform: translateY(-1px);
   }
 
   .sc-img-preview {
@@ -102,17 +163,17 @@ const CSS = `
   .sc-img-remove {
     position: absolute; top: -6px; right: -6px;
     width: 18px; height: 18px; border-radius: 50%;
-    background: #EF4444; border: none; cursor: pointer;
-    font-size: 10px; color: white;
+    background: #DC2626; border: 2px solid #fff; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     transition: transform 0.15s ease;
+    padding: 0;
   }
   .sc-img-remove:hover { transform: scale(1.15); }
 
   .sc-drop-zone {
     position: absolute; inset: 0;
-    background: rgba(0,229,196,0.06);
-    border: 2px dashed rgba(0,229,196,0.5);
+    background: rgba(29, 111, 216, 0.04);
+    border: 2px dashed rgba(29, 111, 216, 0.4);
     border-radius: 16px;
     z-index: 10;
     display: flex; flex-direction: column;
@@ -120,6 +181,14 @@ const CSS = `
     gap: 8px;
     pointer-events: none;
     animation: sc-fade-up 0.15s ease;
+  }
+
+  .sc-input-wrap {
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .sc-input-wrap:focus-within {
+    border-color: #1D6FD8 !important;
+    box-shadow: 0 0 0 3px rgba(29, 111, 216, 0.1) !important;
   }
 `;
 
@@ -209,11 +278,11 @@ function inlineFormat(text) {
   while ((match = regex.exec(text)) !== null) {
     if (match.index > last) parts.push(text.slice(last, match.index));
     if (match[2])
-      parts.push(<strong key={key++} style={{ color: "#E8EDF8", fontWeight: 600 }}>{match[2]}</strong>);
+      parts.push(<strong key={key++} style={{ color: "#0F172A", fontWeight: 600 }}>{match[2]}</strong>);
     else if (match[3])
-      parts.push(<code key={key++} style={{ background: "rgba(0,229,196,0.13)", color: "#00E5C4", padding: "1px 6px", borderRadius: 4, fontSize: 12, fontFamily: "monospace" }}>{match[3]}</code>);
+      parts.push(<code key={key++} style={{ background: "#EBF3FF", color: "#1D6FD8", padding: "2px 6px", borderRadius: 4, fontSize: 12.5, fontFamily: "monospace" }}>{match[3]}</code>);
     else if (match[4])
-      parts.push(<em key={key++} style={{ opacity: 0.85 }}>{match[4]}</em>);
+      parts.push(<em key={key++} style={{ color: "#475569" }}>{match[4]}</em>);
     last = regex.lastIndex;
   }
   if (last < text.length) parts.push(text.slice(last));
@@ -235,10 +304,10 @@ function renderMd(text) {
       while (i < lines.length && !lines[i].startsWith("```")) codeLines.push(lines[i++]);
       els.push(
         <pre key={k++} style={{
-          background: "rgba(0,0,0,0.35)", border: "1px solid rgba(0,229,196,0.18)",
+          background: "#F1F5F9", border: "1px solid #E2E8F0",
           borderRadius: 10, padding: "12px 16px", overflowX: "auto",
           margin: "10px 0", fontSize: 12.5, fontFamily: "'JetBrains Mono','Fira Code',monospace",
-          color: "#9FE5C9", lineHeight: 1.7, whiteSpace: "pre",
+          color: "#334155", lineHeight: 1.7, whiteSpace: "pre",
         }}>
           <code>{codeLines.join("\n")}</code>
         </pre>
@@ -249,7 +318,7 @@ function renderMd(text) {
     // ## heading
     if (line.startsWith("## ")) {
       els.push(
-        <p key={k++} style={{ color: "#00E5C4", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", margin: "12px 0 4px", fontFamily: "Syne, sans-serif" }}>
+        <p key={k++} style={{ color: "#1D6FD8", fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", margin: "14px 0 4px", fontFamily: "'Inter', sans-serif" }}>
           {line.slice(3)}
         </p>
       );
@@ -282,7 +351,7 @@ function renderMd(text) {
 
     // hr
     if (line.trim() === "---") {
-      els.push(<hr key={k++} style={{ border: "none", borderTop: "1px solid rgba(255,255,255,0.07)", margin: "10px 0" }} />);
+      els.push(<hr key={k++} style={{ border: "none", borderTop: "1px solid #E2E8F0", margin: "10px 0" }} />);
       i++; continue;
     }
 
@@ -304,13 +373,12 @@ function renderMd(text) {
 function Avatar() {
   return (
     <div style={{
-      width: 32, height: 32, borderRadius: "50%", flexShrink: 0,
-      background: "linear-gradient(135deg, #00E5C4 0%, #0087EA 100%)",
+      width: 32, height: 32, borderRadius: 10, flexShrink: 0,
+      background: "linear-gradient(135deg, #1D6FD8 0%, #1558B0 100%)",
       display: "flex", alignItems: "center", justifyContent: "center",
-      fontSize: 13, boxShadow: "0 0 14px rgba(0,229,196,0.35)",
-      animation: "sc-pulse-ring 3s ease infinite",
+      boxShadow: "0 2px 8px rgba(29, 111, 216, 0.25)",
     }}>
-      ✦
+      <IconSupport size={16} color="#fff" />
     </div>
   );
 }
@@ -320,13 +388,13 @@ function TypingDots() {
     <div className="sc-message-wrap" style={{ display: "flex", alignItems: "flex-end", gap: 10, marginBottom: 16 }}>
       <Avatar />
       <div style={{
-        background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-        borderRadius: "18px 18px 18px 4px", padding: "14px 18px",
+        background: "#F1F5F9", border: "1px solid #E2E8F0",
+        borderRadius: "16px 16px 16px 4px", padding: "14px 18px",
         display: "flex", alignItems: "center", gap: 6,
       }}>
         {[0, 1, 2].map(i => (
           <div key={i} style={{
-            width: 6, height: 6, borderRadius: "50%", background: "#00E5C4",
+            width: 6, height: 6, borderRadius: "50%", background: "#1D6FD8",
             animation: `sc-bounce 1.2s ease-in-out ${i * 0.18}s infinite`,
           }} />
         ))}
@@ -346,15 +414,15 @@ function ChatMessage({ msg }) {
       <div style={{
         maxWidth: "82%",
         background: isUser
-          ? "linear-gradient(135deg, #00C9A7 0%, #0087EA 100%)"
-          : "rgba(255,255,255,0.04)",
-        border: isUser ? "none" : "1px solid rgba(255,255,255,0.08)",
-        borderRadius: isUser ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
+          ? "linear-gradient(135deg, #1D6FD8 0%, #1558B0 100%)"
+          : "#F1F5F9",
+        border: isUser ? "none" : "1px solid #E2E8F0",
+        borderRadius: isUser ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
         padding: "11px 15px",
-        color: isUser ? "#fff" : "#C4CEDF",
+        color: isUser ? "#fff" : "#334155",
         fontSize: 14,
-        backdropFilter: "blur(10px)",
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'Inter', sans-serif",
+        boxShadow: isUser ? "0 2px 8px rgba(29, 111, 216, 0.2)" : "none",
       }}>
         {/* Images */}
         {msg.images?.length > 0 && (
@@ -362,7 +430,7 @@ function ChatMessage({ msg }) {
             {msg.images.map((src, i) => (
               <img key={i} src={src} alt="Screenshot" style={{
                 maxWidth: 240, maxHeight: 170, borderRadius: 8, objectFit: "contain",
-                border: "1px solid rgba(255,255,255,0.12)",
+                border: "1px solid #E2E8F0",
               }} />
             ))}
           </div>
@@ -381,9 +449,9 @@ function ChatMessage({ msg }) {
 function QuickCard({ icon, title, desc, onClick }) {
   return (
     <button className="sc-quick-card" onClick={onClick}>
-      <div style={{ fontSize: 22, marginBottom: 8 }}>{icon}</div>
-      <div style={{ color: "#E2E8F5", fontSize: 13, fontWeight: 700, fontFamily: "Syne, sans-serif", marginBottom: 4 }}>{title}</div>
-      <div style={{ color: "#4E5E7A", fontSize: 12, lineHeight: 1.5 }}>{desc}</div>
+      <div style={{ marginBottom: 10 }}>{icon}</div>
+      <div style={{ color: "#0F172A", fontSize: 13, fontWeight: 600, fontFamily: "'Inter', sans-serif", marginBottom: 4 }}>{title}</div>
+      <div style={{ color: "#64748B", fontSize: 12, lineHeight: 1.5 }}>{desc}</div>
     </button>
   );
 }
@@ -394,7 +462,7 @@ export default function SupportChat({ apiEndpoint = "/api/support-chat" }) {
 
   const INITIAL_MSG = {
     role: "assistant",
-    content: "Hoi! Ik ben de Drapit support assistent. Ik help je graag de widget te installeren — op Shopify of op je eigen website.\n\nKan je hieronder een screenshot delen als je vastloopt? Dan kijk ik direct mee! 👋",
+    content: "Hoi! Ik ben de Drapit support assistent. Ik help je graag de widget te installeren — op Shopify of op je eigen website.\n\nDeel gerust een screenshot als je vastloopt, dan kijk ik direct mee.",
     images: [],
   };
 
@@ -444,7 +512,6 @@ export default function SupportChat({ apiEndpoint = "/api/support-chat" }) {
     setIsLoading(true);
 
     try {
-      // Build Claude-format messages (with vision support)
       const apiMsgs = thread.map(msg => {
         if (msg.images?.length > 0) {
           const content = msg.images.map(img => ({
@@ -512,36 +579,27 @@ export default function SupportChat({ apiEndpoint = "/api/support-chat" }) {
 
   return (
     <div className="sc-root" style={{
-      fontFamily: "'DM Sans', sans-serif",
-      background: "#07090F",
-      minHeight: "100vh",
+      fontFamily: "'Inter', sans-serif",
+      background: "transparent",
+      minHeight: "100%",
       display: "flex",
-      alignItems: "center",
+      alignItems: "flex-start",
       justifyContent: "center",
-      padding: "24px 16px",
+      padding: 0,
     }}>
-      {/* Inject CSS */}
       <style>{CSS}</style>
-
-      {/* Ambient glow */}
-      <div style={{
-        position: "fixed", top: "10%", left: "50%", transform: "translateX(-50%)",
-        width: 600, height: 300, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(0,229,196,0.04) 0%, transparent 70%)",
-        pointerEvents: "none",
-      }} />
 
       {/* Chat panel */}
       <div style={{
-        width: "100%", maxWidth: 720,
-        background: "rgba(13,18,30,0.95)",
-        border: "1px solid rgba(255,255,255,0.07)",
-        borderRadius: 20,
+        width: "100%", maxWidth: 760,
+        background: "#FFFFFF",
+        border: "1px solid #E2E8F0",
+        borderRadius: 16,
         display: "flex", flexDirection: "column",
-        height: "calc(100vh - 48px)",
-        maxHeight: 760,
+        height: "calc(100vh - 80px)",
+        maxHeight: 780,
         overflow: "hidden",
-        boxShadow: "0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04) inset",
+        boxShadow: "0 4px 12px rgba(15, 39, 68, 0.08)",
         position: "relative",
       }}
         onDragOver={onDragOver}
@@ -551,50 +609,48 @@ export default function SupportChat({ apiEndpoint = "/api/support-chat" }) {
         {/* Drag overlay */}
         {isDragging && (
           <div className="sc-drop-zone">
-            <div style={{ fontSize: 36 }}>🖼️</div>
-            <div style={{ color: "#00E5C4", fontWeight: 600, fontSize: 15, fontFamily: "Syne, sans-serif" }}>Screenshot loslaten</div>
-            <div style={{ color: "#4E5E7A", fontSize: 13 }}>Ik analyseer het direct voor je</div>
+            <IconImage size={36} color="#1D6FD8" />
+            <div style={{ color: "#1D6FD8", fontWeight: 600, fontSize: 15, fontFamily: "'Inter', sans-serif" }}>Screenshot loslaten</div>
+            <div style={{ color: "#64748B", fontSize: 13 }}>Ik analyseer het direct voor je</div>
           </div>
         )}
 
         {/* ── Header ─────────────────────────────────────────────────────── */}
         <div style={{
-          padding: "18px 24px",
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
+          padding: "16px 24px",
+          borderBottom: "1px solid #E2E8F0",
           display: "flex", alignItems: "center", gap: 14,
-          background: "rgba(255,255,255,0.02)",
+          background: "#FFFFFF",
           flexShrink: 0,
         }}>
-          {/* Logo / avatar */}
           <div style={{
-            width: 42, height: 42, borderRadius: 12,
-            background: "linear-gradient(135deg, #00E5C4 0%, #0087EA 100%)",
+            width: 40, height: 40, borderRadius: 12,
+            background: "linear-gradient(135deg, #1D6FD8 0%, #1558B0 100%)",
             display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 20, boxShadow: "0 4px 16px rgba(0,229,196,0.25)",
+            boxShadow: "0 2px 8px rgba(29, 111, 216, 0.25)",
             flexShrink: 0,
           }}>
-            ✦
+            <IconSupport size={20} color="#fff" />
           </div>
 
           <div style={{ flex: 1 }}>
-            <div style={{ color: "#E8EDF8", fontWeight: 700, fontSize: 15, fontFamily: "Syne, sans-serif", letterSpacing: "-0.01em" }}>
+            <div style={{ color: "#0F172A", fontWeight: 700, fontSize: 15, fontFamily: "'Inter', sans-serif", letterSpacing: "-0.01em" }}>
               Drapit Support
             </div>
-            <div style={{ color: "#4E5E7A", fontSize: 12, display: "flex", alignItems: "center", gap: 6, marginTop: 2 }}>
+            <div style={{ color: "#64748B", fontSize: 12, display: "flex", alignItems: "center", gap: 6, marginTop: 2 }}>
               <span style={{
-                width: 7, height: 7, borderRadius: "50%", background: "#00E5C4", display: "inline-block",
-                boxShadow: "0 0 6px rgba(0,229,196,0.6)",
+                width: 7, height: 7, borderRadius: "50%", background: "#16A34A", display: "inline-block",
+                boxShadow: "0 0 6px rgba(22, 163, 74, 0.5)",
               }} />
               Online — we helpen je snel
             </div>
           </div>
 
-          {/* Badge */}
           <div style={{
-            background: "rgba(0,229,196,0.1)", border: "1px solid rgba(0,229,196,0.2)",
-            borderRadius: 20, padding: "4px 12px",
-            color: "#00E5C4", fontSize: 11, fontWeight: 600, letterSpacing: "0.04em",
-            fontFamily: "Syne, sans-serif",
+            background: "#EBF3FF", border: "1px solid #D0E2FF",
+            borderRadius: 20, padding: "5px 14px",
+            color: "#1D6FD8", fontSize: 11, fontWeight: 600, letterSpacing: "0.04em",
+            fontFamily: "'Inter', sans-serif",
           }}>
             AI SUPPORT
           </div>
@@ -605,27 +661,27 @@ export default function SupportChat({ apiEndpoint = "/api/support-chat" }) {
           flex: 1, overflowY: "auto", padding: "24px 24px 8px",
         }}>
 
-          {/* Quick action cards — shown only at start */}
+          {/* Quick action cards */}
           {showQuick && messages.length <= 1 && (
             <div style={{ marginBottom: 24, animation: "sc-fade-up 0.3s ease" }}>
-              <div style={{ color: "#3D4A63", fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 12, fontFamily: "Syne, sans-serif" }}>
+              <div style={{ color: "#64748B", fontSize: 11, fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 12, fontFamily: "'Inter', sans-serif" }}>
                 Waarmee kan ik je helpen?
               </div>
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                 <QuickCard
-                  icon="🛍️"
+                  icon={<IconStore size={24} color="#1D6FD8" />}
                   title="Shopify installatie"
                   desc="Widget toevoegen aan je Shopify store"
                   onClick={() => sendWith("Hoe installeer ik de Drapit widget op mijn Shopify store?")}
                 />
                 <QuickCard
-                  icon="💻"
+                  icon={<IconMonitor size={24} color="#1D6FD8" />}
                   title="Eigen website"
                   desc="Widget embedden zonder Shopify"
                   onClick={() => sendWith("Hoe voeg ik de Drapit widget toe aan mijn eigen website (niet Shopify)?")}
                 />
                 <QuickCard
-                  icon="🔧"
+                  icon={<IconWrench size={24} color="#1D6FD8" />}
                   title="Probleem oplossen"
                   desc="Widget werkt niet of is niet zichtbaar"
                   onClick={() => sendWith("De widget werkt niet of is niet zichtbaar op mijn website. Wat kan ik doen?")}
@@ -639,7 +695,6 @@ export default function SupportChat({ apiEndpoint = "/api/support-chat" }) {
             <ChatMessage key={i} msg={msg} />
           ))}
 
-          {/* Typing indicator */}
           {isLoading && <TypingDots />}
 
           <div ref={endRef} />
@@ -650,20 +705,20 @@ export default function SupportChat({ apiEndpoint = "/api/support-chat" }) {
           <div style={{
             padding: "10px 24px 0",
             display: "flex", flexWrap: "wrap", gap: 8,
-            borderTop: "1px solid rgba(255,255,255,0.05)",
+            borderTop: "1px solid #E2E8F0",
             flexShrink: 0,
           }}>
             {pendingImages.map((src, i) => (
               <div key={i} className="sc-img-preview">
                 <img src={src} alt="" style={{
                   width: 56, height: 56, objectFit: "cover", borderRadius: 8,
-                  border: "1px solid rgba(0,229,196,0.3)",
+                  border: "1px solid #E2E8F0",
                 }} />
                 <button
                   className="sc-img-remove"
                   onClick={() => setPending(prev => prev.filter((_, j) => j !== i))}
                   title="Verwijderen"
-                >✕</button>
+                ><IconX size={8} color="#fff" /></button>
               </div>
             ))}
           </div>
@@ -672,33 +727,30 @@ export default function SupportChat({ apiEndpoint = "/api/support-chat" }) {
         {/* ── Input bar ──────────────────────────────────────────────────── */}
         <div style={{
           padding: "14px 18px 18px",
-          borderTop: "1px solid rgba(255,255,255,0.06)",
-          background: "rgba(255,255,255,0.015)",
+          borderTop: "1px solid #E2E8F0",
+          background: "#FAFBFC",
           flexShrink: 0,
         }}>
-          <div style={{
+          <div className="sc-input-wrap" style={{
             display: "flex", alignItems: "flex-end", gap: 10,
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            borderRadius: 16, padding: "10px 12px",
-            transition: "border-color 0.2s",
-          }}
-            onFocus={() => {}} // handled via CSS ideally
-          >
-            {/* Screenshot upload button */}
+            background: "#FFFFFF",
+            border: "1px solid #E2E8F0",
+            borderRadius: 12, padding: "10px 12px",
+          }}>
             <button
               onClick={() => fileRef.current?.click()}
               title="Screenshot bijvoegen"
               style={{
                 background: "none", border: "none", cursor: "pointer",
-                color: "#3D4A63", fontSize: 18, padding: "4px",
-                borderRadius: 8, transition: "color 0.2s",
-                flexShrink: 0,
+                padding: "4px",
+                borderRadius: 8, transition: "opacity 0.2s",
+                flexShrink: 0, opacity: 0.5,
+                display: "flex", alignItems: "center", justifyContent: "center",
               }}
-              onMouseEnter={e => e.currentTarget.style.color = "#00E5C4"}
-              onMouseLeave={e => e.currentTarget.style.color = "#3D4A63"}
+              onMouseEnter={e => e.currentTarget.style.opacity = "1"}
+              onMouseLeave={e => e.currentTarget.style.opacity = "0.5"}
             >
-              📎
+              <IconPaperclip size={18} color="#64748B" />
             </button>
             <input
               ref={fileRef}
@@ -709,28 +761,27 @@ export default function SupportChat({ apiEndpoint = "/api/support-chat" }) {
               onChange={e => { addFiles(e.target.files); e.target.value = ""; }}
             />
 
-            {/* Textarea */}
             <textarea
               ref={textareaRef}
               className="sc-textarea"
               value={input}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
-              placeholder="Stel je vraag of plak je code hier… (Enter om te versturen)"
+              placeholder="Stel je vraag of plak je code hier... (Enter om te versturen)"
               rows={1}
             />
 
-            {/* Send button */}
             <button
               className="sc-send-btn"
               onClick={handleSend}
               disabled={!canSend}
               style={{
                 background: canSend
-                  ? "linear-gradient(135deg, #00E5C4, #0087EA)"
-                  : "rgba(255,255,255,0.06)",
-                color: canSend ? "#fff" : "#2A3346",
+                  ? "linear-gradient(135deg, #1D6FD8, #1558B0)"
+                  : "#F1F5F9",
+                color: canSend ? "#fff" : "#CBD5E1",
                 cursor: canSend ? "pointer" : "not-allowed",
+                boxShadow: canSend ? "0 2px 6px rgba(29, 111, 216, 0.25)" : "none",
               }}
             >
               {isLoading ? (
@@ -739,13 +790,12 @@ export default function SupportChat({ apiEndpoint = "/api/support-chat" }) {
                   borderTopColor: "#fff", borderRadius: "50%",
                   animation: "sc-spin 0.8s linear infinite",
                 }} />
-              ) : "→"}
+              ) : <IconSend size={15} color={canSend ? "#fff" : "#CBD5E1"} />}
             </button>
           </div>
 
-          {/* Hint */}
-          <div style={{ color: "#2A3346", fontSize: 11, textAlign: "center", marginTop: 10 }}>
-            Sleep een screenshot in dit venster of klik op 📎 om een afbeelding te delen
+          <div style={{ color: "#94A3B8", fontSize: 11, textAlign: "center", marginTop: 10 }}>
+            Sleep een screenshot in dit venster of klik op het paperclip-icoon om een afbeelding te delen
           </div>
         </div>
       </div>
