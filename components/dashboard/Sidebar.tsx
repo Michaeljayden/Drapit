@@ -118,6 +118,17 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
         ),
     },
     {
+        label: t('support'),
+        href: '/dashboard/support',
+        icon: (
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="9" cy="9" r="7.5" stroke="currentColor" strokeWidth="1.5" />
+                <path d="M9 10.5V10c0-.83.5-1.27 1-1.62A2.5 2.5 0 106.5 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="9" cy="13" r="0.75" fill="currentColor" />
+            </svg>
+        ),
+    },
+    {
         label: t('settings'),
         href: '/dashboard/settings',
         icon: (
