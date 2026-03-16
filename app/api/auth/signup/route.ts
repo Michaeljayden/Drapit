@@ -106,10 +106,10 @@ export async function POST(request: Request) {
             );
         }
 
-        // 3. Stuur welkomstmail naar merchant via EmailJS (fire-and-forget)
-        sendWelcomeEmail(user.email!, shopName.trim()).catch((err) =>
-            console.error('[signup] Welcome email failed:', err)
-        );
+        // 3. Stuur welkomstmail naar merchant via EmailJS
+        console.log(`[signup] Sending welcome email to ${user.email} for shop ${shopName.trim()}`);
+        const welcomeSent = await sendWelcomeEmail(user.email!, shopName.trim());
+        console.log(`[signup] Welcome email result: ${welcomeSent ? 'SUCCESS' : 'FAILED'}`);
 
         // 4. Stuur admin notificatie via EmailJS (fire-and-forget)
         sendNewMerchantNotification({

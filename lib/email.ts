@@ -83,9 +83,11 @@ async function sendEmail(
 export async function sendWelcomeEmail(
     toEmail: string,
     shopName: string
-): Promise<void> {
+): Promise<boolean> {
     const templateId = process.env.EMAILJS_TEMPLATE_WELCOME;
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://drapit.io';
+
+    console.log(`[email] Sending welcome email to ${toEmail} (${shopName}) with template ${templateId}`);
 
     const sent = await sendEmail(templateId!, {
         to_email: toEmail,
@@ -98,7 +100,11 @@ export async function sendWelcomeEmail(
 
     if (sent) {
         console.log(`[email] Welcome email sent to ${toEmail} (${shopName})`);
+    } else {
+        console.error(`[email] Welcome email FAILED for ${toEmail} (${shopName})`);
     }
+
+    return sent;
 }
 
 // ---------------------------------------------------------------------------
