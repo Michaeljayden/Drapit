@@ -58,12 +58,12 @@ export const PLANS: Record<Plan, PlanConfig> = {
     },
     growth: {
         price_id: process.env.STRIPE_PRICE_GROWTH || 'price_1T90HkQf4cE06T91QKCF4E59',
-        limit: 2500,
+        limit: 1500,
         price: 199,
         name: 'Pro',
         popular: true,
         features: [
-            '2.500 try-ons per maand',
+            '1.500 try-ons per maand',
             'Onbeperkt API-sleutels',
             'Prioriteit support',
             'Widget personalisatie',
@@ -73,11 +73,11 @@ export const PLANS: Record<Plan, PlanConfig> = {
     },
     scale: {
         price_id: process.env.STRIPE_PRICE_SCALE || 'price_1T90HmQf4cE06T91k24nRnII',
-        limit: 5000,
+        limit: 3000,
         price: 399,
         name: 'Scale',
         features: [
-            '5.000 try-ons per maand',
+            '3.000 try-ons per maand',
             '10 API-sleutels',
             'Prioriteit support',
             'Custom branding',
@@ -263,21 +263,21 @@ export interface TryonPackConfig {
 
 export const TRYON_PACKS: TryonPackConfig[] = [
     {
-        price_id: process.env.STRIPE_PRICE_TRYONS_100 || 'price_tryons_100_placeholder',
+        price_id: process.env.STRIPE_PRICE_TRYONS_100 || 'price_1TBfxHQf4cE06T91autMzT76',
         tryons: 100,
-        price: 7,
+        price: 14,
         name: '100 try-ons',
     },
     {
-        price_id: process.env.STRIPE_PRICE_TRYONS_500 || 'price_tryons_500_placeholder',
+        price_id: process.env.STRIPE_PRICE_TRYONS_500 || 'price_1TBfxNQf4cE06T91jOKgYlhw',
         tryons: 500,
-        price: 35,
+        price: 65,
         name: '500 try-ons',
     },
     {
-        price_id: process.env.STRIPE_PRICE_TRYONS_1000 || 'price_tryons_1000_placeholder',
+        price_id: process.env.STRIPE_PRICE_TRYONS_1000 || 'price_1TBfxSQf4cE06T91UrPeOzIY',
         tryons: 1000,
-        price: 70,
+        price: 120,
         name: '1.000 try-ons',
     },
 ];
