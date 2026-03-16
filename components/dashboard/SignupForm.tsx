@@ -71,77 +71,56 @@ export default function SignupForm() {
         setLoading(true);
         setError(null);
 
-        // 1. Sign up the user
-        const { data: authData, error: authError } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard/onboarding`,
-                data: {
-                    full_name: contactPerson || shopName,
-                },
-            },
-        });
-
-        if (authError) {
-            // Check if it's an email configuration error
-            if (authError.message.toLowerCase().includes('email') || authError.message.toLowerCase().includes('smtp')) {
-                setError(t('errors.emailError'));
-            } else {
-                setError(authError.message);
-            }
-            setLoading(false);
-            return;
-        }
-
-        // 2. Notify admin immediately (fire-and-forget)
-        if (authData.user) {
-            fetch('/api/auth/signup-notify', {
+        try {
+            // 1. Registreer via server-side API (bypass Supabase SMTP)
+            const res = await fetch('/api/auth/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    merchantEmail: email,
-                    merchantName: contactPerson || shopName,
-                    shopName: shopName,
-                    domain: domain,
-                    phone: phone,
-                    plan: 'trial',
+                    email,
+                    password,
+                    shopName,
+                    domain,
+                    phone,
+                    contactPerson,
+                    companyName,
+                    kvkNumber,
+                    vatNumber,
+                    address,
+                    postalCode,
+                    city,
+                    country,
                 }),
-            }).catch(err => console.error('Failed to send admin notification:', err));
-        }
+            });
 
-        if (authData.user && authData.session) {
-            try {
-                const res = await fetch('/api/onboarding', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        shopName,
-                        domain,
-                        plan: 'trial',
-                        phone,
-                        contactPerson,
-                        companyName,
-                        kvkNumber,
-                        vatNumber,
-                        address,
-                        postalCode,
-                        city,
-                        country,
-                    }),
-                });
+            const data = await res.json();
 
-                if (res.ok) {
-                    router.push('/dashboard/onboarding');
-                    return;
-                }
-            } catch (err) {
-                console.error('Failed to create shop during signup:', err);
+            if (!res.ok) {
+                setError(data.error || t('errors.generic'));
+                setLoading(false);
+                return;
             }
-        }
 
-        setIsSuccess(true);
-        setLoading(false);
+            // 2. Log in met het nieuwe account
+            const { error: signInError } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+
+            if (signInError) {
+                // Account is aangemaakt maar inloggen faalde — toon succes en laat user handmatig inloggen
+                setIsSuccess(true);
+                setLoading(false);
+                return;
+            }
+
+            // 3. Redirect naar dashboard
+            router.push('/dashboard');
+        } catch (err) {
+            console.error('Signup failed:', err);
+            setError(t('errors.generic'));
+            setLoading(false);
+        }
     }
 
     if (isSuccess) {

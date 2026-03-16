@@ -12,6 +12,7 @@
     "checkInbox": "Check your inbox",
     "magicLinkSent": "We've sent a login link to",
     "backToLogin": "Back to login",
+    "resetSent": "We've sent a password reset link to",
     "noAccount": "Don't have an account?",
     "signupLink": "Sign up",
     "passwordMode": "Password",
@@ -62,9 +63,9 @@
     "hasAccount": "Already have an account?",
     "loginLink": "Log in",
     "goToLogin": "Go to login",
-    "successTitle": "Check your email",
-    "successMessage": "We've sent a confirmation link to",
-    "successInstruction": "Click the link in the email to activate your account.",
+    "successTitle": "Account created!",
+    "successMessage": "Your account has been successfully created for",
+    "successInstruction": "You can now log in with your email and password.",
     "termsText": "By signing up you agree to our",
     "termsLink": "Terms",
     "and": "and",
@@ -74,7 +75,8 @@
       "passwordTooShort": "Password must be at least 6 characters.",
       "phoneRequired": "Phone number is required.",
       "domainRequired": "Shop URL is required.",
-      "emailError": "Error sending confirmation email. Check the SMTP settings in Supabase."
+      "emailError": "Error sending confirmation email. Check the SMTP settings in Supabase.",
+      "generic": "Something went wrong. Please try again."
     }
   },
   "contact": {
@@ -115,6 +117,19 @@
       "subjectRequired": "Choose a subject",
       "messageRequired": "Message is required",
       "messageTooShort": "Write at least 10 characters"
+    }
+  },
+  "resetPassword": {
+    "title": "Set a new password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "saveButton": "Save password",
+    "saving": "Saving...",
+    "successTitle": "Password changed!",
+    "successMessage": "You will be redirected to the dashboard...",
+    "errors": {
+      "mismatch": "Passwords do not match.",
+      "tooShort": "Password must be at least 6 characters."
     }
   },
   "validation": {

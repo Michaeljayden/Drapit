@@ -19,6 +19,8 @@ export default function LoginForm() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [magicSent, setMagicSent] = useState(false);
+    const [resetSent, setResetSent] = useState(false);
+    const [resetLoading, setResetLoading] = useState(false);
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -79,6 +81,29 @@ export default function LoginForm() {
         setLoading(false);
     }
 
+    async function handleForgotPassword() {
+        if (!email.trim()) {
+            setError(t('errors.emailRequired'));
+            return;
+        }
+
+        setResetLoading(true);
+        setError(null);
+
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: `${window.location.origin}/auth/callback?next=/dashboard/reset-password`,
+        });
+
+        if (error) {
+            setError(error.message);
+            setResetLoading(false);
+            return;
+        }
+
+        setResetSent(true);
+        setResetLoading(false);
+    }
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC] px-4">
             <div className="w-full max-w-[420px]">
@@ -97,8 +122,26 @@ export default function LoginForm() {
 
                 {/* Card */}
                 <div className="bg-white rounded-2xl border border-[#F1F5F9] shadow-sm p-8">
-                    {/* Magic link sent confirmation */}
-                    {magicSent ? (
+                    {/* Reset password sent confirmation */}
+                    {resetSent ? (
+                        <div className="text-center py-4">
+                            <div className="w-14 h-14 bg-[#DCFCE7] rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M22 2L11 13" /><path d="M22 2L15 22L11 13L2 9L22 2Z" />
+                                </svg>
+                            </div>
+                            <h2 className="text-lg font-bold text-[#0F172A] mb-2">{t('checkInbox')}</h2>
+                            <p className="text-sm text-[#64748B] mb-6">
+                                {t('resetSent')} <strong className="text-[#0F172A]">{email}</strong>
+                            </p>
+                            <button
+                                onClick={() => { setResetSent(false); }}
+                                className="text-sm font-medium text-[#1D6FD8] hover:underline"
+                            >
+                                {t('backToLogin')}
+                            </button>
+                        </div>
+                    ) : magicSent ? (
                         <div className="text-center py-4">
                             <div className="w-14 h-14 bg-[#DCFCE7] rounded-full flex items-center justify-center mx-auto mb-4">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -171,8 +214,13 @@ export default function LoginForm() {
                                             <label htmlFor="login-password" className="block text-sm font-medium text-[#0F172A]">
                                                 {t('password')}
                                             </label>
-                                            <button type="button" className="text-xs font-medium text-[#1D6FD8] hover:underline">
-                                                {t('forgotPassword')}
+                                            <button
+                                                type="button"
+                                                onClick={handleForgotPassword}
+                                                disabled={resetLoading}
+                                                className="text-xs font-medium text-[#1D6FD8] hover:underline disabled:opacity-50"
+                                            >
+                                                {resetLoading ? tCommon('loading') : t('forgotPassword')}
                                             </button>
                                         </div>
                                         <input

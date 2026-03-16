@@ -12,6 +12,7 @@
     "checkInbox": "Check je inbox",
     "magicLinkSent": "We hebben een inloglink gestuurd naar",
     "backToLogin": "Terug naar inloggen",
+    "resetSent": "We hebben een wachtwoord-reset link gestuurd naar",
     "noAccount": "Nog geen account?",
     "signupLink": "Aanmelden",
     "passwordMode": "Wachtwoord",
@@ -62,9 +63,9 @@
     "hasAccount": "Heb je al een account?",
     "loginLink": "Inloggen",
     "goToLogin": "Naar inloggen",
-    "successTitle": "Check je e-mail",
-    "successMessage": "We hebben een bevestigingslink gestuurd naar",
-    "successInstruction": "Klik op de link in de mail om je account te activeren.",
+    "successTitle": "Account aangemaakt!",
+    "successMessage": "Je account is succesvol aangemaakt voor",
+    "successInstruction": "Je kunt nu inloggen met je e-mailadres en wachtwoord.",
     "termsText": "Bij aanmelding ga je akkoord met onze",
     "termsLink": "Voorwaarden",
     "and": "en",
@@ -74,7 +75,8 @@
       "passwordTooShort": "Wachtwoord moet minimaal 6 tekens bevatten.",
       "phoneRequired": "Telefoonnummer is verplicht.",
       "domainRequired": "Webshop URL is verplicht.",
-      "emailError": "Fout bij het verzenden van de bevestigingsmail. Controleer de SMTP-instellingen in Supabase."
+      "emailError": "Fout bij het verzenden van de bevestigingsmail. Controleer de SMTP-instellingen in Supabase.",
+      "generic": "Er ging iets mis. Probeer het opnieuw."
     }
   },
   "contact": {
@@ -115,6 +117,19 @@
       "subjectRequired": "Kies een onderwerp",
       "messageRequired": "Bericht is verplicht",
       "messageTooShort": "Schrijf minimaal 10 tekens"
+    }
+  },
+  "resetPassword": {
+    "title": "Stel een nieuw wachtwoord in",
+    "newPassword": "Nieuw wachtwoord",
+    "confirmPassword": "Bevestig wachtwoord",
+    "saveButton": "Wachtwoord opslaan",
+    "saving": "Opslaan...",
+    "successTitle": "Wachtwoord gewijzigd!",
+    "successMessage": "Je wordt doorgestuurd naar het dashboard...",
+    "errors": {
+      "mismatch": "Wachtwoorden komen niet overeen.",
+      "tooShort": "Wachtwoord moet minimaal 6 tekens bevatten."
     }
   },
   "validation": {
