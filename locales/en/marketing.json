@@ -63,9 +63,9 @@
       },
       "pro": {
         "name": "Pro",
-        "limit": "2,500",
+        "limit": "1,500",
         "cta": "Most popular",
-        "feature0": "2,500 try-ons/month",
+        "feature0": "1,500 try-ons/month",
         "feature1": "Unlimited API keys",
         "feature2": "Analytics dashboard",
         "feature3": "Webhook integrations",
@@ -74,9 +74,9 @@
       },
       "scale": {
         "name": "Scale",
-        "limit": "5,000",
+        "limit": "3,000",
         "cta": "Scale up",
-        "feature0": "5,000 try-ons/month",
+        "feature0": "3,000 try-ons/month",
         "feature1": "Unlimited API keys",
         "feature2": "Custom branding",
         "feature3": "Analytics dashboard",

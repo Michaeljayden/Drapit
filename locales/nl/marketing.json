@@ -63,9 +63,9 @@
       },
       "pro": {
         "name": "Pro",
-        "limit": "2.500",
+        "limit": "1.500",
         "cta": "Populairste keuze",
-        "feature0": "2.500 try-ons/maand",
+        "feature0": "1.500 try-ons/maand",
         "feature1": "3 API-sleutels",
         "feature2": "Analytics dashboard",
         "feature3": "Webhook integraties",
@@ -74,9 +74,9 @@
       },
       "scale": {
         "name": "Scale",
-        "limit": "5.000",
+        "limit": "3.000",
         "cta": "Schaal op",
-        "feature0": "5.000 try-ons/maand",
+        "feature0": "3.000 try-ons/maand",
         "feature1": "10 API-sleutels",
         "feature2": "Custom branding",
         "feature3": "Analytics dashboard",
