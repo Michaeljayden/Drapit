@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * SupportChat.jsx — Drapit Support Chatbot
  *
