@@ -11,6 +11,7 @@
     "prebuild": "npm run i18n:check"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.79.0",
     "@google/genai": "^0.7.0",
     "@netlify/plugin-nextjs": "^5.15.8",
     "@stripe/stripe-js": "^8.8.0",
