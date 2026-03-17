@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Logo from '@/components/ui/Logo';
 import Link from 'next/link';
@@ -22,7 +22,6 @@ export default function LoginForm() {
     const [resetSent, setResetSent] = useState(false);
     const [resetLoading, setResetLoading] = useState(false);
 
-    const router = useRouter();
     const searchParams = useSearchParams();
     const redirect = searchParams.get('redirect') || '/dashboard';
 
@@ -55,8 +54,7 @@ export default function LoginForm() {
             return;
         }
 
-        router.push(redirect);
-        router.refresh();
+        window.location.href = redirect;
     }
 
     async function handleMagicLink(e: React.FormEvent) {
