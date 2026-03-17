@@ -173,7 +173,7 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
         <>
             {/* Logo */}
             <div className="px-5 pt-6 pb-5">
-                <Logo size="md" className="brightness-0 invert" />
+                <Logo size="md" className="invert" />
                 <div className="flex items-center gap-2 mt-3">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]" />
                     <p className="text-xs text-[#94A3B8] truncate font-medium">{shopName}</p>
@@ -358,7 +358,7 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
                             <line x1="3" y1="18" x2="21" y2="18" />
                         </svg>
                     </button>
-                    <Logo size="sm" className="brightness-0 invert" />
+                    <Logo size="sm" className="invert" />
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />

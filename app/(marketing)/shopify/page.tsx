@@ -420,12 +420,8 @@ export default function ShopifyGuidePage() {
                     transition: 'all 0.4s ease',
                 }}>
                     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 28px', height: 70, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 9, textDecoration: 'none' }}>
-                            <svg width="22" height="22" viewBox="0 0 16 16" fill="none">
-                                <path d="M9.5 3.5C9.5 2.67 8.83 2 8 2S6.5 2.67 6.5 3.5" stroke="#95BF47" strokeWidth="1.5" strokeLinecap="round" />
-                                <path d="M8 5L2.5 10.5C2.18 10.77 2 11.15 2 11.56C2 12.35 2.65 13 3.44 13H12.56C13.35 13 14 12.35 14 11.56C14 11.15 13.82 10.77 13.5 10.5L8 5Z" stroke="#95BF47" strokeWidth="1.5" strokeLinejoin="round" />
-                            </svg>
-                            <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 20, color: '#F1F5F9', letterSpacing: '-0.015em' }}>Drapit</span>
+                        <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+                            <img src="/images/2.png" alt="Drapit" style={{ height: 32, width: 'auto', filter: 'invert(1)' }} />
                         </Link>
 
                         <div className="d-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
