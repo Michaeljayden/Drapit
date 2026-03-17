@@ -183,7 +183,7 @@ export default function LicensePage() {
 
                     {/* Logo */}
                     <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <img src="/images/2.png" alt="Drapit" style={{ height: 32, width: 'auto', filter: 'invert(1)' }} />
+                        <img src="/images/2.png" alt="Drapit" style={{ height: 120, width: 'auto', filter: 'invert(1)' }} />
                         <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#C9A66A', border: '1px solid rgba(201,166,106,0.35)', padding: '3px 8px', borderRadius: 2 }}>License</span>
                     </Link>
 

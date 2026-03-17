@@ -421,7 +421,7 @@ export default function ShopifyGuidePage() {
                 }}>
                     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 28px', height: 70, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-                            <img src="/images/2.png" alt="Drapit" style={{ height: 32, width: 'auto', filter: 'invert(1)' }} />
+                            <img src="/images/2.png" alt="Drapit" style={{ height: 120, width: 'auto', filter: 'invert(1)' }} />
                         </Link>
 
                         <div className="d-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>

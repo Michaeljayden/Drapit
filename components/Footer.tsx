@@ -42,7 +42,7 @@ export default function Footer() {
                     {/* Brand Section */}
                     <div style={{ maxWidth: '360px' }}>
                         <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', marginBottom: '24px' }}>
-                            <img src="/images/2.png" alt="Drapit" style={{ height: 36, width: 'auto', filter: 'invert(1)' }} />
+                            <img src="/images/2.png" alt="Drapit" style={{ height: 130, width: 'auto', filter: 'invert(1)' }} />
                         </Link>
                         <p style={{
                             fontSize: '15px',
