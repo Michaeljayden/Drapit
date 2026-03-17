@@ -949,8 +949,34 @@ export default function LandingPage() {
                             </div>
 
                             {/* Right visual */}
-                            <div className={`d-hero-visual d-float d-in d-d3 ${hero.inView ? 'visible' : ''}`}>
-                                <TryOnVisual />
+                            <div className={`d-hero-visual d-in d-d3 ${hero.inView ? 'visible' : ''}`} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <div style={{
+                                    position: 'relative',
+                                    borderRadius: 24,
+                                    overflow: 'hidden',
+                                    boxShadow: '0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(29,111,216,0.18)',
+                                    background: 'rgba(6,9,15,0.5)',
+                                }}>
+                                    {/* Ambient glow achter de afbeelding */}
+                                    <div style={{
+                                        position: 'absolute', inset: -60,
+                                        background: 'radial-gradient(ellipse at center, rgba(29,111,216,0.18) 0%, transparent 70%)',
+                                        filter: 'blur(40px)', pointerEvents: 'none', zIndex: 0,
+                                    }} />
+                                    <img
+                                        src="/images/VTON process.png"
+                                        alt="Drapit Virtueel Passen Proces"
+                                        style={{
+                                            display: 'block',
+                                            width: '100%',
+                                            maxWidth: 560,
+                                            height: 'auto',
+                                            borderRadius: 24,
+                                            position: 'relative',
+                                            zIndex: 1,
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
