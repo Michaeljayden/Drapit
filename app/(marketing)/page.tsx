@@ -893,41 +893,46 @@ export default function LandingPage() {
                                     >
                                         {t('hero.ctaSecondary')}
                                     </button>
-                                    <a
-                                        href="https://drapit-testomgeving.myshopify.com/?password=Drapit"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{
-                                            padding: '14px 28px', fontSize: 16, fontWeight: 600,
-                                            color: '#93C5FD', fontFamily: 'Plus Jakarta Sans, sans-serif',
-                                            background: 'transparent',
-                                            border: '1.5px solid rgba(29,111,216,0.5)',
-                                            borderRadius: 12, textDecoration: 'none',
-                                            transition: 'all 0.3s ease', cursor: 'pointer',
-                                            display: 'inline-flex', alignItems: 'center', gap: 8,
-                                        }}
-                                        onMouseEnter={e => {
-                                            e.currentTarget.style.background = 'rgba(29,111,216,0.12)';
-                                            e.currentTarget.style.color = '#F1F5F9';
-                                            e.currentTarget.style.borderColor = 'rgba(34,211,238,0.6)';
-                                            e.currentTarget.style.boxShadow = '0 0 24px rgba(29,111,216,0.3)';
-                                            e.currentTarget.style.transform = 'translateY(-2px)';
-                                        }}
-                                        onMouseLeave={e => {
-                                            e.currentTarget.style.background = 'transparent';
-                                            e.currentTarget.style.color = '#93C5FD';
-                                            e.currentTarget.style.borderColor = 'rgba(29,111,216,0.5)';
-                                            e.currentTarget.style.boxShadow = 'none';
-                                            e.currentTarget.style.transform = 'translateY(0)';
-                                        }}
-                                    >
-                                        Test de technologie
-                                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
-                                            <path d="M5.25 2.625H2.625V11.375H11.375V8.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                            <path d="M8.75 2.625H11.375V5.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                            <path d="M6.125 7.875L11.375 2.625" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                        </svg>
-                                    </a>
+                                    <div style={{ position: 'relative', display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
+                                        <a
+                                            href="https://drapit-testomgeving.myshopify.com/?password=Drapit"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{
+                                                padding: '14px 28px', fontSize: 16, fontWeight: 600,
+                                                color: '#93C5FD', fontFamily: 'Plus Jakarta Sans, sans-serif',
+                                                background: 'transparent',
+                                                border: '1.5px solid rgba(29,111,216,0.5)',
+                                                borderRadius: 12, textDecoration: 'none',
+                                                transition: 'all 0.3s ease', cursor: 'pointer',
+                                                display: 'inline-flex', alignItems: 'center', gap: 8,
+                                            }}
+                                            onMouseEnter={e => {
+                                                e.currentTarget.style.background = 'rgba(29,111,216,0.12)';
+                                                e.currentTarget.style.color = '#F1F5F9';
+                                                e.currentTarget.style.borderColor = 'rgba(34,211,238,0.6)';
+                                                e.currentTarget.style.boxShadow = '0 0 24px rgba(29,111,216,0.3)';
+                                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                            }}
+                                            onMouseLeave={e => {
+                                                e.currentTarget.style.background = 'transparent';
+                                                e.currentTarget.style.color = '#93C5FD';
+                                                e.currentTarget.style.borderColor = 'rgba(29,111,216,0.5)';
+                                                e.currentTarget.style.boxShadow = 'none';
+                                                e.currentTarget.style.transform = 'translateY(0)';
+                                            }}
+                                        >
+                                            Test de technologie
+                                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
+                                                <path d="M5.25 2.625H2.625V11.375H11.375V8.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                                <path d="M8.75 2.625H11.375V5.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                                <path d="M6.125 7.875L11.375 2.625" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                            </svg>
+                                        </a>
+                                        <span style={{ marginTop: 6, fontSize: 11, color: 'rgba(241,245,249,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.02em' }}>
+                                            Wachtwoord: <span style={{ color: 'rgba(147,197,253,0.7)', fontWeight: 600, userSelect: 'all' }}>Drapit</span>
+                                        </span>
+                                    </div>
                                 </div>
 
                                 {/* Social proof */}
