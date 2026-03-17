@@ -992,8 +992,8 @@ export default function LandingPage() {
                     <div className="d-stats-grid" style={{ maxWidth: 960, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 32 }}>
                         {[
                             { num: '< 10 min', label: 'Installatietijd', note: 'Één script-tag' },
-                            { num: '+34%', label: 'Hogere conversie', note: 'Gemiddeld na launch' },
-                            { num: '−28%', label: 'Minder retours', note: 'Bewezen resultaat' },
+                            { num: '+34%', label: 'Hogere conversie', note: 'Industrie gemiddelde' },
+                            { num: '−28%', label: 'Minder retours', note: 'Industrie gemiddelde' },
                             { num: '99.9%', label: 'Uptime SLA', note: 'Enterprise plan' },
                         ].map((s, i) => (
                             <div key={i} className={`d-in d-d${i + 1} ${stats.inView ? 'visible' : ''}`} style={{ textAlign: 'center' }}>
@@ -1021,7 +1021,7 @@ export default function LandingPage() {
                             {[
                                 { num: '01', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>, title: 'Script toevoegen', desc: 'Kopieer één regel code vanuit je Drapit dashboard en plak het in de <head> van je webshop. Geen plugin, geen developer vereist. Klaar in 5 minuten.', tag: '< 5 minuten', tagColor: '#22D3EE' },
                                 { num: '02', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 9h6M9 12h6M9 15h4" /></svg>, title: 'Widget verschijnt', desc: 'De "Virtueel passen" knop verschijnt automatisch bij elk product met het juiste data-attribuut. Volledig aanpasbaar qua kleur en tekst via het dashboard.', tag: 'Zero-code setup', tagColor: '#8B5CF6' },
-                                { num: '03', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3" /><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" /></svg>, title: 'AI doet de rest', desc: 'Klant uploadt een foto. Onze AI verwerkt het kledingstuk virtueel om het lichaam. Resultaat binnen seconden, directe koopknop inbegrepen.', tag: 'State-of-art AI', tagColor: '#1D6FD8' },
+                                { num: '03', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3" /><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" /></svg>, title: 'AI doet de rest', desc: 'Klant uploadt een foto. Onze AI verwerkt het kledingstuk virtueel om het lichaam. Resultaat binnen seconden, directe koopknop inbegrepen.', tag: 'Resultaat in seconden', tagColor: '#1D6FD8' },
                             ].map((step, i) => (
                                 <div key={i} className={`d-feat d-in d-d${i + 2} ${how.inView ? 'visible' : ''}`} style={{ background: 'rgba(13,24,41,0.6)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 20, padding: '32px 28px', backdropFilter: 'blur(10px)' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
@@ -1132,7 +1132,7 @@ export default function LandingPage() {
                         <div ref={feats.ref} style={{ marginBottom: 56 }}>
                             <div className={`d-in d-d1 ${feats.inView ? 'visible' : ''}`} style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#1D6FD8', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 18 }}>WAAROM DRAPIT</div>
                             <h2 className={`d-gradient d-in d-d2 ${feats.inView ? 'visible' : ''}`} style={{ fontSize: 'clamp(26px, 3.5vw, 46px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.08, maxWidth: 520 }}>
-                                Alles wat je nodig hebt,<br />niets wat je niet nodig hebt
+                                Gebouwd om te converteren.<br />Eenvoudig te installeren.
                             </h2>
                         </div>
 
@@ -1144,6 +1144,7 @@ export default function LandingPage() {
                                 { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21 2-1 1" /><path d="m3 22 1-1" /><path d="m10 11-7 7 2 2 7-7" /><path d="m10 11 4 4 6-6-4-4-6 6" /></svg>, title: 'API-sleutels beheer', desc: 'Meerdere keys per shop, direct activeren of deactiveren, met gebruik- en datum-tracking.', accent: '#1D6FD8' },
                                 { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /></svg>, title: 'Privacy-first', desc: "Foto's worden na AI-verwerking niet opgeslagen. GDPR-compliant by design, geen datarisico.", accent: '#10B981' },
                                 { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EC4899" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 20V10" /><path d="M12 20V4" /><path d="M6 20v-6" /><path d="M2 12c8 0 14-4 20-8" /></svg>, title: 'Webhook integraties', desc: 'Koppel try-on events aan je CRM, analytics of retargeting tool via webhooks.', accent: '#EC4899' },
+                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>, title: 'Gratis mond-tot-mondreclame', desc: 'Elke gedeelde try-on is een gratis advertentie voor jouw webshop. Shoppers delen hun resultaat met vrienden — zonder dat jij er iets voor hoeft te doen.', accent: '#F59E0B' },
                             ].map((f, i) => (
                                 <div key={i} className={`d-feat d-in d-d${(i % 3) + 1} ${feats.inView ? 'visible' : ''}`} style={{ background: 'rgba(13,24,41,0.5)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 16, padding: '26px 24px 30px' }}>
                                     <div style={{ marginBottom: 14, display: 'flex' }}>{f.icon}</div>

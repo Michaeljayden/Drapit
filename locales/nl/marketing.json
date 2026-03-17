@@ -9,13 +9,13 @@
   },
   "hero": {
     "eyebrow": "AI VIRTUAL TRY-ON VOOR WEBSHOPS",
-    "titleStart": "Laat klanten kleding",
-    "titleHighlight": "virtueel passen",
-    "titleEnd": "in seconden.",
-    "subtitle": "Eén script-tag. Elke webshop. Klanten uploaden een foto en zien zichzelf in elk kledingstuk — aangedreven door state-of-the-art AI diffusion technologie.",
+    "titleStart": "Meer verkopen.",
+    "titleHighlight": "Minder retourzendingen.",
+    "titleEnd": "",
+    "subtitle": "Klanten passen kleding virtueel, kopen met zekerheid, en delen het met vrienden. Eén script-tag. Werkt op elke webshop.",
     "ctaPrimary": "Begin gratis →",
     "ctaSecondary": "Bekijk live demo",
-    "socialProof": "2.000+ webshops gebruiken Drapit"
+    "socialProof": "Gratis starten — geen creditcard nodig"
   },
   "widget": {
     "demoUrl": "drapit.io/widget — live demo",
