@@ -508,8 +508,8 @@ export default async function BillingPage() {
                             a: 'Maandelijkse plan-credits worden maandelijks gereset. Extra credits die je los hebt gekocht vervallen nooit.',
                         },
                         {
-                            q: 'Kan ik op elk moment annuleren?',
-                            a: 'Ja, je kunt beide abonnementen onafhankelijk annuleren via de Stripe Portal. Je houdt toegang tot het einde van je huidige factureringsperiode.',
+                            q: 'Wat gebeurt er als ik mijn abonnement opzeg?',
+                            a: 'Je houdt toegang tot het einde van je factureringsperiode. Daarna word je automatisch gedowngraded naar Trial (20 gratis try-ons/maand voor VTON, 20 credits voor Studio). Extra gekochte try-ons en credits blijven altijd behouden, maar rollover try-ons en auto top-up gaan verloren. Je kunt op elk moment opnieuw activeren via de Stripe Portal.',
                         },
                         {
                             q: 'Hoe werkt automatisch bijvullen?',

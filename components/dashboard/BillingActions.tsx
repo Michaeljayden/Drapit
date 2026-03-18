@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { colors, componentStyles } from '@/lib/design-tokens';
 import type { Plan } from '@/lib/supabase/types';
+import CancellationWarningModal from './CancellationWarningModal';
 
 interface CheckoutProps {
     action: 'checkout';
@@ -24,7 +25,14 @@ export default function BillingActions(props: BillingActionsProps) {
 
     // ── Portal button ───────────────────────────────────────────────────
     if (props.action === 'portal') {
+        const [showWarningModal, setShowWarningModal] = useState(false);
+
         async function handlePortal() {
+            setShowWarningModal(true);
+        }
+
+        async function confirmPortalAccess() {
+            setShowWarningModal(false);
             setLoading(true);
             setError(null);
             try {
@@ -65,6 +73,12 @@ export default function BillingActions(props: BillingActionsProps) {
                 {error && (
                     <p className="text-xs mt-1" style={{ color: colors.red }}>{error}</p>
                 )}
+
+                <CancellationWarningModal
+                    isOpen={showWarningModal}
+                    onClose={() => setShowWarningModal(false)}
+                    onConfirm={confirmPortalAccess}
+                />
             </div>
         );
     }
