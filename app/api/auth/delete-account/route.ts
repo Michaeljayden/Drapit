@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { NextResponse } from 'next/server';
 
 /**
@@ -14,6 +15,7 @@ import { NextResponse } from 'next/server';
 export async function DELETE(request: Request) {
     try {
         const supabase = await createClient();
+        const supabaseAdmin = createAdminClient();
 
         // Check of user is ingelogd
         const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -38,7 +40,7 @@ export async function DELETE(request: Request) {
 
         // Verwijder alle shops van deze user
         // (cascade zorgt dat alle gerelateerde data automatisch wordt verwijderd)
-        const { error: shopDeleteError } = await supabase
+        const { error: shopDeleteError } = await supabaseAdmin
             .from('shops')
             .delete()
             .eq('owner_id', user.id);
@@ -52,7 +54,7 @@ export async function DELETE(request: Request) {
         }
 
         // Verwijder de auth user (via admin API)
-        const { error: userDeleteError } = await supabase.auth.admin.deleteUser(user.id);
+        const { error: userDeleteError } = await supabaseAdmin.auth.admin.deleteUser(user.id);
 
         if (userDeleteError) {
             console.error('Error deleting user:', userDeleteError);
