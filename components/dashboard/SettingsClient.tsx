@@ -20,6 +20,11 @@ export default function SettingsClient({ shop, initialApiKeys, maxApiKeys, planN
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
+    // Account deletion states
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [deleteConfirmEmail, setDeleteConfirmEmail] = useState('');
+    const [deleteLoading, setDeleteLoading] = useState(false);
+
     // Form states
     const [formData, setFormData] = useState({
         name: shop.name || '',
@@ -62,6 +67,35 @@ export default function SettingsClient({ shop, initialApiKeys, maxApiKeys, planN
             setMessage({ type: 'error', text: err.message });
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleDeleteAccount = async () => {
+        if (deleteConfirmEmail !== shop.email) {
+            setMessage({ type: 'error', text: 'Email komt niet overeen. Vul het correcte email adres in.' });
+            return;
+        }
+
+        setDeleteLoading(true);
+        setMessage(null);
+
+        try {
+            const res = await fetch('/api/auth/delete-account', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ confirmEmail: deleteConfirmEmail }),
+            });
+
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.error || 'Er ging iets mis bij het verwijderen.');
+            }
+
+            // Account succesvol verwijderd, redirect naar homepage
+            window.location.href = '/';
+        } catch (err: any) {
+            setMessage({ type: 'error', text: err.message });
+            setDeleteLoading(false);
         }
     };
 
@@ -275,6 +309,81 @@ export default function SettingsClient({ shop, initialApiKeys, maxApiKeys, planN
                             </button>
                         </div>
                     </form>
+
+                    {/* Danger Zone */}
+                    <div className={`${componentStyles.dashboardCard} border-2 border-red-100 bg-red-50/30`}>
+                        <h2 className={`${typography.h2} text-red-700 mb-2`}>Danger Zone</h2>
+                        <p className="text-sm text-red-600 mb-6">
+                            Let op: deze actie kan niet ongedaan gemaakt worden. Al je data wordt permanent verwijderd.
+                        </p>
+
+                        {!showDeleteConfirm ? (
+                            <button
+                                onClick={() => setShowDeleteConfirm(true)}
+                                className="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-xl transition-colors"
+                            >
+                                Account verwijderen
+                            </button>
+                        ) : (
+                            <div className="space-y-4 max-w-md">
+                                <div className="p-4 bg-red-100 border border-red-200 rounded-xl">
+                                    <p className="text-sm font-medium text-red-900 mb-2">
+                                        ⚠️ Dit verwijdert permanent:
+                                    </p>
+                                    <ul className="text-xs text-red-800 space-y-1 ml-4 list-disc">
+                                        <li>Je account en inloggegevens</li>
+                                        <li>Alle shops en API keys</li>
+                                        <li>Alle try-ons en Studio data</li>
+                                        <li>Alle abonnementen en transacties</li>
+                                    </ul>
+                                </div>
+
+                                <div>
+                                    <label className="text-xs font-medium text-red-900 block mb-2">
+                                        Typ <span className="font-bold">{shop.email}</span> om te bevestigen:
+                                    </label>
+                                    <input
+                                        type="email"
+                                        value={deleteConfirmEmail}
+                                        onChange={(e) => setDeleteConfirmEmail(e.target.value)}
+                                        placeholder={shop.email}
+                                        className="w-full px-3 py-2 border border-red-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                                        disabled={deleteLoading}
+                                    />
+                                </div>
+
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={() => {
+                                            setShowDeleteConfirm(false);
+                                            setDeleteConfirmEmail('');
+                                        }}
+                                        disabled={deleteLoading}
+                                        className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-xl transition-colors disabled:opacity-50"
+                                    >
+                                        Annuleren
+                                    </button>
+                                    <button
+                                        onClick={handleDeleteAccount}
+                                        disabled={deleteLoading || deleteConfirmEmail !== shop.email}
+                                        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                    >
+                                        {deleteLoading ? (
+                                            <>
+                                                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                                                </svg>
+                                                Bezig met verwijderen...
+                                            </>
+                                        ) : (
+                                            'Account permanent verwijderen'
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             )}
 
