@@ -15,9 +15,10 @@ interface SidebarProps {
     studioCreditsUsed?: number;
     studioCreditsLimit?: number;
     studioExtraCredits?: number;
+    isAdmin?: boolean;
 }
 
-export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryonsLimit = 500, studioCreditsUsed = 0, studioCreditsLimit = 20, studioExtraCredits = 0 }: SidebarProps) {
+export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryonsLimit = 500, studioCreditsUsed = 0, studioCreditsLimit = 20, studioExtraCredits = 0, isAdmin = false }: SidebarProps) {
     const t = useTranslations('nav');
     const tCommon = useTranslations('buttons');
     const pathname = usePathname();
@@ -333,6 +334,21 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
                     <LanguageSwitcher />
                 </div>
             </div>
+
+            {/* Admin link */}
+            {isAdmin && (
+                <div className="px-3 pb-1">
+                    <Link
+                        href="/admin"
+                        className="flex items-center gap-3 text-amber-400/80 hover:text-amber-300 hover:bg-white/8 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-150 w-full"
+                    >
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 1.5l1.3 4h4.2l-3.4 2.5 1.3 4L9 9.5 5.6 12l1.3-4L3.5 5.5h4.2L9 1.5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        Admin
+                    </Link>
+                </div>
+            )}
 
             {/* Logout */}
             <div className="p-3 pt-0">

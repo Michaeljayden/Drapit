@@ -34,6 +34,8 @@ export default async function DashboardLayout({
         }
     }
 
+    const isAdmin = user?.email === process.env.ADMIN_EMAIL;
+
     return (
         <div className="min-h-screen">
             <Sidebar
@@ -43,6 +45,7 @@ export default async function DashboardLayout({
                 studioCreditsUsed={studioCreditsUsed}
                 studioCreditsLimit={studioCreditsLimit}
                 studioExtraCredits={studioExtraCredits}
+                isAdmin={isAdmin}
             />
             {/* Main content: offset for desktop sidebar + mobile top bar */}
             <main className="md:ml-64 bg-[#F8FAFC] min-h-screen pt-[72px] md:pt-0 p-4 md:p-8 overflow-y-auto">
