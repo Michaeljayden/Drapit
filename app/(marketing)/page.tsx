@@ -1055,7 +1055,7 @@ export default function LandingPage() {
                             <div>
                                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(149,191,71,0.1)', border: '1px solid rgba(149,191,71,0.2)', borderRadius: 100, padding: '5px 14px', marginBottom: 20 }}>
                                     <img src="/images/logos/Shopify_logo_2018.svg.png" alt="Shopify" style={{ height: 14, width: 'auto' }} />
-                                    <span style={{ fontSize: 10, fontWeight: 700, color: '#95BF47', fontFamily: 'Plus Jakarta Sans', letterSpacing: '0.08em' }}>SHOPIFY INSTALLATIE</span>
+                                    <span style={{ fontSize: 10, fontWeight: 700, color: '#95BF47', fontFamily: 'Plus Jakarta Sans', letterSpacing: '0.08em' }}>SHOPIFY · BINNENKORT IN DE APP STORE</span>
                                 </div>
 
                                 <h3 style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 800, color: '#F1F5F9', lineHeight: 1.15, marginBottom: 14, letterSpacing: '-0.02em', fontFamily: 'Plus Jakarta Sans' }}>
@@ -1064,7 +1064,7 @@ export default function LandingPage() {
                                 </h3>
 
                                 <p style={{ fontSize: 15, color: 'rgba(241,245,249,0.5)', lineHeight: 1.7, marginBottom: 24, fontFamily: 'Plus Jakarta Sans' }}>
-                                    Installeer Drapit direct vanuit de Shopify App Store — geen code, geen developer. De app voegt automatisch de benodigde scripts toe aan je theme en je bent binnen minuten live.
+                                    Binnenkort beschikbaar in de Shopify App Store — installeer met één klik, geen code nodig. In afwachting van goedkeuring kun je nu al starten met onze standalone widget.
                                 </p>
 
                                 <Link href="/shopify" style={{
@@ -1093,8 +1093,8 @@ export default function LandingPage() {
                             {/* Right: mini-stappen */}
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                                 {[
-                                    { step: '1', title: 'Installeer de app', desc: 'Zoek "Drapit" in de Shopify App Store en klik op installeren.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /></svg> },
-                                    { step: '2', title: 'Activeer in je theme', desc: 'De app configureert alles automatisch — geen code aanpassingen nodig.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg> },
+                                    { step: '1', title: 'App Store (binnenkort)', desc: 'De Shopify App wordt binnenkort beschikbaar voor automatische installatie.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg> },
+                                    { step: '2', title: 'Standalone widget', desc: 'Start vandaag al met onze standalone widget — kopieer & plak, klaar in 10 minuten.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg> },
                                     { step: '3', title: 'Direct live', desc: 'Je klanten kunnen meteen virtueel kleding passen op je webshop.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg> },
                                 ].map((item, i) => (
                                     <div key={i} style={{
@@ -1404,11 +1404,16 @@ export default function LandingPage() {
 
                                 <div className="d-shopify-card-features" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 48 }}>
                                     {[
-                                        { title: 'Shopify App Store', desc: 'Download Drapit rechtstreeks en start in minuten. Geen handmatige code nodig.' },
-                                        { title: 'Naadloze Installatie', desc: 'Onze app voegt de benodigde script-tags automatisch toe aan je theme.' }
-                                    ].map((item, i) => (
+                                        { title: 'Shopify App Store', desc: 'Binnenkort beschikbaar — we wachten op goedkeuring van Shopify. Zodra live, installeer je met één klik.', comingSoon: true },
+                                        { title: 'Naadloze Installatie', desc: 'Start nu al met onze standalone widget. Kopieer de code, plak in je theme — klaar in minuten.' }
+                                    ].map((item: { title: string; desc: string; comingSoon?: boolean }, i) => (
                                         <div key={i}>
-                                            <div style={{ fontSize: 16, fontWeight: 700, color: '#F1F5F9', marginBottom: 8 }}>{item.title}</div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                                                <div style={{ fontSize: 16, fontWeight: 700, color: '#F1F5F9' }}>{item.title}</div>
+                                                {item.comingSoon && (
+                                                    <span style={{ fontSize: 9, fontWeight: 800, color: '#D97706', background: 'rgba(217,119,6,0.12)', border: '1px solid rgba(217,119,6,0.25)', borderRadius: 100, padding: '3px 10px', letterSpacing: '0.08em', fontFamily: 'Plus Jakarta Sans' }}>COMING SOON</span>
+                                                )}
+                                            </div>
                                             <p style={{ fontSize: 14, color: 'rgba(241,245,249,0.4)', lineHeight: 1.5 }}>{item.desc}</p>
                                         </div>
                                     ))}
@@ -1438,23 +1443,23 @@ export default function LandingPage() {
                                     Bekijk de installatie handleiding →
                                 </Link>
 
-                                <a href="https://apps.shopify.com" target="_blank" rel="noopener noreferrer" style={{
+                                <div style={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
                                     gap: 12,
-                                    background: '#000000',
+                                    background: 'rgba(217,119,6,0.06)',
                                     padding: '12px 24px',
                                     borderRadius: 12,
-                                    border: '1px solid rgba(255,255,255,0.1)',
-                                    textDecoration: 'none',
-                                    transition: 'all 0.3s'
-                                }} onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(149,191,71,0.5)'} onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}>
-                                    <img src="/images/logos/Shopify_logo_2018.svg.png" alt="Shopify" style={{ height: 20, filter: 'brightness(0) invert(1)' }} />
+                                    border: '1px solid rgba(217,119,6,0.2)',
+                                    opacity: 0.85,
+                                    cursor: 'default',
+                                }}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
                                     <div style={{ textAlign: 'left' }}>
-                                        <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', fontWeight: 500, lineHeight: 1 }}>Bekijk in de</div>
-                                        <div style={{ fontSize: 15, color: 'white', fontWeight: 700, lineHeight: 1.2 }}>App Store</div>
+                                        <div style={{ fontSize: 10, color: 'rgba(217,119,6,0.7)', fontWeight: 500, lineHeight: 1 }}>Binnenkort in de</div>
+                                        <div style={{ fontSize: 15, color: '#D97706', fontWeight: 700, lineHeight: 1.2 }}>App Store</div>
                                     </div>
-                                </a>
+                                </div>
                             </div>
 
                             {/* Visual/Tech Card */}

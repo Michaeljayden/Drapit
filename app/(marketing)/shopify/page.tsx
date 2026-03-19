@@ -463,8 +463,26 @@ export default function ShopifyGuidePage() {
                             <span style={{ fontSize: 11, fontWeight: 700, color: '#95BF47', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.1em' }}>OFFICIAL PARTNER</span>
                         </div>
 
+                        {/* Coming soon banner */}
+                        <div className={`d-in d-d2 ${hero.inView ? 'visible' : ''}`} style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 12,
+                            background: 'rgba(217,119,6,0.08)',
+                            border: '1px solid rgba(217,119,6,0.2)',
+                            borderRadius: 14,
+                            padding: '12px 22px',
+                            marginBottom: 28,
+                            maxWidth: 620,
+                        }}>
+                            <Clock size={18} color="#D97706" style={{ flexShrink: 0 }} />
+                            <span style={{ fontSize: 14, color: '#D97706', fontFamily: 'Plus Jakarta Sans, sans-serif', lineHeight: 1.5, textAlign: 'left' }}>
+                                De Shopify App Store versie is momenteel in afwachting van goedkeuring. Volg onderstaande handleiding om nu al te starten met de standalone widget.
+                            </span>
+                        </div>
+
                         {/* Headline */}
-                        <h1 className={`d-hero-title d-in d-d2 ${hero.inView ? 'visible' : ''}`} style={{ fontSize: 'clamp(34px, 4.5vw, 62px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, lineHeight: 1.08, letterSpacing: '-0.025em', marginBottom: 24, color: '#F1F5F9' }}>
+                        <h1 className={`d-hero-title d-in d-d3 ${hero.inView ? 'visible' : ''}`} style={{ fontSize: 'clamp(34px, 4.5vw, 62px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, lineHeight: 1.08, letterSpacing: '-0.025em', marginBottom: 24, color: '#F1F5F9' }}>
                             Drapit installeren op{' '}
                             <span className="d-shimmer-shopify">Shopify</span>
                         </h1>
