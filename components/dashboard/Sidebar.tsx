@@ -49,6 +49,16 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
         ),
     },
     {
+        label: t('installation'),
+        href: '/dashboard/installation',
+        icon: (
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 1v10m0 0l-3-3m3 3l3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M2 13v2a2 2 0 002 2h10a2 2 0 002-2v-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+        ),
+    },
+    {
         label: t('studio'),
         href: '/dashboard/studio',
         badge: t('new'),

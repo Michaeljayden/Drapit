@@ -195,7 +195,21 @@ export default async function DashboardPage() {
                             </svg>
                         </div>
                         <p className="text-sm font-semibold text-[#0F172A]">Nog geen try-ons</p>
-                        <p className="text-xs text-[#94A3B8] mt-1">Installeer de widget op je webshop om te beginnen.</p>
+                        <p className="text-xs text-[#94A3B8] mt-1 mb-4">Installeer de widget op je webshop om te beginnen.</p>
+                        <div className="flex gap-2 justify-center">
+                            <a
+                                href="/dashboard/installation"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1D6FD8] to-[#3B9AF0] text-white text-sm font-semibold rounded-xl hover:shadow-lg transition-all duration-200"
+                            >
+                                Kies installatiemethode
+                            </a>
+                            <a
+                                href="/dashboard/widget"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-[#E2E8F0] text-[#64748B] text-sm font-semibold rounded-xl hover:bg-[#F1F5F9] transition-all duration-200"
+                            >
+                                Direct naar Widget
+                            </a>
+                        </div>
                     </div>
                 ) : (
                     <div className="overflow-x-auto">

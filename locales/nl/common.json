@@ -2,6 +2,7 @@
   "nav": {
     "overview": "Overzicht",
     "widget": "Widget",
+    "installation": "Installatie",
     "studio": "Studio",
     "apiKeys": "API-sleutels",
     "billing": "Abonnement",
@@ -41,5 +42,37 @@
     "privacy": "Privacy Policy",
     "terms": "Voorwaarden",
     "contact": "Contact"
+  },
+  "installation": {
+    "title": "Kies installatiemethode",
+    "subtitle": "Kies hoe je Drapit wilt integreren in je webshop",
+    "shopifyApp": {
+      "title": "Shopify App",
+      "description": "Automatische installatie via de Shopify App Store",
+      "badge": "Binnenkort beschikbaar",
+      "features": [
+        "Eenmalige klik installatie",
+        "Automatische updates",
+        "Directe integratie met je store",
+        "Geen code aanpassingen nodig"
+      ],
+      "comingSoon": {
+        "title": "Nog niet beschikbaar",
+        "description": "De Shopify App wacht momenteel op goedkeuring van Shopify. Zodra deze beschikbaar is, kun je met één klik installeren.",
+        "cta": "Gebruik voorlopig de Standalone Widget"
+      }
+    },
+    "standaloneWidget": {
+      "title": "Standalone Widget",
+      "description": "Installeer de widget met een script snippet",
+      "badge": "Beschikbaar",
+      "features": [
+        "Werkt op elke webshop",
+        "Volledige controle over plaatsing",
+        "Aanpasbare styling",
+        "Direct te gebruiken"
+      ],
+      "cta": "Widget installeren"
+    }
   }
 }

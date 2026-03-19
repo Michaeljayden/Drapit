@@ -2,6 +2,7 @@
   "nav": {
     "overview": "Overview",
     "widget": "Widget",
+    "installation": "Installation",
     "studio": "Studio",
     "apiKeys": "API Keys",
     "billing": "Billing",
@@ -41,5 +42,37 @@
     "privacy": "Privacy Policy",
     "terms": "Terms",
     "contact": "Contact"
+  },
+  "installation": {
+    "title": "Choose installation method",
+    "subtitle": "Choose how you want to integrate Drapit into your webshop",
+    "shopifyApp": {
+      "title": "Shopify App",
+      "description": "Automatic installation via the Shopify App Store",
+      "badge": "Coming soon",
+      "features": [
+        "One-click installation",
+        "Automatic updates",
+        "Direct integration with your store",
+        "No code modifications required"
+      ],
+      "comingSoon": {
+        "title": "Not yet available",
+        "description": "The Shopify App is currently awaiting approval from Shopify. Once available, you can install with one click.",
+        "cta": "Use the Standalone Widget for now"
+      }
+    },
+    "standaloneWidget": {
+      "title": "Standalone Widget",
+      "description": "Install the widget with a script snippet",
+      "badge": "Available",
+      "features": [
+        "Works on any webshop",
+        "Full control over placement",
+        "Customizable styling",
+        "Ready to use"
+      ],
+      "cta": "Install widget"
+    }
   }
 }
