@@ -116,6 +116,9 @@ export type Database = {
           auto_topup_pack_index: number
           auto_topup_monthly_cap: number
           auto_topup_spent_this_month: number
+          studio_credits_used: number
+          studio_credits_limit: number
+          studio_extra_credits: number
         }
         Insert: {
           created_at?: string
@@ -136,6 +139,9 @@ export type Database = {
           auto_topup_pack_index?: number
           auto_topup_monthly_cap?: number
           auto_topup_spent_this_month?: number
+          studio_credits_used?: number
+          studio_credits_limit?: number
+          studio_extra_credits?: number
         }
         Update: {
           created_at?: string
@@ -156,6 +162,9 @@ export type Database = {
           auto_topup_pack_index?: number
           auto_topup_monthly_cap?: number
           auto_topup_spent_this_month?: number
+          studio_credits_used?: number
+          studio_credits_limit?: number
+          studio_extra_credits?: number
         }
         Relationships: []
       }
@@ -170,6 +179,8 @@ export type Database = {
           status: string
           trigger_type: string
           failure_reason: string | null
+          admin_reason: string | null
+          admin_email: string | null
         }
         Insert: {
           id?: string
@@ -181,6 +192,8 @@ export type Database = {
           status?: string
           trigger_type?: string
           failure_reason?: string | null
+          admin_reason?: string | null
+          admin_email?: string | null
         }
         Update: {
           id?: string
@@ -192,10 +205,47 @@ export type Database = {
           status?: string
           trigger_type?: string
           failure_reason?: string | null
+          admin_reason?: string | null
+          admin_email?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "topup_transactions_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      studio_credit_adjustments: {
+        Row: {
+          id: string
+          shop_id: string
+          created_at: string
+          credits_added: number
+          admin_email: string
+          reason: string | null
+        }
+        Insert: {
+          id?: string
+          shop_id: string
+          created_at?: string
+          credits_added: number
+          admin_email: string
+          reason?: string | null
+        }
+        Update: {
+          id?: string
+          shop_id?: string
+          created_at?: string
+          credits_added?: number
+          admin_email?: string
+          reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "studio_credit_adjustments_shop_id_fkey"
             columns: ["shop_id"]
             isOneToOne: false
             referencedRelation: "shops"

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Logo from '@/components/ui/Logo';
+import CreditAdjustmentModal from '@/components/admin/CreditAdjustmentModal';
 
 interface Shop {
     id: string;
@@ -12,6 +13,11 @@ interface Shop {
     monthly_tryon_limit: number;
     tryons_this_month: number;
     domain: string | null;
+    rollover_tryons: number;
+    extra_tryons: number;
+    studio_credits_used: number;
+    studio_credits_limit: number;
+    studio_extra_credits: number;
 }
 
 export default function AdminDashboard() {
@@ -19,6 +25,16 @@ export default function AdminDashboard() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const handleCreditSuccess = (shopId: string, newExtraTryons: number, newStudioExtraCredits: number) => {
+        setShops(prev => prev.map(s =>
+            s.id === shopId
+                ? { ...s, extra_tryons: newExtraTryons, studio_extra_credits: newStudioExtraCredits }
+                : s
+        ));
+    };
 
     useEffect(() => {
         async function fetchShops() {
@@ -144,7 +160,12 @@ export default function AdminDashboard() {
                                             {new Date(shop.created_at).toLocaleDateString()}
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <button className="text-xs font-semibold text-[#1D6FD8] hover:underline">Details</button>
+                                            <button
+                                                className="text-xs font-semibold text-[#1D6FD8] hover:underline"
+                                                onClick={() => { setSelectedShop(shop); setModalOpen(true); }}
+                                            >
+                                                Credits
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}
@@ -152,6 +173,13 @@ export default function AdminDashboard() {
                         </table>
                     </div>
                 </div>
+
+                <CreditAdjustmentModal
+                    shop={selectedShop}
+                    isOpen={modalOpen}
+                    onClose={() => { setModalOpen(false); setSelectedShop(null); }}
+                    onSuccess={handleCreditSuccess}
+                />
             </div>
         </div>
     );
