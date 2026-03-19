@@ -9,7 +9,7 @@ export async function GET() {
     // SECURITY: Only allow specific admin emails
     const adminEmail = process.env.ADMIN_EMAIL;
 
-    if (!user || !user.email || user.email !== adminEmail) {
+    if (!user || !user.email || user.email.toLowerCase() !== adminEmail?.toLowerCase()) {
         return NextResponse.json({ error: 'Niet geautoriseerd' }, { status: 403 });
     }
 

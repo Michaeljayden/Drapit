@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Admin bypass: unlimited access, no credit deduction
-    const isAdmin = user.email === process.env.ADMIN_EMAIL;
+    const isAdmin = user.email?.toLowerCase() === process.env.ADMIN_EMAIL?.toLowerCase();
 
     // 3. Parse and validate request body
     let body: unknown;

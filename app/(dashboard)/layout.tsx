@@ -34,7 +34,7 @@ export default async function DashboardLayout({
         }
     }
 
-    const isAdmin = user?.email === process.env.ADMIN_EMAIL;
+    const isAdmin = user?.email?.toLowerCase() === process.env.ADMIN_EMAIL?.toLowerCase();
 
     return (
         <div className="min-h-screen">

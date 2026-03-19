@@ -51,7 +51,7 @@ export async function updateSession(request: NextRequest) {
             loginUrl.searchParams.set('redirect', pathname);
             return NextResponse.redirect(loginUrl);
         }
-        if (user.email !== process.env.ADMIN_EMAIL) {
+        if (user.email?.toLowerCase() !== process.env.ADMIN_EMAIL?.toLowerCase()) {
             // Logged in but not admin → send to dashboard
             return NextResponse.redirect(new URL('/dashboard', request.url));
         }
@@ -67,7 +67,7 @@ export async function updateSession(request: NextRequest) {
     }
 
     // Redirect authenticated users without a shop to onboarding
-    if (isDashboardRoute && !isLoginPage && !isOnboardingPage && user && user.email !== process.env.ADMIN_EMAIL) {
+    if (isDashboardRoute && !isLoginPage && !isOnboardingPage && user && user.email?.toLowerCase() !== process.env.ADMIN_EMAIL?.toLowerCase()) {
         const { data: shop } = await supabase
             .from('shops')
             .select('id')

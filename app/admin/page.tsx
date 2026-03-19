@@ -9,7 +9,7 @@ export default async function AdminPage() {
     // Redundant security check on server side
     const adminEmail = process.env.ADMIN_EMAIL;
 
-    if (!user || !user.email || user.email !== adminEmail) {
+    if (!user || !user.email || user.email.toLowerCase() !== adminEmail?.toLowerCase()) {
         redirect('/dashboard/login');
     }
 
