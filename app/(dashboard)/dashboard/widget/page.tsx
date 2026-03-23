@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import WidgetConfigurator from '@/components/dashboard/WidgetConfigurator';
+import StandaloneInstallationGuide from '@/components/dashboard/StandaloneInstallationGuide';
 
 export default async function WidgetPage() {
     const supabase = await createClient();
@@ -117,6 +118,9 @@ export default async function WidgetPage() {
 </div>`}
                 </pre>
             </div>
+
+            {/* Detailed Installation Guide */}
+            <StandaloneInstallationGuide />
         </div>
     );
 }

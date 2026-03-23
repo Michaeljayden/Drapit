@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drapit Cold Emails — Campagne 5 (Herenmode)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f6; color: #1a1a1a; padding: 30px 20px; }
+  h1 { font-size: 1.5rem; margin-bottom: 6px; color: #1a1a1a; }
+  .subtitle { color: #666; margin-bottom: 30px; font-size: 0.9rem; }
+  .email-card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 28px; overflow: hidden; }
+  .email-header { background: #1a1a2e; color: #fff; padding: 16px 20px; }
+  .email-header h2 { font-size: 1rem; margin-bottom: 6px; }
+  .meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .meta-item { background: rgba(255,255,255,0.12); border-radius: 6px; padding: 6px 10px; font-size: 0.82rem; display: flex; align-items: center; gap: 8px; }
+  .meta-item span.label { opacity: 0.7; }
+  .meta-value { font-weight: 500; }
+  .copy-btn { background: #fff; color: #1a1a2e; border: none; border-radius: 5px; padding: 4px 10px; font-size: 0.78rem; cursor: pointer; font-weight: 600; margin-left: 8px; transition: background 0.2s; }
+  .copy-btn:hover { background: #e0e0f0; }
+  .copy-btn.copied { background: #4caf50; color: #fff; }
+  .email-body { padding: 20px; }
+  .field-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #888; margin-bottom: 4px; letter-spacing: 0.04em; }
+  .field-content { background: #f8f8fb; border-radius: 6px; padding: 12px 14px; font-size: 0.92rem; line-height: 1.65; white-space: pre-wrap; margin-bottom: 14px; border: 1px solid #eee; }
+  .field-content a { color: #1a1a2e; }
+</style>
+</head>
+<body>
+
+<h1>📧 Drapit Cold Emails — Campagne 5</h1>
+<p class="subtitle">Niche: Herenmode · 5 emails klaargesteld · Kopieer per email Aan / Onderwerp / Tekst</p>
+
+<!-- EMAIL 1: Schulte Herenmode -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 1 — Schulte Herenmode</h2>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="label">Aan:</span>
+        <span class="meta-value" id="aan1">klantenservice@schulteherenmode.nl</span>
+        <button class="copy-btn" onclick="copyField('aan1', this)">Kopieer</button>
+      </div>
+      <div class="meta-item">
+        <span class="label">Onderwerp:</span>
+        <span class="meta-value" id="onderwerp1">Virtual try-on voor Schulte Herenmode?</span>
+        <button class="copy-btn" onclick="copyField('onderwerp1', this)">Kopieer</button>
+      </div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body1', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body1">Beste Schulte Herenmode,
+
+Met bijna 90 jaar ervaring weten jullie beter dan wie ook dat pasvorm alles is in herenmode. Online is dat echter moeilijk over te brengen — klanten bestellen op hoop en sturen terug als het tegenvalt.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een kledingstuk hen staat — voor ze de bestelling plaatsen. Dat vermindert retouren en vergroot het vertrouwen bij de aankoop. Foto's die klanten uploaden worden ook gedeeld, wat gratis zichtbaarheid oplevert voor Schulte Herenmode.
+
+Grote retailers zoals Zara en Zalando gebruiken dezelfde technologie al. Drapit maakt dit nu ook beschikbaar voor gespecialiseerde herenmodewinkels.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Schulte Herenmode hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 2: Zeli Herenmode -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 2 — Zeli Herenmode</h2>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="label">Aan:</span>
+        <span class="meta-value" id="aan2">info@zeliherenmode.nl</span>
+        <button class="copy-btn" onclick="copyField('aan2', this)">Kopieer</button>
+      </div>
+      <div class="meta-item">
+        <span class="label">Onderwerp:</span>
+        <span class="meta-value" id="onderwerp2">Virtual try-on voor Zeli Herenmode?</span>
+        <button class="copy-btn" onclick="copyField('onderwerp2', this)">Kopieer</button>
+      </div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body2', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body2">Beste Zeli Herenmode,
+
+Een herenmodeboetiek in het hart van Den Haag — jullie klanten weten wat ze willen en stellen kwaliteit voorop. Online zijn ze echter terughoudend: een broek of jasje kopen zonder te passen voelt als een gok.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Bezoekers uploaden een foto van zichzelf en zien direct hoe een kledingstuk hen staat. Dat neemt de twijfel weg en maakt het makkelijker om online te kopen — zonder het gevoel een gok te nemen. Gedeelde foto's zorgen bovendien voor gratis reclame voor Zeli Herenmode.
+
+Zara en Zalando gebruiken dezelfde technologie al grootschalig. Drapit brengt dit nu naar gespecialiseerde herenmodewinkels.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Zeli Herenmode hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 3: Yugo Menswear -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 3 — Yugo Menswear</h2>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="label">Aan:</span>
+        <span class="meta-value" id="aan3">support@yugomenswear.com</span>
+        <button class="copy-btn" onclick="copyField('aan3', this)">Kopieer</button>
+      </div>
+      <div class="meta-item">
+        <span class="label">Onderwerp:</span>
+        <span class="meta-value" id="onderwerp3">Virtual try-on voor Yugo Menswear?</span>
+        <button class="copy-btn" onclick="copyField('onderwerp3', this)">Kopieer</button>
+      </div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body3', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body3">Beste Yugo Menswear,
+
+Yugo combineert een fysieke winkel in Heerlen met een sterke online aanwezigheid — de laatste modetrends voor heren, vandaag besteld en morgen in huis. Maar bij kleding is "morgen in huis" vaak ook "overmorgen retour" als de pasvorm tegenvalt.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een item van Yugo hen staat — voor ze bestellen. Dat verhoogt de conversie en verlaagt het retourpercentage. Geüploade foto's worden ook gedeeld en leveren gratis zichtbaarheid op.
+
+Grote spelers zoals Zara en Zalando werken al met dezelfde technologie. Drapit maakt dit nu bereikbaar voor webshops zoals Yugo Menswear.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Yugo Menswear hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 4: GENTS.nl -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 4 — GENTS.nl</h2>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="label">Aan:</span>
+        <span class="meta-value" id="aan4">info@gents.nl</span>
+        <button class="copy-btn" onclick="copyField('aan4', this)">Kopieer</button>
+      </div>
+      <div class="meta-item">
+        <span class="label">Onderwerp:</span>
+        <span class="meta-value" id="onderwerp4">Virtual try-on voor GENTS?</span>
+        <button class="copy-btn" onclick="copyField('onderwerp4', this)">Kopieer</button>
+      </div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body4', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body4">Beste Floris,
+
+GENTS bedient de moderne man die weet hoe hij zich wil presenteren — van formeel pak tot casual blazer. Juist bij die categorieën is pasvorm doorslaggevend, en online is dat lastig in te schatten.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Bezoekers uploaden een foto van zichzelf en zien direct hoe een item van GENTS hen staat — of het nu een colbert of een casual broek is. Dat vermindert retourzendingen en geeft klanten het vertrouwen om te kopen. Gedeelde foto's leveren bovendien gratis zichtbaarheid op voor GENTS.
+
+Zara en Zalando gebruiken al dezelfde technologie op grote schaal. Drapit maakt dit nu bereikbaar voor gespecialiseerde herenmodewinkels.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou GENTS hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 5: Suitable -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 5 — Suitable</h2>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="label">Aan:</span>
+        <span class="meta-value" id="aan5">klantenservice@suitable.nl</span>
+        <button class="copy-btn" onclick="copyField('aan5', this)">Kopieer</button>
+      </div>
+      <div class="meta-item">
+        <span class="label">Onderwerp:</span>
+        <span class="meta-value" id="onderwerp5">Virtual try-on voor Suitable?</span>
+        <button class="copy-btn" onclick="copyField('onderwerp5', this)">Kopieer</button>
+      </div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body5', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body5">Beste Raoul,
+
+Suitable begon als verhuur van smokings vanuit een studentenkamer en is uitgegroeid tot een van de beste herenmodewinkels van Nederland. Die groei komt niet voor niets — jullie snappen wat mannen nodig hebben als ze er goed uit willen zien.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een pak, colbert of casual item van Suitable hen staat — voor ze bestellen. Dat neemt de twijfel weg bij online aankopen en vermindert retouren. Gedeelde foto's zorgen bovendien voor gratis zichtbaarheid.
+
+Grote names zoals Zara en Zalando gebruiken al dezelfde technologie. Drapit brengt dit nu naar toonaangevende herenmode-winkels zoals Suitable.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Suitable hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<script>
+function copyField(id, btn) {
+  const el = document.getElementById(id);
+  const text = el.innerText;
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  textarea.style.left = '-9999px';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    const original = btn.innerText;
+    btn.innerText = '✓ Gekopieerd';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerText = original; btn.classList.remove('copied'); }, 2000);
+  } catch (e) {
+    alert('Kopiëren mislukt — selecteer de tekst handmatig.');
+  }
+  document.body.removeChild(textarea);
+}
+</script>
+
+</body>
+</html>

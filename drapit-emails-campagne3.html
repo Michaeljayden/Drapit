@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drapit Cold Emails — Campagne 3 (Bruidsmode)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f6; color: #1a1a1a; padding: 30px 20px; }
+  h1 { font-size: 1.5rem; margin-bottom: 6px; color: #1a1a1a; }
+  .subtitle { color: #666; margin-bottom: 30px; font-size: 0.9rem; }
+  .email-card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 28px; overflow: hidden; }
+  .email-header { background: #1a1a2e; color: #fff; padding: 16px 20px; }
+  .email-header h2 { font-size: 1rem; margin-bottom: 6px; }
+  .meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .meta-item { background: rgba(255,255,255,0.12); border-radius: 6px; padding: 6px 10px; font-size: 0.82rem; display: flex; align-items: center; gap: 8px; }
+  .meta-item span.label { opacity: 0.7; }
+  .meta-value { font-weight: 500; }
+  .copy-btn { background: #fff; color: #1a1a2e; border: none; border-radius: 5px; padding: 4px 10px; font-size: 0.78rem; cursor: pointer; font-weight: 600; margin-left: 8px; transition: background 0.2s; }
+  .copy-btn:hover { background: #e0e0f0; }
+  .copy-btn.copied { background: #4caf50; color: #fff; }
+  .email-body { padding: 20px; }
+  .field-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #888; margin-bottom: 4px; letter-spacing: 0.04em; }
+  .field-content { background: #f8f8fb; border-radius: 6px; padding: 12px 14px; font-size: 0.92rem; line-height: 1.65; white-space: pre-wrap; margin-bottom: 14px; border: 1px solid #eee; }
+  .field-content a { color: #1a1a2e; }
+  .divider { height: 1px; background: #eee; margin: 0 20px 14px; }
+</style>
+</head>
+<body>
+
+<h1>📧 Drapit Cold Emails — Campagne 3</h1>
+<p class="subtitle">Niche: Bruidsmode · 5 emails klaargesteld · Kopieer per email Aan / Onderwerp / Tekst</p>
+
+<!-- EMAIL 1: Something Blue Bruidsmode -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 1 — Something Blue Bruidsmode</h2>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="label">Aan:</span>
+        <span class="meta-value" id="aan1">info@somethingbluebruidsmode.nl</span>
+        <button class="copy-btn" onclick="copyField('aan1', this)">Kopieer</button>
+      </div>
+      <div class="meta-item">
+        <span class="label">Onderwerp:</span>
+        <span class="meta-value" id="onderwerp1">Virtual try-on voor Something Blue Bruidsmode?</span>
+        <button class="copy-btn" onclick="copyField('onderwerp1', this)">Kopieer</button>
+      </div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body1', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body1">Beste Something Blue Bruidsmode,
+
+Bruiden die bij jullie komen, weten wat ze willen — een zelfverzekerde keuze die bij hen past. Toch twijfelen veel bruiden lang voor ze een jurk durven bestellen, zeker online.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Bruiden uploaden een foto van zichzelf en zien direct hoe een trouwjurk hen staat — zonder te hoeven passen of bestellen. Dat verlaagt de drempel enorm én maakt de keuze persoonlijker. De foto's die bruiden uploaden zijn bovendien gratis reclame: shoppers delen hun look, zowel online als offline.
+
+Grote namen zoals Zara en Zalando gebruiken inmiddels dezelfde technologie. Drapit maakt dit nu ook toegankelijk voor bruidsmode-winkels.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Je kunt de technologie ook direct uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Something Blue Bruidsmode hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 2: Engels Bruidsmode -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 2 — Engels Bruidsmode</h2>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="label">Aan:</span>
+        <span class="meta-value" id="aan2">info@engelsbruidsmode.nl</span>
+        <button class="copy-btn" onclick="copyField('aan2', this)">Kopieer</button>
+      </div>
+      <div class="meta-item">
+        <span class="label">Onderwerp:</span>
+        <span class="meta-value" id="onderwerp2">Virtual try-on voor Engels Bruidsmode?</span>
+        <button class="copy-btn" onclick="copyField('onderwerp2', this)">Kopieer</button>
+      </div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body2', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body2">Beste Julie,
+
+Engels Bruidsmode heeft een mooie reputatie opgebouwd — persoonlijke service, exclusieve merken en een collectie die echt iets bijzonders biedt. Toch zoeken veel bruiden tegenwoordig eerst online voor ze een afspraak maken.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Bezoekers uploaden een foto van zichzelf en zien direct hoe een jurk hen staat — nog voor ze langskomen. Dat vergroot de kans op een afspraak én zorgt dat bruiden al verliefd zijn op een jurk als ze binnenstappen. Geüploade foto's worden ook gedeeld, wat gratis zichtbaarheid oplevert.
+
+Grote retailers zoals Zara en Zalando gebruiken dezelfde technologie al. Drapit brengt dit nu naar bruidsmode-winkels zoals die van jullie.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Engels Bruidsmode hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 3: Elements Bridal by Marian -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 3 — Elements Bridal by Marian</h2>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="label">Aan:</span>
+        <span class="meta-value" id="aan3">info@elementsbridal.nl</span>
+        <button class="copy-btn" onclick="copyField('aan3', this)">Kopieer</button>
+      </div>
+      <div class="meta-item">
+        <span class="label">Onderwerp:</span>
+        <span class="meta-value" id="onderwerp3">Virtual try-on voor Elements Bridal?</span>
+        <button class="copy-btn" onclick="copyField('onderwerp3', this)">Kopieer</button>
+      </div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body3', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body3">Beste Marian,
+
+Het mix-and-match concept van Elements Bridal is echt uniek — bruiden combineren tops, rokken en broeken tot hun eigen perfecte look. Dat vraagt wel om een goed beeld van hoe stukken samen staan, en dat is online lastig over te brengen.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Bezoekers uploaden een foto van zichzelf en zien direct hoe een combinatie hen staat — zonder te passen. Juist voor een mix-and-match collectie is dat krachtig: ze kunnen combinaties virtueel uitproberen voor ze langskomen. Foto's die klanten uploaden worden ook gedeeld en leveren gratis zichtbaarheid op.
+
+Grote spelers zoals Zara en Zalando werken al met deze technologie. Drapit maakt dit nu ook beschikbaar voor boutiques zoals Elements Bridal.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Elements Bridal hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 4: Bruidsboutique La Romance -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 4 — Bruidsboutique La Romance</h2>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="label">Aan:</span>
+        <span class="meta-value" id="aan4">info@la-romance.nl</span>
+        <button class="copy-btn" onclick="copyField('aan4', this)">Kopieer</button>
+      </div>
+      <div class="meta-item">
+        <span class="label">Onderwerp:</span>
+        <span class="meta-value" id="onderwerp4">Virtual try-on voor La Romance?</span>
+        <button class="copy-btn" onclick="copyField('onderwerp4', this)">Kopieer</button>
+      </div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body4', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body4">Beste Anneke,
+
+Bruidsboutique La Romance heeft een prachtige sfeer — bohemian, romantisch, met oog voor stijl en gevoel. Precies de bruiden die jullie aantrekken dromen al lang van hun jurk voor ze binnenstappen.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Bruiden uploaden een foto van zichzelf en zien direct hoe een jurk — of een hele bohemian look — hen staat. Dat maakt de droom tastbaar, nog voor de eerste afspraak. Foto's die bruiden uploaden worden gedeeld en zorgen voor gratis reclame voor La Romance.
+
+Zara en Zalando gebruiken dezelfde technologie al grootschalig. Drapit brengt dit nu ook naar romantische boutiques zoals de uwe.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou La Romance hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 5: Nikita Bruidsmode -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 5 — Nikita Bruidsmode</h2>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="label">Aan:</span>
+        <span class="meta-value" id="aan5">nikitabruidsmode.nl@gmail.com</span>
+        <button class="copy-btn" onclick="copyField('aan5', this)">Kopieer</button>
+      </div>
+      <div class="meta-item">
+        <span class="label">Onderwerp:</span>
+        <span class="meta-value" id="onderwerp5">Virtual try-on voor Nikita Bruidsmode?</span>
+        <button class="copy-btn" onclick="copyField('onderwerp5', this)">Kopieer</button>
+      </div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body5', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body5">Beste Miranda,
+
+Nikita Bruidsmode heeft een bijzonder concept — tweedehands én nieuwe trouwjurken, inclusief exclusieve merken die nergens anders te vinden zijn. Juist voor bruiden die bewust kiezen, is het fijn om van tevoren een goed beeld te hebben van hoe een jurk staat.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Bruiden uploaden een foto van zichzelf en zien direct hoe een jurk hen staat — zonder te passen of op afspraak te komen. Dat verlaagt de drempel om contact te leggen én vergroot het vertrouwen in hun keuze. Gedeelde foto's zorgen bovendien voor gratis zichtbaarheid voor Nikita Bruidsmode.
+
+Grote spelers zoals Zara en Zalando gebruiken inmiddels dezelfde technologie. Drapit maakt dit nu ook beschikbaar voor bijzondere bruidsconcepten zoals het uwe.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Nikita Bruidsmode hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<script>
+function copyField(id, btn) {
+  const el = document.getElementById(id);
+  const text = el.innerText;
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  textarea.style.left = '-9999px';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    const original = btn.innerText;
+    btn.innerText = '✓ Gekopieerd';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerText = original; btn.classList.remove('copied'); }, 2000);
+  } catch (e) {
+    alert('Kopiëren mislukt — selecteer de tekst handmatig.');
+  }
+  document.body.removeChild(textarea);
+}
+</script>
+
+</body>
+</html>

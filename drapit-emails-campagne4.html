@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drapit Cold Emails — Campagne 4 (Nederlandse Designers)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f6; color: #1a1a1a; padding: 30px 20px; }
+  h1 { font-size: 1.5rem; margin-bottom: 6px; color: #1a1a1a; }
+  .subtitle { color: #666; margin-bottom: 30px; font-size: 0.9rem; }
+  .email-card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 28px; overflow: hidden; }
+  .email-header { background: #1a1a2e; color: #fff; padding: 16px 20px; }
+  .email-header h2 { font-size: 1rem; margin-bottom: 6px; }
+  .meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .meta-item { background: rgba(255,255,255,0.12); border-radius: 6px; padding: 6px 10px; font-size: 0.82rem; display: flex; align-items: center; gap: 8px; }
+  .meta-item span.label { opacity: 0.7; }
+  .meta-value { font-weight: 500; }
+  .copy-btn { background: #fff; color: #1a1a2e; border: none; border-radius: 5px; padding: 4px 10px; font-size: 0.78rem; cursor: pointer; font-weight: 600; margin-left: 8px; transition: background 0.2s; }
+  .copy-btn:hover { background: #e0e0f0; }
+  .copy-btn.copied { background: #4caf50; color: #fff; }
+  .email-body { padding: 20px; }
+  .field-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #888; margin-bottom: 4px; letter-spacing: 0.04em; }
+  .field-content { background: #f8f8fb; border-radius: 6px; padding: 12px 14px; font-size: 0.92rem; line-height: 1.65; white-space: pre-wrap; margin-bottom: 14px; border: 1px solid #eee; }
+  .field-content a { color: #1a1a2e; }
+</style>
+</head>
+<body>
+
+<h1>📧 Drapit Cold Emails — Campagne 4</h1>
+<p class="subtitle">Niche: Nederlandse Designers · 5 emails klaargesteld · Kopieer per email Aan / Onderwerp / Tekst</p>
+
+<!-- EMAIL 1: Tessa Koops -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 1 — Tessa Koops</h2>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="label">Aan:</span>
+        <span class="meta-value" id="aan1">info@tessakoops.com</span>
+        <button class="copy-btn" onclick="copyField('aan1', this)">Kopieer</button>
+      </div>
+      <div class="meta-item">
+        <span class="label">Onderwerp:</span>
+        <span class="meta-value" id="onderwerp1">Virtual try-on voor Tessa Koops?</span>
+        <button class="copy-btn" onclick="copyField('onderwerp1', this)">Kopieer</button>
+      </div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body1', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body1">Beste Tessa,
+
+Jouw collectie valt op door de kleurrijkheid en de exclusieve stoffen — kleding die echt iets zegt. Toch is het voor klanten online lastig in te schatten hoe zo'n stuk op hén persoonlijk staat.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een kledingstuk hen staat — zonder te bestellen. Dat verlaagt de twijfel enorm en verhoogt de kans dat ze daadwerkelijk kopen. Bovendien worden de geüploade foto's gedeeld, wat gratis reclame oplevert voor Tessa Koops.
+
+Grote namen zoals Zara en Zalando gebruiken dezelfde technologie al. Drapit maakt dit nu ook toegankelijk voor zelfstandige designers.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou jij hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 2: Studio Anneloes -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 2 — Studio Anneloes</h2>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="label">Aan:</span>
+        <span class="meta-value" id="aan2">webshop@studioanneloes.nl</span>
+        <button class="copy-btn" onclick="copyField('aan2', this)">Kopieer</button>
+      </div>
+      <div class="meta-item">
+        <span class="label">Onderwerp:</span>
+        <span class="meta-value" id="onderwerp2">Virtual try-on voor Studio Anneloes?</span>
+        <button class="copy-btn" onclick="copyField('onderwerp2', this)">Kopieer</button>
+      </div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body2', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body2">Beste Anneloes,
+
+Studio Anneloes kleedt vrouwen die weten wat ze willen — sterk, comfortabel en stijlvol. Precies die doelgroep is veeleisend online: ze willen zeker weten dat het klopt voor ze bestellen.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een item van Studio Anneloes hen staat. Dat geeft vertrouwen, vermindert retouren en verlaagt de twijfel bij twijfelende kopers. Geüploade foto's worden ook gedeeld — gratis zichtbaarheid voor het merk.
+
+Zara en Zalando werken al met dezelfde technologie. Drapit brengt dit nu naar Nederlandse designer labels zoals Studio Anneloes.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Studio Anneloes hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 3: Dutchess -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 3 — Dutchess</h2>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="label">Aan:</span>
+        <span class="meta-value" id="aan3">info@dutch-ess.com</span>
+        <button class="copy-btn" onclick="copyField('aan3', this)">Kopieer</button>
+      </div>
+      <div class="meta-item">
+        <span class="label">Onderwerp:</span>
+        <span class="meta-value" id="onderwerp3">Virtual try-on voor Dutchess?</span>
+        <button class="copy-btn" onclick="copyField('onderwerp3', this)">Kopieer</button>
+      </div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body3', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body3">Beste Gwen,
+
+Dutchess heeft in twintig jaar een heel eigen stijl opgebouwd — hedendaagse kleding met karakter, gemaakt in Rotterdam. Klanten die jouw werk kennen, zijn loyaal. Maar nieuwe bezoekers online twijfelen vaker voor ze die eerste stap zetten.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Bezoekers uploaden een foto van zichzelf en zien direct hoe een kledingstuk van Dutchess hen staat — zonder te passen. Dat verlaagt de drempel voor nieuwe klanten én vermindert retouren bij vaste klanten. Gedeelde foto's leveren daarnaast gratis zichtbaarheid op voor Dutchess.
+
+Grote retailers zoals Zara en Zalando gebruiken inmiddels dezelfde technologie. Drapit maakt dit nu ook beschikbaar voor onafhankelijke designers.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Dutchess hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 4: Bonne Suits -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 4 — Bonne Suits</h2>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="label">Aan:</span>
+        <span class="meta-value" id="aan4">info@bonnelife.com</span>
+        <button class="copy-btn" onclick="copyField('aan4', this)">Kopieer</button>
+      </div>
+      <div class="meta-item">
+        <span class="label">Onderwerp:</span>
+        <span class="meta-value" id="onderwerp4">Virtual try-on voor Bonne Suits?</span>
+        <button class="copy-btn" onclick="copyField('onderwerp4', this)">Kopieer</button>
+      </div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body4', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body4">Beste Bonne,
+
+Een pak kopen zonder het te passen is voor veel mensen een grote stap — zeker online. Bonne Suits heeft een sterk concept met die unisex zevendaagse suit, maar de twijfel bij online kopers is reëel.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Bezoekers uploaden een foto van zichzelf en zien direct hoe een suit van Bonne hen staat. Dat neemt de onzekerheid weg die vaak gepaard gaat met kleding kopen zonder passen. De foto's die klanten uploaden worden ook gedeeld — gratis reclame voor Bonne Suits.
+
+Grote namen zoals Zara en Zalando gebruiken al dezelfde technologie. Drapit brengt dit nu naar onafhankelijke merken zoals het jouwe.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Bonne Suits hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 5: Beaumont Amsterdam -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 5 — Beaumont Amsterdam</h2>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="label">Aan:</span>
+        <span class="meta-value" id="aan5">support@beaumont.eu</span>
+        <button class="copy-btn" onclick="copyField('aan5', this)">Kopieer</button>
+      </div>
+      <div class="meta-item">
+        <span class="label">Onderwerp:</span>
+        <span class="meta-value" id="onderwerp5">Virtual try-on voor Beaumont Amsterdam?</span>
+        <button class="copy-btn" onclick="copyField('onderwerp5', this)">Kopieer</button>
+      </div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body5', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body5">Beste Beaumont Amsterdam,
+
+Beaumont kleedt zelfverzekerde vrouwen — de mix van Amsterdamse nuchterheid en Franse stijl maakt jullie collectie onderscheidend. Toch is die aankoopbeslissing online voor veel klanten een drempel.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een item van Beaumont hen staat — zonder te bestellen. Dat vergroot het vertrouwen, verlaagt retouren en maakt het makkelijker voor nieuwe klanten om de stap te zetten. Gedeelde foto's zorgen bovendien voor extra zichtbaarheid voor het merk.
+
+Zara en Zalando gebruiken al dezelfde technologie op grote schaal. Drapit maakt dit nu ook beschikbaar voor Nederlandse designer labels zoals Beaumont Amsterdam.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Beaumont Amsterdam hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<script>
+function copyField(id, btn) {
+  const el = document.getElementById(id);
+  const text = el.innerText;
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  textarea.style.left = '-9999px';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    const original = btn.innerText;
+    btn.innerText = '✓ Gekopieerd';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerText = original; btn.classList.remove('copied'); }, 2000);
+  } catch (e) {
+    alert('Kopiëren mislukt — selecteer de tekst handmatig.');
+  }
+  document.body.removeChild(textarea);
+}
+</script>
+
+</body>
+</html>

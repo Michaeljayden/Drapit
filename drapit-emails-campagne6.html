@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drapit Cold Emails — Campagne 6 (Gelegenheidskleding)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f6; color: #1a1a1a; padding: 30px 20px; }
+  h1 { font-size: 1.5rem; margin-bottom: 6px; color: #1a1a1a; }
+  .subtitle { color: #666; margin-bottom: 30px; font-size: 0.9rem; }
+  .email-card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 28px; overflow: hidden; }
+  .email-header { background: #1a1a2e; color: #fff; padding: 16px 20px; }
+  .email-header h2 { font-size: 1rem; margin-bottom: 6px; }
+  .meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .meta-item { background: rgba(255,255,255,0.12); border-radius: 6px; padding: 6px 10px; font-size: 0.82rem; display: flex; align-items: center; gap: 8px; }
+  .meta-item span.label { opacity: 0.7; }
+  .meta-value { font-weight: 500; }
+  .copy-btn { background: #fff; color: #1a1a2e; border: none; border-radius: 5px; padding: 4px 10px; font-size: 0.78rem; cursor: pointer; font-weight: 600; margin-left: 8px; transition: background 0.2s; }
+  .copy-btn:hover { background: #e0e0f0; }
+  .copy-btn.copied { background: #4caf50; color: #fff; }
+  .email-body { padding: 20px; }
+  .field-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #888; margin-bottom: 4px; letter-spacing: 0.04em; }
+  .field-content { background: #f8f8fb; border-radius: 6px; padding: 12px 14px; font-size: 0.92rem; line-height: 1.65; white-space: pre-wrap; margin-bottom: 14px; border: 1px solid #eee; }
+  .field-content a { color: #1a1a2e; }
+</style>
+</head>
+<body>
+
+<h1>📧 Drapit Cold Emails — Campagne 6</h1>
+<p class="subtitle">Niche: Gelegenheidskleding · 10 emails klaargesteld · Kopieer per email Aan / Onderwerp / Tekst</p>
+
+<!-- EMAIL 1: Honneloeloe -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 1 — Honneloeloe</h2>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan1">info@honneloeloe.nl</span><button class="copy-btn" onclick="copyField('aan1', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp1">Virtual try-on voor Honneloeloe?</span><button class="copy-btn" onclick="copyField('onderwerp1', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body1', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body1">Beste Honneloeloe,
+
+Met 4000 jurken en meerdere filialen zijn jullie dé galajurken specialist van Nederland. Een indrukwekkend assortiment — maar online is het voor klanten moeilijk in te schatten hoe zo'n jurk echt op hén staat.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een jurk van Honneloeloe hen staat — voor ze langskomen of bestellen. Dat geeft vertrouwen, trekt meer bezoekers naar de winkel én vermindert online retouren. De foto's die klanten uploaden worden ook gedeeld, wat gratis zichtbaarheid oplevert.
+
+Grote retailers zoals Zara en Zalando gebruiken dezelfde technologie al. Drapit maakt dit nu ook toegankelijk voor gespecialiseerde jurken-winkels.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Honneloeloe hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 2: Larobe Dresses -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 2 — Larobe Dresses</h2>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan2">info@larobedresses.com</span><button class="copy-btn" onclick="copyField('aan2', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp2">Virtual try-on voor Larobe Dresses?</span><button class="copy-btn" onclick="copyField('onderwerp2', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body2', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body2">Beste Larobe Dresses,
+
+Jurken huren of kopen voor een speciale gelegenheid — een slimme aanpak die veel klanten aanspreekt. Maar de twijfel blijft: staat die jurk mij wel? Dat is online nog lastiger te beantwoorden dan in een winkel.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een jurk van Larobe Dresses hen staat — voor ze reserveren of bestellen. Dat verlaagt de drempel enorm en vergroot het vertrouwen in hun keuze. Gedeelde foto's zorgen bovendien voor gratis zichtbaarheid voor Larobe Dresses.
+
+Zara en Zalando werken al met dezelfde technologie. Drapit brengt dit nu naar gespecialiseerde gelegenheidskleding-winkels.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Larobe Dresses hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 3: Robin Uitgaansmode -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 3 — Robin Uitgaansmode</h2>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan3">info@galajurk.nl</span><button class="copy-btn" onclick="copyField('aan3', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp3">Virtual try-on voor Robin Uitgaansmode?</span><button class="copy-btn" onclick="copyField('onderwerp3', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body3', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body3">Beste Robin Uitgaansmode,
+
+Meer dan 35 jaar dé plek in Amsterdam voor galajurken en uitgaansmode — dat bouwt je niet toevallig op. Jullie kennen de klant door en door. Maar online bereiken is ook een kunst, en daar speelt twijfel over pasvorm een grote rol.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Bezoekers uploaden een foto van zichzelf en zien direct hoe een jurk van Robin hen staat. Dat maakt de stap naar een aankoop of bezoek kleiner, en vergroot het vertrouwen bij klanten die van verder komen. Gedeelde foto's leveren daarnaast gratis reclame op.
+
+Zara en Zalando gebruiken dezelfde technologie al. Drapit brengt dit nu naar winkel-iconen zoals Robin Uitgaansmode.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Robin Uitgaansmode hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 4: Topjurken.nl -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 4 — Topjurken.nl</h2>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan4">info@topjurken.nl</span><button class="copy-btn" onclick="copyField('aan4', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp4">Virtual try-on voor Topjurken.nl?</span><button class="copy-btn" onclick="copyField('onderwerp4', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body4', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body4">Beste Topjurken.nl,
+
+Topjurken.nl heeft een breed assortiment van alledaagse jurken tot galajurken — damesmode voor elke gelegenheid. Dat spreekt een brede doelgroep aan, maar online is de twijfel "staat dit mij?" bij jurken altijd aanwezig.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een jurk van Topjurken hen staat. Dat neemt de twijfel weg, verhoogt de conversie en vermindert retourzendingen. Foto's die klanten uploaden worden ook gedeeld — gratis zichtbaarheid voor de webshop.
+
+Grote spelers zoals Zara en Zalando gebruiken dezelfde technologie al. Drapit maakt dit nu bereikbaar voor gespecialiseerde jurken-webshops zoals Topjurken.nl.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Topjurken.nl hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 5: Rinsma Modeplein -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 5 — Rinsma Modeplein</h2>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan5">info@rinsmamodeplein.nl</span><button class="copy-btn" onclick="copyField('aan5', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp5">Virtual try-on voor Rinsma Modeplein?</span><button class="copy-btn" onclick="copyField('onderwerp5', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body5', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body5">Beste Henk-Jan,
+
+Rinsma Modeplein combineert een grote fysieke locatie in Gorredijk met een sterke webshop — één van de grootste collecties gelegenheidskleding van Nederland, snel bezorgd. Maar bij dat soort aankopen wil een klant zeker weten dat het klopt.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een jurk of ensemble van Rinsma hen staat — voor ze bestellen. Dat vergroot het bestelvertrouwen en verlaagt retourzendingen. Gedeelde foto's geven Rinsma bovendien gratis extra bereik.
+
+Zara en Zalando gebruiken dezelfde technologie al. Drapit brengt dit nu naar gerenommeerde mode-aanbieders zoals Rinsma Modeplein.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Rinsma Modeplein hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 6: Galajurken-Outlet -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 6 — Galajurken-Outlet</h2>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan6">info@galajurken-outlet.nl</span><button class="copy-btn" onclick="copyField('aan6', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp6">Virtual try-on voor Galajurken-Outlet?</span><button class="copy-btn" onclick="copyField('onderwerp6', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body6', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body6">Beste Galajurken-Outlet,
+
+Galajurken voor een eerlijke prijs — dat spreekt veel klanten aan die een mooie jurk willen zonder de volle prijs te betalen. Toch is online kopen van gelegenheidskleding nog steeds spannend: past het wel, staat het wel?
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een jurk hen staat — voor ze bestellen. Dat verlaagt de drempel enorm, vermindert retouren en geeft ook outlet-kopers het vertrouwen om door te klikken. Gedeelde foto's zorgen bovendien voor gratis extra zichtbaarheid.
+
+Zara en Zalando gebruiken al dezelfde technologie. Drapit maakt dit nu beschikbaar voor gespecialiseerde galajurken-winkels.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Galajurken-Outlet hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 7: Dreamdresses -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 7 — Dreamdresses</h2>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan7">info@dreamdresses.nl</span><button class="copy-btn" onclick="copyField('aan7', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp7">Virtual try-on voor Dreamdresses?</span><button class="copy-btn" onclick="copyField('onderwerp7', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body7', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body7">Beste Dreamdresses,
+
+Dreamdresses in Arnhem staat bekend als één van de grootste galajurken-winkels van Nederland — een droomwinkel voor iedereen die op zoek is naar die ene perfecte jurk. Maar klanten die niet in Arnhem wonen, beginnen hun zoektocht vaak online.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Bezoekers uploaden een foto van zichzelf en zien direct hoe een jurk van Dreamdresses hen staat. Dat maakt de stap naar een bezoek of aankoop veel kleiner — en trekt klanten van verder weg. Gedeelde foto's leveren ook gratis extra zichtbaarheid op voor de winkel.
+
+Grote namen zoals Zara en Zalando gebruiken dezelfde technologie al. Drapit brengt dit nu naar toonaangevende jurken-winkels zoals Dreamdresses.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Dreamdresses hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 8: Opaack -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 8 — Opaack Rotterdam</h2>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan8">info@opaack.nl</span><button class="copy-btn" onclick="copyField('aan8', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp8">Virtual try-on voor Opaack?</span><button class="copy-btn" onclick="copyField('onderwerp8', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body8', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body8">Beste Opaack,
+
+Opaack brengt luxe avond- en galajurken naar het centrum van Rotterdam — met stylisten die weten hoe een vrouw er op haar best uitziet. Die expertise is in de winkel direct voelbaar, maar online is dat verhaal moeilijker over te brengen.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een jurk van Opaack hen staat — voor ze langskomen of bestellen. Dat maakt de drempel kleiner en trekt klanten aan die anders twijfelen. Gedeelde foto's geven Opaack bovendien gratis extra bereik.
+
+Zara en Zalando gebruiken al dezelfde technologie. Drapit brengt dit nu naar stijlvolle boutiques zoals Opaack.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Opaack hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 9: Masu Galajurken -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 9 — Masu Galajurken</h2>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan9">masu-reclame@hotmail.com</span><button class="copy-btn" onclick="copyField('aan9', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp9">Virtual try-on voor Masu Galajurken?</span><button class="copy-btn" onclick="copyField('onderwerp9', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body9', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body9">Beste Marianne,
+
+Masu Galajurken in Panningen is een persoonlijke zaak — klanten komen op afspraak, en dat geeft een bijzondere winkelervaring. Maar veel mensen oriënteren zich eerst online voor ze die stap zetten.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Bezoekers uploaden een foto van zichzelf en zien direct hoe een jurk van Masu hen staat. Dat maakt de drempel om een afspraak te maken een stuk kleiner — ze komen al enthousiast en gericht binnen. Gedeelde foto's zorgen ook voor gratis zichtbaarheid voor Masu.
+
+Grote spelers zoals Zara en Zalando werken al met dezelfde technologie. Drapit maakt dit nu ook bereikbaar voor persoonlijke galajurken-winkels zoals de uwe.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Masu Galajurken hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 10: De Galazaak -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 10 — De Galazaak</h2>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan10">info@degalazaak.nl</span><button class="copy-btn" onclick="copyField('aan10', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp10">Virtual try-on voor De Galazaak?</span><button class="copy-btn" onclick="copyField('onderwerp10', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body10', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body10">Beste De Galazaak,
+
+Sinds 2009 helpen jullie duizenden gasten aan de perfecte galajurk — met vier grote winkels door het hele land. Een sterk merk met een duidelijke missie. Maar online kopers missen nog iets: het gevoel van "staat dit mij?"
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een jurk van De Galazaak hen staat — voor ze bestellen of een winkel bezoeken. Dat vergroot het vertrouwen, trekt klanten van verder aan en verlaagt retouren. De foto's die klanten delen geven De Galazaak ook gratis extra zichtbaarheid.
+
+Zara en Zalando werken al op grote schaal met dezelfde technologie. Drapit brengt dit nu naar toonaangevende galajurken-ketens zoals De Galazaak.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou De Galazaak hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<script>
+function copyField(id, btn) {
+  const el = document.getElementById(id);
+  const text = el.innerText;
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  textarea.style.left = '-9999px';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    const original = btn.innerText;
+    btn.innerText = '✓ Gekopieerd';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerText = original; btn.classList.remove('copied'); }, 2000);
+  } catch (e) {
+    alert('Kopiëren mislukt — selecteer de tekst handmatig.');
+  }
+  document.body.removeChild(textarea);
+}
+</script>
+
+</body>
+</html>

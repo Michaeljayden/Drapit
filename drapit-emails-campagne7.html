@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drapit Cold Emails — Campagne 7 (Streetwear / Urban)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f6; color: #1a1a1a; padding: 30px 20px; }
+  h1 { font-size: 1.5rem; margin-bottom: 6px; color: #1a1a1a; }
+  .subtitle { color: #666; margin-bottom: 30px; font-size: 0.9rem; }
+  .email-card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 28px; overflow: hidden; }
+  .email-header { background: #1a1a2e; color: #fff; padding: 16px 20px; }
+  .email-header h2 { font-size: 1rem; margin-bottom: 6px; }
+  .meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .meta-item { background: rgba(255,255,255,0.12); border-radius: 6px; padding: 6px 10px; font-size: 0.82rem; display: flex; align-items: center; gap: 8px; }
+  .meta-item span.label { opacity: 0.7; }
+  .meta-value { font-weight: 500; }
+  .copy-btn { background: #fff; color: #1a1a2e; border: none; border-radius: 5px; padding: 4px 10px; font-size: 0.78rem; cursor: pointer; font-weight: 600; margin-left: 8px; transition: background 0.2s; }
+  .copy-btn:hover { background: #e0e0f0; }
+  .copy-btn.copied { background: #4caf50; color: #fff; }
+  .email-body { padding: 20px; }
+  .field-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #888; margin-bottom: 4px; letter-spacing: 0.04em; }
+  .field-content { background: #f8f8fb; border-radius: 6px; padding: 12px 14px; font-size: 0.92rem; line-height: 1.65; white-space: pre-wrap; margin-bottom: 14px; border: 1px solid #eee; }
+  .field-content a { color: #1a1a2e; }
+</style>
+</head>
+<body>
+
+<h1>📧 Drapit Cold Emails — Campagne 7</h1>
+<p class="subtitle">Niche: Streetwear / Urban · 5 emails klaargesteld · Kopieer per email Aan / Onderwerp / Tekst</p>
+
+<!-- EMAIL 1: Patta -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 1 — Patta</h2>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan1">info@patta.nl</span><button class="copy-btn" onclick="copyField('aan1', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp1">Virtual try-on voor Patta?</span><button class="copy-btn" onclick="copyField('onderwerp1', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body1', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body1">Beste Patta,
+
+Patta heeft een unieke positie in de Nederlandse streetwear scène — authentiek, cultureel gedreven en altijd relevant. De community weet wat ze willen, maar online kopen blijft voor veel mensen een afweging: past dit bij mijn stijl, bij mijn look?
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een item van Patta hen staat — voor ze bestellen. Dat maakt de beslissing persoonlijker en verkleint de kans op teleurstelling. Geüploade foto's worden ook gedeeld, wat organische zichtbaarheid oplevert voor Patta.
+
+Zara en Zalando werken al met dezelfde technologie op grote schaal. Drapit brengt dit nu naar iconische streetwear winkels.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Patta hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 2: Funkie House -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 2 — Funkie House</h2>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan2">webshop@funkiehouse.nl</span><button class="copy-btn" onclick="copyField('aan2', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp2">Virtual try-on voor Funkie House?</span><button class="copy-btn" onclick="copyField('onderwerp2', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body2', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body2">Beste Funkie House,
+
+Sinds 1989 dé plek in Rotterdam voor streetwear en sneakers — met merken als Carhartt, Obey en New Balance. Een winkel die weet wat werkt. Maar ook voor vaste klanten is online kopen soms een gok: hoe combineer ik dit, staat dit mij?
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een item van Funkie House hen staat — voor ze de bestelling afronden. Dat verhoogt het bestelvertrouwen en verlaagt retourzendingen. Geüploade foto's worden ook gedeeld, wat gratis zichtbaarheid oplevert.
+
+Grote spelers zoals Zara en Zalando werken al met dezelfde technologie. Drapit brengt dit nu naar streetwear instituten zoals Funkie House.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Funkie House hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 3: Reloadstore -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 3 — Reloadstore</h2>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan3">info@reloadstore.nl</span><button class="copy-btn" onclick="copyField('aan3', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp3">Virtual try-on voor Reloadstore?</span><button class="copy-btn" onclick="copyField('onderwerp3', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body3', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body3">Beste Reloadstore,
+
+Reloadstore heeft een sterke mix van streetwear en sneakers met merken als Banlieue, New Balance en Don't Waste Culture — en een loyale klantenkring in Rotterdam en omstreken. Online kopen van kleding blijft echter vaak een gok als je niet weet hoe het op jou valt.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een item van Reloadstore hen staat. Dat maakt de keuze makkelijker, verhoogt de conversie en verlaagt retouren. Foto's die klanten uploaden worden ook gedeeld — gratis extra bereik voor Reloadstore.
+
+Zara en Zalando gebruiken al dezelfde technologie. Drapit brengt dit nu naar gespecialiseerde streetwear-winkels.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Reloadstore hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 4: Straatwaar -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 4 — Straatwaar</h2>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan4">info@straatwaar.nl</span><button class="copy-btn" onclick="copyField('aan4', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp4">Virtual try-on voor Straatwaar?</span><button class="copy-btn" onclick="copyField('onderwerp4', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body4', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body4">Beste Simon,
+
+Straatwaar brengt lokale Amsterdamse streetwear designers samen op één platform — duurzaam, authentiek en vol karakter. Klanten die bewust kopen willen ook zeker weten dat het klopt voordat ze bestellen.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een item van een van jullie designers hen staat. Dat maakt de online aankoop persoonlijker en verlaagt de drempel voor nieuwe klanten die de merken nog niet kennen. Gedeelde foto's zorgen ook voor gratis zichtbaarheid voor de designers op Straatwaar.
+
+Grote namen zoals Zara en Zalando gebruiken al dezelfde technologie. Drapit maakt dit nu ook beschikbaar voor platforms als Straatwaar.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Straatwaar hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 5: Daily Paper -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 5 — Daily Paper</h2>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan5">info@dailypaperclothing.com</span><button class="copy-btn" onclick="copyField('aan5', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp5">Virtual try-on voor Daily Paper?</span><button class="copy-btn" onclick="copyField('onderwerp5', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body5', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body5">Beste Daily Paper,
+
+Daily Paper heeft zich vanuit Amsterdam ontwikkeld tot een wereldwijd erkend streetwear merk — cultureel sterk, visueel onderscheidend en met een eigen identiteit. Online bereiken jullie klanten over de hele wereld, maar de vraag "staat dit mij?" blijft ook voor streetwear fans actueel.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een stuk van Daily Paper hen staat — voor ze bestellen. Dat verlaagt de drempel, vermindert retouren en geeft klanten een persoonlijkere band met de collectie. Gedeelde foto's zorgen ook voor organisch bereik.
+
+Grote retailers zoals Zara en Zalando gebruiken al dezelfde technologie. Drapit brengt dit nu naar toonaangevende merken zoals Daily Paper.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Daily Paper hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<script>
+function copyField(id, btn) {
+  const el = document.getElementById(id);
+  const text = el.innerText;
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  textarea.style.left = '-9999px';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    const original = btn.innerText;
+    btn.innerText = '✓ Gekopieerd';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerText = original; btn.classList.remove('copied'); }, 2000);
+  } catch (e) {
+    alert('Kopiëren mislukt — selecteer de tekst handmatig.');
+  }
+  document.body.removeChild(textarea);
+}
+</script>
+
+</body>
+</html>
