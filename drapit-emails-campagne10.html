@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drapit Cold Emails — Campagne 10 (Officewear)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f6; color: #1a1a1a; padding: 30px 20px; }
+  h1 { font-size: 1.5rem; margin-bottom: 4px; color: #1a1a1a; }
+  .subtitle { color: #666; margin-bottom: 30px; font-size: 0.9rem; }
+  .email-card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 28px; overflow: hidden; }
+  .email-header { background: #1a1a2e; color: #fff; padding: 16px 20px; }
+  .email-header h2 { font-size: 1rem; margin-bottom: 3px; }
+  .email-meta-line { font-size: 0.75rem; opacity: 0.6; margin-bottom: 8px; }
+  .meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .meta-item { background: rgba(255,255,255,0.12); border-radius: 6px; padding: 6px 10px; font-size: 0.82rem; display: flex; align-items: center; gap: 8px; }
+  .meta-item.fallback { background: rgba(255,152,0,0.25); }
+  .meta-item span.label { opacity: 0.7; }
+  .meta-value { font-weight: 500; }
+  .copy-btn { background: #fff; color: #1a1a2e; border: none; border-radius: 5px; padding: 4px 10px; font-size: 0.78rem; cursor: pointer; font-weight: 600; margin-left: 8px; transition: background 0.2s; }
+  .copy-btn:hover { background: #e0e0f0; }
+  .copy-btn.copied { background: #4caf50; color: #fff; }
+  .badge { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; margin-left: 6px; font-weight: 600; vertical-align: middle; }
+  .badge-guessed { background: #ff9800; color: #fff; }
+  .email-body { padding: 20px; }
+  .field-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #888; margin-bottom: 4px; letter-spacing: 0.04em; }
+  .field-content { background: #f8f8fb; border-radius: 6px; padding: 12px 14px; font-size: 0.92rem; line-height: 1.65; white-space: pre-wrap; margin-bottom: 14px; border: 1px solid #eee; }
+  .context-box { background: #f0f4ff; border-left: 3px solid #3b5bdb; border-radius: 0 6px 6px 0; padding: 10px 14px; font-size: 0.82rem; color: #444; margin-bottom: 14px; line-height: 1.5; }
+  .context-box strong { color: #1a1a2e; }
+  .fallback-note { background: #fff8e1; border-left: 3px solid #ff9800; border-radius: 0 6px 6px 0; padding: 8px 12px; font-size: 0.8rem; color: #7a5c00; margin-bottom: 14px; }
+</style>
+</head>
+<body>
+
+<h1>📧 Drapit Cold Emails — Campagne 10</h1>
+<p class="subtitle">Officewear / zakelijke damesmode · 5 emails · 🟠 = ingeschat op naam/domein (gebruik fallback info@ als het bounced)</p>
+
+<!-- EMAIL 1: Nanda Schilperoort — NAN -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>👤 Nanda Schilperoort — Founder @ NAN <span class="badge badge-guessed">🟠 Ingeschat</span></h2>
+    <div class="email-meta-line">nan.nl · Stijlvolle zakelijke kleding voor vrouwen met ambitie, Amsterdam</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan1">nanda@nan.nl</span><button class="copy-btn" onclick="copyField('aan1', this)">Kopieer</button></div>
+      <div class="meta-item fallback"><span class="label">📦 Fallback:</span><span class="meta-value" id="fallback1">info@nan.nl</span><button class="copy-btn" onclick="copyField('fallback1', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp1">Powersuits voor vrouwen met ambitie — ook AI-klaar?</span><button class="copy-btn" onclick="copyField('onderwerp1', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="fallback-note">⚠️ Ingeschat adres — stuur naar <strong>info@nan.nl</strong> als nanda@ bounced.</div>
+    <div class="context-box"><strong>Gebruikte context:</strong> NAN is een onafhankelijk Nederlands modemerk, opgericht door Nanda Schilperoort. Specialisatie: stijlvolle zakelijke kleding voor vrouwen met ambitie — powersuits, blazers en broekpakken. Werkt met Europese stoffen en fabrieken. Missie: vrouwen laten stralen op de werkvloer.</div>
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body1', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body1">Beste Nanda,
+
+NAN kleedt vrouwen die vooruitkijken — met powersuits die uitstralen dat je weet wat je wilt. Die vrouwen willen ook online zeker weten dat een pak écht bij hen staat voor ze de aankoop doen.
+
+AI verandert hoe zakelijke shoppers kleding kopen. Merken als Zara en Zalando investeren hier al actief in — en de labels die nu volgen bouwen een verwachting die klanten straks als standaard zien. Dit is het moment om voorop te lopen.
+
+Drapit is een widget op je productpagina: klanten uploaden een foto en zien direct hoe een NAN-suit hen staat, vóór ze bestellen. Minder twijfel, minder retourzendingen, meetbaar resultaat.
+
+Ik geef een select aantal merken gratis toegang. Doet NAN mee?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 2: Janina — Olivia & Kate -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>👤 Janina — Eigenaar @ Olivia &amp; Kate <span class="badge badge-guessed">🟠 Ingeschat</span></h2>
+    <div class="email-meta-line">oliviakate.nl · Fashion boutique met office-collectie, Haarlem</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan2">janina@oliviakate.nl</span><button class="copy-btn" onclick="copyField('aan2', this)">Kopieer</button></div>
+      <div class="meta-item fallback"><span class="label">📦 Fallback:</span><span class="meta-value" id="fallback2">webshop@olivia-kate.nl</span><button class="copy-btn" onclick="copyField('fallback2', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp2">Olivia &amp; Kate's office collectie — klaar voor de AI-stap?</span><button class="copy-btn" onclick="copyField('onderwerp2', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="fallback-note">⚠️ Ingeschat adres — stuur naar <strong>webshop@olivia-kate.nl</strong> als janina@ bounced.</div>
+    <div class="context-box"><strong>Gebruikte context:</strong> Olivia & Kate werd in 2018 opgericht door Janina vanuit een droom om een eigen boutique te starten in Haarlem. Na een succesvolle opening volgde na 3 maanden al een webshop. Heeft een expliciete "To the office"-collectie met kantoorkleding voor dames.</div>
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body2', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body2">Beste Janina,
+
+Jij bouwde Olivia & Kate op vanuit een droom: een plek in Haarlem waar mode een lifestyle is. Je "To the office"-collectie is precies de categorie waar online twijfel het hoogst is — shoppers willen weten hoe iets staat vóór ze bestellen.
+
+Merken als Zara en Zalando zetten virtual try-on al in op grote schaal. Webshops die nu volgen onderscheiden zich direct van de rest — en geven hun kantoor-collectie een extra conversie-boost.
+
+Drapit is een widget op je productpagina. Klanten uploaden een foto en zien hoe een item van Olivia & Kate hen staat, vóór ze bestellen. In minuten live, meetbaar resultaat.
+
+Gratis te testen. Doet Olivia & Kate mee?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 3: Bonito Hage — Stretchshop -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>👤 Bonito Hage — Online Marketing &amp; Mede-eigenaar @ Stretchshop <span class="badge badge-guessed">🟠 Ingeschat</span></h2>
+    <div class="email-meta-line">stretchshop.nl · 33 jaar damesmode, familiebedrijf uit Goes, kantoor-collectie</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan3">bonito@stretchshop.nl</span><button class="copy-btn" onclick="copyField('aan3', this)">Kopieer</button></div>
+      <div class="meta-item fallback"><span class="label">📦 Fallback:</span><span class="meta-value" id="fallback3">info@stretchshop.nl</span><button class="copy-btn" onclick="copyField('fallback3', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp3">Stretchshop en de AI-shift in fashion retail</span><button class="copy-btn" onclick="copyField('onderwerp3', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="fallback-note">⚠️ Ingeschat adres — stuur naar <strong>info@stretchshop.nl</strong> als bonito@ bounced.</div>
+    <div class="context-box"><strong>Gebruikte context:</strong> Stretchshop is een 33-jaar oud familiebedrijf uit Goes. Bonito Hage beheert de online marketing samen met 2 collega's; zijn vader Jan Hage verzorgt de financiën, zijn moeder Karin Goulooze de fysieke winkels. Heeft een aparte kantoor-collectie voor dames.</div>
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body3', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body3">Beste Bonito,
+
+Stretchshop is al meer dan 30 jaar een vertrouwd gezicht in damesmode — van Goes naar een van de bekendste mode-webshops van Nederland. Jullie kantoor-collectie bedient vrouwen die er professioneel uit willen zien, maar online twijfelen over pasvorm.
+
+Merken als Zara en Zalando investeren actief in virtual try-on. Webshops die nu deze stap zetten bouwen een digitale voorsprong die over twee jaar als standaard wordt gezien — en verlagen tegelijk de retourstroom.
+
+Drapit is een widget op de productpagina: klanten uploaden een foto en zien hoe een stuk hen staat, vóór ze bestellen. Laagdrempelig te installeren, direct zichtbaar effect.
+
+Ik geef een select aantal winkels gratis toegang. Interesse?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 4: Lara de Graaf — Ydence -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>👤 Lara de Graaf — CEO &amp; Founder @ Ydence <span class="badge badge-guessed">🟠 Ingeschat</span></h2>
+    <div class="email-meta-line">ydence.com · Contemporary damesmode, 300+ verkooppunten in 6 landen, Zaandam</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan4">lara@ydence.com</span><button class="copy-btn" onclick="copyField('aan4', this)">Kopieer</button></div>
+      <div class="meta-item fallback"><span class="label">📦 Fallback:</span><span class="meta-value" id="fallback4">info@ydence.com</span><button class="copy-btn" onclick="copyField('fallback4', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp4">Ydence groeit internationaal — is de AI-stap de volgende?</span><button class="copy-btn" onclick="copyField('onderwerp4', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="fallback-note">⚠️ Ingeschat adres — stuur naar <strong>info@ydence.com</strong> als lara@ bounced.</div>
+    <div class="context-box"><strong>Gebruikte context:</strong> Ydence is opgericht door Lara de Graaf in 2010/2012. In coronatijd verdubbelde de omzet. Nu 300+ verkooppunten in 6 landen. Stijl: feminien, prints, speels met een raw edge. Groeit zowel via retailers als via eigen webshop.</div>
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body4', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body4">Beste Lara,
+
+Ydence heeft in korte tijd 300+ verkooppunten in 6 landen opgebouwd — dat doe je niet zonder een scherp oog voor wat werkt. Nu de brand ook online groeit, is de volgende stap voor veel fashion-merken dezelfde: shoppers de zekerheid geven die ze nodig hebben vóór ze kopen.
+
+Merken als Zara en Zalando zetten virtual try-on al actief in. Labels die dit nu implementeren bieden een ervaring die klanten straks verwachten — en lopen voor op merken die nog afwachten.
+
+Drapit is een widget op je productpagina. Klanten uploaden een foto en zien direct hoe een Ydence-stuk hen staat, vóór ze bestellen. Minder retouren, hogere conversie, meetbaar vanaf dag één.
+
+Gratis testperiode beschikbaar. Interesse?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 5: Mart Visser — Mart Visser -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>👤 Mart Visser — Oprichter &amp; Couturier @ Mart Visser <span class="badge badge-guessed">🟠 Ingeschat</span></h2>
+    <div class="email-meta-line">martvisser.nl · Elegant damesmode, maten 36–50, eigen webshop Amsterdam</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan5">mart@martvisser.nl</span><button class="copy-btn" onclick="copyField('aan5', this)">Kopieer</button></div>
+      <div class="meta-item fallback"><span class="label">📦 Fallback:</span><span class="meta-value" id="fallback5">info@martvisser.nl</span><button class="copy-btn" onclick="copyField('fallback5', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp5">Mart Visser's elegante collectie — ook online het voordeel van AI?</span><button class="copy-btn" onclick="copyField('onderwerp5', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="fallback-note">⚠️ Ingeschat adres — stuur naar <strong>info@martvisser.nl</strong> als mart@ bounced.</div>
+    <div class="context-box"><strong>Gebruikte context:</strong> Mart Visser is een gerenommeerd Nederlands couturier, actief sinds 1993. Elegant damesmode in maten 36–50 voor alle leeftijden. Eigen webshop en concept store in Amsterdam. Kleedt vrouwen voor bijzondere momenten én het dagelijks leven op kantoor.</div>
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body5', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body5">Beste Mart,
+
+Jij kleedt al meer dan 30 jaar vrouwen voor de mooiste momenten — en elke dag op kantoor. Maar online missen klanten precies wat in jouw concept store zo vanzelfsprekend is: zien hoe iets staat.
+
+Merken als Zara en Zalando investeren hier al actief in. Ontwerpers die nu virtual try-on inzetten geven hun online klanten dezelfde aandacht als in de winkel — en onderscheiden zich van de rest.
+
+Drapit is een widget op je productpagina. Klanten uploaden een foto en zien direct hoe een item van Mart Visser hen staat, vóór ze bestellen. Laagdrempelig, in minuten live, direct meetbaar resultaat.
+
+Ik geef een select aantal merken gratis toegang. Doet Mart Visser mee?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<script>
+function copyField(id, btn) {
+  const el = document.getElementById(id);
+  const text = el.innerText;
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  textarea.style.left = '-9999px';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    const original = btn.innerText;
+    btn.innerText = '✓ Gekopieerd';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerText = original; btn.classList.remove('copied'); }, 2000);
+  } catch (e) {
+    alert('Kopiëren mislukt — selecteer de tekst handmatig.');
+  }
+  document.body.removeChild(textarea);
+}
+</script>
+</body>
+</html>

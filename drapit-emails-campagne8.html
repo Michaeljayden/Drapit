@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drapit Cold Emails — Campagne 8 (Denim / Jeans)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f6; color: #1a1a1a; padding: 30px 20px; }
+  h1 { font-size: 1.5rem; margin-bottom: 6px; color: #1a1a1a; }
+  .subtitle { color: #666; margin-bottom: 30px; font-size: 0.9rem; }
+  .email-card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 28px; overflow: hidden; }
+  .email-header { background: #1a1a2e; color: #fff; padding: 16px 20px; }
+  .email-header h2 { font-size: 1rem; margin-bottom: 4px; }
+  .email-bron { font-size: 0.75rem; opacity: 0.6; margin-bottom: 6px; }
+  .meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .meta-item { background: rgba(255,255,255,0.12); border-radius: 6px; padding: 6px 10px; font-size: 0.82rem; display: flex; align-items: center; gap: 8px; }
+  .meta-item span.label { opacity: 0.7; }
+  .meta-value { font-weight: 500; }
+  .copy-btn { background: #fff; color: #1a1a2e; border: none; border-radius: 5px; padding: 4px 10px; font-size: 0.78rem; cursor: pointer; font-weight: 600; margin-left: 8px; transition: background 0.2s; }
+  .copy-btn:hover { background: #e0e0f0; }
+  .copy-btn.copied { background: #4caf50; color: #fff; }
+  .badge { display: inline-block; font-size: 0.7rem; padding: 2px 7px; border-radius: 10px; margin-left: 6px; font-weight: 600; }
+  .badge-personal { background: #4caf50; color: #fff; }
+  .badge-generic { background: #ff9800; color: #fff; }
+  .email-body { padding: 20px; }
+  .field-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #888; margin-bottom: 4px; letter-spacing: 0.04em; }
+  .field-content { background: #f8f8fb; border-radius: 6px; padding: 12px 14px; font-size: 0.92rem; line-height: 1.65; white-space: pre-wrap; margin-bottom: 14px; border: 1px solid #eee; }
+  .field-content a { color: #1a1a2e; }
+</style>
+</head>
+<body>
+
+<h1>📧 Drapit Cold Emails — Campagne 8</h1>
+<p class="subtitle">Niche: Denim / Jeans · 5 emails · 🟢 = persoonlijk adres · 🟠 = info@ fallback</p>
+
+<!-- EMAIL 1: Delft Denim -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 1 — Delft Denim <span class="badge badge-personal">🟢 Persoonlijk (gegist)</span></h2>
+    <div class="email-bron">Contact: Bas Visser (oprichter) · Web (naam gevonden)</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan1">bas@delftdenim.com</span><button class="copy-btn" onclick="copyField('aan1', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp1">Virtual try-on voor Delft Denim?</span><button class="copy-btn" onclick="copyField('onderwerp1', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body1', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body1">Beste Bas,
+
+Delft Denim — duurzame jeans met een verhaal, gemaakt van eerlijke materialen en geïnspireerd op je eigen stad. Precies het soort merk waarbij klanten bewust kiezen, maar ook willen weten: staat dit mij?
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een jeans van Delft Denim hen staat — voor ze bestellen. Dat geeft het vertrouwen dat past bij een bewuste aankoop, en vermindert retouren. Foto's die klanten uploaden worden ook gedeeld, wat gratis zichtbaarheid oplevert.
+
+Grote namen zoals Zara en Zalando gebruiken dezelfde technologie al. Drapit maakt dit nu toegankelijk voor zelfstandige denim-merken zoals Delft Denim.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Delft Denim hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 2: De Rode Winkel -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 2 — De Rode Winkel <span class="badge badge-generic">🟠 Generiek (naam bekend)</span></h2>
+    <div class="email-bron">Contact: Tom Broekman (6e generatie eigenaar) · Web (naam gevonden, email generiek)</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan2">info@derodewinkel.nl</span><button class="copy-btn" onclick="copyField('aan2', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp2">Virtual try-on voor De Rode Winkel?</span><button class="copy-btn" onclick="copyField('onderwerp2', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body2', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body2">Beste Tom,
+
+De Rode Winkel bestaat al sinds 1837 — een familiewinkel die zich generatie op generatie heeft ontwikkeld tot de jeanswinkel van Nederland. Met zo'n lange staat van dienst weet jij als geen ander dat de juiste pasvorm alles is.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een jeans van De Rode Winkel hen staat — voor ze bestellen of langskomen. Dat verlaagt de online drempel en trekt ook klanten aan die wat verder weg wonen. Foto's die klanten uploaden worden gedeeld en leveren gratis extra bereik op.
+
+Zara en Zalando gebruiken dezelfde technologie al. Drapit brengt dit nu naar Nederlandse jeans-iconen zoals De Rode Winkel.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou De Rode Winkel hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 3: Het Broekenhuis -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 3 — Het Broekenhuis <span class="badge badge-generic">🟠 Generiek</span></h2>
+    <div class="email-bron">Contact: onbekend · Web (generiek fallback)</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan3">info@hetbroekenhuis.nl</span><button class="copy-btn" onclick="copyField('aan3', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp3">Virtual try-on voor Het Broekenhuis?</span><button class="copy-btn" onclick="copyField('onderwerp3', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body3', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body3">Beste Het Broekenhuis,
+
+Al meer dan 40 jaar dé speciaalzaak voor mannenmode en jeans — Het Broekenhuis heeft een vaste klantenkring opgebouwd door te weten wat mannen nodig hebben. Maar online is de twijfel over pasvorm bij jeans altijd aanwezig.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een jeans of broek van Het Broekenhuis hen staat. Dat geeft vertrouwen bij de aankoop, vermindert retouren en maakt het aantrekkelijker voor klanten om online te bestellen. Gedeelde foto's leveren ook gratis extra bereik op.
+
+Grote spelers zoals Zara en Zalando werken al met dezelfde technologie. Drapit maakt dit nu bereikbaar voor gespecialiseerde jeans-winkels.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Het Broekenhuis hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 4: Versteegh Jeans -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 4 — Versteegh Jeans <span class="badge badge-generic">🟠 Generiek</span></h2>
+    <div class="email-bron">Contact: onbekend · Web (generiek fallback)</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan4">info@versteeghjeansonline.nl</span><button class="copy-btn" onclick="copyField('aan4', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp4">Virtual try-on voor Versteegh Jeans?</span><button class="copy-btn" onclick="copyField('onderwerp4', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body4', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body4">Beste Versteegh Jeans,
+
+Versteegh Jeans in Leiden en Katwijk is officieel dealer van topmerken als PME Legend, Cast Iron en Superdry — een sterk assortiment voor mannen die weten wat ze willen. Maar bij dat soort merken is de pasvorm cruciaal, en online kopen blijft daardoor een drempel.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een jeans of broek van Versteegh hen staat — voor ze de bestelling plaatsen. Dat neemt de twijfel weg, verhoogt de conversie en verlaagt retouren. Foto's die klanten uploaden worden ook gedeeld — gratis extra zichtbaarheid voor de webshop.
+
+Zara en Zalando gebruiken dezelfde technologie al op grote schaal. Drapit brengt dit nu naar gespecialiseerde jeans-winkels zoals Versteegh.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Versteegh Jeans hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 5: Jeans Inn -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>Email 5 — Jeans Inn <span class="badge badge-generic">🟠 Generiek (naam bekend)</span></h2>
+    <div class="email-bron">Contact: André Schout (oprichter 1978) · Web (naam gevonden, email generiek)</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan5">info@jeansinn.nl</span><button class="copy-btn" onclick="copyField('aan5', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp5">Virtual try-on voor Jeans Inn?</span><button class="copy-btn" onclick="copyField('onderwerp5', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body5', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body5">Beste André,
+
+Jeans Inn begon in 1978 met twee winkels in Zeeland en is uitgegroeid tot een keten met zes filialen en een webshop — een mooi Nederlands verhaal. Met zo'n assortiment en zoveel merken zijn er voor elke klant mooie opties, maar online is "staat dit mij?" altijd de vraag.
+
+Drapit is een kleine widget die je op je productpagina plaatst. Klanten uploaden een foto van zichzelf en zien direct hoe een item van Jeans Inn hen staat — voor ze bestellen. Dat maakt de keuze persoonlijker, verhoogt de conversie en vermindert retourzendingen. Gedeelde foto's geven Jeans Inn bovendien gratis extra bereik.
+
+Grote retailers zoals Zara en Zalando gebruiken al dezelfde technologie. Drapit brengt dit nu naar regionale jeans-ketens zoals Jeans Inn.
+
+Drapit is gratis te testen. Meer info en een demovideo op <a href="https://drapit.io" target="_blank">drapit.io</a>. Uitproberen zonder installatie: <a href="https://drapit-testomgeving.myshopify.com" target="_blank">drapit-testomgeving.myshopify.com</a> (wachtwoord: drapit). Als de installatie van de widget niet lukt, helpen we daar graag bij.
+
+Zou Jeans Inn hier interesse in hebben?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<script>
+function copyField(id, btn) {
+  const el = document.getElementById(id);
+  const text = el.innerText;
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  textarea.style.left = '-9999px';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    const original = btn.innerText;
+    btn.innerText = '✓ Gekopieerd';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerText = original; btn.classList.remove('copied'); }, 2000);
+  } catch (e) {
+    alert('Kopiëren mislukt — selecteer de tekst handmatig.');
+  }
+  document.body.removeChild(textarea);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drapit Cold Emails — Campagne 9 (LinkedIn-modus)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f6; color: #1a1a1a; padding: 30px 20px; }
+  h1 { font-size: 1.5rem; margin-bottom: 4px; color: #1a1a1a; }
+  .subtitle { color: #666; margin-bottom: 30px; font-size: 0.9rem; }
+  .email-card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 28px; overflow: hidden; }
+  .email-header { background: #1a1a2e; color: #fff; padding: 16px 20px; }
+  .email-header h2 { font-size: 1rem; margin-bottom: 3px; }
+  .email-meta-line { font-size: 0.75rem; opacity: 0.6; margin-bottom: 8px; }
+  .meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .meta-item { background: rgba(255,255,255,0.12); border-radius: 6px; padding: 6px 10px; font-size: 0.82rem; display: flex; align-items: center; gap: 8px; }
+  .meta-item.fallback { background: rgba(255,152,0,0.25); }
+  .meta-item span.label { opacity: 0.7; }
+  .meta-value { font-weight: 500; }
+  .copy-btn { background: #fff; color: #1a1a2e; border: none; border-radius: 5px; padding: 4px 10px; font-size: 0.78rem; cursor: pointer; font-weight: 600; margin-left: 8px; transition: background 0.2s; }
+  .copy-btn:hover { background: #e0e0f0; }
+  .copy-btn.copied { background: #4caf50; color: #fff; }
+  .badge { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; margin-left: 6px; font-weight: 600; vertical-align: middle; }
+  .badge-confirmed { background: #4caf50; color: #fff; }
+  .badge-guessed { background: #ff9800; color: #fff; }
+  .email-body { padding: 20px; }
+  .field-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #888; margin-bottom: 4px; letter-spacing: 0.04em; }
+  .field-content { background: #f8f8fb; border-radius: 6px; padding: 12px 14px; font-size: 0.92rem; line-height: 1.65; white-space: pre-wrap; margin-bottom: 14px; border: 1px solid #eee; }
+  .context-box { background: #f0f4ff; border-left: 3px solid #3b5bdb; border-radius: 0 6px 6px 0; padding: 10px 14px; font-size: 0.82rem; color: #444; margin-bottom: 14px; line-height: 1.5; }
+  .context-box strong { color: #1a1a2e; }
+  .fallback-note { background: #fff8e1; border-left: 3px solid #ff9800; border-radius: 0 6px 6px 0; padding: 8px 12px; font-size: 0.8rem; color: #7a5c00; margin-bottom: 14px; }
+</style>
+</head>
+<body>
+
+<h1>📧 Drapit Cold Emails — Campagne 9</h1>
+<p class="subtitle">LinkedIn-modus · 8 hyperpersoonlijke emails · 🟢 = bevestigd e-mailadres · 🟠 = ingeschat op naam/domein (gebruik fallback info@ als het bounced)</p>
+
+<!-- EMAIL 1: Jordi Chris — FOUR Amsterdam -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>👤 Jordi Chris — Co-Owner @ FOUR Amsterdam <span class="badge badge-guessed">🟠 Ingeschat</span></h2>
+    <div class="email-meta-line">fouramsterdam.com · Multi-brand luxury & streetwear, Amsterdam</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan1">jordi@fouramsterdam.com</span><button class="copy-btn" onclick="copyField('aan1', this)">Kopieer</button></div>
+      <div class="meta-item fallback"><span class="label">📦 Fallback:</span><span class="meta-value" id="fallback1">info@fouramsterdam.com</span><button class="copy-btn" onclick="copyField('fallback1', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp1">FOUR bouwt community — ook online de volgende stap in AI?</span><button class="copy-btn" onclick="copyField('onderwerp1', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="fallback-note">⚠️ Ingeschat adres — stuur naar <strong>info@fouramsterdam.com</strong> als jordi@ bounced.</div>
+    <div class="context-box"><strong>Gebruikte context:</strong> FOUR is opgericht als community-driven concept store (2012), mix van streetwear en luxury (Saint Laurent, Balenciaga, Rick Owens). Jordi is co-owner en general manager, actief op TikTok en podcasts. Brand mission: iedereen moet zich thuis voelen, ongeacht achtergrond.</div>
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body1', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body1">Beste Jordi,
+
+FOUR heeft altijd meer geboden dan alleen merken — van Rick Owens tot Stone Island, voor iedereen die voelt wat mode betekent. Maar die community-ervaring is online moeilijk te repliceren: hoe weet een klant hoe een Balenciaga hoodie hem écht staat?
+
+AI verandert dat nu. Merken als Zara en Zalando investeren hier al actief in — en webshops die nu volgen bouwen een digitale voorsprong die concurrenten over twee jaar moeten inhalen. Dit is het moment om voorop te lopen.
+
+Drapit is een widget op je productpagina: klanten uploaden een foto en zien direct hoe een stuk van FOUR hen staat, vóór ze bestellen. Laagdrempelig, in minuten live, meetbaar resultaat.
+
+Ik geef een select aantal stores gratis toegang. Doet FOUR mee?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 2: Regi Schalks — FLÂNEUR -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>👤 Regi Schalks — Founder @ FLÂNEUR <span class="badge badge-guessed">🟠 Ingeschat</span></h2>
+    <div class="email-meta-line">flaneur.eu · Fashion shaped by music, Museum Quarter Amsterdam</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan2">regi@flaneur.eu</span><button class="copy-btn" onclick="copyField('aan2', this)">Kopieer</button></div>
+      <div class="meta-item fallback"><span class="label">📦 Fallback:</span><span class="meta-value" id="fallback2">info@flaneur.eu</span><button class="copy-btn" onclick="copyField('fallback2', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp2">FLÂNEUR's eigenzinnige identiteit — klaar voor AI in fashion retail?</span><button class="copy-btn" onclick="copyField('onderwerp2', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="fallback-note">⚠️ Ingeschat adres — stuur naar <strong>info@flaneur.eu</strong> als regi@ bounced.</div>
+    <div class="context-box"><strong>Gebruikte context:</strong> FLÂNEUR opgericht in 2019 door Regi Schalks (Dutch-Moroccan), mode gevormd door muziek. Flagshipstore in het Museumkwartier in Amsterdam. Eigenzinnig merk met sterke creatieve identiteit.</div>
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body2', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body2">Beste Regi,
+
+FLÂNEUR is mode die je voelt — vormgegeven door muziek, met een eigenzinnige identiteit die online moeilijk te vangen is. Klanten die jouw werk begrijpen, willen zeker weten dat een stuk écht bij hen past voordat ze de stap zetten.
+
+Merken als Zara en Zalando investeren al actief in virtual try-on. Winkels die nu volgen bouwen een ervaring die klanten straks als vanzelfsprekend beschouwen — en onderscheiden zich van de rest die nog afwacht.
+
+Drapit is een widget op je productpagina. Klanten uploaden een foto en zien direct hoe een FLÂNEUR-item hen staat, vóór ze bestellen. De boutique-ervaring van de Van Baerlestraat, ook online.
+
+Gratis te testen, geen verplichting. Doet FLÂNEUR mee?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 3: Samuel Onuha — ICON. AMSTERDAM -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>👤 Samuel Onuha — Founder @ ICON. AMSTERDAM <span class="badge badge-confirmed">🟢 Bevestigd</span></h2>
+    <div class="email-meta-line">icon-amsterdam.com · Premium menswear, Amsterdam — email zichtbaar op LinkedIn</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan3">samuel@icon-amsterdam.com</span><button class="copy-btn" onclick="copyField('aan3', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp3">Dress with intention — ook bij de online keuze?</span><button class="copy-btn" onclick="copyField('onderwerp3', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="context-box"><strong>Gebruikte context:</strong> Samuel startte ICON op zijn 18e in 2018, missie: "dress with intention, show up differently." Refined menswear met luxury stretch fabrics. Zijn broer Ruben joined later. Nu ook verkoop in de VS (icon.us). Sterk verhaal over persoonlijke groei via kleding.</div>
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body3', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body3">Beste Samuel,
+
+ICON is opgericht met één gedachte: wie zich kleedt met intentie, staat anders in de wereld. Die klanten verdienen ook online de ruimte om die keuze écht weloverwogen te maken — niet op goed geluk.
+
+Merken als Zara en Zalando zetten virtual try-on al op grote schaal in. Dit is de AI-stap die direct meetbaar is: minder twijfel, minder retourzendingen, hogere conversie — en een voorsprong die nu te pakken is, voordat anderen het doen.
+
+Drapit is een widget op de productpagina, in minuten live. Ik geef een select aantal merken gratis toegang om te testen.
+
+Doet ICON mee?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 4: Soufyan el Hammouti — Mason Garments -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>👤 Soufyan el Hammouti — Managing Director @ Mason Garments <span class="badge badge-guessed">🟠 Ingeschat</span></h2>
+    <div class="email-meta-line">masongarments.com · Premium footwear & apparel, Amsterdam ontworpen / Italië gemaakt</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan4">soufyan@masongarments.com</span><button class="copy-btn" onclick="copyField('aan4', this)">Kopieer</button></div>
+      <div class="meta-item fallback"><span class="label">📦 Fallback:</span><span class="meta-value" id="fallback4">info@masongarments.com</span><button class="copy-btn" onclick="copyField('fallback4', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp4">Mason Garments en de AI-shift in premium fashion retail</span><button class="copy-btn" onclick="copyField('onderwerp4', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="fallback-note">⚠️ Ingeschat adres — stuur naar <strong>info@masongarments.com</strong> als soufyan@ bounced.</div>
+    <div class="context-box"><strong>Gebruikte context:</strong> Mason Garments is een premium merk, ontworpen in Amsterdam, handgemaakt in Italië. Soufyan is Managing Director met expertise in fashion, sales en online marketing. Innovatie-gedreven profiel. Het merk verkoopt naast schoeisel ook kleding.</div>
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body4', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body4">Beste Soufyan,
+
+Mason Garments combineert Amsterdams design met Italiaans vakmanschap — een premium product dat je voelt zodra je het draagt. Maar online is die belofte lastig over te brengen: hoe weet een klant dat een stuk écht bij hem past?
+
+Merken als Zara en Zalando investeren hier al actief in — en premium labels die nu volgen bouwen een digitale verwachting die shoppers straks als standaard zien. Dit is de stap die nu loont.
+
+Drapit is een widget op je productpagina. Klanten uploaden een foto en zien direct hoe een stuk van Mason Garments hen staat, vóór ze bestellen. Minder retouren, meer vertrouwen, meetbaar vanaf dag één.
+
+Gratis testperiode beschikbaar. Interesse?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 5: Shiva Raciti — Cars Jeans -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>👤 Shiva Raciti — Marketing & E-commerce Specialist @ Cars Jeans <span class="badge badge-guessed">🟠 Ingeschat</span></h2>
+    <div class="email-meta-line">carsjeans.nl · Dutch denim & casual brand, Amsterdam</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan5">shiva@carsjeans.nl</span><button class="copy-btn" onclick="copyField('aan5', this)">Kopieer</button></div>
+      <div class="meta-item fallback"><span class="label">📦 Fallback:</span><span class="meta-value" id="fallback5">info@carsjeans.nl</span><button class="copy-btn" onclick="copyField('fallback5', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp5">Conversiegroei bij Cars Jeans — de AI-stap die nu loont</span><button class="copy-btn" onclick="copyField('onderwerp5', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="fallback-note">⚠️ Ingeschat adres — stuur naar <strong>info@carsjeans.nl</strong> als shiva@ bounced.</div>
+    <div class="context-box"><strong>Gebruikte context:</strong> Shiva's LinkedIn-header toont expliciet haar focus op "campagnes, content & webshopgroei." Ze werkt bij Cars Jeans, een Dutch denim & casual merk. Ze denkt actief na over conversie-optimalisatie.</div>
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body5', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body5">Beste Shiva,
+
+Jij focust op campagnes, content en webshopgroei bij Cars Jeans — precies de combinatie waar AI nu het grootste verschil maakt. Bij denim is pasvorm alles, maar online twijfelen klanten langer dan nodig.
+
+Merken als Zara en Zalando zetten virtual try-on al op grote schaal in. Webshops die nu volgen zien hogere conversie én minder retourzendingen — en je campagnes krijgen er direct een concrete USP bij.
+
+Drapit is een widget op de productpagina: klanten uploaden een foto en zien hoe een item van Cars Jeans hen staat, vóór ze bestellen.
+
+Ik geef een select aantal webshops gratis toegang. Interesse?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 6: Monique Bruin — Cars Jeans -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>👤 Monique Bruin — E-commerce Manager @ Cars Jeans <span class="badge badge-guessed">🟠 Ingeschat</span></h2>
+    <div class="email-meta-line">carsjeans.nl · Dutch denim & casual brand, Amsterdam</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan6">monique@carsjeans.nl</span><button class="copy-btn" onclick="copyField('aan6', this)">Kopieer</button></div>
+      <div class="meta-item fallback"><span class="label">📦 Fallback:</span><span class="meta-value" id="fallback6">info@carsjeans.nl</span><button class="copy-btn" onclick="copyField('fallback6', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp6">De Cars Jeans webshop en de volgende stap in AI-retail</span><button class="copy-btn" onclick="copyField('onderwerp6', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="fallback-note">⚠️ Ingeschat adres — stuur naar <strong>info@carsjeans.nl</strong> als monique@ bounced.</div>
+    <div class="context-box"><strong>Gebruikte context:</strong> Monique is E-commerce Manager bij Cars Jeans — verantwoordelijk voor de webshop. Als decision-maker op e-commerce is zij de juiste persoon voor een tool die conversie verhoogt en retouren verlaagt.</div>
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body6', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body6">Beste Monique,
+
+Als e-commerce manager bij Cars Jeans ken jij de uitdaging: denim online verkopen vraagt vertrouwen van de klant. Pasvorm is alles bij jeans, maar dat is online lastig over te brengen.
+
+Merken als Zara en Zalando investeren hier al actief in — en webshops die nu deze stap zetten bouwen een voorsprong die over twee jaar als standaard wordt gezien. Vroege adopters winnen dat spel.
+
+Drapit is een widget op je productpagina. Klanten uploaden een foto en zien direct hoe een stuk van Cars Jeans hen staat, vóór ze bestellen. In minuten live, meetbaar resultaat.
+
+Gratis testperiode beschikbaar. Wil je even kijken?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 7: Malou Maarschalk — Tumble 'N Dry -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>👤 Malou Maarschalk — E-commerce & Marketing Coördinator @ Tumble 'N Dry <span class="badge badge-guessed">🟠 Ingeschat</span></h2>
+    <div class="email-meta-line">tumblendry.com · Dutch kindermode, leeftijd 0–14, Haarlem</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan7">malou@tumblendry.com</span><button class="copy-btn" onclick="copyField('aan7', this)">Kopieer</button></div>
+      <div class="meta-item fallback"><span class="label">📦 Fallback:</span><span class="meta-value" id="fallback7">info@tumblendry.com</span><button class="copy-btn" onclick="copyField('fallback7', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp7">Minder retourzendingen bij Tumble 'N Dry — de AI-aanpak die werkt</span><button class="copy-btn" onclick="copyField('onderwerp7', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="fallback-note">⚠️ Ingeschat adres — stuur naar <strong>info@tumblendry.com</strong> als malou@ bounced.</div>
+    <div class="context-box"><strong>Gebruikte context:</strong> Tumble 'N Dry is een Nederlands kindermode-merk voor leeftijd 0–14. Malou coördineert e-commerce én marketing. Ouders bestellen online maar twijfelen over maat/pasvorm bij kinderkleding, wat leidt tot hoge retouren.</div>
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body7', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body7">Beste Malou,
+
+Bij kinderkleding is de return-rate een structurele uitdaging — ouders bestellen meerdere maten en sturen er één of twee terug. Jij werkt aan zowel e-commerce als marketing bij Tumble 'N Dry: dit is precies waar AI nu het verschil maakt.
+
+Merken als Zara en Zalando zetten virtual try-on al in op grote schaal. Kindermode-merken die nu volgen bieden ouders de zekerheid die ze zoeken — en bouwen een voorsprong die shoppers straks als vanzelfsprekend zien.
+
+Drapit is een widget op je productpagina: ouders uploaden een foto van hun kind en zien hoe een item staat, vóór ze bestellen. Laagdrempelig en in minuten live.
+
+Ik geef een select aantal merken gratis toegang. Doet Tumble 'N Dry mee?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<!-- EMAIL 8: Natascha Vlaar — Tumble 'N Dry -->
+<div class="email-card">
+  <div class="email-header">
+    <h2>👤 Natascha Vlaar — Manager Development, Buying & Merchandising @ Tumble 'N Dry <span class="badge badge-guessed">🟠 Ingeschat</span></h2>
+    <div class="email-meta-line">tumblendry.com · Dutch kindermode, leeftijd 0–14</div>
+    <div class="meta">
+      <div class="meta-item"><span class="label">Aan:</span><span class="meta-value" id="aan8">natascha@tumblendry.com</span><button class="copy-btn" onclick="copyField('aan8', this)">Kopieer</button></div>
+      <div class="meta-item fallback"><span class="label">📦 Fallback:</span><span class="meta-value" id="fallback8">info@tumblendry.com</span><button class="copy-btn" onclick="copyField('fallback8', this)">Kopieer</button></div>
+      <div class="meta-item"><span class="label">Onderwerp:</span><span class="meta-value" id="onderwerp8">De collectie van Tumble 'N Dry — ook online overtuigend?</span><button class="copy-btn" onclick="copyField('onderwerp8', this)">Kopieer</button></div>
+    </div>
+  </div>
+  <div class="email-body">
+    <div class="fallback-note">⚠️ Ingeschat adres — stuur naar <strong>info@tumblendry.com</strong> als natascha@ bounced.</div>
+    <div class="context-box"><strong>Gebruikte context:</strong> Natascha is verantwoordelijk voor Development, Buying & Merchandising bij Tumble 'N Dry — ze bepaalt mede welke collectie er komt en hoe die gepresenteerd wordt.</div>
+    <div class="field-label">E-mailtekst <button class="copy-btn" style="color:#555;background:#eee;" onclick="copyField('body8', this)">Kopieer tekst</button></div>
+    <div class="field-content" id="body8">Beste Natascha,
+
+Jij werkt aan de collectie van Tumble 'N Dry van buying tot merchandising — maar online moeten ouders op goed geluk de juiste maat voor hun kind kiezen. Hoe sterk de collectie ook is, die onzekerheid kost vertrouwen én leidt tot retouren.
+
+Merken als Zara en Zalando zetten virtual try-on al actief in. Tumble 'N Dry zou daarmee één van de eerste kindermode-merken zijn die dit serieus inzet — een concurrentievoordeel dat nu te pakken is, voordat anderen het doen.
+
+Drapit is een widget op de productpagina, in minuten live. Ik geef een select aantal merken gratis toegang.
+
+Interesse?
+
+Met vriendelijke groet,</div>
+  </div>
+</div>
+
+<script>
+function copyField(id, btn) {
+  const el = document.getElementById(id);
+  const text = el.innerText;
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  textarea.style.left = '-9999px';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    const original = btn.innerText;
+    btn.innerText = '✓ Gekopieerd';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerText = original; btn.classList.remove('copied'); }, 2000);
+  } catch (e) {
+    alert('Kopiëren mislukt — selecteer de tekst handmatig.');
+  }
+  document.body.removeChild(textarea);
+}
+</script>
+</body>
+</html>
