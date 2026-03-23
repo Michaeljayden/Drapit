@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Logo from '@/components/ui/Logo';
 import CreditAdjustmentModal from '@/components/admin/CreditAdjustmentModal';
+import Link from 'next/link';
 
 interface Shop {
     id: string;
@@ -80,6 +81,15 @@ export default function AdminDashboard() {
                     <div className="flex items-center gap-4">
                         <Logo size="sm" />
                         <h1 className="text-2xl font-bold text-[#0F172A]">Admin Dashboard</h1>
+                        <Link 
+                            href="/dashboard"
+                            className="ml-4 text-sm bg-white border border-[#CBD5E1] hover:border-[#94A3B8] text-[#0F172A] px-4 py-2 rounded-lg font-medium hover:bg-[#F8FAFC] transition-colors flex items-center gap-2 shadow-sm"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                            Terug naar Dashboard
+                        </Link>
                     </div>
                     <div className="text-sm font-medium px-3 py-1 bg-[#F1F5F9] rounded-full text-[#64748B]">
                         {stats.total} Actieve Shops
