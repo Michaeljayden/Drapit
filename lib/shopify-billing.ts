@@ -14,7 +14,7 @@
 import type { Plan } from '@/lib/supabase/types';
 import { PLANS } from '@/lib/stripe';
 
-const SHOPIFY_API_VERSION = '2024-01';
+const SHOPIFY_API_VERSION = '2026-01';
 
 // ---------------------------------------------------------------------------
 // Plan config for Shopify billing
@@ -28,8 +28,8 @@ export interface ShopifyPlanConfig {
 
 export const SHOPIFY_BILLING_PLANS: Record<Exclude<Plan, 'trial'>, ShopifyPlanConfig> = {
     starter:    { name: 'Drapit Starter — 500 try-ons/maand',    price: PLANS.starter.price,    trialDays: 0 },
-    growth:     { name: 'Drapit Pro — 2.500 try-ons/maand',      price: PLANS.growth.price,     trialDays: 0 },
-    scale:      { name: 'Drapit Scale — 5.000 try-ons/maand',    price: PLANS.scale.price,      trialDays: 0 },
+    growth:     { name: 'Drapit Pro — 1.500 try-ons/maand',      price: PLANS.growth.price,     trialDays: 0 },
+    scale:      { name: 'Drapit Scale — 3.000 try-ons/maand',    price: PLANS.scale.price,      trialDays: 0 },
     enterprise: { name: 'Drapit Business — 10.000 try-ons/maand', price: PLANS.enterprise.price, trialDays: 0 },
 };
 
@@ -177,8 +177,8 @@ export function planLimitForShopifyPlan(plan: Plan): number {
     const planMap: Record<Plan, number> = {
         trial: 20,
         starter: 500,
-        growth: 2500,
-        scale: 5000,
+        growth: 1500,
+        scale: 3000,
         enterprise: 10000,
     };
     return planMap[plan] ?? 500;
