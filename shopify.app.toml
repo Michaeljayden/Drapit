@@ -33,3 +33,33 @@ api_version = "2026-01"
 
 [pos]
 embedded = false
+
+[pricing_plans]
+
+  [[pricing_plans.plans]]
+  name = "Starter"
+  price = "49.00"
+  currency_code = "EUR"
+  interval = "EVERY_30_DAYS"
+  trial_days = 0
+
+  [[pricing_plans.plans]]
+  name = "Pro"
+  price = "199.00"
+  currency_code = "EUR"
+  interval = "EVERY_30_DAYS"
+  trial_days = 0
+
+  [[pricing_plans.plans]]
+  name = "Scale"
+  price = "399.00"
+  currency_code = "EUR"
+  interval = "EVERY_30_DAYS"
+  trial_days = 0
+
+  [[pricing_plans.plans]]
+  name = "Business"
+  price = "799.00"
+  currency_code = "EUR"
+  interval = "EVERY_30_DAYS"
+  trial_days = 0
