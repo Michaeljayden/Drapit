@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { colors, componentStyles } from '@/lib/design-tokens';
+import { colors } from '@/lib/design-tokens';
 import type { Plan } from '@/lib/supabase/types';
 import CancellationWarningModal from './CancellationWarningModal';
 
@@ -11,10 +11,13 @@ interface CheckoutProps {
     isUpgrade?: boolean;
     isDowngrade?: boolean;
     popular?: boolean;
+    billingSource?: string | null;
+    shopId?: string;
 }
 
 interface PortalProps {
     action: 'portal';
+    billingSource?: string | null;
 }
 
 type BillingActionsProps = CheckoutProps | PortalProps;
@@ -22,9 +25,33 @@ type BillingActionsProps = CheckoutProps | PortalProps;
 export default function BillingActions(props: BillingActionsProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const isShopify = props.billingSource === 'shopify';
 
     // ── Portal button ───────────────────────────────────────────────────
     if (props.action === 'portal') {
+
+        // Shopify merchants manage their subscription in Shopify admin
+        if (isShopify) {
+            return (
+                <a
+                    href="https://admin.shopify.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-sm font-medium px-4 py-2.5 rounded-xl transition-colors duration-150"
+                    style={{
+                        backgroundColor: colors.gray100,
+                        color: colors.gray900,
+                    }}
+                >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <rect x="1.5" y="3" width="13" height="10" rx="2" stroke="currentColor" strokeWidth="1.3" />
+                        <line x1="1.5" y1="7" x2="14.5" y2="7" stroke="currentColor" strokeWidth="1.3" />
+                    </svg>
+                    Beheren in Shopify
+                </a>
+            );
+        }
+
         const [showWarningModal, setShowWarningModal] = useState(false);
 
         async function handlePortal() {
@@ -73,7 +100,6 @@ export default function BillingActions(props: BillingActionsProps) {
                 {error && (
                     <p className="text-xs mt-1" style={{ color: colors.red }}>{error}</p>
                 )}
-
                 <CancellationWarningModal
                     isOpen={showWarningModal}
                     onClose={() => setShowWarningModal(false)}
@@ -84,20 +110,33 @@ export default function BillingActions(props: BillingActionsProps) {
     }
 
     // ── Checkout button ─────────────────────────────────────────────────
-    const { plan, isUpgrade, isDowngrade, popular } = props;
+    const { plan, isUpgrade, isDowngrade, popular, shopId } = props as CheckoutProps;
 
     async function handleCheckout() {
         setLoading(true);
         setError(null);
         try {
-            const res = await fetch('/api/stripe/checkout', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ plan }),
-            });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.error || 'Fout bij starten checkout');
-            window.location.href = data.checkout_url;
+            if (isShopify) {
+                // Shopify merchants → Shopify Billing API
+                const res = await fetch('/api/billing/shopify/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ shop_id: shopId, plan }),
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Fout bij starten Shopify billing');
+                window.location.href = data.confirmation_url;
+            } else {
+                // Direct drapit.io customers → Stripe
+                const res = await fetch('/api/stripe/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ plan }),
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Fout bij starten checkout');
+                window.location.href = data.checkout_url;
+            }
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'Onbekende fout');
             setLoading(false);

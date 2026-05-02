@@ -67,12 +67,20 @@ export async function POST(request: NextRequest) {
         const admin = getSupabaseAdmin();
         const { data: shop, error: shopErr } = await admin
             .from('shops')
-            .select('id, stripe_customer_id, email, name')
+            .select('id, stripe_customer_id, email, name, billing_source')
             .eq('owner_id', user.id)
             .single();
 
         if (shopErr || !shop) {
             return NextResponse.json({ error: 'Geen shop gevonden' }, { status: 404 });
+        }
+
+        // ── Block Shopify merchants from Stripe billing ─────────────────
+        if (shop.billing_source === 'shopify') {
+            return NextResponse.json(
+                { error: 'Shopify merchants gebruiken Shopify Billing. Beheer je abonnement via je Shopify dashboard.' },
+                { status: 403 }
+            );
         }
 
         const stripe = getStripe();

@@ -106,8 +106,8 @@ export default async function BillingPage() {
                             )}
                         </p>
                     </div>
-                    {hasStripe && (
-                        <BillingActions action="portal" />
+                    {(hasStripe || billingSource === 'shopify') && (
+                        <BillingActions action="portal" billingSource={billingSource} />
                     )}
                 </div>
 
@@ -228,6 +228,8 @@ export default async function BillingPage() {
                                     isUpgrade={isUpgrade}
                                     isDowngrade={isDowngrade}
                                     popular={config.popular}
+                                    billingSource={billingSource}
+                                    shopId={shop?.id as string}
                                 />
                             )}
                         </div>
@@ -296,8 +298,8 @@ export default async function BillingPage() {
                             {studioTotalAvailable} credits beschikbaar
                         </p>
                     </div>
-                    {hasStudioSub && hasStripe && (
-                        <BillingActions action="portal" />
+                    {hasStudioSub && (hasStripe || billingSource === 'shopify') && (
+                        <BillingActions action="portal" billingSource={billingSource} />
                     )}
                 </div>
 
