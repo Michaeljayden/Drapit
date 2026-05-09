@@ -61,7 +61,23 @@ export async function createSubscription(
     if (!config) throw new Error(`Unknown plan: ${plan}`);
 
     const returnUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/billing/shopify/callback?plan=${plan}&shop=${shopDomain}`;
-    const isTest = process.env.NODE_ENV !== 'production';
+
+    // Detect development/partner-test stores so reviewers can approve charges
+    // without real payment. Falls back to false on fetch errors.
+    let isTest = false;
+    try {
+        const shopRes = await fetch(
+            `https://${shopDomain}/admin/api/${SHOPIFY_API_VERSION}/shop.json`,
+            { headers: { 'X-Shopify-Access-Token': accessToken } },
+        );
+        if (shopRes.ok) {
+            const shopData = await shopRes.json();
+            const planName: string = shopData.shop?.plan_name ?? '';
+            isTest = planName === 'developer' || planName === 'partner_test' || planName === 'affiliate';
+        }
+    } catch {
+        console.warn('[shopify-billing] Could not fetch shop plan — defaulting test=false');
+    }
 
     const response = await fetch(
         `https://${shopDomain}/admin/api/${SHOPIFY_API_VERSION}/recurring_application_charges.json`,
