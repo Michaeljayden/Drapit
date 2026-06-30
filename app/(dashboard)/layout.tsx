@@ -16,11 +16,12 @@ export default async function DashboardLayout({
     let studioCreditsUsed = 0;
     let studioCreditsLimit = 20;
     let studioExtraCredits = 0;
+    let isShopify = false;
 
     if (user) {
         const { data: shop } = await supabase
             .from('shops')
-            .select('name, tryons_this_month, monthly_tryon_limit, studio_credits_used, studio_credits_limit, studio_extra_credits')
+            .select('name, tryons_this_month, monthly_tryon_limit, studio_credits_used, studio_credits_limit, studio_extra_credits, billing_source')
             .eq('owner_id', user.id)
             .single();
 
@@ -31,6 +32,7 @@ export default async function DashboardLayout({
             studioCreditsUsed = shop.studio_credits_used ?? 0;
             studioCreditsLimit = shop.studio_credits_limit ?? 20;
             studioExtraCredits = shop.studio_extra_credits ?? 0;
+            isShopify = shop.billing_source === 'shopify';
         }
     }
 
@@ -46,6 +48,7 @@ export default async function DashboardLayout({
                 studioCreditsLimit={studioCreditsLimit}
                 studioExtraCredits={studioExtraCredits}
                 isAdmin={isAdmin}
+                isShopify={isShopify}
             />
             {/* Main content: offset for desktop sidebar + mobile top bar */}
             <main className="md:ml-64 bg-[#F8FAFC] min-h-screen pt-[72px] md:pt-0 p-4 md:p-8 overflow-y-auto">

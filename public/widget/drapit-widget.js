@@ -24,7 +24,12 @@
 
     // ── Configuration ─────────────────────────────────────────────────────
     const SCRIPT_EL = document.currentScript;
-    const API_KEY = SCRIPT_EL?.getAttribute('data-drapit-key') || '';
+    // Treat empty or placeholder values as "no key" so the widget can
+    // auto-resolve a key via /api/widget/config using the shop domain.
+    const RAW_KEY = (SCRIPT_EL?.getAttribute('data-drapit-key') || '').trim();
+    const IS_PLACEHOLDER_KEY = !RAW_KEY || /^dk_live_\.\.\.?$/i.test(RAW_KEY) || RAW_KEY === 'dk_live_';
+    let API_KEY = IS_PLACEHOLDER_KEY ? '' : RAW_KEY;
+    const SHOP_DOMAIN = (SCRIPT_EL?.getAttribute('data-drapit-shop') || '').trim();
     const PRIMARY_COLOR = SCRIPT_EL?.getAttribute('data-drapit-color') || '#1D6FD8';
     const CTA_TEXT = SCRIPT_EL?.getAttribute('data-drapit-cta') || 'Virtueel passen | Virtual try-on';
     const API_BASE = SCRIPT_EL?.src
@@ -33,12 +38,33 @@
     const POLL_INTERVAL = 3000;
     const MAX_POLLS = 60; // 3 min max
 
-    if (!API_KEY) {
-        console.error('[Drapit] Missing data-drapit-key attribute on script tag.');
+    if (!API_KEY && !SHOP_DOMAIN) {
+        console.error('[Drapit] Geen API-key en geen shop-domein gevonden op de script-tag. ' +
+            'Voeg data-drapit-shop toe (bijv. {{ shop.permanent_domain }}) of vul een geldige data-drapit-key in.');
         return;
     }
 
-    console.log('[Drapit Widget] v1.1.0 (Bilingual) loaded — key: ' + API_KEY.substring(0, 12) + '…');
+    // Resolve the publishable key from the shop domain when no explicit key is set.
+    // Cached after the first successful lookup.
+    let _keyResolution = null;
+    async function ensureApiKey() {
+        if (API_KEY) return API_KEY;
+        if (!SHOP_DOMAIN) throw new Error('NO_KEY');
+        if (!_keyResolution) {
+            _keyResolution = fetch(`${API_BASE}/api/widget/config?shop=${encodeURIComponent(SHOP_DOMAIN)}`)
+                .then(async (res) => {
+                    if (!res.ok) throw new Error('CONFIG_' + res.status);
+                    const data = await res.json();
+                    if (!data.key) throw new Error('NO_KEY');
+                    API_KEY = data.key;
+                    return API_KEY;
+                });
+        }
+        return _keyResolution;
+    }
+
+    console.log('[Drapit Widget] v1.1.0 (Bilingual) loaded — '
+        + (API_KEY ? 'key: ' + API_KEY.substring(0, 12) + '…' : 'auto-key via shop ' + SHOP_DOMAIN));
 
     // ── CSS ───────────────────────────────────────────────────────────────
     const STYLES = `
@@ -692,6 +718,9 @@
         }, 3500);
 
         try {
+            // Make sure we have a valid key before doing any work.
+            await ensureApiKey();
+
             const uploadUrl = await uploadUserPhoto(userPhotoFile);
 
             const res = await fetch(`${API_BASE}/api/tryon`, {
@@ -724,7 +753,7 @@
             await pollForResult(overlay, body, tryonId, product);
         } catch (err) {
             console.error('[Drapit] Try-on error:', err);
-            showError(body, err.message, product, overlay);
+            showError(body, friendlyError(err.message), product, overlay);
         } finally {
             clearInterval(msgInterval);
         }
@@ -742,11 +771,31 @@
         });
 
         if (!res.ok) {
-            throw new Error('Foto upload mislukt | Photo upload failed. Probeer het opnieuw | Please try again.');
+            // 401 = invalid/missing key → distinct code so we can show a clear message.
+            if (res.status === 401) throw new Error('AUTH');
+            throw new Error('UPLOAD_FAILED');
         }
 
         const data = await res.json();
         return data.url;
+    }
+
+    // Map internal error codes to friendly bilingual messages.
+    function friendlyError(message) {
+        switch (message) {
+            case 'NO_KEY':
+            case 'AUTH':
+                return 'De try-on widget is nog niet volledig geactiveerd voor deze winkel. '
+                    + '| This try-on widget is not fully activated for this store yet.';
+            case 'UPLOAD_FAILED':
+                return 'Foto uploaden mislukt. Probeer het opnieuw. | Photo upload failed. Please try again.';
+            default:
+                if (typeof message === 'string' && message.startsWith('CONFIG_')) {
+                    return 'De try-on widget is nog niet volledig geactiveerd voor deze winkel. '
+                        + '| This try-on widget is not fully activated for this store yet.';
+                }
+                return message || 'Er ging iets mis. Probeer het opnieuw. | Something went wrong. Please try again.';
+        }
     }
 
     // ── Poll for result ───────────────────────────────────────────────────

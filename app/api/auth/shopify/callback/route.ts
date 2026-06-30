@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { sendWelcomeEmail } from '@/lib/email';
+import { ensureShopAuthUser, ensureWidgetKey, shopifyLoginEmail } from '@/lib/shopify-onboarding';
 
 const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://drapit.io';
 
 // ---------------------------------------------------------------------------
 // HMAC validation — verifies the request is genuinely from Shopify
@@ -142,16 +145,55 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Failed to save shop data' }, { status: 500 });
     }
 
-    // 6. Send welcome email on first install (fire-and-forget)
+    // 6. Link the store to a dedicated dashboard account (owner_id) so the
+    //    merchant is recognised as a Shopify (billing_source = 'shopify')
+    //    merchant, and auto-generate the publishable widget key so the
+    //    storefront widget works without manual configuration.
+    try {
+        await ensureShopAuthUser(supabase, {
+            id: data.id,
+            owner_id: data.owner_id ?? null,
+            shopify_domain: shop,
+            email: shopEmail,
+        });
+        await ensureWidgetKey(supabase, {
+            id: data.id,
+            widget_public_key: data.widget_public_key ?? null,
+        });
+    } catch (linkErr) {
+        // Non-fatal: the merchant can still complete setup from the dashboard.
+        console.error('[shopify/callback] Onboarding linking error:', linkErr);
+    }
+
+    // 7. Send welcome email on first install (fire-and-forget)
     if (isNewInstall && shopEmail && !shopEmail.includes('shopify-placeholder')) {
         sendWelcomeEmail(shopEmail, shopDisplayName).catch(console.error);
     }
 
-    // 7. Redirect: nieuwe installs gaan naar billing om een plan te kiezen,
-    //    heraanmeldingen gaan direct naar het dashboard.
-    const redirectUrl = isNewInstall
-        ? `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/billing?new_install=true&shop_id=${data.id}`
-        : `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?shop_id=${data.id}`;
+    // 8. Auto-login the merchant via a one-time magic link, then land them in
+    //    the dashboard. New installs go to billing (Shopify Managed Pricing),
+    //    re-installs go straight to the dashboard.
+    const next = isNewInstall ? '/dashboard/billing' : '/dashboard';
+    const loginEmail = shopifyLoginEmail(shop);
+
+    let redirectUrl = `${APP_URL}${next}`; // fallback if magic-link generation fails
+
+    try {
+        const { data: linkData, error: linkErr } = await supabase.auth.admin.generateLink({
+            type: 'magiclink',
+            email: loginEmail,
+            options: {
+                redirectTo: `${APP_URL}/auth/callback?next=${encodeURIComponent(next)}`,
+            },
+        });
+        if (!linkErr && linkData?.properties?.action_link) {
+            redirectUrl = linkData.properties.action_link;
+        } else if (linkErr) {
+            console.error('[shopify/callback] generateLink error:', linkErr.message);
+        }
+    } catch (err) {
+        console.error('[shopify/callback] generateLink threw:', err);
+    }
 
     const redirectResponse = NextResponse.redirect(redirectUrl);
     // Clear the OAuth state cookie — one-time use only

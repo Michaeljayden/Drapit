@@ -6,6 +6,7 @@
 <script
   src="https://drapit.io/widget/drapit-widget.js"
   data-drapit-key="{{ block.settings.api_key }}"
+  data-drapit-shop="{{ shop.permanent_domain }}"
   data-drapit-color="{{ block.settings.button_color }}"
   data-drapit-cta="{{ block.settings.button_text }}"
   defer
@@ -29,8 +30,9 @@
     {
       "type": "text",
       "id": "api_key",
-      "label": "Drapit API Key",
-      "default": "dk_live_..."
+      "label": "Drapit API Key (optioneel)",
+      "info": "Laat dit leeg — de widget haalt de juiste sleutel automatisch op na installatie. Vul alleen handmatig een sleutel in als je daarom gevraagd wordt.",
+      "default": ""
     },
     {
       "type": "color",

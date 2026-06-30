@@ -31,6 +31,10 @@ api_version = "2026-01"
   topics = ["app/uninstalled"]
   uri = "https://drapit.io/api/webhook/shopify/app/uninstalled"
 
+  [[webhooks.subscriptions]]
+  topics = ["app_subscriptions/update"]
+  uri = "https://drapit.io/api/webhook/shopify/app_subscriptions/update"
+
 [pos]
 embedded = false
 

@@ -5,6 +5,7 @@ import type { Plan, StudioPlan } from '@/lib/supabase/types';
 import BillingActions from '@/components/dashboard/BillingActions';
 import StudioBillingActions from '@/components/dashboard/StudioBillingActions';
 import AutoTopupSettings from '@/components/dashboard/AutoTopupSettings';
+import { getManagedPricingUrl } from '@/lib/shopify-managed-pricing';
 
 const planOrder: Plan[] = ['trial', 'starter', 'growth', 'scale', 'enterprise'];
 const studioPlanOrder: StudioPlan[] = ['studio_trial', 'studio_starter', 'studio_pro', 'studio_scale'];
@@ -16,7 +17,7 @@ export default async function BillingPage() {
 
     const { data: shop } = await supabase
         .from('shops')
-        .select('id, plan, tryons_this_month, monthly_tryon_limit, rollover_tryons, extra_tryons, stripe_customer_id, billing_source, has_studio, studio_plan, studio_credits_used, studio_credits_limit, studio_extra_credits, studio_subscription_id, auto_topup_enabled, auto_topup_threshold_pct, auto_topup_pack_index, auto_topup_monthly_cap, auto_topup_spent_this_month')
+        .select('id, plan, tryons_this_month, monthly_tryon_limit, rollover_tryons, extra_tryons, stripe_customer_id, billing_source, shopify_domain, has_studio, studio_plan, studio_credits_used, studio_credits_limit, studio_extra_credits, studio_subscription_id, auto_topup_enabled, auto_topup_threshold_pct, auto_topup_pack_index, auto_topup_monthly_cap, auto_topup_spent_this_month')
         .eq('owner_id', user.id)
         .single();
 
@@ -24,6 +25,11 @@ export default async function BillingPage() {
     const currentPlan = ((shop?.plan as string) || 'starter') as Plan;
     const hasStripe = !!(shop?.stripe_customer_id);
     const billingSource = (shop?.billing_source as string | null) ?? null;
+
+    // Shopify merchants manage billing on-platform via Shopify Managed Pricing.
+    const isShopify = billingSource === 'shopify';
+    const shopifyDomain = (shop?.shopify_domain as string | null) ?? null;
+    const managedPricingUrl = isShopify && shopifyDomain ? getManagedPricingUrl(shopifyDomain) : null;
     const tryonsUsed = (shop?.tryons_this_month as number) ?? 0;
     const tryonsLimit = (shop?.monthly_tryon_limit as number) ?? 500;
     const rolloverTryons = (shop?.rollover_tryons as number) ?? 0;
@@ -106,8 +112,22 @@ export default async function BillingPage() {
                             )}
                         </p>
                     </div>
-                    {(hasStripe || billingSource === 'shopify') && (
-                        <BillingActions action="portal" billingSource={billingSource} />
+                    {isShopify ? (
+                        managedPricingUrl && (
+                            <a
+                                href={managedPricingUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 text-sm font-medium px-4 py-2.5 rounded-xl transition-colors duration-150"
+                                style={{ backgroundColor: colors.gray100, color: colors.gray900 }}
+                            >
+                                Beheren in Shopify
+                            </a>
+                        )
+                    ) : (
+                        hasStripe && (
+                            <BillingActions action="portal" billingSource={billingSource} />
+                        )
                     )}
                 </div>
 
@@ -128,21 +148,45 @@ export default async function BillingPage() {
                 </div>
             </div>
 
-            {/* Auto top-up settings */}
-            <AutoTopupSettings
-                shopId={shop?.id as string ?? ''}
-                autoTopupEnabled={autoTopupEnabled}
-                autoTopupThresholdPct={autoTopupThresholdPct}
-                autoTopupPackIndex={autoTopupPackIndex}
-                autoTopupMonthlyCap={autoTopupMonthlyCap}
-                autoTopupSpentThisMonth={autoTopupSpentThisMonth}
-                extraTryons={extraTryons}
-                billingSource={billingSource}
-                hasStripeCustomer={hasStripe}
-                plan={currentPlan}
-            />
+            {/* Auto top-up settings (Stripe only — hidden for Shopify merchants) */}
+            {!isShopify && (
+                <AutoTopupSettings
+                    shopId={shop?.id as string ?? ''}
+                    autoTopupEnabled={autoTopupEnabled}
+                    autoTopupThresholdPct={autoTopupThresholdPct}
+                    autoTopupPackIndex={autoTopupPackIndex}
+                    autoTopupMonthlyCap={autoTopupMonthlyCap}
+                    autoTopupSpentThisMonth={autoTopupSpentThisMonth}
+                    extraTryons={extraTryons}
+                    billingSource={billingSource}
+                    hasStripeCustomer={hasStripe}
+                    plan={currentPlan}
+                />
+            )}
 
-            {/* VTON Plans grid */}
+            {/* Shopify merchants: manage the plan on Shopify's Managed Pricing page */}
+            {isShopify && (
+                <div className={componentStyles.dashboardCard}>
+                    <h2 className={typography.h3} style={{ color: colors.gray900 }}>Abonnement beheren</h2>
+                    <p className="text-sm mt-1 mb-4" style={{ color: colors.gray500 }}>
+                        Je abonnement loopt via Shopify. Kies of wijzig je plan veilig in je Shopify-beheer — facturering verloopt volledig via Shopify.
+                    </p>
+                    {managedPricingUrl && (
+                        <a
+                            href={managedPricingUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors duration-150"
+                            style={{ backgroundColor: colors.blue, color: colors.white }}
+                        >
+                            Plan kiezen of wijzigen in Shopify
+                        </a>
+                    )}
+                </div>
+            )}
+
+            {/* VTON Plans grid (Stripe checkout — hidden for Shopify merchants) */}
+            {!isShopify && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {planOrder.map((planKey) => {
                     const config = PLANS[planKey];
@@ -236,7 +280,11 @@ export default async function BillingPage() {
                     );
                 })}
             </div>
+            )}
 
+            {/* Studio section (Stripe only — hidden for Shopify merchants) */}
+            {!isShopify && (
+            <>
             {/* ═══════════════════════════════════════════════════════════════ */}
             {/* Divider */}
             {/* ═══════════════════════════════════════════════════════════════ */}
@@ -487,6 +535,8 @@ export default async function BillingPage() {
                     ))}
                 </div>
             </div>
+            </>
+            )}
 
             {/* ═══════════════════════════════════════════════════════════════ */}
             {/* FAQ */}

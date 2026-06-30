@@ -16,9 +16,10 @@ interface SidebarProps {
     studioCreditsLimit?: number;
     studioExtraCredits?: number;
     isAdmin?: boolean;
+    isShopify?: boolean;
 }
 
-export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryonsLimit = 500, studioCreditsUsed = 0, studioCreditsLimit = 20, studioExtraCredits = 0, isAdmin = false }: SidebarProps) {
+export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryonsLimit = 500, studioCreditsUsed = 0, studioCreditsLimit = 20, studioExtraCredits = 0, isAdmin = false, isShopify = false }: SidebarProps) {
     const t = useTranslations('nav');
     const tCommon = useTranslations('buttons');
     const pathname = usePathname();
@@ -152,6 +153,11 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
     },
 ];
 
+    // Shopify merchants don't get the (Stripe-billed) Studio product in their nav.
+    const visibleNavItems = isShopify
+        ? navItems.filter((item) => !item.href.startsWith('/dashboard/studio'))
+        : navItems;
+
     const usagePercent = tryonsLimit > 0 ? Math.min((tryonsUsed / tryonsLimit) * 100, 100) : 0;
     const usageColor = usagePercent > 90 ? '#EF4444' : usagePercent > 75 ? '#F59E0B' : '#1D6FD8';
 
@@ -196,7 +202,7 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
 
             {/* Navigation */}
             <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto">
-                {navItems.map((item) => {
+                {visibleNavItems.map((item) => {
                     const isParentActive =
                         item.href === '/dashboard'
                             ? pathname === '/dashboard'
@@ -266,7 +272,8 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
             {/* Usage indicator */}
             <div className="px-4 py-3 mx-3 mb-3">
                 <div className="bg-white/5 rounded-xl p-3 border border-white/5 space-y-3">
-                    {/* Studio Credits */}
+                    {/* Studio Credits (Stripe-billed — hidden for Shopify merchants) */}
+                    {!isShopify && (
                     <div>
                         <div className="flex justify-between items-center mb-2">
                             <span className="text-[11px] font-semibold text-[#94A3B8]">Studio credits</span>
@@ -296,9 +303,10 @@ export default function Sidebar({ shopName = 'Mijn Shop', tryonsUsed = 0, tryons
                             </a>
                         )}
                     </div>
+                    )}
 
                     {/* Divider */}
-                    <div className="h-px bg-white/8" />
+                    {!isShopify && <div className="h-px bg-white/8" />}
 
                     {/* Try-ons */}
                     <div>
