@@ -29,7 +29,14 @@
     const RAW_KEY = (SCRIPT_EL?.getAttribute('data-drapit-key') || '').trim();
     const IS_PLACEHOLDER_KEY = !RAW_KEY || /^dk_live_\.\.\.?$/i.test(RAW_KEY) || RAW_KEY === 'dk_live_';
     let API_KEY = IS_PLACEHOLDER_KEY ? '' : RAW_KEY;
-    const SHOP_DOMAIN = (SCRIPT_EL?.getAttribute('data-drapit-shop') || '').trim();
+    // Shop domain: explicit attribute first, else Shopify's storefront global
+    // (window.Shopify.shop is present on every Shopify storefront), so the
+    // widget works zero-config even with the older theme block.
+    const SHOP_DOMAIN = (
+        SCRIPT_EL?.getAttribute('data-drapit-shop')
+        || (typeof window !== 'undefined' && window.Shopify && window.Shopify.shop)
+        || ''
+    ).trim();
     const PRIMARY_COLOR = SCRIPT_EL?.getAttribute('data-drapit-color') || '#1D6FD8';
     const CTA_TEXT = SCRIPT_EL?.getAttribute('data-drapit-cta') || 'Virtueel passen | Virtual try-on';
     const API_BASE = SCRIPT_EL?.src
