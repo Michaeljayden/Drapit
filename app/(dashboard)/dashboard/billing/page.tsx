@@ -5,7 +5,7 @@ import type { Plan, StudioPlan } from '@/lib/supabase/types';
 import BillingActions from '@/components/dashboard/BillingActions';
 import StudioBillingActions from '@/components/dashboard/StudioBillingActions';
 import AutoTopupSettings from '@/components/dashboard/AutoTopupSettings';
-import { getManagedPricingUrl } from '@/lib/shopify-managed-pricing';
+import { getManagedPricingUrl, syncShopifyPlan } from '@/lib/shopify-managed-pricing';
 
 const planOrder: Plan[] = ['trial', 'starter', 'growth', 'scale', 'enterprise'];
 const studioPlanOrder: StudioPlan[] = ['studio_trial', 'studio_starter', 'studio_pro', 'studio_scale'];
@@ -20,6 +20,15 @@ export default async function BillingPage() {
         .select('id, plan, tryons_this_month, monthly_tryon_limit, rollover_tryons, extra_tryons, stripe_customer_id, billing_source, shopify_domain, has_studio, studio_plan, studio_credits_used, studio_credits_limit, studio_extra_credits, studio_subscription_id, auto_topup_enabled, auto_topup_threshold_pct, auto_topup_pack_index, auto_topup_monthly_cap, auto_topup_spent_this_month')
         .eq('owner_id', user.id)
         .single();
+
+    // Keep the plan + limit in sync with the merchant's active Shopify plan.
+    if (shop && shop.billing_source === 'shopify') {
+        const synced = await syncShopifyPlan(shop.id as string);
+        if (synced) {
+            shop.plan = synced.plan;
+            shop.monthly_tryon_limit = synced.monthly_tryon_limit;
+        }
+    }
 
     // ── VTON data ────────────────────────────────────────────────────────
     const currentPlan = ((shop?.plan as string) || 'starter') as Plan;

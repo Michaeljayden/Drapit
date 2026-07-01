@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { sendWelcomeEmail } from '@/lib/email';
 import { ensureShopAuthUser, ensureWidgetKey, shopifyLoginEmail } from '@/lib/shopify-onboarding';
+import { syncShopifyPlan } from '@/lib/shopify-managed-pricing';
 
 const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -160,6 +161,8 @@ export async function GET(request: NextRequest) {
             id: data.id,
             widget_public_key: data.widget_public_key ?? null,
         });
+        // Set the initial plan + limit from the merchant's Shopify subscription.
+        await syncShopifyPlan(data.id);
     } catch (linkErr) {
         // Non-fatal: the merchant can still complete setup from the dashboard.
         console.error('[shopify/callback] Onboarding linking error:', linkErr);

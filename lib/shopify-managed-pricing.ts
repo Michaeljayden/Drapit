@@ -13,6 +13,7 @@
 // =============================================================================
 
 import type { Plan } from '@/lib/supabase/types';
+import { createClient } from '@supabase/supabase-js';
 
 const SHOPIFY_API_VERSION = '2026-01';
 
@@ -114,4 +115,53 @@ export async function getActiveSubscription(
         status: active.status,
         plan: mapShopifyPlanNameToKey(active.name),
     };
+}
+
+// ---------------------------------------------------------------------------
+// syncShopifyPlan — reads the store's active Managed Pricing subscription and
+// updates shops.plan + monthly_tryon_limit to match. Runs on dashboard/billing
+// load and at install, so per-merchant limits always reflect their chosen
+// Shopify plan without needing the app_subscriptions/update webhook.
+// Returns the (possibly updated) plan + limit, or null when not applicable.
+// ---------------------------------------------------------------------------
+export async function syncShopifyPlan(
+    shopId: string,
+): Promise<{ plan: Plan; monthly_tryon_limit: number } | null> {
+    const admin = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!,
+        { auth: { autoRefreshToken: false, persistSession: false } },
+    );
+
+    const { data: shop } = await admin
+        .from('shops')
+        .select('shopify_domain, shopify_access_token, billing_source, plan, monthly_tryon_limit')
+        .eq('id', shopId)
+        .single();
+
+    if (
+        !shop ||
+        shop.billing_source !== 'shopify' ||
+        !shop.shopify_domain ||
+        !shop.shopify_access_token
+    ) {
+        return null;
+    }
+
+    try {
+        const sub = await getActiveSubscription(shop.shopify_domain, shop.shopify_access_token);
+        if (!sub) return null; // no active paid subscription (e.g. Free/trial)
+
+        const limit = planLimitForKey(sub.plan);
+        if (shop.plan !== sub.plan || shop.monthly_tryon_limit !== limit) {
+            await admin
+                .from('shops')
+                .update({ plan: sub.plan, monthly_tryon_limit: limit })
+                .eq('id', shopId);
+        }
+        return { plan: sub.plan, monthly_tryon_limit: limit };
+    } catch (err) {
+        console.error('[syncShopifyPlan]', err);
+        return null;
+    }
 }
