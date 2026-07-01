@@ -563,6 +563,9 @@
         // stacking context (transform/filter/position on the product section).
         const modalHost = document.createElement('div');
         modalHost.className = 'drapit-modal-host';
+        // Force visibility: some themes hide unknown top-level divs, so an inline
+        // !important display beats the theme CSS (same reason the button host does this).
+        modalHost.style.setProperty('display', 'block', 'important');
         const shadow = modalHost.attachShadow({ mode: 'closed' });
         const modalStyle = document.createElement('style');
         modalStyle.textContent = STYLES;
