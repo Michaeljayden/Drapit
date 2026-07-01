@@ -548,14 +548,30 @@
     }
 
     // ── Modal ─────────────────────────────────────────────────────────────
-    function openModal(shadow, product) {
-        if (currentModal) currentModal.remove();
+    function openModal(_shadowIgnored, product) {
+        if (currentModal) {
+            const prevHost = currentModal._drapitHost;
+            currentModal.remove();
+            if (prevHost) prevHost.remove();
+        }
 
         userPhotoDataUrl = null;
         userPhotoFile = null;
 
+        // Mount the modal in a fresh top-level host on <body> so its fixed
+        // overlay is never trapped behind the product media by an ancestor
+        // stacking context (transform/filter/position on the product section).
+        const modalHost = document.createElement('div');
+        modalHost.className = 'drapit-modal-host';
+        const shadow = modalHost.attachShadow({ mode: 'closed' });
+        const modalStyle = document.createElement('style');
+        modalStyle.textContent = STYLES;
+        shadow.appendChild(modalStyle);
+        document.body.appendChild(modalHost);
+
         const overlay = document.createElement('div');
         overlay.className = 'drapit-overlay';
+        overlay._drapitHost = modalHost;
         currentModal = overlay;
 
         overlay.innerHTML = `
@@ -686,7 +702,8 @@
 
     function closeModal(overlay) {
         overlay.classList.remove('active');
-        setTimeout(() => overlay.remove(), 250);
+        const host = overlay._drapitHost;
+        setTimeout(() => { (host || overlay).remove(); }, 250);
         currentModal = null;
     }
 
