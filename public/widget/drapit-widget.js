@@ -65,6 +65,11 @@
                     if (!data.key) throw new Error('NO_KEY');
                     API_KEY = data.key;
                     return API_KEY;
+                })
+                .catch((err) => {
+                    // Don't cache a failed lookup — let the next attempt retry.
+                    _keyResolution = null;
+                    throw err;
                 });
         }
         return _keyResolution;
