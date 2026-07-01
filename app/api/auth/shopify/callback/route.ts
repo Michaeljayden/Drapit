@@ -182,12 +182,13 @@ export async function GET(request: NextRequest) {
         const { data: linkData, error: linkErr } = await supabase.auth.admin.generateLink({
             type: 'magiclink',
             email: loginEmail,
-            options: {
-                redirectTo: `${APP_URL}/auth/callback?next=${encodeURIComponent(next)}`,
-            },
         });
-        if (!linkErr && linkData?.properties?.action_link) {
-            redirectUrl = linkData.properties.action_link;
+        const tokenHash = linkData?.properties?.hashed_token;
+        if (!linkErr && tokenHash) {
+            // Verify server-side in /auth/callback so the session cookie is set
+            // on our own domain (the action_link uses an implicit hash flow that
+            // our server callback cannot read).
+            redirectUrl = `${APP_URL}/auth/callback?token_hash=${tokenHash}&next=${encodeURIComponent(next)}`;
         } else if (linkErr) {
             console.error('[shopify/callback] generateLink error:', linkErr.message);
         }
