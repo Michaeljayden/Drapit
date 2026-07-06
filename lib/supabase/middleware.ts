@@ -34,6 +34,27 @@ export async function updateSession(request: NextRequest) {
     const isSignupPage = pathname === '/auth/signup';
     const isOnboardingPage = pathname === '/dashboard/onboarding';
 
+    // ── Shopify App Store entry ──────────────────────────────────────────
+    // When Shopify opens the app with a ?shop= param and there is no session
+    // yet, start the Shopify OAuth install so the merchant is onboarded as a
+    // Shopify (billing_source = 'shopify') merchant — never the direct Stripe
+    // signup flow. This guarantees App Store merchants only ever see Shopify
+    // Managed Pricing, never off-platform billing. (Auth routes are excluded to
+    // avoid a redirect loop.)
+    const shopParam = request.nextUrl.searchParams.get('shop');
+    const isAuthFlow = pathname.startsWith('/api/auth') || pathname.startsWith('/auth');
+    if (
+        shopParam &&
+        /^[a-zA-Z0-9][a-zA-Z0-9-]*\.myshopify\.com$/.test(shopParam) &&
+        !user &&
+        isDashboardRoute &&
+        !isAuthFlow
+    ) {
+        return NextResponse.redirect(
+            new URL(`/api/auth/shopify/install?shop=${encodeURIComponent(shopParam)}`, request.url),
+        );
+    }
+
     // Protect all /dashboard/* routes (except login)
     if (isDashboardRoute && !isLoginPage && !isSignupPage && !user) {
         const loginUrl = request.nextUrl.clone();
@@ -70,7 +91,7 @@ export async function updateSession(request: NextRequest) {
     if (isDashboardRoute && !isLoginPage && !isOnboardingPage && user && user.email?.toLowerCase() !== process.env.ADMIN_EMAIL?.toLowerCase()) {
         const { data: shop } = await supabase
             .from('shops')
-            .select('id')
+            .select('id, billing_source')
             .eq('owner_id', user.id)
             .single();
 
@@ -78,6 +99,11 @@ export async function updateSession(request: NextRequest) {
             const onboardingUrl = request.nextUrl.clone();
             onboardingUrl.pathname = '/dashboard/onboarding';
             return NextResponse.redirect(onboardingUrl);
+        }
+
+        // Shopify merchants may not access the Stripe-billed Studio product.
+        if (shop.billing_source === 'shopify' && pathname.startsWith('/dashboard/studio')) {
+            return NextResponse.redirect(new URL('/dashboard/billing', request.url));
         }
     }
 
