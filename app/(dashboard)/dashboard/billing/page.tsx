@@ -555,7 +555,20 @@ export default async function BillingPage() {
                     Veelgestelde vragen
                 </h2>
                 <div className="space-y-4">
-                    {[
+                    {(isShopify ? [
+                        {
+                            q: 'Hoe wijzig ik mijn abonnement?',
+                            a: 'Je abonnement loopt volledig via Shopify. Klik op "Plan kiezen of wijzigen in Shopify" om je plan aan te passen — de kosten verschijnen gewoon op je Shopify-factuur.',
+                        },
+                        {
+                            q: 'Vervallen ongebruikte try-ons?',
+                            a: 'Nee — ongebruikte try-ons rollen automatisch door naar de volgende maand (max. 1\u00d7 je maandlimiet).',
+                        },
+                        {
+                            q: 'Wat gebeurt er als ik de app verwijder?',
+                            a: 'Je abonnement wordt dan automatisch stopgezet door Shopify. Je betaalt daarna niets meer.',
+                        },
+                    ] : [
                         {
                             q: 'Wat is een credit?',
                             a: 'Eén credit staat voor één AI-generatie in Drapit Studio. Virtual Model kost 1 credit, Product Only 1 credit, en 360° Rotatie 2 credits.',
@@ -580,7 +593,7 @@ export default async function BillingPage() {
                             q: 'Zijn VTON en Studio losse abonnementen?',
                             a: 'Ja — je kunt VTON en Drapit Studio volledig onafhankelijk van elkaar afnemen. Je betaalt alleen voor wat je gebruikt.',
                         },
-                    ].map((faq) => (
+                    ]).map((faq) => (
                         <div key={faq.q}>
                             <p className="text-sm font-medium" style={{ color: colors.gray900 }}>
                                 {faq.q}
