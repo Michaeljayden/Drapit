@@ -42,28 +42,28 @@ embedded = false
 
   [[pricing_plans.plans]]
   name = "Starter"
-  price = "49.00"
+  price = "29.00"
   currency_code = "EUR"
   interval = "EVERY_30_DAYS"
-  trial_days = 0
+  trial_days = 3
 
   [[pricing_plans.plans]]
   name = "Pro"
-  price = "199.00"
+  price = "89.00"
   currency_code = "EUR"
   interval = "EVERY_30_DAYS"
-  trial_days = 0
+  trial_days = 3
 
   [[pricing_plans.plans]]
   name = "Scale"
-  price = "399.00"
+  price = "169.00"
   currency_code = "EUR"
   interval = "EVERY_30_DAYS"
-  trial_days = 0
+  trial_days = 3
 
   [[pricing_plans.plans]]
   name = "Business"
-  price = "799.00"
+  price = "299.00"
   currency_code = "EUR"
   interval = "EVERY_30_DAYS"
-  trial_days = 0
+  trial_days = 3
