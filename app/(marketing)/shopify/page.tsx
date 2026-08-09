@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import ShopifyLaunchBar, { SHOPIFY_APP_URL } from '@/components/marketing/ShopifyLaunchBar';
+import ShopifyLaunchSection from '@/components/marketing/ShopifyLaunchSection';
 import { 
     UserPlus, 
     Key, 
@@ -411,9 +413,11 @@ export default function ShopifyGuidePage() {
 
             <div style={{ background: '#06090F', minHeight: '100vh' }}>
 
+                <ShopifyLaunchBar />
+
                 {/* ─── NAV ─────────────────────────────────────────────── */}
                 <nav style={{
-                    position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200,
+                    position: 'fixed', top: 'var(--drapit-bar-h, 0px)', left: 0, right: 0, zIndex: 200,
                     background: scrolled ? 'rgba(6,9,15,0.88)' : 'transparent',
                     backdropFilter: scrolled ? 'blur(24px) saturate(1.5)' : 'none',
                     borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : 'none',
@@ -450,7 +454,7 @@ export default function ShopifyGuidePage() {
                 </nav>
 
                 {/* ─── HERO ───────────────────────────────────────────── */}
-                <section className="drapit-grid-bg" style={{ paddingTop: 148, paddingBottom: 80, position: 'relative', overflow: 'hidden' }}>
+                <section className="drapit-grid-bg" style={{ paddingTop: 'calc(148px + var(--drapit-bar-h, 0px))', paddingBottom: 80, position: 'relative', overflow: 'hidden' }}>
                     {/* Ambient orbs */}
                     <div style={{ position: 'absolute', top: '5%', left: '-5%', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(149,191,71,0.12) 0%, transparent 68%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
                     <div style={{ position: 'absolute', bottom: '-10%', right: '-5%', width: 480, height: 480, borderRadius: '50%', background: 'radial-gradient(circle, rgba(94,142,62,0.08) 0%, transparent 65%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
@@ -463,23 +467,33 @@ export default function ShopifyGuidePage() {
                             <span style={{ fontSize: 11, fontWeight: 700, color: '#95BF47', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.1em' }}>OFFICIAL PARTNER</span>
                         </div>
 
-                        {/* Coming soon banner */}
-                        <div className={`d-in d-d2 ${hero.inView ? 'visible' : ''}`} style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 12,
-                            background: 'rgba(217,119,6,0.08)',
-                            border: '1px solid rgba(217,119,6,0.2)',
-                            borderRadius: 14,
-                            padding: '12px 22px',
-                            marginBottom: 28,
-                            maxWidth: 620,
-                        }}>
-                            <Clock size={18} color="#D97706" style={{ flexShrink: 0 }} />
-                            <span style={{ fontSize: 14, color: '#D97706', fontFamily: 'Plus Jakarta Sans, sans-serif', lineHeight: 1.5, textAlign: 'left' }}>
-                                De Shopify App Store versie is momenteel in afwachting van goedkeuring. Volg onderstaande handleiding om nu al te starten met de standalone widget.
+                        {/* Live in de App Store */}
+                        <a
+                            href={SHOPIFY_APP_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`d-in d-d2 ${hero.inView ? 'visible' : ''}`}
+                            style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 12,
+                                background: 'rgba(149,191,71,0.08)',
+                                border: '1px solid rgba(149,191,71,0.28)',
+                                borderRadius: 14,
+                                padding: '12px 22px',
+                                marginBottom: 28,
+                                maxWidth: 660,
+                                textDecoration: 'none',
+                                transition: 'background 0.25s, border-color 0.25s, transform 0.25s',
+                            }}
+                            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(149,191,71,0.14)'; e.currentTarget.style.borderColor = 'rgba(149,191,71,0.45)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(149,191,71,0.08)'; e.currentTarget.style.borderColor = 'rgba(149,191,71,0.28)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                        >
+                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#95BF47', boxShadow: '0 0 10px #95BF47', flexShrink: 0 }} />
+                            <span style={{ fontSize: 14, color: '#B5DC72', fontFamily: 'Plus Jakarta Sans, sans-serif', lineHeight: 1.5, textAlign: 'left' }}>
+                                <b style={{ fontWeight: 800 }}>Nieuw:</b> Drapit staat live in de Shopify App Store — installeer met één klik, zonder code. Liever handmatig? Volg dan onderstaande handleiding voor de standalone widget. ↗
                             </span>
-                        </div>
+                        </a>
 
                         {/* Headline */}
                         <h1 className={`d-hero-title d-in d-d3 ${hero.inView ? 'visible' : ''}`} style={{ fontSize: 'clamp(34px, 4.5vw, 62px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, lineHeight: 1.08, letterSpacing: '-0.025em', marginBottom: 24, color: '#F1F5F9' }}>
@@ -489,7 +503,7 @@ export default function ShopifyGuidePage() {
 
                         {/* Subtitle */}
                         <p className={`d-in d-d3 ${hero.inView ? 'visible' : ''}`} style={{ fontSize: 19, color: 'rgba(241,245,249,0.55)', lineHeight: 1.7, marginBottom: 20, maxWidth: 620, margin: '0 auto 20px', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-                            Volg deze eenvoudige stappen om de virtuele pas-functie toe te voegen aan je Shopify webshop. Geen technische kennis nodig — alles is kopiëren en plakken.
+                            Het snelst gaat het via de App Store: installeren met één klik. Wil je Drapit liever handmatig plaatsen? Volg dan de stappen hieronder — geen technische kennis nodig, alles is kopiëren en plakken.
                         </p>
 
                         {/* Time estimate */}
@@ -500,8 +514,21 @@ export default function ShopifyGuidePage() {
 
                         {/* CTA */}
                         <div className={`d-in d-d5 ${hero.inView ? 'visible' : ''}`} style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-                            <a href="#installatie" className="d-btn-primary-shopify" style={{ padding: '14px 30px', fontSize: 16 }}>
-                                Begin met installeren ↓
+                            <a
+                                href={SHOPIFY_APP_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="d-btn-primary-shopify"
+                                style={{ padding: '14px 30px', fontSize: 16, display: 'inline-flex', alignItems: 'center', gap: 10 }}
+                            >
+                                <img src="/images/logos/Shopify_logo_2018.svg.png" alt="" aria-hidden="true" style={{ height: 16, width: 'auto', filter: 'brightness(0) invert(1)' }} />
+                                Installeer via de App Store
+                            </a>
+                            <a href="#installatie" style={{ padding: '14px 28px', fontSize: 16, fontWeight: 500, color: 'rgba(241,245,249,0.72)', fontFamily: 'Plus Jakarta Sans, sans-serif', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 12, textDecoration: 'none', transition: 'all 0.2s' }}
+                                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#F1F5F9'; }}
+                                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = 'rgba(241,245,249,0.72)'; }}
+                            >
+                                Handmatig installeren ↓
                             </a>
                             <Link href="/dashboard/login" style={{ padding: '14px 28px', fontSize: 16, fontWeight: 500, color: 'rgba(241,245,249,0.72)', fontFamily: 'Plus Jakarta Sans, sans-serif', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 12, textDecoration: 'none', transition: 'all 0.2s' }}
                                 onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#F1F5F9'; }}
@@ -512,6 +539,9 @@ export default function ShopifyGuidePage() {
                         </div>
                     </div>
                 </section>
+
+                {/* ─── SHOPIFY APP STORE LAUNCH ──────────────────────── */}
+                <ShopifyLaunchSection showGuideLink={false} />
 
                 {/* ─── OVERVIEW CARDS ──────────────────────────────────── */}
                 <section style={{ padding: '40px 28px 0' }}>

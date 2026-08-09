@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
+import { SHOPIFY_APP_URL } from '@/components/marketing/ShopifyLaunchBar';
 import { useTranslations, useLocale } from 'next-intl';
 import { PLAN_TIERS, recommendPlan } from '@/lib/plans-config';
 import type { PlanInfo } from '@/lib/plans-config';
@@ -133,6 +134,11 @@ function MiniPlanCard({ plan, isRecommended, t }: {
                 fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '-0.02em', lineHeight: 1,
             }}>
                 {plan.price === 0 ? t('calculator.free') : `€${plan.price}`}
+                {plan.oldPrice && (
+                    <span style={{ fontSize: 12, fontWeight: 600, color: 'rgba(241,245,249,0.25)', textDecoration: 'line-through', marginLeft: 6 }}>
+                        €{plan.oldPrice}
+                    </span>
+                )}
             </div>
             <div style={{
                 fontSize: 11, color: 'rgba(241,245,249,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif', marginTop: 4,
@@ -306,6 +312,11 @@ export default function TryOnCalculator() {
                                         /{t('calculator.month')}
                                     </span>
                                 )}
+                                {recommended.oldPrice && (
+                                    <span style={{ fontSize: 16, fontWeight: 600, color: 'rgba(241,245,249,0.28)', textDecoration: 'line-through', marginLeft: 8 }}>
+                                        €{recommended.oldPrice}
+                                    </span>
+                                )}
                             </div>
 
                             {recommended.price > 0 && (
@@ -314,14 +325,35 @@ export default function TryOnCalculator() {
                                 </div>
                             )}
 
-                            <Link href="/dashboard/login" className="d-btn-primary" style={{
-                                display: 'inline-block', padding: '14px 32px', borderRadius: 12,
-                                fontSize: 14, fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif',
-                                letterSpacing: '0.04em', textDecoration: 'none', marginTop: 8,
-                                boxShadow: '0 8px 28px rgba(29,111,216,0.45)',
-                            }}>
+                            <a
+                                href={SHOPIFY_APP_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="d-btn-primary"
+                                style={{
+                                    display: 'inline-block', padding: '14px 32px', borderRadius: 12,
+                                    fontSize: 14, fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif',
+                                    letterSpacing: '0.04em', textDecoration: 'none', marginTop: 8,
+                                    boxShadow: '0 8px 28px rgba(29,111,216,0.45)',
+                                }}
+                            >
                                 {t('calculator.cta', { plan: PLAN_NAMES[recommended.key] })}
-                            </Link>
+                            </a>
+
+                            <div style={{ marginTop: 14 }}>
+                                <Link
+                                    href="/dashboard/login"
+                                    style={{
+                                        fontSize: 13, fontWeight: 600, color: 'rgba(241,245,249,0.45)',
+                                        fontFamily: 'Plus Jakarta Sans, sans-serif', textDecoration: 'none',
+                                        transition: 'color 0.2s',
+                                    }}
+                                    onMouseEnter={e => { e.currentTarget.style.color = '#F1F5F9'; }}
+                                    onMouseLeave={e => { e.currentTarget.style.color = 'rgba(241,245,249,0.45)'; }}
+                                >
+                                    {t('calculator.ctaDirect')}
+                                </Link>
+                            </div>
                         </>
                     )}
                 </div>

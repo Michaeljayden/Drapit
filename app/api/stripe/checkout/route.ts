@@ -84,6 +84,19 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        // ── Prijs moet geconfigureerd zijn ──────────────────────────────
+        // Stripe Prices zijn onwijzigbaar: na de prijswijziging hoort er per
+        // plan een nieuwe Price te bestaan waarvan de ID in STRIPE_PRICE_*
+        // staat. Ontbreekt die, dan weigeren we hier — liever een duidelijke
+        // melding dan stilzwijgend het oude bedrag afschrijven.
+        if (!planConfig.price_id) {
+            console.error(`[stripe/checkout] Geen Price ID geconfigureerd voor plan "${plan}".`);
+            return NextResponse.json(
+                { error: 'Dit abonnement is tijdelijk niet af te sluiten. Neem contact met ons op — we helpen je direct verder.' },
+                { status: 503 }
+            );
+        }
+
         const stripe = getStripe();
 
         // ── Get or create Stripe Customer ───────────────────────────────

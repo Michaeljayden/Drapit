@@ -17,16 +17,35 @@ export function getStripe(): Stripe {
 }
 
 // ═════════════════════════════════════════════════════════════════════════════
-// Plan definitions
+// Plan definitions — ALLEEN voor directe drapit.io-klanten (Stripe)
 // ═════════════════════════════════════════════════════════════════════════════
-// Update the price_id values with your real Stripe Price IDs when you go live.
-// Create products + prices in Stripe Dashboard →  Products → Add product.
+// Shopify App Store-merchants lopen NIET langs dit bestand: zij betalen via
+// Shopify Managed Pricing (shopify.app.toml + lib/shopify-managed-pricing.ts).
+// Raak dat pad niet aan — de app is daarop goedgekeurd.
+//
+// De bedragen hieronder zijn de introductieprijzen en zijn gelijkgetrokken met
+// de Shopify-plannen: Starter €29, Pro €89, Scale €169, Business €299.
+// `oldPrice` is de normale prijs die doorgestreept getoond wordt.
+//
+// De bijbehorende Stripe Prices zijn op 2026-08-09 live aangemaakt; hun IDs
+// staan hieronder als fallback en kunnen per omgeving overschreven worden met
+// de STRIPE_PRICE_*-variabelen. Stripe Prices zijn onwijzigbaar: een volgende
+// prijswijziging betekent altijd een NIEUWE Price aanmaken en de ID hier of in
+// de omgeving zetten. Is er geen ID, dan weigert /api/stripe/checkout het plan
+// met een duidelijke melding in plaats van stilzwijgend iets af te schrijven.
+//
+// `legacy_price_ids` bevat de gearchiveerde Prices van vóór de introductieactie
+// (€49/€149/€199/€249/€399/€799). Die worden niet meer verkocht, maar blijven
+// nodig zodat de Stripe-webhook een eventueel oud abonnement nog aan het juiste
+// plan kan koppelen.
 // ═════════════════════════════════════════════════════════════════════════════
 
 export interface PlanConfig {
     price_id: string;
+    legacy_price_ids?: string[];  // oude Prices — alleen voor webhook-herkenning
     limit: number;
-    price: number;       // EUR, displayed on billing page
+    price: number;       // EUR, huidige (introductie)prijs
+    oldPrice?: number;   // EUR, normale prijs — doorgestreept getoond
     name: string;        // Human-readable label
     features: string[];
     popular?: boolean;
@@ -45,9 +64,11 @@ export const PLANS: Record<Plan, PlanConfig> = {
         ],
     },
     starter: {
-        price_id: process.env.STRIPE_PRICE_STARTER || 'price_1T4eWrQf4cE06T91UECmF7rp',
+        price_id: process.env.STRIPE_PRICE_STARTER || 'price_1U2VMVQf4cE06T91zazZKLX2',
+        legacy_price_ids: ['price_1T4eWrQf4cE06T91UECmF7rp'],
         limit: 500,
-        price: 49,
+        price: 29,
+        oldPrice: 49,
         name: 'Starter',
         features: [
             '500 try-ons per maand',
@@ -57,9 +78,11 @@ export const PLANS: Record<Plan, PlanConfig> = {
         ],
     },
     growth: {
-        price_id: process.env.STRIPE_PRICE_GROWTH || 'price_1T90HkQf4cE06T91QKCF4E59',
+        price_id: process.env.STRIPE_PRICE_GROWTH || 'price_1U2VMdQf4cE06T91s0SKhoSN',
+        legacy_price_ids: ['price_1T90HkQf4cE06T91QKCF4E59', 'price_1T4eXjQf4cE06T91YwBQAUWT'],
         limit: 1500,
-        price: 199,
+        price: 89,
+        oldPrice: 199,
         name: 'Pro',
         popular: true,
         features: [
@@ -72,9 +95,11 @@ export const PLANS: Record<Plan, PlanConfig> = {
         ],
     },
     scale: {
-        price_id: process.env.STRIPE_PRICE_SCALE || 'price_1T90HmQf4cE06T91k24nRnII',
+        price_id: process.env.STRIPE_PRICE_SCALE || 'price_1U2VMfQf4cE06T91hSMCP9Mn',
+        legacy_price_ids: ['price_1T90HmQf4cE06T91k24nRnII', 'price_1T4eYtQf4cE06T91fYyeFyil'],
         limit: 3000,
-        price: 399,
+        price: 169,
+        oldPrice: 399,
         name: 'Scale',
         features: [
             '3.000 try-ons per maand',
@@ -87,9 +112,11 @@ export const PLANS: Record<Plan, PlanConfig> = {
         ],
     },
     enterprise: {
-        price_id: process.env.STRIPE_PRICE_ENTERPRISE || 'price_1T90HnQf4cE06T919U4tZzbs',
+        price_id: process.env.STRIPE_PRICE_ENTERPRISE || 'price_1U2VMgQf4cE06T91ejGb80L3',
+        legacy_price_ids: ['price_1T90HnQf4cE06T919U4tZzbs', 'price_1T4eZtQf4cE06T919zzx0lVE'],
         limit: 10_000,
-        price: 799,
+        price: 299,
+        oldPrice: 799,
         name: 'Business',
         features: [
             '10.000 try-ons per maand',
@@ -106,10 +133,15 @@ export const PLANS: Record<Plan, PlanConfig> = {
 
 // ── Lookup helpers ──────────────────────────────────────────────────────────
 
-/** Find which Plan a Stripe Price ID belongs to */
+/**
+ * Find which Plan a Stripe Price ID belongs to.
+ * Kijkt ook naar legacy_price_ids, zodat abonnees op de prijzen van vóór de
+ * introductieactie herkend blijven worden door de webhook.
+ */
 export function planByPriceId(priceId: string): Plan | null {
     for (const [key, config] of Object.entries(PLANS)) {
-        if (config.price_id === priceId) return key as Plan;
+        if (config.price_id && config.price_id === priceId) return key as Plan;
+        if (config.legacy_price_ids?.includes(priceId)) return key as Plan;
     }
     return null;
 }

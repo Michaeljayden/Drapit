@@ -7,8 +7,41 @@
     "studio": "Studio",
     "vton": "VTON"
   },
+  "launch": {
+    "bar": {
+      "aria": "Aankondiging: Drapit is live in de Shopify App Store",
+      "chip": "NIEUW",
+      "textStart": "Drapit staat nu",
+      "textBold": "live in de Shopify App Store",
+      "textEnd": "— installeer met één klik.",
+      "cta": "Bekijk de listing",
+      "dismiss": "Melding sluiten"
+    },
+    "heroBadge": "NU LIVE IN DE SHOPIFY APP STORE",
+    "heroCta": "Installeer via Shopify",
+    "section": {
+      "eyebrow": "LIVE IN DE SHOPIFY APP STORE",
+      "titleStart": "Vanaf nu installeer je Drapit rechtstreeks uit de",
+      "titleHighlight": "Shopify App Store.",
+      "body": "Onze app is door de Shopify-review heen en staat officieel in de App Store. Zoek op “Drapit”, klik op installeren en de virtuele paskamer staat binnen enkele minuten live in je webshop — zonder code, zonder developer.",
+      "point0": "Installeren met één klik — geen script-tag, geen thema-aanpassingen",
+      "point1": "Werkt met elk Shopify-thema en updatet automatisch mee",
+      "point2": "Gratis plan om te starten — daarna introductieprijs vanaf €29 per maand",
+      "ctaPrimary": "Installeren in de App Store",
+      "ctaSecondary": "Bekijk de installatiehandleiding →",
+      "cardLive": "LIVE",
+      "cardBy": "door",
+      "cardTagline": "AI virtual try-on voor modewinkels. Klanten zien hoe kleding op hun eigen lichaam valt — zonder code.",
+      "cardTag0": "Gratis abonnement",
+      "cardTag1": "Werkt met elk thema",
+      "cardTag2": "Nederlands & Engels",
+      "cardInstall": "Installeren in de App Store",
+      "floatLabel": "INSTALLATIETIJD",
+      "floatValue": "Eén klik"
+    }
+  },
   "hero": {
-    "eyebrow": "AI VIRTUAL TRY-ON VOOR WEBSHOPS",
+    "eyebrow": "NU LIVE IN DE SHOPIFY APP STORE",
     "titleStart": "Meer verkopen.",
     "titleHighlight": "Minder retourzendingen.",
     "titleEnd": "",
@@ -37,7 +70,10 @@
     "eyebrow": "TRANSPARANTE PRIJZEN",
     "title": "Simpel. Voorspelbaar. Geen verrassingen.",
     "subtitle": "Kies het plan dat past bij je verkoop volume. Upgrade of downgrade op elk moment.",
-    "disclaimer": "Alle plannen excl. BTW · Annuleer op elk moment · 14 dagen tevredenheidsgarantie",
+    "introEyebrow": "LANCERINGSACTIE",
+    "introText": "Introductieprijzen — tijdelijk, zolang de lancering loopt.",
+    "introTag": "INTRODUCTIEPRIJS",
+    "disclaimer": "Installeren via de Shopify App Store · Alle plannen excl. BTW · Maandelijks opzegbaar · Introductieprijs zolang de lancering loopt",
     "notSure": "Twijfel je? Probeer onze calculator",
     "perMonth": "/maand",
     "tryOns": "try-ons",
@@ -86,7 +122,7 @@
       "business": {
         "name": "Business",
         "limit": "10.000",
-        "cta": "Neem contact op",
+        "cta": "Kies Business",
         "feature0": "10.000 try-ons/maand",
         "feature1": "Dedicated support",
         "feature2": "Custom integratie hulp",
@@ -94,7 +130,9 @@
         "feature4": "SLA garantie",
         "feature5": "Onbeperkt alles"
       }
-    }
+    },
+    "routeShopify": "Shopify-webshop? Installeer met één klik via de App Store",
+    "routeDirect": "Ander platform? Maak een account aan — dezelfde prijs"
   },
   "calculator": {
     "eyebrow": "TRY-ON CALCULATOR",
@@ -117,7 +155,8 @@
     "cta": "Start met {plan} →",
     "overLimit": "Je webshop heeft een maatwerkplan nodig",
     "overLimitCta": "Neem contact op →",
-    "disclaimer": "Schattingen gebaseerd op branchegemiddelden. Werkelijk gebruik kan afwijken."
+    "disclaimer": "Schattingen gebaseerd op branchegemiddelden. Werkelijk gebruik kan afwijken.",
+    "ctaDirect": "of maak een account aan →"
   },
   "studioPricing": {
     "eyebrow": "DRAPIT STUDIO",

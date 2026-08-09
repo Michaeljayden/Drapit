@@ -5,6 +5,8 @@ import Link from 'next/link';
 import ContactForm from '@/components/ContactForm';
 import TryOnCalculator from '@/components/marketing/TryOnCalculator';
 import VideoModal from '@/components/marketing/VideoModal';
+import ShopifyLaunchBar, { SHOPIFY_APP_URL } from '@/components/marketing/ShopifyLaunchBar';
+import ShopifyLaunchSection from '@/components/marketing/ShopifyLaunchSection';
 import { useTranslations } from 'next-intl';
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -28,7 +30,7 @@ const FAQS = [
     },
     {
         q: 'Werkt Drapit op Shopify?',
-        a: 'Ja. Drapit werkt op elk platform dat custom scripts ondersteunt: Shopify, WooCommerce, Magento, maatwerk — alles. Er is geen app-installatie nodig.',
+        a: 'Ja. Drapit staat sinds augustus 2026 live in de Shopify App Store — installeren doe je met één klik, zonder code. Gebruik je een ander platform? Drapit werkt op elke webshop die custom scripts ondersteunt: WooCommerce, Magento of maatwerk.',
     },
     {
         q: 'Hoe werkt de AI onder de motorkap?',
@@ -311,7 +313,16 @@ export default function LandingPage() {
     }, []);
 
     // Pricing plans with translations
-    const PLANS = [
+    const PLANS: {
+        key: string;
+        name: string;
+        price: number;
+        oldPrice?: number;
+        limit: string;
+        features: string[];
+        popular: boolean;
+        cta: string;
+    }[] = [
         {
             key: 'trial',
             name: t('pricing.plans.trial.name'),
@@ -328,7 +339,8 @@ export default function LandingPage() {
         {
             key: 'starter',
             name: t('pricing.plans.starter.name'),
-            price: 49,
+            price: 29,
+            oldPrice: 49,
             limit: t('pricing.plans.starter.limit'),
             features: [
                 t('pricing.plans.starter.feature0'),
@@ -342,7 +354,8 @@ export default function LandingPage() {
         {
             key: 'pro',
             name: t('pricing.plans.pro.name'),
-            price: 199,
+            price: 89,
+            oldPrice: 199,
             limit: t('pricing.plans.pro.limit'),
             features: [
                 t('pricing.plans.pro.feature0'),
@@ -358,7 +371,8 @@ export default function LandingPage() {
         {
             key: 'scale',
             name: t('pricing.plans.scale.name'),
-            price: 399,
+            price: 169,
+            oldPrice: 399,
             limit: t('pricing.plans.scale.limit'),
             features: [
                 t('pricing.plans.scale.feature0'),
@@ -374,7 +388,8 @@ export default function LandingPage() {
         {
             key: 'business',
             name: t('pricing.plans.business.name'),
-            price: 799,
+            price: 299,
+            oldPrice: 799,
             limit: t('pricing.plans.business.limit'),
             features: [
                 t('pricing.plans.business.feature0'),
@@ -565,6 +580,180 @@ export default function LandingPage() {
                     box-shadow: 0 14px 40px rgba(29,111,216,0.65) !important;
                 }
 
+                /* ── Shopify App Store launch ─────────────────────── */
+                .d-btn-shopify {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 10px;
+                    background: linear-gradient(135deg, #95BF47, #5E8E3E);
+                    color: #FFFFFF !important;
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    font-weight: 700;
+                    letter-spacing: 0.03em;
+                    border-radius: 12px;
+                    border: none;
+                    cursor: pointer;
+                    text-decoration: none;
+                    transition: transform 0.25s, box-shadow 0.25s;
+                    box-shadow: 0 8px 28px rgba(149,191,71,0.4);
+                }
+                .d-btn-shopify:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 14px 40px rgba(149,191,71,0.6);
+                }
+                .d-hero-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 9px;
+                    background: rgba(149,191,71,0.1);
+                    border: 1px solid rgba(149,191,71,0.3);
+                    border-radius: 100px;
+                    padding: 6px 16px 6px 14px;
+                    margin-bottom: 30px;
+                    text-decoration: none;
+                    transition: background 0.25s, border-color 0.25s, transform 0.25s;
+                }
+                .d-hero-badge:hover {
+                    background: rgba(149,191,71,0.17);
+                    border-color: rgba(149,191,71,0.52);
+                    transform: translateY(-1px);
+                }
+                .d-hero-badge-dot {
+                    width: 6px; height: 6px; border-radius: 50%;
+                    background: #95BF47;
+                    box-shadow: 0 0 8px #95BF47;
+                    animation: drapit-pulse 2s ease-in-out infinite;
+                }
+                .d-hero-textlink {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 7px;
+                    background: none;
+                    border: none;
+                    padding: 0;
+                    cursor: pointer;
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: rgba(241,245,249,0.6);
+                    text-decoration: none;
+                    transition: color 0.2s;
+                }
+                .d-hero-textlink:hover { color: #F1F5F9; }
+
+                /* ── Introductieprijzen ───────────────────────────── */
+                .d-intro-banner {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 12px;
+                    margin-top: 28px;
+                    padding: 9px 20px;
+                    border-radius: 100px;
+                    background: linear-gradient(90deg, rgba(149,191,71,0.13), rgba(29,111,216,0.13));
+                    border: 1px solid rgba(149,191,71,0.3);
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                }
+                .d-intro-banner-dot {
+                    width: 6px; height: 6px; border-radius: 50%;
+                    background: #95BF47;
+                    box-shadow: 0 0 8px #95BF47;
+                    animation: drapit-pulse 2s ease-in-out infinite;
+                    flex-shrink: 0;
+                }
+                .d-intro-banner-label {
+                    font-size: 10.5px;
+                    font-weight: 800;
+                    letter-spacing: 0.13em;
+                    color: #B5DC72;
+                    white-space: nowrap;
+                }
+                .d-intro-banner-sep {
+                    width: 1px; height: 12px;
+                    background: rgba(149,191,71,0.32);
+                }
+                .d-intro-banner-text {
+                    font-size: 13.5px;
+                    font-weight: 500;
+                    color: rgba(241,245,249,0.68);
+                }
+                .d-hero-routes {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 14px;
+                    flex-wrap: wrap;
+                    margin-top: 18px;
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    font-size: 13px;
+                    color: rgba(241,245,249,0.4);
+                }
+                .d-hero-routes b { font-weight: 700; color: rgba(241,245,249,0.6); }
+                .d-hero-routes-sep {
+                    width: 1px; height: 11px;
+                    background: rgba(255,255,255,0.12);
+                }
+                .d-routes {
+                    display: flex;
+                    justify-content: center;
+                    gap: 14px;
+                    flex-wrap: wrap;
+                    margin-top: 36px;
+                }
+                .d-route {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding: 13px 22px;
+                    border-radius: 14px;
+                    background: rgba(255,255,255,0.03);
+                    border: 1px solid rgba(255,255,255,0.08);
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    font-size: 13.5px;
+                    font-weight: 600;
+                    color: rgba(241,245,249,0.66);
+                    text-decoration: none;
+                    transition: all 0.25s;
+                }
+                .d-route:hover {
+                    color: #F1F5F9;
+                    background: rgba(29,111,216,0.09);
+                    border-color: rgba(29,111,216,0.32);
+                    transform: translateY(-2px);
+                }
+                .d-route-shopify:hover {
+                    background: rgba(149,191,71,0.09);
+                    border-color: rgba(149,191,71,0.34);
+                }
+                .d-route-arrow {
+                    color: rgba(241,245,249,0.3);
+                    font-size: 13px;
+                }
+                @media (max-width: 540px) {
+                    .d-routes { flex-direction: column; align-items: stretch; }
+                    .d-route { justify-content: center; text-align: center; }
+                }
+                .d-intro-tag {
+                    display: inline-block;
+                    margin-top: 10px;
+                    padding: 3px 9px;
+                    border-radius: 100px;
+                    background: rgba(149,191,71,0.13);
+                    border: 1px solid rgba(149,191,71,0.28);
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    font-size: 9px;
+                    font-weight: 800;
+                    letter-spacing: 0.1em;
+                    color: #B5DC72;
+                    white-space: nowrap;
+                }
+                @media (max-width: 640px) {
+                    .d-intro-banner { gap: 8px; padding: 10px 18px; }
+                    .d-intro-banner-sep { display: none; }
+                    .d-intro-banner-text { font-size: 12.5px; }
+                }
+
                 .d-plan {
                     transition: transform 0.3s ease, box-shadow 0.3s ease;
                 }
@@ -661,7 +850,7 @@ export default function LandingPage() {
                 /* Mobile menu drawer */
                 .d-mobile-drawer {
                     position: fixed;
-                    top: 0;
+                    top: var(--drapit-bar-h, 0px);
                     right: 0;
                     bottom: 0;
                     width: min(320px, 85vw);
@@ -750,7 +939,7 @@ export default function LandingPage() {
                     .d-stats-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
                     .d-shopify-card { padding: 28px 18px !important; }
                     .d-hero-grid { gap: 28px !important; }
-                    .d-hero-section { padding-top: 110px !important; padding-bottom: 80px !important; }
+                    .d-hero-section { padding-top: calc(110px + var(--drapit-bar-h, 0px)) !important; padding-bottom: 80px !important; }
                     .d-platforms { margin-top: -30px !important; margin-bottom: 60px !important; }
                     .d-section-lg { padding-top: 80px !important; padding-bottom: 80px !important; }
                 }
@@ -758,9 +947,11 @@ export default function LandingPage() {
 
             <div style={{ background: '#06090F', minHeight: '100vh' }}>
 
+                <ShopifyLaunchBar />
+
                 {/* ─── NAV ─────────────────────────────────────────────── */}
                 <nav style={{
-                    position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200,
+                    position: 'fixed', top: 'var(--drapit-bar-h, 0px)', left: 0, right: 0, zIndex: 200,
                     background: scrolled ? 'rgba(6,9,15,0.88)' : 'transparent',
                     backdropFilter: scrolled ? 'blur(24px) saturate(1.5)' : 'none',
                     borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : 'none',
@@ -786,15 +977,22 @@ export default function LandingPage() {
                             >
                                 Inloggen
                             </Link>
-                            <Link href="/dashboard/login" className="d-btn-primary" style={{ padding: '9px 20px', fontSize: 14, marginLeft: 4 }}>
-                                Gratis starten →
-                            </Link>
+                            <a
+                                href={SHOPIFY_APP_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="d-btn-shopify"
+                                style={{ padding: '9px 18px', fontSize: 14, marginLeft: 4 }}
+                            >
+                                <img src="/images/logos/Shopify_logo_2018.svg.png" alt="" aria-hidden="true" style={{ height: 14, width: 'auto', filter: 'brightness(0) invert(1)' }} />
+                                Installeren
+                            </a>
                         </div>
 
                         <div className="d-nav-mobile" style={{ display: 'none', alignItems: 'center', gap: 8 }}>
-                            <Link href="/dashboard/login" className="d-btn-primary" style={{ padding: '8px 16px', fontSize: 12 }}>
-                                Start gratis
-                            </Link>
+                            <a href={SHOPIFY_APP_URL} target="_blank" rel="noopener noreferrer" className="d-btn-shopify" style={{ padding: '8px 14px', fontSize: 12 }}>
+                                Installeren
+                            </a>
                             <button
                                 className={`d-hamburger ${mobileMenuOpen ? 'open' : ''}`}
                                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -838,23 +1036,27 @@ export default function LandingPage() {
                         <Link href="/license" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>License</Link>
                         <Link href="/contact" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
                         <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '12px 0' }} />
+                        <Link href="/dashboard/login" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>Account aanmaken</Link>
                         <Link href="/dashboard/login" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>Inloggen</Link>
                     </nav>
 
                     <div style={{ paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                        <Link
-                            href="/dashboard/login"
-                            className="d-btn-primary"
-                            style={{ display: 'block', textAlign: 'center', padding: '14px 0', fontSize: 15, width: '100%' }}
+                        <a
+                            href={SHOPIFY_APP_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="d-btn-shopify"
+                            style={{ display: 'flex', justifyContent: 'center', textAlign: 'center', padding: '14px 0', fontSize: 15, width: '100%' }}
                             onClick={() => setMobileMenuOpen(false)}
                         >
-                            Gratis starten →
-                        </Link>
+                            <img src="/images/logos/Shopify_logo_2018.svg.png" alt="" aria-hidden="true" style={{ height: 15, width: 'auto', filter: 'brightness(0) invert(1)' }} />
+                            Installeer via Shopify
+                        </a>
                     </div>
                 </div>
 
                 {/* ─── HERO ───────────────────────────────────────────── */}
-                <section className="drapit-grid-bg d-hero-section" style={{ paddingTop: 148, paddingBottom: 128, position: 'relative', overflow: 'hidden' }}>
+                <section className="drapit-grid-bg d-hero-section" style={{ paddingTop: 'calc(148px + var(--drapit-bar-h, 0px))', paddingBottom: 128, position: 'relative', overflow: 'hidden' }}>
                     {/* Ambient orbs */}
                     <div style={{ position: 'absolute', top: '5%', left: '-5%', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(29,111,216,0.14) 0%, transparent 68%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
                     <div style={{ position: 'absolute', bottom: '-10%', right: '-5%', width: 480, height: 480, borderRadius: '50%', background: 'radial-gradient(circle, rgba(34,211,238,0.07) 0%, transparent 65%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
@@ -864,11 +1066,23 @@ export default function LandingPage() {
 
                             {/* Left copy */}
                             <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                {/* Eyebrow chip */}
-                                <div className={`d-in d-d1 ${hero.inView ? 'visible' : ''}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(29,111,216,0.1)', border: '1px solid rgba(29,111,216,0.22)', borderRadius: 100, padding: '6px 16px', marginBottom: 30 }}>
-                                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#22D3EE', boxShadow: '0 0 8px #22D3EE', animation: 'drapit-pulse 2s ease-in-out infinite' }} />
-                                    <span style={{ fontSize: 11, fontWeight: 700, color: '#93C5FD', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.1em' }}>{t('hero.eyebrow')}</span>
-                                </div>
+                                {/* Launch-badge — live in de Shopify App Store */}
+                                <a
+                                    href={SHOPIFY_APP_URL}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`d-hero-badge d-in d-d1 ${hero.inView ? 'visible' : ''}`}
+                                >
+                                    <span className="d-hero-badge-dot" />
+                                    <img src="/images/logos/Shopify_logo_2018.svg.png" alt="Shopify" style={{ height: 14, width: 'auto' }} />
+                                    <span style={{ width: 1, height: 12, background: 'rgba(149,191,71,0.35)' }} />
+                                    <span style={{ fontSize: 11, fontWeight: 800, color: '#B5DC72', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.1em' }}>{t('launch.heroBadge')}</span>
+                                    <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true" style={{ color: 'rgba(181,220,114,0.7)' }}>
+                                        <path d="M5.25 2.625H2.625V11.375H11.375V8.75" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M8.75 2.625H11.375V5.25" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M6.125 7.875L11.375 2.625" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                </a>
 
                                 {/* Headline */}
                                 <h1 className={`d-hero-title d-in d-d2 ${hero.inView ? 'visible' : ''}`} style={{ fontSize: 'clamp(40px, 4.5vw, 70px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, lineHeight: 1.03, letterSpacing: '-0.025em', marginBottom: 26, color: '#F1F5F9' }}>
@@ -884,59 +1098,55 @@ export default function LandingPage() {
 
                                 {/* CTAs */}
                                 <div className={`d-hero-ctas d-in d-d4 ${hero.inView ? 'visible' : ''}`} style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+                                    <a
+                                        href={SHOPIFY_APP_URL}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="d-btn-shopify"
+                                        style={{ padding: '14px 28px', fontSize: 16 }}
+                                    >
+                                        <img src="/images/logos/Shopify_logo_2018.svg.png" alt="" aria-hidden="true" style={{ height: 16, width: 'auto', filter: 'brightness(0) invert(1)' }} />
+                                        {t('launch.heroCta')}
+                                    </a>
                                     <Link href="/dashboard/login" className="d-btn-primary" style={{ padding: '14px 30px', fontSize: 16 }}>
                                         {t('hero.ctaPrimary')}
                                     </Link>
-                                    <button onClick={() => setIsVideoOpen(true)} style={{ padding: '14px 28px', fontSize: 16, fontWeight: 500, color: 'rgba(241,245,249,0.72)', fontFamily: 'Plus Jakarta Sans, sans-serif', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 12, textDecoration: 'none', transition: 'all 0.2s', cursor: 'pointer' }}
-                                        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#F1F5F9'; }}
-                                        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = 'rgba(241,245,249,0.72)'; }}
-                                    >
+                                </div>
+
+                                {/* Route-uitleg */}
+                                <div className={`d-hero-routes d-in d-d4 ${hero.inView ? 'visible' : ''}`}>
+                                    <span><b>Shopify?</b> Installeer met één klik.</span>
+                                    <span className="d-hero-routes-sep" />
+                                    <span><b>Ander platform?</b> Maak een account aan.</span>
+                                </div>
+
+                                {/* Secundaire acties */}
+                                <div className={`d-hero-ctas d-in d-d5 ${hero.inView ? 'visible' : ''}`} style={{ marginTop: 18, display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'center' }}>
+                                    <button onClick={() => setIsVideoOpen(true)} className="d-hero-textlink">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
                                         {t('hero.ctaSecondary')}
                                     </button>
-                                    <div style={{ position: 'relative', display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
-                                        <a
-                                            href="https://drapit-testomgeving.myshopify.com/?password=Drapit"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            style={{
-                                                padding: '14px 28px', fontSize: 16, fontWeight: 600,
-                                                color: '#93C5FD', fontFamily: 'Plus Jakarta Sans, sans-serif',
-                                                background: 'transparent',
-                                                border: '1.5px solid rgba(29,111,216,0.5)',
-                                                borderRadius: 12, textDecoration: 'none',
-                                                transition: 'all 0.3s ease', cursor: 'pointer',
-                                                display: 'inline-flex', alignItems: 'center', gap: 8,
-                                            }}
-                                            onMouseEnter={e => {
-                                                e.currentTarget.style.background = 'rgba(29,111,216,0.12)';
-                                                e.currentTarget.style.color = '#F1F5F9';
-                                                e.currentTarget.style.borderColor = 'rgba(34,211,238,0.6)';
-                                                e.currentTarget.style.boxShadow = '0 0 24px rgba(29,111,216,0.3)';
-                                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                            }}
-                                            onMouseLeave={e => {
-                                                e.currentTarget.style.background = 'transparent';
-                                                e.currentTarget.style.color = '#93C5FD';
-                                                e.currentTarget.style.borderColor = 'rgba(29,111,216,0.5)';
-                                                e.currentTarget.style.boxShadow = 'none';
-                                                e.currentTarget.style.transform = 'translateY(0)';
-                                            }}
-                                        >
-                                            Test de technologie
-                                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
-                                                <path d="M5.25 2.625H2.625V11.375H11.375V8.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                                <path d="M8.75 2.625H11.375V5.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                                <path d="M6.125 7.875L11.375 2.625" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                            </svg>
-                                        </a>
-                                        <span style={{ marginTop: 6, fontSize: 11, color: 'rgba(241,245,249,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.02em' }}>
-                                            Wachtwoord: <span style={{ color: 'rgba(147,197,253,0.7)', fontWeight: 600, userSelect: 'all' }}>Drapit</span>
+                                    <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'rgba(241,245,249,0.2)' }} />
+                                    <a
+                                        href="https://drapit-testomgeving.myshopify.com/?password=Drapit"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="d-hero-textlink"
+                                    >
+                                        Test de technologie
+                                        <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                            <path d="M5.25 2.625H2.625V11.375H11.375V8.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                            <path d="M8.75 2.625H11.375V5.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                            <path d="M6.125 7.875L11.375 2.625" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                        <span style={{ fontSize: 11, fontWeight: 500, color: 'rgba(241,245,249,0.3)' }}>
+                                            (wachtwoord: <span style={{ color: 'rgba(147,197,253,0.7)', fontWeight: 600, userSelect: 'all' }}>Drapit</span>)
                                         </span>
-                                    </div>
+                                    </a>
                                 </div>
 
                                 {/* Social proof */}
-                                <div className={`d-hero-proof d-in d-d5 ${hero.inView ? 'visible' : ''}`} style={{ marginTop: 36, display: 'flex', alignItems: 'center', gap: 12 }}>
+                                <div className={`d-hero-proof d-in d-d6 ${hero.inView ? 'visible' : ''}`} style={{ marginTop: 36, display: 'flex', alignItems: 'center', gap: 12 }}>
                                     <div style={{ display: 'flex' }}>
                                         {['#3B82F6', '#8B5CF6', '#EC4899', '#F59E0B', '#10B981'].map((c, i) => (
                                             <div key={i} style={{ width: 28, height: 28, borderRadius: '50%', background: c, border: '2px solid #06090F', marginLeft: i > 0 ? -9 : 0 }} />
@@ -986,6 +1196,9 @@ export default function LandingPage() {
                 <div className="d-platforms" style={{ maxWidth: 1200, margin: '-60px auto 100px', position: 'relative', zIndex: 10 }}>
                     <PlatformLogos />
                 </div>
+
+                {/* ─── SHOPIFY APP STORE LAUNCH ──────────────────────── */}
+                <ShopifyLaunchSection />
 
                 {/* ─── STATS ─────────────────────────────────────────── */}
                 <div ref={stats.ref} style={{ borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '52px 28px', background: 'rgba(13,24,41,0.45)' }}>
@@ -1055,7 +1268,7 @@ export default function LandingPage() {
                             <div>
                                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(149,191,71,0.1)', border: '1px solid rgba(149,191,71,0.2)', borderRadius: 100, padding: '5px 14px', marginBottom: 20 }}>
                                     <img src="/images/logos/Shopify_logo_2018.svg.png" alt="Shopify" style={{ height: 14, width: 'auto' }} />
-                                    <span style={{ fontSize: 10, fontWeight: 700, color: '#95BF47', fontFamily: 'Plus Jakarta Sans', letterSpacing: '0.08em' }}>SHOPIFY · BINNENKORT IN DE APP STORE</span>
+                                    <span style={{ fontSize: 10, fontWeight: 700, color: '#95BF47', fontFamily: 'Plus Jakarta Sans', letterSpacing: '0.08em' }}>SHOPIFY · NU LIVE IN DE APP STORE</span>
                                 </div>
 
                                 <h3 style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 800, color: '#F1F5F9', lineHeight: 1.15, marginBottom: 14, letterSpacing: '-0.02em', fontFamily: 'Plus Jakarta Sans' }}>
@@ -1064,7 +1277,7 @@ export default function LandingPage() {
                                 </h3>
 
                                 <p style={{ fontSize: 15, color: 'rgba(241,245,249,0.5)', lineHeight: 1.7, marginBottom: 24, fontFamily: 'Plus Jakarta Sans' }}>
-                                    Binnenkort beschikbaar in de Shopify App Store — installeer met één klik, geen code nodig. In afwachting van goedkeuring kun je nu al starten met onze standalone widget.
+                                    Drapit staat live in de Shopify App Store. Installeer met één klik vanuit je Shopify-admin — geen code, geen thema-aanpassingen. Liever zelf plaatsen? De standalone widget blijft gewoon beschikbaar.
                                 </p>
 
                                 <Link href="/shopify" style={{
@@ -1093,8 +1306,8 @@ export default function LandingPage() {
                             {/* Right: mini-stappen */}
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                                 {[
-                                    { step: '1', title: 'App Store (binnenkort)', desc: 'De Shopify App wordt binnenkort beschikbaar voor automatische installatie.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg> },
-                                    { step: '2', title: 'Standalone widget', desc: 'Start vandaag al met onze standalone widget — kopieer & plak, klaar in 10 minuten.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg> },
+                                    { step: '1', title: 'Installeer via de App Store', desc: 'Zoek op “Drapit” in de Shopify App Store en installeer met één klik — automatische updates inbegrepen.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg> },
+                                    { step: '2', title: 'Of standalone widget', desc: 'Ander platform of liever zelf plaatsen? Kopieer & plak de script-tag — klaar in 10 minuten.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg> },
                                     { step: '3', title: 'Direct live', desc: 'Je klanten kunnen meteen virtueel kleding passen op je webshop.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg> },
                                 ].map((item, i) => (
                                     <div key={i} style={{
@@ -1169,6 +1382,14 @@ export default function LandingPage() {
                             <p className={`d-in d-d3 ${pricing.inView ? 'visible' : ''}`} style={{ fontSize: 17, color: 'rgba(241,245,249,0.45)', fontFamily: 'Plus Jakarta Sans, sans-serif', maxWidth: 440, margin: '0 auto' }}>
                                 {t('pricing.subtitle')}
                             </p>
+
+                            {/* Lanceringsactie */}
+                            <div className={`d-intro-banner d-in d-d4 ${pricing.inView ? 'visible' : ''}`}>
+                                <span className="d-intro-banner-dot" />
+                                <span className="d-intro-banner-label">{t('pricing.introEyebrow')}</span>
+                                <span className="d-intro-banner-sep" />
+                                <span className="d-intro-banner-text">{t('pricing.introText')}</span>
+                            </div>
                         </div>
 
                         <div className="d-plans-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 16, alignItems: 'start' }}>
@@ -1189,10 +1410,18 @@ export default function LandingPage() {
                                     )}
                                     <div style={{ marginBottom: 22 }}>
                                         <div style={{ fontSize: 11, fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif', color: plan.popular ? '#93C5FD' : 'rgba(241,245,249,0.4)', letterSpacing: '0.08em', marginBottom: 10 }}>{plan.name.toUpperCase()}</div>
-                                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, flexWrap: 'wrap' }}>
                                             <span style={{ fontSize: 42, fontWeight: 800, fontFamily: 'Plus Jakarta Sans, sans-serif', color: '#F1F5F9', letterSpacing: '-0.028em', lineHeight: 1 }}>{plan.price === 0 ? t('pricing.free') : `€${plan.price}`}</span>
                                             {plan.price > 0 && <span style={{ fontSize: 13, color: 'rgba(241,245,249,0.35)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{t('pricing.perMonth')}</span>}
+                                            {plan.oldPrice && (
+                                                <span style={{ fontSize: 15, fontWeight: 600, color: 'rgba(241,245,249,0.28)', fontFamily: 'Plus Jakarta Sans, sans-serif', textDecoration: 'line-through', textDecorationThickness: 1, marginLeft: 4 }}>
+                                                    €{plan.oldPrice}
+                                                </span>
+                                            )}
                                         </div>
+                                        {plan.oldPrice && (
+                                            <div className="d-intro-tag">{t('pricing.introTag')}</div>
+                                        )}
                                         <div style={{ marginTop: 8, fontSize: 13, color: 'rgba(241,245,249,0.4)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{plan.limit} {t('pricing.tryOns')}{t('pricing.perMonth')}</div>
                                     </div>
 
@@ -1210,7 +1439,10 @@ export default function LandingPage() {
                                         ))}
                                     </ul>
 
-                                    <Link href="/dashboard/login"
+                                    <a
+                                        href={SHOPIFY_APP_URL}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
                                         className={plan.popular ? 'd-btn-primary' : ''}
                                         style={{
                                             display: 'block', textAlign: 'center', padding: '12px 0',
@@ -1228,12 +1460,27 @@ export default function LandingPage() {
                                         onMouseLeave={!plan.popular ? (e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'rgba(241,245,249,0.72)'; } : undefined}
                                     >
                                         {plan.popular ? plan.cta + ' →' : plan.cta}
-                                    </Link>
+                                    </a>
                                 </div>
                             ))}
                         </div>
 
-                        <p style={{ textAlign: 'center', marginTop: 32, fontSize: 13, color: 'rgba(241,245,249,0.25)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                        <div className="d-routes">
+                            <a className="d-route d-route-shopify" href={SHOPIFY_APP_URL} target="_blank" rel="noopener noreferrer">
+                                <img src="/images/logos/Shopify_logo_2018.svg.png" alt="" aria-hidden="true" style={{ height: 15, width: 'auto', flexShrink: 0 }} />
+                                <span>{t('pricing.routeShopify')}</span>
+                                <span className="d-route-arrow">↗</span>
+                            </a>
+                            <Link className="d-route" href="/dashboard/login">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }} aria-hidden="true">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><line x1="19" y1="8" x2="19" y2="14" /><line x1="22" y1="11" x2="16" y2="11" />
+                                </svg>
+                                <span>{t('pricing.routeDirect')}</span>
+                                <span className="d-route-arrow">→</span>
+                            </Link>
+                        </div>
+
+                        <p style={{ textAlign: 'center', marginTop: 26, fontSize: 13, color: 'rgba(241,245,249,0.25)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
                             {t('pricing.disclaimer')}
                         </p>
 
@@ -1399,19 +1646,19 @@ export default function LandingPage() {
                                 </h2>
 
                                 <p style={{ fontSize: 18, color: 'rgba(241,245,249,0.55)', lineHeight: 1.7, marginBottom: 40, fontFamily: 'Plus Jakarta Sans' }}>
-                                    Wij zijn trots officieel Shopify Partner te zijn. Onze technologie is ontworpen om naadloos te integreren met jouw Shopify-omgeving, zodat je klanten direct kunnen profiteren van de toekomst van online fashion retail.
+                                    Wij zijn trots officieel Shopify Partner te zijn — en sinds augustus 2026 vind je Drapit ook gewoon in de Shopify App Store. Eén klik en de virtuele paskamer staat live in je webshop, naadloos geïntegreerd met je Shopify-omgeving.
                                 </p>
 
                                 <div className="d-shopify-card-features" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 48 }}>
                                     {[
-                                        { title: 'Shopify App Store', desc: 'Binnenkort beschikbaar — we wachten op goedkeuring van Shopify. Zodra live, installeer je met één klik.', comingSoon: true },
-                                        { title: 'Naadloze Installatie', desc: 'Start nu al met onze standalone widget. Kopieer de code, plak in je theme — klaar in minuten.' }
-                                    ].map((item: { title: string; desc: string; comingSoon?: boolean }, i) => (
+                                        { title: 'Shopify App Store', desc: 'Live in de App Store — installeer Drapit met één klik vanuit je Shopify-admin, zonder code.', live: true },
+                                        { title: 'Naadloze Installatie', desc: 'Werkt met elk thema en updatet automatisch mee. Liever handmatig? De standalone widget blijft beschikbaar.' }
+                                    ].map((item: { title: string; desc: string; live?: boolean }, i) => (
                                         <div key={i}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                                                 <div style={{ fontSize: 16, fontWeight: 700, color: '#F1F5F9' }}>{item.title}</div>
-                                                {item.comingSoon && (
-                                                    <span style={{ fontSize: 9, fontWeight: 800, color: '#D97706', background: 'rgba(217,119,6,0.12)', border: '1px solid rgba(217,119,6,0.25)', borderRadius: 100, padding: '3px 10px', letterSpacing: '0.08em', fontFamily: 'Plus Jakarta Sans' }}>COMING SOON</span>
+                                                {item.live && (
+                                                    <span style={{ fontSize: 9, fontWeight: 800, color: '#B5DC72', background: 'rgba(149,191,71,0.14)', border: '1px solid rgba(149,191,71,0.3)', borderRadius: 100, padding: '3px 10px', letterSpacing: '0.08em', fontFamily: 'Plus Jakarta Sans' }}>LIVE</span>
                                                 )}
                                             </div>
                                             <p style={{ fontSize: 14, color: 'rgba(241,245,249,0.4)', lineHeight: 1.5 }}>{item.desc}</p>
@@ -1443,23 +1690,30 @@ export default function LandingPage() {
                                     Bekijk de installatie handleiding →
                                 </Link>
 
-                                <div style={{
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: 12,
-                                    background: 'rgba(217,119,6,0.06)',
-                                    padding: '12px 24px',
-                                    borderRadius: 12,
-                                    border: '1px solid rgba(217,119,6,0.2)',
-                                    opacity: 0.85,
-                                    cursor: 'default',
-                                }}>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                                <a
+                                    href={SHOPIFY_APP_URL}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: 12,
+                                        background: 'rgba(149,191,71,0.07)',
+                                        padding: '12px 24px',
+                                        borderRadius: 12,
+                                        border: '1px solid rgba(149,191,71,0.25)',
+                                        textDecoration: 'none',
+                                        transition: 'background 0.25s, border-color 0.25s, transform 0.25s',
+                                    }}
+                                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(149,191,71,0.13)'; e.currentTarget.style.borderColor = 'rgba(149,191,71,0.45)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(149,191,71,0.07)'; e.currentTarget.style.borderColor = 'rgba(149,191,71,0.25)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                                >
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
                                     <div style={{ textAlign: 'left' }}>
-                                        <div style={{ fontSize: 10, color: 'rgba(217,119,6,0.7)', fontWeight: 500, lineHeight: 1 }}>Binnenkort in de</div>
-                                        <div style={{ fontSize: 15, color: '#D97706', fontWeight: 700, lineHeight: 1.2 }}>App Store</div>
+                                        <div style={{ fontSize: 10, color: 'rgba(181,220,114,0.75)', fontWeight: 600, lineHeight: 1, letterSpacing: '0.06em' }}>NU LIVE IN DE</div>
+                                        <div style={{ fontSize: 15, color: '#B5DC72', fontWeight: 800, lineHeight: 1.2 }}>Shopify App Store ↗</div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
 
                             {/* Visual/Tech Card */}
@@ -1592,18 +1846,16 @@ export default function LandingPage() {
                                 Zet virtual try-on live<br />in minder dan 10 minuten
                             </h2>
                             <p style={{ fontSize: 17, color: 'rgba(241,245,249,0.45)', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 36, maxWidth: 420, margin: '0 auto 36px' }}>
-                                Geen creditcard nodig. Verbind je webshop en zie direct het verschil in conversie.
+                                Op Shopify installeer je met één klik. Op elk ander platform maak je een account aan en plaats je de widget zelf — dezelfde prijzen, geen creditcard nodig.
                             </p>
                             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-                                <Link href="/dashboard/login" className="d-btn-primary" style={{ padding: '16px 38px', fontSize: 16 }}>
-                                    BEGIN GRATIS →
-                                </Link>
-                                <a href="#contact" style={{ padding: '16px 30px', fontSize: 16, fontWeight: 500, color: 'rgba(241,245,249,0.68)', fontFamily: 'Plus Jakarta Sans, sans-serif', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 12, textDecoration: 'none', transition: 'all 0.2s' }}
-                                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#F1F5F9'; }}
-                                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = 'rgba(241,245,249,0.68)'; }}
-                                >
-                                    Neem contact op
+                                <a href={SHOPIFY_APP_URL} target="_blank" rel="noopener noreferrer" className="d-btn-shopify" style={{ padding: '16px 32px', fontSize: 16 }}>
+                                    <img src="/images/logos/Shopify_logo_2018.svg.png" alt="" aria-hidden="true" style={{ height: 16, width: 'auto', filter: 'brightness(0) invert(1)' }} />
+                                    INSTALLEREN VIA SHOPIFY
                                 </a>
+                                <Link href="/dashboard/login" className="d-btn-primary" style={{ padding: '16px 34px', fontSize: 16 }}>
+                                    ACCOUNT AANMAKEN →
+                                </Link>
                             </div>
                         </div>
                     </div>
