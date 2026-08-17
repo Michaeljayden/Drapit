@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import LanguageSwitcher from './LanguageSwitcher';
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -11,6 +12,7 @@ import LanguageSwitcher from './LanguageSwitcher';
    ───────────────────────────────────────────────────────────────────────────── */
 
 export default function Footer() {
+    const t = useTranslations();
     return (
         <footer style={{
             background: '#06090F',
@@ -49,69 +51,60 @@ export default function Footer() {
                             lineHeight: '1.6',
                             color: 'rgba(241,245,249,0.5)',
                             fontFamily: 'Plus Jakarta Sans, sans-serif',
-                            marginBottom: '28px'
+                            marginBottom: '20px'
                         }}>
-                            AI-powered virtual try-on technologie. Wij transformeren webshops met intelligente automatisering en realistische passessies.
+                            {t('footer.tagline')}
                         </p>
-                        <div style={{ display: 'flex', gap: '12px' }}>
-                            {['linkedin', 'twitter', 'github'].map((social) => (
-                                <a key={social} href={`#${social}`} style={{
-                                    width: '36px',
-                                    height: '36px',
-                                    borderRadius: '50%',
-                                    background: 'rgba(255,255,255,0.04)',
-                                    border: '1px solid rgba(255,255,255,0.08)',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    transition: 'all 0.2s ease',
-                                    color: 'rgba(241,245,249,0.5)'
-                                }}
-                                    onMouseEnter={e => {
-                                        e.currentTarget.style.background = 'rgba(29,111,216,0.1)';
-                                        e.currentTarget.style.borderColor = 'rgba(29,111,216,0.3)';
-                                        e.currentTarget.style.color = '#1D6FD8';
-                                        e.currentTarget.style.transform = 'translateY(-2px)';
-                                    }}
-                                    onMouseLeave={e => {
-                                        e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
-                                        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
-                                        e.currentTarget.style.color = 'rgba(241,245,249,0.5)';
-                                        e.currentTarget.style.transform = 'translateY(0)';
-                                    }}>
-                                    <span style={{ fontSize: '14px', fontWeight: 600 }}>{social[0].toUpperCase()}</span>
-                                </a>
-                            ))}
-                        </div>
+                        <a href="https://apps.shopify.com/drapit-virtual-try-on" target="_blank" rel="noopener noreferrer" style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            padding: '7px 14px',
+                            borderRadius: '100px',
+                            background: 'rgba(149,191,71,0.08)',
+                            border: '1px solid rgba(149,191,71,0.22)',
+                            textDecoration: 'none',
+                            fontSize: '11px',
+                            fontWeight: 700,
+                            letterSpacing: '0.06em',
+                            color: '#B5DC72',
+                            fontFamily: 'Plus Jakarta Sans, sans-serif',
+                            transition: 'background 0.2s, border-color 0.2s'
+                        }}
+                            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(149,191,71,0.14)'; e.currentTarget.style.borderColor = 'rgba(149,191,71,0.4)'; }}
+                            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(149,191,71,0.08)'; e.currentTarget.style.borderColor = 'rgba(149,191,71,0.22)'; }}>
+                            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#95BF47', boxShadow: '0 0 8px #95BF47' }} />
+                            SHOPIFY APP STORE ↗
+                        </a>
                     </div>
 
                     {/* Columns Container */}
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '40px', gridColumn: 'span 2' }}>
                         {/* Product Links */}
                         <div>
-                            <h4 style={footerHeadingStyle}>Product</h4>
+                            <h4 style={footerHeadingStyle}>{t('footer.product')}</h4>
                             <ul style={footerListStyle}>
-                                <li><a href="#hoe-het-werkt" style={footerLinkStyle}>Hoe het werkt</a></li>
-                                <li><a href="#shopify" style={footerLinkStyle}>Shopify Integratie</a></li>
-                                <li><a href="#prijzen" style={footerLinkStyle}>Prijzen</a></li>
-                                <li><Link href="/dashboard/login" style={footerLinkStyle}>Demo aanvragen</Link></li>
+                                <li><a href="#hoe-het-werkt" style={footerLinkStyle}>{t('footer.howItWorks')}</a></li>
+                                <li><a href="#shopify" style={footerLinkStyle}>{t('footer.shopifyIntegration')}</a></li>
+                                <li><a href="#prijzen" style={footerLinkStyle}>{t('footer.pricing')}</a></li>
+                                <li><Link href="/dashboard/login" style={footerLinkStyle}>{t('footer.requestDemo')}</Link></li>
                             </ul>
                         </div>
 
                         {/* Bedrijf Links */}
                         <div>
-                            <h4 style={footerHeadingStyle}>Bedrijf</h4>
+                            <h4 style={footerHeadingStyle}>{t('footer.company')}</h4>
                             <ul style={footerListStyle}>
-                                <li><a href="#" style={footerLinkStyle}>Over Ons</a></li>
-                                <li><a href="#faq" style={footerLinkStyle}>FAQ</a></li>
-                                <li><Link href="/privacy" style={footerLinkStyle}>Privacy Policy</Link></li>
-                                <li><Link href="/privacy#8" style={footerLinkStyle}>Cookie Beleid</Link></li>
+                                <li><Link href="/contact" style={footerLinkStyle}>{t('footer.about')}</Link></li>
+                                <li><a href="#faq" style={footerLinkStyle}>{t('footer.faq')}</a></li>
+                                <li><Link href="/privacy" style={footerLinkStyle}>{t('footer.privacyPolicy')}</Link></li>
+                                <li><Link href="/privacy#8" style={footerLinkStyle}>{t('footer.cookies')}</Link></li>
                             </ul>
                         </div>
 
                         {/* Contact Section */}
                         <div>
-                            <h4 style={footerHeadingStyle}>Contact</h4>
+                            <h4 style={footerHeadingStyle}>{t('footer.contact')}</h4>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                                 <a href="mailto:info@drapit.io" style={{
                                     display: 'flex',
@@ -185,35 +178,35 @@ export default function Footer() {
                             fontFamily: 'Plus Jakarta Sans, sans-serif',
                             margin: 0
                         }}>
-                            © 2026 Drapit. Alle rechten voorbehouden.
+                            {t('footer.rights')}
                         </p>
                         <div style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '10px',
+                            gap: '12px',
                             paddingLeft: '12px',
                             borderLeft: '1px solid rgba(255,255,255,0.08)'
                         }}>
                             <Image
                                 src="/images/ideal wero.png"
-                                alt="iDeal / Wero"
-                                width={60}
-                                height={28}
-                                style={{ objectFit: 'contain', opacity: 0.7 }}
+                                alt="iDEAL / Wero"
+                                width={52}
+                                height={22}
+                                style={{ objectFit: 'contain', opacity: 0.55, filter: 'grayscale(1) brightness(1.6)' }}
                             />
                             <Image
                                 src="/images/visa-brandmark-blue-1960x622.png"
                                 alt="Visa"
-                                width={45}
-                                height={28}
-                                style={{ objectFit: 'contain', opacity: 0.7 }}
+                                width={44}
+                                height={22}
+                                style={{ objectFit: 'contain', opacity: 0.55, filter: 'grayscale(1) brightness(1.6)' }}
                             />
                         </div>
                     </div>
                     <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-                        <Link href="/privacy" style={bottomLinkStyle}>Privacy</Link>
-                        <Link href="/privacy" style={bottomLinkStyle}>Voorwaarden</Link>
-                        <a href="#faq" style={bottomLinkStyle}>FAQ</a>
+                        <Link href="/privacy" style={bottomLinkStyle}>{t('footer.privacy')}</Link>
+                        <Link href="/privacy" style={bottomLinkStyle}>{t('footer.terms')}</Link>
+                        <a href="#faq" style={bottomLinkStyle}>{t('footer.faq')}</a>
                         <div style={{ marginLeft: '12px' }}>
                             <LanguageSwitcher />
                         </div>

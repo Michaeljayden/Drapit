@@ -244,7 +244,13 @@ export default function VtonPage() {
                             <Link href="/studio" className="d-nav-link">Studio</Link>
                             <Link href="/vton" className="d-nav-link d-nav-link-active">VTON</Link>
                             <Link href="/contact" className="d-nav-link">Contact</Link>
-                            <Link href="/dashboard/login" className="d-btn-primary" style={{ padding: '9px 20px', fontSize: 14, marginLeft: 12 }}>
+                            <Link href="/dashboard/login" style={{ marginLeft: 8, padding: '9px 18px', fontSize: 14, fontWeight: 600, color: 'rgba(241,245,249,0.75)', fontFamily: 'Plus Jakarta Sans, sans-serif', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, textDecoration: 'none', transition: 'all 0.2s' }}
+                                onMouseEnter={(e) => { e.currentTarget.style.color = '#F1F5F9'; e.currentTarget.style.borderColor = 'rgba(29,111,216,0.4)'; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(241,245,249,0.75)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
+                            >
+                                Inloggen
+                            </Link>
+                            <Link href="/dashboard/login" className="d-btn-primary" style={{ padding: '9px 20px', fontSize: 14, marginLeft: 4 }}>
                                 Gratis starten →
                             </Link>
                         </div>
@@ -285,7 +291,7 @@ export default function VtonPage() {
 
                         <h1 className={`d-in d-d2 ${hero.inView ? 'visible' : ''}`} style={{ fontSize: 'clamp(40px, 6vw, 72px)', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.03em', marginBottom: 28 }}>
                             Geef je klanten de<br />
-                            <span className="d-shimmer-blue">perfecte paservaring.</span>
+                            <span className="d-shimmer-blue">perfecte pas-ervaring.</span>
                         </h1>
 
                         <p className={`d-in d-d3 ${hero.inView ? 'visible' : ''}`} style={{ fontSize: 20, color: 'rgba(241,245,249,0.55)', lineHeight: 1.7, maxWidth: 650, margin: '0 auto 48px' }}>

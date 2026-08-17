@@ -25,34 +25,42 @@ function useInView(threshold = 0.12) {
     return { ref, inView };
 }
 
+const STUDIO_ICON_PROPS = { width: 20, height: 20, viewBox: '0 0 24 24', fill: 'none', stroke: '#818CF8', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+
 const STUDIO_FEATURES = [
     {
         title: 'Modelgeneratie',
+        icon: <svg {...STUDIO_ICON_PROPS}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M19 8l1.5-1.5M21.5 9.5L20 11M19 11l-1.5-1.5M16.5 9.5L18 8" /></svg>,
         description:
             'Genereer professionele productfoto\'s op realistische AI-modellen zonder fotoshoot te plannen. Kies uit verschillende lichaamstypes, huidstinten en poses om je doelgroep optimaal aan te spreken.',
     },
     {
         title: 'Achtergrondvervanging',
+        icon: <svg {...STUDIO_ICON_PROPS}><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="M21 15l-5-5L5 21" /></svg>,
         description:
             'Vervang saai witte studiofoto\'s automatisch door contextrijke omgevingen — een minimalistisch interieur, een stadse straat of een neutraal gradient — zonder Photoshop of externe editor.',
     },
     {
         title: 'Batch-verwerking',
+        icon: <svg {...STUDIO_ICON_PROPS}><path d="M12 2l9 4.9V17L12 22l-9-4.9V7z" /><path d="M12 22V12" /><path d="M21 7l-9 5-9-5" /></svg>,
         description:
             'Upload meerdere kledingstukken tegelijk en laat Studio alle varianten in één run verwerken. Ideaal voor seizoenscatalogi met tientallen of honderden producten.',
     },
     {
         title: 'Stijlconsistentie',
+        icon: <svg {...STUDIO_ICON_PROPS}><circle cx="13.5" cy="6.5" r=".5" fill="#818CF8" /><circle cx="17.5" cy="10.5" r=".5" fill="#818CF8" /><circle cx="8.5" cy="7.5" r=".5" fill="#818CF8" /><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" /></svg>,
         description:
             'Definieer een huisstijl — lichttemperatuur, pose, achtergrondkleur — en pas deze als template toe op elk nieuw product. Zo behoud je altijd een uniforme merkuitstraling.',
     },
     {
         title: 'Directe export',
+        icon: <svg {...STUDIO_ICON_PROPS}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>,
         description:
             'Download resultaten als hoge-resolutie JPEG of PNG, klaar voor gebruik op je Shopify webshop, sociale media of printmateriaal. Beelden worden toegevoegd aan je persoonlijke mediabibliotheek.',
     },
     {
         title: 'Privé & Veilig',
+        icon: <svg {...STUDIO_ICON_PROPS}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /><path d="M9.5 11.5l2 2 3.5-3.5" /></svg>,
         description:
             'Alle geüploade producten en gegenereerde afbeeldingen blijven exclusief in jouw accountomgeving. Drapit verkoopt of deelt nooit klantdata met derden.',
     },
@@ -568,7 +576,7 @@ export default function StudioPage() {
                                     padding: '28px 24px',
                                 }}>
                                     <div style={{ width: 42, height: 42, borderRadius: 12, background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18 }}>
-                                        <div style={{ width: 12, height: 12, borderRadius: 3, background: '#6366F1', opacity: 0.9 }} />
+                                        {feat.icon}
                                     </div>
                                     <h3 style={{ fontSize: 17, fontWeight: 700, color: '#F1F5F9', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 10, letterSpacing: '-0.01em' }}>{feat.title}</h3>
                                     <p style={{ fontSize: 14, color: 'rgba(241,245,249,0.48)', lineHeight: 1.7, fontFamily: 'Plus Jakarta Sans, sans-serif', margin: 0 }}>{feat.description}</p>

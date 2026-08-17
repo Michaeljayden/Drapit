@@ -5,7 +5,10 @@
     "faq": "FAQ",
     "shopify": "Shopify",
     "studio": "Studio",
-    "vton": "VTON"
+    "vton": "VTON",
+    "install": "Install",
+    "login": "Log in",
+    "createAccount": "Create account"
   },
   "launch": {
     "bar": {
@@ -42,13 +45,20 @@
   },
   "hero": {
     "eyebrow": "NOW LIVE ON THE SHOPIFY APP STORE",
-    "titleStart": "Let customers try on clothes",
-    "titleHighlight": "virtually",
-    "titleEnd": "in seconds.",
-    "subtitle": "One script tag. Any online store. Customers upload a photo and see themselves in any garment — powered by state-of-the-art AI diffusion technology.",
+    "titleStart": "Sell more.",
+    "titleHighlight": "Fewer returns.",
+    "titleEnd": "",
+    "subtitle": "Customers try on clothes virtually, buy with confidence and share it with friends. One script tag. Works on any online store.",
     "ctaPrimary": "Start free →",
     "ctaSecondary": "See live demo",
-    "socialProof": "2,000+ stores use Drapit"
+    "socialProof": "Start free — no credit card required",
+    "testTech": "Test the technology",
+    "passwordLabel": "password",
+    "platformsLabel": "Works with your favorite platform",
+    "routeShopify": "Install in one click.",
+    "routeOther": "Create an account.",
+    "routeShopifyLabel": "Shopify?",
+    "routeOtherLabel": "Other platform?"
   },
   "widget": {
     "demoUrl": "drapit.io/widget — live demo",
@@ -216,6 +226,194 @@
         "feature4": "Priority support",
         "feature5": "Unused credits roll over"
       }
-    }
+    },
+    "disclaimer": "All plans excl. VAT · Cancel anytime"
+  },
+  "stats": {
+    "items": [
+      {
+        "num": "< 10 min",
+        "label": "Install time",
+        "note": "One script tag"
+      },
+      {
+        "num": "+34%",
+        "label": "Higher conversion",
+        "note": "Industry average"
+      },
+      {
+        "num": "−28%",
+        "label": "Fewer returns",
+        "note": "Industry average"
+      },
+      {
+        "num": "99.9%",
+        "label": "Uptime SLA",
+        "note": "Enterprise plan"
+      }
+    ]
+  },
+  "how": {
+    "eyebrow": "HOW IT WORKS",
+    "title1": "From install to live",
+    "title2": "in three steps",
+    "steps": [
+      {
+        "title": "Add the script",
+        "desc": "Copy one line of code from your Drapit dashboard and paste it into the <head> of your store. No plugin, no developer required. Done in 5 minutes.",
+        "tag": "< 5 minutes"
+      },
+      {
+        "title": "Widget appears",
+        "desc": "The \"Virtual try-on\" button automatically appears on every product with the right data attribute. Fully customizable in colour and copy from the dashboard.",
+        "tag": "Zero-code setup"
+      },
+      {
+        "title": "AI does the rest",
+        "desc": "The customer uploads a photo. Our AI drapes the garment onto the body. Results within seconds, buy button included.",
+        "tag": "Results in seconds"
+      }
+    ]
+  },
+  "shopifyInstall": {
+    "badge": "SHOPIFY · NOW LIVE ON THE APP STORE",
+    "title": "On Shopify?",
+    "titleAccent": "Even easier.",
+    "body": "Drapit is live on the Shopify App Store. Install in one click from your Shopify admin — no code, no theme changes. Prefer to do it yourself? The standalone widget remains available.",
+    "cta": "More about the Shopify install →",
+    "steps": [
+      {
+        "title": "Install from the App Store",
+        "desc": "Search for “Drapit” in the Shopify App Store and install in one click — automatic updates included."
+      },
+      {
+        "title": "Or the standalone widget",
+        "desc": "Different platform, or prefer to place it yourself? Copy & paste the script tag — done in 10 minutes."
+      },
+      {
+        "title": "Live right away",
+        "desc": "Your customers can immediately try on clothes virtually in your store."
+      }
+    ]
+  },
+  "why": {
+    "eyebrow": "WHY DRAPIT",
+    "title1": "Built to convert.",
+    "title2": "Simple to install.",
+    "features": [
+      {
+        "title": "Platform-agnostic",
+        "desc": "Shopify, WooCommerce, Magento or custom — if it accepts HTML, Drapit works right away."
+      },
+      {
+        "title": "Fully customizable",
+        "desc": "Match the widget colour, copy and style to your brand from the dashboard. No code."
+      },
+      {
+        "title": "Real-time analytics",
+        "desc": "Try-ons per product, conversion impact and trends — all in one clear dashboard."
+      },
+      {
+        "title": "API key management",
+        "desc": "Multiple keys per shop, activate or deactivate instantly, with usage and date tracking."
+      },
+      {
+        "title": "Privacy-first",
+        "desc": "Photos are not stored after AI processing. GDPR-compliant by design, no data risk."
+      },
+      {
+        "title": "Webhook integrations",
+        "desc": "Connect try-on events to your CRM, analytics or retargeting tool via webhooks."
+      },
+      {
+        "title": "Free word of mouth",
+        "desc": "Every shared try-on is a free ad for your store. Shoppers share their result with friends — without you lifting a finger."
+      }
+    ]
+  },
+  "partner": {
+    "badge": "OFFICIAL PARTNER",
+    "title1": "Drapit & Shopify:",
+    "titleAccent": "E-commerce AI",
+    "title2": "perfected.",
+    "body": "We are proud to be an official Shopify Partner — and since August 2026 you can find Drapit right in the Shopify App Store. One click and the virtual fitting room is live in your store, seamlessly integrated with your Shopify environment.",
+    "featureAppStoreTitle": "Shopify App Store",
+    "featureAppStoreDesc": "Live on the App Store — install Drapit in one click from your Shopify admin, no code.",
+    "featureInstallTitle": "Seamless install",
+    "featureInstallDesc": "Works with every theme and updates automatically. Prefer manual? The standalone widget remains available.",
+    "ctaGuide": "View the installation guide →",
+    "liveEyebrow": "NOW LIVE ON THE",
+    "liveTitle": "Shopify App Store ↗",
+    "techEyebrow": "DRAPIT AI TECHNOLOGY",
+    "techTitle": "State-of-the-Art VTON",
+    "techBody": "Our own IDM-VTON architecture uses advanced diffusion models to photorealistically drape garments onto the customer’s body. Unlike simple overlays, Drapit understands texture, shadow and body shape.",
+    "techFeatures": [
+      "Real-time texture rendering",
+      "Automatic body detection",
+      "Dynamic lighting adjustment",
+      "Supports all garment types"
+    ],
+    "statConversion": "CONVERSION",
+    "statReturns": "RETURNS",
+    "ready": "SHOPIFY READY",
+    "live": "LIVE"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Frequently asked questions",
+    "items": [
+      {
+        "q": "How fast is the integration?",
+        "a": "Less than 10 minutes. Copy one script tag from your dashboard, paste it into the <head> of your store — Shopify, WooCommerce or custom — and the widget is live."
+      },
+      {
+        "q": "What if I reach my monthly limit?",
+        "a": "The API declines new requests until the next month. You can always upgrade instantly from your dashboard to activate more try-ons."
+      },
+      {
+        "q": "Does Drapit work on Shopify?",
+        "a": "Yes. Drapit has been live on the Shopify App Store since August 2026 — install in one click, no code. On a different platform? Drapit works on any store that supports custom scripts: WooCommerce, Magento or custom builds."
+      },
+      {
+        "q": "How does the AI work under the hood?",
+        "a": "We use IDM-VTON, a state-of-the-art diffusion model specialized in virtual try-on. The customer uploads a photo, we process both images and deliver a realistic result within seconds."
+      },
+      {
+        "q": "Can I cancel my subscription at any time?",
+        "a": "Yes, you keep access until the end of your billing period. No hidden fees, no contracts."
+      }
+    ]
+  },
+  "contactSection": {
+    "eyebrow": "CONTACT",
+    "title1": "Get in touch",
+    "title2": "with us",
+    "body": "Have a question, want a demo, or curious whether Drapit fits your store? We usually respond within one business day.",
+    "response": "Response within 1 business day"
+  },
+  "finalCta": {
+    "eyebrow": "READY TO START?",
+    "title1": "Put virtual try-on live",
+    "title2": "in under 10 minutes",
+    "body": "On Shopify you install in one click. On any other platform you create an account and place the widget yourself — same prices, no credit card required.",
+    "ctaShopify": "INSTALL VIA SHOPIFY",
+    "ctaDirect": "CREATE ACCOUNT →"
+  },
+  "footer": {
+    "tagline": "AI-powered virtual try-on technology. We transform online stores with intelligent automation and realistic fitting sessions.",
+    "product": "Product",
+    "company": "Company",
+    "contact": "Contact",
+    "howItWorks": "How it works",
+    "shopifyIntegration": "Shopify integration",
+    "pricing": "Pricing",
+    "requestDemo": "Request a demo",
+    "about": "About us",
+    "faq": "FAQ",
+    "privacyPolicy": "Privacy Policy",
+    "cookies": "Cookie Policy",
+    "rights": "© 2026 Drapit. All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms"
   }
 }

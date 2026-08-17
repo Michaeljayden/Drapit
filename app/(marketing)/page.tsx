@@ -18,29 +18,7 @@ import { useTranslations } from 'next-intl';
 // Note: PLANS moved inside LandingPage component to use translations
 
 // Note: STUDIO_PLANS moved inside LandingPage component to use translations
-
-const FAQS = [
-    {
-        q: 'Hoe snel is de integratie klaar?',
-        a: 'Minder dan 10 minuten. Kopieer één script-tag vanuit je dashboard, plak het in de <head> van je webshop — Shopify, WooCommerce of maatwerk — en de widget is live.',
-    },
-    {
-        q: 'Wat als ik mijn maandlimiet bereik?',
-        a: 'De API weigert nieuwe verzoeken tot het volgende maand. Je kunt altijd direct upgraden via je dashboard om meer try-ons te activeren.',
-    },
-    {
-        q: 'Werkt Drapit op Shopify?',
-        a: 'Ja. Drapit staat sinds augustus 2026 live in de Shopify App Store — installeren doe je met één klik, zonder code. Gebruik je een ander platform? Drapit werkt op elke webshop die custom scripts ondersteunt: WooCommerce, Magento of maatwerk.',
-    },
-    {
-        q: 'Hoe werkt de AI onder de motorkap?',
-        a: 'We gebruiken IDM-VTON, een state-of-the-art diffusion model gespecialiseerd in virtual try-on. De klant uploadt een foto, wij verwerken beide afbeeldingen en leveren binnen seconden een realistisch resultaat.',
-    },
-    {
-        q: 'Kan ik het abonnement op elk moment opzeggen?',
-        a: 'Ja, je houdt toegang tot het einde van je factureringsperiode. Geen verborgen kosten, geen contracten.',
-    },
-];
+// Note: FAQ-items komen uit locales (faq.items) zodat NL én EN kloppen
 
 function useInView(threshold = 0.12) {
     const ref = useRef<HTMLDivElement>(null);
@@ -179,7 +157,7 @@ function FAQItem({ q, a, isOpen, onToggle }: { q: string; a: string; isOpen: boo
                 <span style={{ fontSize: 16, fontWeight: 600, color: '#F1F5F9', fontFamily: 'Plus Jakarta Sans, sans-serif', lineHeight: 1.3 }}>{q}</span>
                 <div style={{ width: 30, height: 30, borderRadius: '50%', flexShrink: 0, border: '1px solid rgba(29,111,216,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1D6FD8', fontSize: 20, transition: 'transform 0.3s', transform: isOpen ? 'rotate(45deg)' : 'none', fontWeight: 300 }}>+</div>
             </div>
-            <div style={{ overflow: 'hidden', maxHeight: isOpen ? 160 : 0, transition: 'max-height 0.35s ease', marginTop: isOpen ? 12 : 0 }}>
+            <div style={{ overflow: 'hidden', maxHeight: isOpen ? 420 : 0, transition: 'max-height 0.4s ease', marginTop: isOpen ? 12 : 0 }}>
                 <p style={{ fontSize: 15, color: 'rgba(241,245,249,0.55)', lineHeight: 1.7, fontFamily: 'Plus Jakarta Sans, sans-serif', margin: 0, paddingRight: 40 }}>{a}</p>
             </div>
         </div>
@@ -187,37 +165,18 @@ function FAQItem({ q, a, isOpen, onToggle }: { q: string; a: string; isOpen: boo
 }
 
 function PlatformLogos() {
+    const t = useTranslations();
     const { ref, inView } = useInView(0.05);
 
     const logos = [
-        {
-            name: 'Shopify',
-            src: '/images/logos/Shopify_logo_2018.svg.png',
-            width: 100,
-            glow: 'rgba(149,191,71,0.15)'
-        },
-        {
-            name: 'WooCommerce',
-            src: '/images/logos/Woocommerce.png',
-            width: 100,
-            glow: 'rgba(150,88,138,0.15)'
-        },
-        {
-            name: 'Magento',
-            src: '/images/logos/Magento.png',
-            width: 100,
-            glow: 'rgba(242,99,34,0.15)'
-        },
-        {
-            name: 'Wix',
-            src: '/images/logos/wIX.png',
-            width: 60,
-            glow: 'rgba(10,131,255,0.15)'
-        }
+        { name: 'Shopify', src: '/images/logos/Shopify_logo_2018.svg.png', h: 30, glow: 'rgba(149,191,71,0.15)' },
+        { name: 'WooCommerce', src: '/images/logos/Woocommerce.png', h: 34, glow: 'rgba(150,88,138,0.15)' },
+        { name: 'Magento', src: '/images/logos/Magento.png', h: 34, glow: 'rgba(242,99,34,0.15)' },
+        { name: 'Wix', src: '/images/logos/wIX.png', h: 24, glow: 'rgba(10,131,255,0.15)' },
     ];
 
     return (
-        <div ref={ref} style={{ textAlign: 'center', padding: '40px 0' }}>
+        <div ref={ref} style={{ textAlign: 'center', padding: '32px 0 0' }}>
             <span style={{
                 fontSize: 10,
                 fontWeight: 800,
@@ -225,60 +184,60 @@ function PlatformLogos() {
                 color: 'rgba(241,245,249,0.25)',
                 fontFamily: 'Plus Jakarta Sans',
                 textTransform: 'uppercase',
-                marginBottom: 32,
+                marginBottom: 28,
                 display: 'block'
             }}>
-                VERBIND MET JE FAVORIETE PLATFORM
+                {t('hero.platformsLabel')}
             </span>
             <div className={`d-in d-d1 ${inView ? 'visible' : ''}`} style={{
                 display: 'flex',
-                gap: '20px',
+                gap: '16px',
                 flexWrap: 'wrap',
-                alignItems: 'center',
+                alignItems: 'stretch',
                 justifyContent: 'center'
             }}>
                 {logos.map((logo) => (
-                    <div key={logo.name} style={{
+                    <div key={logo.name} className="d-platform-tile" style={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        width: 180,
-                        height: 90,
+                        width: 168,
+                        height: 76,
                         background: 'rgba(255,255,255,0.03)',
                         border: '1px solid rgba(255,255,255,0.06)',
                         borderRadius: 16,
                         backdropFilter: 'blur(8px)',
                         transition: 'all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)',
-                        cursor: 'pointer',
-                        padding: '12px'
+                        padding: '12px 20px'
                     }}
                         onMouseEnter={e => {
                             e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
                             e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)';
                             e.currentTarget.style.transform = 'translateY(-4px)';
                             e.currentTarget.style.boxShadow = `0 15px 35px ${logo.glow}`;
+                            const img = e.currentTarget.querySelector('img');
+                            if (img) img.style.filter = 'grayscale(0) brightness(1.15) contrast(1.05)';
                         }}
                         onMouseLeave={e => {
                             e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
                             e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)';
                             e.currentTarget.style.transform = 'translateY(0)';
                             e.currentTarget.style.boxShadow = 'none';
+                            const img = e.currentTarget.querySelector('img');
+                            if (img) img.style.filter = 'grayscale(1) brightness(1.6) contrast(0.9)';
                         }}
                     >
                         <img
                             src={logo.src}
                             alt={logo.name}
                             style={{
+                                height: logo.h,
                                 maxWidth: '100%',
-                                maxHeight: '100%',
                                 objectFit: 'contain',
-                                transition: 'all 0.4s ease',
-                                // Improve legibility on dark background: subtle brightness and white glow
-                                filter: `
-                                    brightness(${logo.name === 'Wix' ? 1.6 : logo.name === 'Shopify' ? 1.3 : 1.1}) 
-                                    contrast(1.1) 
-                                    drop-shadow(0 0 8px rgba(255,255,255,0.15))
-                                `
+                                transition: 'filter 0.4s ease',
+                                opacity: 0.85,
+                                // Uniforme behandeling: gedempt grijs, kleur op hover
+                                filter: 'grayscale(1) brightness(1.6) contrast(0.9)'
                             }}
                         />
                     </div>
@@ -536,13 +495,18 @@ export default function LandingPage() {
                 }
 
                 .d-in   { opacity: 0; }
-                .d-in.visible { animation: drapit-slideup 0.7s ease forwards; }
-                .d-d1 { animation-delay: 0.05s; }
-                .d-d2 { animation-delay: 0.15s; }
-                .d-d3 { animation-delay: 0.25s; }
-                .d-d4 { animation-delay: 0.35s; }
-                .d-d5 { animation-delay: 0.45s; }
-                .d-d6 { animation-delay: 0.55s; }
+                /* Boven de vouw nooit onzichtbaar: hero onthult direct bij laden, ook vóór JS/scroll */
+                .d-in.visible,
+                .d-hero-section .d-in { animation: drapit-slideup 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+                .d-in.visible.d-d1, .d-hero-section .d-in.d-d1 { animation-delay: 0.05s; }
+                .d-in.visible.d-d2, .d-hero-section .d-in.d-d2 { animation-delay: 0.15s; }
+                .d-in.visible.d-d3, .d-hero-section .d-in.d-d3 { animation-delay: 0.25s; }
+                .d-in.visible.d-d4, .d-hero-section .d-in.d-d4 { animation-delay: 0.35s; }
+                .d-in.visible.d-d5, .d-hero-section .d-in.d-d5 { animation-delay: 0.45s; }
+                .d-in.visible.d-d6, .d-hero-section .d-in.d-d6 { animation-delay: 0.55s; }
+                @media (prefers-reduced-motion: reduce) {
+                    .d-in { opacity: 1 !important; animation: none !important; transform: none !important; }
+                }
 
                 .d-float { animation: drapit-float 6s ease-in-out infinite; }
 
@@ -600,29 +564,6 @@ export default function LandingPage() {
                 .d-btn-shopify:hover {
                     transform: translateY(-2px);
                     box-shadow: 0 14px 40px rgba(149,191,71,0.6);
-                }
-                .d-hero-badge {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 9px;
-                    background: rgba(149,191,71,0.1);
-                    border: 1px solid rgba(149,191,71,0.3);
-                    border-radius: 100px;
-                    padding: 6px 16px 6px 14px;
-                    margin-bottom: 30px;
-                    text-decoration: none;
-                    transition: background 0.25s, border-color 0.25s, transform 0.25s;
-                }
-                .d-hero-badge:hover {
-                    background: rgba(149,191,71,0.17);
-                    border-color: rgba(149,191,71,0.52);
-                    transform: translateY(-1px);
-                }
-                .d-hero-badge-dot {
-                    width: 6px; height: 6px; border-radius: 50%;
-                    background: #95BF47;
-                    box-shadow: 0 0 8px #95BF47;
-                    animation: drapit-pulse 2s ease-in-out infinite;
                 }
                 .d-hero-textlink {
                     display: inline-flex;
@@ -975,7 +916,7 @@ export default function LandingPage() {
                                 onMouseEnter={(e) => { e.currentTarget.style.color = '#F1F5F9'; e.currentTarget.style.borderColor = 'rgba(29,111,216,0.4)'; }}
                                 onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(241,245,249,0.75)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
                             >
-                                Inloggen
+                                {t('nav.login')}
                             </Link>
                             <a
                                 href={SHOPIFY_APP_URL}
@@ -985,13 +926,13 @@ export default function LandingPage() {
                                 style={{ padding: '9px 18px', fontSize: 14, marginLeft: 4 }}
                             >
                                 <img src="/images/logos/Shopify_logo_2018.svg.png" alt="" aria-hidden="true" style={{ height: 14, width: 'auto', filter: 'brightness(0) invert(1)' }} />
-                                Installeren
+                                {t('nav.install')}
                             </a>
                         </div>
 
                         <div className="d-nav-mobile" style={{ display: 'none', alignItems: 'center', gap: 8 }}>
                             <a href={SHOPIFY_APP_URL} target="_blank" rel="noopener noreferrer" className="d-btn-shopify" style={{ padding: '8px 14px', fontSize: 12 }}>
-                                Installeren
+                                {t('nav.install')}
                             </a>
                             <button
                                 className={`d-hamburger ${mobileMenuOpen ? 'open' : ''}`}
@@ -1036,8 +977,8 @@ export default function LandingPage() {
                         <Link href="/license" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>License</Link>
                         <Link href="/contact" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
                         <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '12px 0' }} />
-                        <Link href="/dashboard/login" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>Account aanmaken</Link>
-                        <Link href="/dashboard/login" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>Inloggen</Link>
+                        <Link href="/dashboard/login" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>{t('nav.createAccount')}</Link>
+                        <Link href="/dashboard/login" className="d-mobile-drawer-link" onClick={() => setMobileMenuOpen(false)}>{t('nav.login')}</Link>
                     </nav>
 
                     <div style={{ paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
@@ -1050,7 +991,7 @@ export default function LandingPage() {
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             <img src="/images/logos/Shopify_logo_2018.svg.png" alt="" aria-hidden="true" style={{ height: 15, width: 'auto', filter: 'brightness(0) invert(1)' }} />
-                            Installeer via Shopify
+                            {t('launch.heroCta')}
                         </a>
                     </div>
                 </div>
@@ -1066,29 +1007,12 @@ export default function LandingPage() {
 
                             {/* Left copy */}
                             <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                {/* Launch-badge — live in de Shopify App Store */}
-                                <a
-                                    href={SHOPIFY_APP_URL}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className={`d-hero-badge d-in d-d1 ${hero.inView ? 'visible' : ''}`}
-                                >
-                                    <span className="d-hero-badge-dot" />
-                                    <img src="/images/logos/Shopify_logo_2018.svg.png" alt="Shopify" style={{ height: 14, width: 'auto' }} />
-                                    <span style={{ width: 1, height: 12, background: 'rgba(149,191,71,0.35)' }} />
-                                    <span style={{ fontSize: 11, fontWeight: 800, color: '#B5DC72', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.1em' }}>{t('launch.heroBadge')}</span>
-                                    <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true" style={{ color: 'rgba(181,220,114,0.7)' }}>
-                                        <path d="M5.25 2.625H2.625V11.375H11.375V8.75" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M8.75 2.625H11.375V5.25" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M6.125 7.875L11.375 2.625" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </a>
-
                                 {/* Headline */}
-                                <h1 className={`d-hero-title d-in d-d2 ${hero.inView ? 'visible' : ''}`} style={{ fontSize: 'clamp(40px, 4.5vw, 70px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, lineHeight: 1.03, letterSpacing: '-0.025em', marginBottom: 26, color: '#F1F5F9' }}>
-                                    {t('hero.titleStart')}{' '}
+                                <h1 className={`d-hero-title d-in d-d2 ${hero.inView ? 'visible' : ''}`} style={{ fontSize: 'clamp(40px, 4.5vw, 70px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.025em', marginBottom: 26, color: '#F1F5F9' }}>
+                                    {t('hero.titleStart')}
+                                    <br />
                                     <span className="d-shimmer">{t('hero.titleHighlight')}</span>
-                                    <br />{t('hero.titleEnd')}
+                                    {t('hero.titleEnd') && <><br />{t('hero.titleEnd')}</>}
                                 </h1>
 
                                 {/* Body */}
@@ -1115,9 +1039,9 @@ export default function LandingPage() {
 
                                 {/* Route-uitleg */}
                                 <div className={`d-hero-routes d-in d-d4 ${hero.inView ? 'visible' : ''}`}>
-                                    <span><b>Shopify?</b> Installeer met één klik.</span>
+                                    <span><b>{t('hero.routeShopifyLabel')}</b> {t('hero.routeShopify')}</span>
                                     <span className="d-hero-routes-sep" />
-                                    <span><b>Ander platform?</b> Maak een account aan.</span>
+                                    <span><b>{t('hero.routeOtherLabel')}</b> {t('hero.routeOther')}</span>
                                 </div>
 
                                 {/* Secundaire acties */}
@@ -1133,25 +1057,34 @@ export default function LandingPage() {
                                         rel="noopener noreferrer"
                                         className="d-hero-textlink"
                                     >
-                                        Test de technologie
+                                        {t('hero.testTech')}
                                         <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                                             <path d="M5.25 2.625H2.625V11.375H11.375V8.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                             <path d="M8.75 2.625H11.375V5.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                             <path d="M6.125 7.875L11.375 2.625" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
-                                        <span style={{ fontSize: 11, fontWeight: 500, color: 'rgba(241,245,249,0.3)' }}>
-                                            (wachtwoord: <span style={{ color: 'rgba(147,197,253,0.7)', fontWeight: 600, userSelect: 'all' }}>Drapit</span>)
+                                        <span style={{
+                                            display: 'inline-flex', alignItems: 'center', gap: 5,
+                                            fontSize: 11, fontWeight: 500, color: 'rgba(241,245,249,0.38)',
+                                            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
+                                            borderRadius: 100, padding: '3px 10px',
+                                        }}>
+                                            {t('hero.passwordLabel')}: <span style={{ color: 'rgba(147,197,253,0.85)', fontWeight: 700, userSelect: 'all' }}>Drapit</span>
                                         </span>
                                     </a>
                                 </div>
 
-                                {/* Social proof */}
-                                <div className={`d-hero-proof d-in d-d6 ${hero.inView ? 'visible' : ''}`} style={{ marginTop: 36, display: 'flex', alignItems: 'center', gap: 12 }}>
-                                    <div style={{ display: 'flex' }}>
-                                        {['#3B82F6', '#8B5CF6', '#EC4899', '#F59E0B', '#10B981'].map((c, i) => (
-                                            <div key={i} style={{ width: 28, height: 28, borderRadius: '50%', background: c, border: '2px solid #06090F', marginLeft: i > 0 ? -9 : 0 }} />
-                                        ))}
-                                    </div>
+                                {/* Trust-regel */}
+                                <div className={`d-hero-proof d-in d-d6 ${hero.inView ? 'visible' : ''}`} style={{ marginTop: 36, display: 'flex', alignItems: 'center', gap: 10 }}>
+                                    <span style={{
+                                        width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
+                                        background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.35)',
+                                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                    }}>
+                                        <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                            <path d="M3 7.2l2.6 2.6L11 4.5" stroke="#10B981" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    </span>
                                     <span style={{ fontSize: 13, color: 'rgba(241,245,249,0.42)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
                                         {t('hero.socialProof')}
                                     </span>
@@ -1193,7 +1126,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* ─── PLATFORMS ─────────────────────────────────────────── */}
-                <div className="d-platforms" style={{ maxWidth: 1200, margin: '-60px auto 100px', position: 'relative', zIndex: 10 }}>
+                <div className="d-platforms" style={{ maxWidth: 1200, margin: '-72px auto 24px', position: 'relative', zIndex: 10 }}>
                     <PlatformLogos />
                 </div>
 
@@ -1203,12 +1136,7 @@ export default function LandingPage() {
                 {/* ─── STATS ─────────────────────────────────────────── */}
                 <div ref={stats.ref} style={{ borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '52px 28px', background: 'rgba(13,24,41,0.45)' }}>
                     <div className="d-stats-grid" style={{ maxWidth: 960, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 32 }}>
-                        {[
-                            { num: '< 10 min', label: 'Installatietijd', note: 'Één script-tag' },
-                            { num: '+34%', label: 'Hogere conversie', note: 'Industrie gemiddelde' },
-                            { num: '−28%', label: 'Minder retours', note: 'Industrie gemiddelde' },
-                            { num: '99.9%', label: 'Uptime SLA', note: 'Enterprise plan' },
-                        ].map((s, i) => (
+                        {(t.raw('stats.items') as { num: string; label: string; note: string }[]).map((s, i) => (
                             <div key={i} className={`d-in d-d${i + 1} ${stats.inView ? 'visible' : ''}`} style={{ textAlign: 'center' }}>
                                 <div style={{ fontSize: 30, fontWeight: 800, fontFamily: 'Plus Jakarta Sans, sans-serif', color: '#F1F5F9', letterSpacing: '-0.028em', lineHeight: 1 }}>{s.num}</div>
                                 <div style={{ fontSize: 13, fontWeight: 600, color: '#93C5FD', marginTop: 6, fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{s.label}</div>
@@ -1223,19 +1151,22 @@ export default function LandingPage() {
                     <div style={{ maxWidth: 1200, margin: '0 auto' }}>
                         <div ref={how.ref} style={{ textAlign: 'center', marginBottom: 72 }}>
                             <div className={`d-in d-d1 ${how.inView ? 'visible' : ''}`} style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#1D6FD8', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 18, textTransform: 'uppercase' }}>
-                                HOE HET WERKT
+                                {t('how.eyebrow')}
                             </div>
                             <h2 className={`d-gradient d-in d-d2 ${how.inView ? 'visible' : ''}`} style={{ fontSize: 'clamp(30px, 4vw, 52px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.08 }}>
-                                Van installatie tot live<br />in drie stappen
+                                {t('how.title1')}<br />{t('how.title2')}
                             </h2>
                         </div>
 
                         <div className="d-how-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 28 }}>
                             {[
-                                { num: '01', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>, title: 'Script toevoegen', desc: 'Kopieer één regel code vanuit je Drapit dashboard en plak het in de <head> van je webshop. Geen plugin, geen developer vereist. Klaar in 5 minuten.', tag: '< 5 minuten', tagColor: '#22D3EE' },
-                                { num: '02', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 9h6M9 12h6M9 15h4" /></svg>, title: 'Widget verschijnt', desc: 'De "Virtueel passen" knop verschijnt automatisch bij elk product met het juiste data-attribuut. Volledig aanpasbaar qua kleur en tekst via het dashboard.', tag: 'Zero-code setup', tagColor: '#8B5CF6' },
-                                { num: '03', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3" /><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" /></svg>, title: 'AI doet de rest', desc: 'Klant uploadt een foto. Onze AI verwerkt het kledingstuk virtueel om het lichaam. Resultaat binnen seconden, directe koopknop inbegrepen.', tag: 'Resultaat in seconden', tagColor: '#1D6FD8' },
-                            ].map((step, i) => (
+                                { num: '01', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>, tagColor: '#22D3EE' },
+                                { num: '02', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 9h6M9 12h6M9 15h4" /></svg>, tagColor: '#8B5CF6' },
+                                { num: '03', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3" /><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" /></svg>, tagColor: '#1D6FD8' },
+                            ].map((meta, i) => {
+                                const steps = t.raw('how.steps') as { title: string; desc: string; tag: string }[];
+                                const step = { ...meta, ...steps[i] };
+                                return (
                                 <div key={i} className={`d-feat d-in d-d${i + 2} ${how.inView ? 'visible' : ''}`} style={{ background: 'rgba(13,24,41,0.6)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 20, padding: '32px 28px', backdropFilter: 'blur(10px)' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
                                         <div style={{ width: 50, height: 50, borderRadius: 15, background: 'rgba(29,111,216,0.1)', border: '1px solid rgba(29,111,216,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{step.icon}</div>
@@ -1248,7 +1179,8 @@ export default function LandingPage() {
                                         <span style={{ fontSize: 11, fontWeight: 600, color: step.tagColor, fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '0.06em' }}>{step.tag}</span>
                                     </div>
                                 </div>
-                            ))}
+                                );
+                            })}
                         </div>
 
                         {/* ── Shopify installatie kort uitleg ────────── */}
@@ -1268,16 +1200,16 @@ export default function LandingPage() {
                             <div>
                                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(149,191,71,0.1)', border: '1px solid rgba(149,191,71,0.2)', borderRadius: 100, padding: '5px 14px', marginBottom: 20 }}>
                                     <img src="/images/logos/Shopify_logo_2018.svg.png" alt="Shopify" style={{ height: 14, width: 'auto' }} />
-                                    <span style={{ fontSize: 10, fontWeight: 700, color: '#95BF47', fontFamily: 'Plus Jakarta Sans', letterSpacing: '0.08em' }}>SHOPIFY · NU LIVE IN DE APP STORE</span>
+                                    <span style={{ fontSize: 10, fontWeight: 700, color: '#95BF47', fontFamily: 'Plus Jakarta Sans', letterSpacing: '0.08em' }}>{t('shopifyInstall.badge')}</span>
                                 </div>
 
                                 <h3 style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 800, color: '#F1F5F9', lineHeight: 1.15, marginBottom: 14, letterSpacing: '-0.02em', fontFamily: 'Plus Jakarta Sans' }}>
-                                    Shopify gebruiker?{' '}
-                                    <span style={{ color: '#95BF47' }}>Nog makkelijker.</span>
+                                    {t('shopifyInstall.title')}{' '}
+                                    <span style={{ color: '#95BF47' }}>{t('shopifyInstall.titleAccent')}</span>
                                 </h3>
 
                                 <p style={{ fontSize: 15, color: 'rgba(241,245,249,0.5)', lineHeight: 1.7, marginBottom: 24, fontFamily: 'Plus Jakarta Sans' }}>
-                                    Drapit staat live in de Shopify App Store. Installeer met één klik vanuit je Shopify-admin — geen code, geen thema-aanpassingen. Liever zelf plaatsen? De standalone widget blijft gewoon beschikbaar.
+                                    {t('shopifyInstall.body')}
                                 </p>
 
                                 <Link href="/shopify" style={{
@@ -1299,17 +1231,20 @@ export default function LandingPage() {
                                     onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 30px rgba(149,191,71,0.45)'; }}
                                     onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(149,191,71,0.3)'; }}
                                 >
-                                    Meer over Shopify installatie →
+                                    {t('shopifyInstall.cta')}
                                 </Link>
                             </div>
 
                             {/* Right: mini-stappen */}
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                                 {[
-                                    { step: '1', title: 'Installeer via de App Store', desc: 'Zoek op “Drapit” in de Shopify App Store en installeer met één klik — automatische updates inbegrepen.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg> },
-                                    { step: '2', title: 'Of standalone widget', desc: 'Ander platform of liever zelf plaatsen? Kopieer & plak de script-tag — klaar in 10 minuten.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg> },
-                                    { step: '3', title: 'Direct live', desc: 'Je klanten kunnen meteen virtueel kleding passen op je webshop.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg> },
-                                ].map((item, i) => (
+                                    { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg> },
+                                    { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg> },
+                                    { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg> },
+                                ].map((meta, i) => {
+                                    const steps = t.raw('shopifyInstall.steps') as { title: string; desc: string }[];
+                                    const item = { ...meta, ...steps[i] };
+                                    return (
                                     <div key={i} style={{
                                         display: 'flex',
                                         alignItems: 'flex-start',
@@ -1333,7 +1268,8 @@ export default function LandingPage() {
                                             <div style={{ fontSize: 13, color: 'rgba(241,245,249,0.42)', lineHeight: 1.5, fontFamily: 'Plus Jakarta Sans' }}>{item.desc}</div>
                                         </div>
                                     </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
@@ -1343,29 +1279,33 @@ export default function LandingPage() {
                 <section style={{ padding: '0 28px 128px' }}>
                     <div style={{ maxWidth: 1200, margin: '0 auto' }}>
                         <div ref={feats.ref} style={{ marginBottom: 56 }}>
-                            <div className={`d-in d-d1 ${feats.inView ? 'visible' : ''}`} style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#1D6FD8', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 18 }}>WAAROM DRAPIT</div>
+                            <div className={`d-in d-d1 ${feats.inView ? 'visible' : ''}`} style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#1D6FD8', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 18 }}>{t('why.eyebrow')}</div>
                             <h2 className={`d-gradient d-in d-d2 ${feats.inView ? 'visible' : ''}`} style={{ fontSize: 'clamp(26px, 3.5vw, 46px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.08, maxWidth: 520 }}>
-                                Gebouwd om te converteren.<br />Eenvoudig te installeren.
+                                {t('why.title1')}<br />{t('why.title2')}
                             </h2>
                         </div>
 
                         <div className="d-feat-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 18 }}>
                             {[
-                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" /></svg>, title: 'Platform-agnostisch', desc: 'Shopify, WooCommerce, Magento of maatwerk — als het HTML accepteert, werkt Drapit direct.', accent: '#F59E0B' },
-                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="#8B5CF6" /><circle cx="17.5" cy="10.5" r=".5" fill="#8B5CF6" /><circle cx="8.5" cy="7.5" r=".5" fill="#8B5CF6" /><circle cx="6.5" cy="12.5" r=".5" fill="#8B5CF6" /><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" /></svg>, title: 'Volledig aanpasbaar', desc: 'Pas kleur, tekst en stijl van de widget aan je merk aan vanuit het dashboard. Geen code.', accent: '#8B5CF6' },
-                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22D3EE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /></svg>, title: 'Real-time analytics', desc: 'Hoeveel try-ons per product, conversie-impact en trends — alles in één overzichtelijk dashboard.', accent: '#22D3EE' },
-                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21 2-1 1" /><path d="m3 22 1-1" /><path d="m10 11-7 7 2 2 7-7" /><path d="m10 11 4 4 6-6-4-4-6 6" /></svg>, title: 'API-sleutels beheer', desc: 'Meerdere keys per shop, direct activeren of deactiveren, met gebruik- en datum-tracking.', accent: '#1D6FD8' },
-                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /></svg>, title: 'Privacy-first', desc: "Foto's worden na AI-verwerking niet opgeslagen. GDPR-compliant by design, geen datarisico.", accent: '#10B981' },
-                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EC4899" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 20V10" /><path d="M12 20V4" /><path d="M6 20v-6" /><path d="M2 12c8 0 14-4 20-8" /></svg>, title: 'Webhook integraties', desc: 'Koppel try-on events aan je CRM, analytics of retargeting tool via webhooks.', accent: '#EC4899' },
-                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>, title: 'Gratis mond-tot-mondreclame', desc: 'Elke gedeelde try-on is een gratis advertentie voor jouw webshop. Shoppers delen hun resultaat met vrienden — zonder dat jij er iets voor hoeft te doen.', accent: '#F59E0B' },
-                            ].map((f, i) => (
+                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" /></svg>, accent: '#F59E0B' },
+                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="#8B5CF6" /><circle cx="17.5" cy="10.5" r=".5" fill="#8B5CF6" /><circle cx="8.5" cy="7.5" r=".5" fill="#8B5CF6" /><circle cx="6.5" cy="12.5" r=".5" fill="#8B5CF6" /><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" /></svg>, accent: '#8B5CF6' },
+                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22D3EE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /></svg>, accent: '#22D3EE' },
+                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D6FD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21 2-1 1" /><path d="m3 22 1-1" /><path d="m10 11-7 7 2 2 7-7" /><path d="m10 11 4 4 6-6-4-4-6 6" /></svg>, accent: '#1D6FD8' },
+                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /></svg>, accent: '#10B981' },
+                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EC4899" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 20V10" /><path d="M12 20V4" /><path d="M6 20v-6" /><path d="M2 12c8 0 14-4 20-8" /></svg>, accent: '#EC4899' },
+                                { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>, accent: '#F59E0B' },
+                            ].map((meta, i) => {
+                                const feats2 = t.raw('why.features') as { title: string; desc: string }[];
+                                const f = { ...meta, ...feats2[i] };
+                                return (
                                 <div key={i} className={`d-feat d-in d-d${(i % 3) + 1} ${feats.inView ? 'visible' : ''}`} style={{ background: 'rgba(13,24,41,0.5)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 16, padding: '26px 24px 30px' }}>
                                     <div style={{ marginBottom: 14, display: 'flex' }}>{f.icon}</div>
                                     <h3 style={{ fontSize: 16, fontWeight: 700, fontFamily: 'Plus Jakarta Sans, sans-serif', color: '#F1F5F9', marginBottom: 10, letterSpacing: '-0.01em' }}>{f.title}</h3>
                                     <p style={{ fontSize: 14, color: 'rgba(241,245,249,0.48)', lineHeight: 1.62, fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{f.desc}</p>
                                     <div style={{ marginTop: 18, height: 2, width: 36, background: `linear-gradient(90deg, ${f.accent}, transparent)`, borderRadius: 4 }} />
                                 </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     </div>
                 </section>
@@ -1497,7 +1437,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* ─── TRY-ON CALCULATOR ────────────────────────────── */}
-                <section id="calculator" className="d-section-lg" style={{ padding: '128px 28px', position: 'relative', overflow: 'hidden' }}>
+                <section id="calculator" className="d-section-lg" style={{ padding: '96px 28px 64px', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 800, height: 500, background: 'radial-gradient(ellipse, rgba(29,111,216,0.05) 0%, transparent 70%)', pointerEvents: 'none' }} />
                     <div ref={calc.ref} style={{ maxWidth: 960, margin: '0 auto', position: 'relative' }}>
                         <div className={`d-in d-d1 ${calc.inView ? 'visible' : ''}`}>
@@ -1507,7 +1447,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* ─── STUDIO PRICING ────────────────────────────────── */}
-                <section className="d-section-lg" style={{ padding: '128px 28px 128px', position: 'relative', overflow: 'hidden' }}>
+                <section className="d-section-lg" style={{ padding: '64px 28px 112px', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 900, height: 600, background: 'radial-gradient(ellipse, rgba(139,92,246,0.06) 0%, transparent 68%)', pointerEvents: 'none' }} />
                     <div style={{ maxWidth: 1000, margin: '0 auto', position: 'relative' }}>
                         <div ref={studioPricing.ref} style={{ textAlign: 'center', marginBottom: 64 }}>
@@ -1611,7 +1551,7 @@ export default function LandingPage() {
                         </div>
 
                         <p style={{ textAlign: 'center', marginTop: 24, fontSize: 13, color: 'rgba(241,245,249,0.25)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-                            Alle plannen excl. BTW · Annuleer op elk moment
+                            {t('studioPricing.disclaimer')}
                         </p>
                     </div>
                 </section>
@@ -1637,28 +1577,28 @@ export default function LandingPage() {
                                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(149,191,71,0.1)', border: '1px solid rgba(149,191,71,0.2)', borderRadius: 100, padding: '8px 20px', marginBottom: 28 }}>
                                     <img src="/images/logos/Shopify_logo_2018.svg.png" alt="Shopify" style={{ height: 18, width: 'auto' }} />
                                     <div style={{ width: 1, height: 14, background: 'rgba(149,191,71,0.3)' }} />
-                                    <span style={{ fontSize: 12, fontWeight: 700, color: '#95BF47', fontFamily: 'Plus Jakarta Sans', letterSpacing: '0.05em' }}>OFFICIAL PARTNER</span>
+                                    <span style={{ fontSize: 12, fontWeight: 700, color: '#95BF47', fontFamily: 'Plus Jakarta Sans', letterSpacing: '0.05em' }}>{t('partner.badge')}</span>
                                 </div>
 
                                 <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 800, color: '#F1F5F9', lineHeight: 1.1, marginBottom: 24, letterSpacing: '-0.02em' }}>
-                                    Drapit & Shopify:<br />
-                                    <span style={{ color: '#95BF47' }}>E-commerce AI</span> perfected.
+                                    {t('partner.title1')}<br />
+                                    <span style={{ color: '#95BF47' }}>{t('partner.titleAccent')}</span> {t('partner.title2')}
                                 </h2>
 
                                 <p style={{ fontSize: 18, color: 'rgba(241,245,249,0.55)', lineHeight: 1.7, marginBottom: 40, fontFamily: 'Plus Jakarta Sans' }}>
-                                    Wij zijn trots officieel Shopify Partner te zijn — en sinds augustus 2026 vind je Drapit ook gewoon in de Shopify App Store. Eén klik en de virtuele paskamer staat live in je webshop, naadloos geïntegreerd met je Shopify-omgeving.
+                                    {t('partner.body')}
                                 </p>
 
                                 <div className="d-shopify-card-features" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 48 }}>
                                     {[
-                                        { title: 'Shopify App Store', desc: 'Live in de App Store — installeer Drapit met één klik vanuit je Shopify-admin, zonder code.', live: true },
-                                        { title: 'Naadloze Installatie', desc: 'Werkt met elk thema en updatet automatisch mee. Liever handmatig? De standalone widget blijft beschikbaar.' }
+                                        { title: t('partner.featureAppStoreTitle'), desc: t('partner.featureAppStoreDesc'), live: true },
+                                        { title: t('partner.featureInstallTitle'), desc: t('partner.featureInstallDesc') }
                                     ].map((item: { title: string; desc: string; live?: boolean }, i) => (
                                         <div key={i}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                                                 <div style={{ fontSize: 16, fontWeight: 700, color: '#F1F5F9' }}>{item.title}</div>
                                                 {item.live && (
-                                                    <span style={{ fontSize: 9, fontWeight: 800, color: '#B5DC72', background: 'rgba(149,191,71,0.14)', border: '1px solid rgba(149,191,71,0.3)', borderRadius: 100, padding: '3px 10px', letterSpacing: '0.08em', fontFamily: 'Plus Jakarta Sans' }}>LIVE</span>
+                                                    <span style={{ fontSize: 9, fontWeight: 800, color: '#B5DC72', background: 'rgba(149,191,71,0.14)', border: '1px solid rgba(149,191,71,0.3)', borderRadius: 100, padding: '3px 10px', letterSpacing: '0.08em', fontFamily: 'Plus Jakarta Sans' }}>{t('partner.live')}</span>
                                                 )}
                                             </div>
                                             <p style={{ fontSize: 14, color: 'rgba(241,245,249,0.4)', lineHeight: 1.5 }}>{item.desc}</p>
@@ -1687,7 +1627,7 @@ export default function LandingPage() {
                                     onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(149,191,71,0.35)'; }}
                                 >
                                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>
-                                    Bekijk de installatie handleiding →
+                                    {t('partner.ctaGuide')}
                                 </Link>
 
                                 <a
@@ -1710,8 +1650,8 @@ export default function LandingPage() {
                                 >
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#95BF47" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
                                     <div style={{ textAlign: 'left' }}>
-                                        <div style={{ fontSize: 10, color: 'rgba(181,220,114,0.75)', fontWeight: 600, lineHeight: 1, letterSpacing: '0.06em' }}>NU LIVE IN DE</div>
-                                        <div style={{ fontSize: 15, color: '#B5DC72', fontWeight: 800, lineHeight: 1.2 }}>Shopify App Store ↗</div>
+                                        <div style={{ fontSize: 10, color: 'rgba(181,220,114,0.75)', fontWeight: 600, lineHeight: 1, letterSpacing: '0.06em' }}>{t('partner.liveEyebrow')}</div>
+                                        <div style={{ fontSize: 15, color: '#B5DC72', fontWeight: 800, lineHeight: 1.2 }}>{t('partner.liveTitle')}</div>
                                     </div>
                                 </a>
                             </div>
@@ -1725,20 +1665,14 @@ export default function LandingPage() {
                                     padding: '32px',
                                     backdropFilter: 'blur(10px)'
                                 }}>
-                                    <div style={{ fontSize: 12, fontWeight: 800, color: '#1D6FD8', letterSpacing: '0.1em', marginBottom: 20 }}>DRAPIT AI TECHNOLOGY</div>
-                                    <h3 style={{ fontSize: 20, fontWeight: 700, color: '#F1F5F9', marginBottom: 16 }}>State-of-the-Art VTON</h3>
+                                    <div style={{ fontSize: 12, fontWeight: 800, color: '#1D6FD8', letterSpacing: '0.1em', marginBottom: 20 }}>{t('partner.techEyebrow')}</div>
+                                    <h3 style={{ fontSize: 20, fontWeight: 700, color: '#F1F5F9', marginBottom: 16 }}>{t('partner.techTitle')}</h3>
                                     <p style={{ fontSize: 14, color: 'rgba(241,245,249,0.5)', lineHeight: 1.6, marginBottom: 24 }}>
-                                        Onze eigen IDM-VTON architectuur gebruikt geavanceerde diffusion models om kledingstukken fotorealistisch te transformeren naar het lichaam van de klant.
-                                        In tegenstelling tot eenvoudige overlays, begrijpt Drapit textuur, schaduw en lichaamsvormen.
+                                        {t('partner.techBody')}
                                     </p>
 
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                                        {[
-                                            'Real-time textuur rendering',
-                                            'Automatische lichaamsdetectie',
-                                            'Dynamische belichting aanpassing',
-                                            'Support voor alle kledingtypes'
-                                        ].map((feat, i) => (
+                                        {(t.raw('partner.techFeatures') as string[]).map((feat, i) => (
                                             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 13, color: 'rgba(241,245,249,0.7)' }}>
                                                 <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#1D6FD8' }} />
                                                 {feat}
@@ -1749,11 +1683,11 @@ export default function LandingPage() {
                                     <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', gap: 20 }}>
                                         <div>
                                             <div style={{ fontSize: 24, fontWeight: 800, color: '#F1F5F9' }}>+34%</div>
-                                            <div style={{ fontSize: 11, color: '#93C5FD' }}>CONVERSIE</div>
+                                            <div style={{ fontSize: 11, color: '#93C5FD' }}>{t('partner.statConversion')}</div>
                                         </div>
                                         <div>
                                             <div style={{ fontSize: 24, fontWeight: 800, color: '#F1F5F9' }}>-28%</div>
-                                            <div style={{ fontSize: 11, color: '#93C5FD' }}>RETOUREN</div>
+                                            <div style={{ fontSize: 11, color: '#93C5FD' }}>{t('partner.statReturns')}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -1767,7 +1701,7 @@ export default function LandingPage() {
                                     color: 'white', fontWeight: 800, fontSize: 12,
                                     animation: 'drapit-float 5s ease-in-out infinite'
                                 }}>
-                                    SHOPIFY READY
+                                    {t('partner.ready')}
                                 </div>
                             </div>
                         </div>
@@ -1776,13 +1710,13 @@ export default function LandingPage() {
                 <section id="faq" className="d-section-lg" style={{ padding: '128px 28px' }}>
                     <div style={{ maxWidth: 740, margin: '0 auto' }}>
                         <div ref={faqSec.ref} style={{ textAlign: 'center', marginBottom: 60 }}>
-                            <div className={`d-in d-d1 ${faqSec.inView ? 'visible' : ''}`} style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#1D6FD8', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 18 }}>FAQ</div>
+                            <div className={`d-in d-d1 ${faqSec.inView ? 'visible' : ''}`} style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#1D6FD8', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 18 }}>{t('faq.eyebrow')}</div>
                             <h2 className={`d-gradient d-in d-d2 ${faqSec.inView ? 'visible' : ''}`} style={{ fontSize: 'clamp(28px, 3.5vw, 46px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.08 }}>
-                                Veelgestelde vragen
+                                {t('faq.title')}
                             </h2>
                         </div>
                         <div className={`d-in d-d3 ${faqSec.inView ? 'visible' : ''}`}>
-                            {FAQS.map((faq, i) => (
+                            {(t.raw('faq.items') as { q: string; a: string }[]).map((faq, i) => (
                                 <FAQItem key={i} q={faq.q} a={faq.a} isOpen={openFaq === i} onToggle={() => setOpenFaq(openFaq === i ? null : i)} />
                             ))}
                         </div>
@@ -1796,12 +1730,12 @@ export default function LandingPage() {
 
                         {/* Left — tekst */}
                         <div>
-                            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#1D6FD8', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 18 }}>CONTACT</div>
+                            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#1D6FD8', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 18 }}>{t('contactSection.eyebrow')}</div>
                             <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.1, margin: '0 0 20px', background: 'linear-gradient(135deg, #F1F5F9 0%, rgba(241,245,249,0.55) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                                Neem contact<br />met ons op
+                                {t('contactSection.title1')}<br />{t('contactSection.title2')}
                             </h2>
                             <p style={{ color: 'rgba(241,245,249,0.50)', fontSize: 16, fontFamily: 'Plus Jakarta Sans, sans-serif', lineHeight: 1.7, margin: '0 0 36px', maxWidth: 400 }}>
-                                Heb je een vraag, wil je een demo of ben je benieuwd of Drapit past bij jouw webshop? We reageren normaal gesproken binnen één werkdag.
+                                {t('contactSection.body')}
                             </p>
 
                             {/* Contact details */}
@@ -1823,7 +1757,7 @@ export default function LandingPage() {
                                             <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
                                         </svg>
                                     </span>
-                                    Reactie binnen 1 werkdag
+                                    {t('contactSection.response')}
                                 </div>
                             </div>
                         </div>
@@ -1841,20 +1775,20 @@ export default function LandingPage() {
                     <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 50%, rgba(29,111,216,0.09) 0%, transparent 60%)', pointerEvents: 'none' }} />
                     <div ref={ctaSec.ref} style={{ maxWidth: 780, margin: '0 auto', position: 'relative' }}>
                         <div className={`d-in d-d1 ${ctaSec.inView ? 'visible' : ''}`} style={{ background: 'linear-gradient(135deg, rgba(13,24,41,0.92) 0%, rgba(6,9,15,0.97) 100%)', border: '1px solid rgba(29,111,216,0.18)', borderRadius: 28, padding: '68px 52px', textAlign: 'center', boxShadow: '0 40px 80px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.04)' }}>
-                            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#22D3EE', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 22 }}>KLAAR OM TE BEGINNEN?</div>
+                            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#22D3EE', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 22 }}>{t('finalCta.eyebrow')}</div>
                             <h2 className="d-gradient" style={{ fontSize: 'clamp(30px, 5vw, 52px)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, letterSpacing: '-0.028em', lineHeight: 1.05, marginBottom: 20 }}>
-                                Zet virtual try-on live<br />in minder dan 10 minuten
+                                {t('finalCta.title1')}<br />{t('finalCta.title2')}
                             </h2>
                             <p style={{ fontSize: 17, color: 'rgba(241,245,249,0.45)', fontFamily: 'Plus Jakarta Sans, sans-serif', marginBottom: 36, maxWidth: 420, margin: '0 auto 36px' }}>
-                                Op Shopify installeer je met één klik. Op elk ander platform maak je een account aan en plaats je de widget zelf — dezelfde prijzen, geen creditcard nodig.
+                                {t('finalCta.body')}
                             </p>
                             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
                                 <a href={SHOPIFY_APP_URL} target="_blank" rel="noopener noreferrer" className="d-btn-shopify" style={{ padding: '16px 32px', fontSize: 16 }}>
                                     <img src="/images/logos/Shopify_logo_2018.svg.png" alt="" aria-hidden="true" style={{ height: 16, width: 'auto', filter: 'brightness(0) invert(1)' }} />
-                                    INSTALLEREN VIA SHOPIFY
+                                    {t('finalCta.ctaShopify')}
                                 </a>
                                 <Link href="/dashboard/login" className="d-btn-primary" style={{ padding: '16px 34px', fontSize: 16 }}>
-                                    ACCOUNT AANMAKEN →
+                                    {t('finalCta.ctaDirect')}
                                 </Link>
                             </div>
                         </div>

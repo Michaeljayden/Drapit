@@ -5,7 +5,10 @@
     "faq": "FAQ",
     "shopify": "Shopify",
     "studio": "Studio",
-    "vton": "VTON"
+    "vton": "VTON",
+    "install": "Installeren",
+    "login": "Inloggen",
+    "createAccount": "Account aanmaken"
   },
   "launch": {
     "bar": {
@@ -43,12 +46,19 @@
   "hero": {
     "eyebrow": "NU LIVE IN DE SHOPIFY APP STORE",
     "titleStart": "Meer verkopen.",
-    "titleHighlight": "Minder retourzendingen.",
+    "titleHighlight": "Minder retouren.",
     "titleEnd": "",
     "subtitle": "Klanten passen kleding virtueel, kopen met zekerheid, en delen het met vrienden. Eén script-tag. Werkt op elke webshop.",
     "ctaPrimary": "Begin gratis →",
     "ctaSecondary": "Bekijk live demo",
-    "socialProof": "Gratis starten — geen creditcard nodig"
+    "socialProof": "Gratis starten — geen creditcard nodig",
+    "testTech": "Test de technologie",
+    "passwordLabel": "wachtwoord",
+    "platformsLabel": "Verbind met je favoriete platform",
+    "routeShopify": "Installeer met één klik.",
+    "routeOther": "Maak een account aan.",
+    "routeShopifyLabel": "Shopify?",
+    "routeOtherLabel": "Ander platform?"
   },
   "widget": {
     "demoUrl": "drapit.io/widget — live demo",
@@ -216,6 +226,194 @@
         "feature4": "Prioriteit support",
         "feature5": "Ongebruikte credits rollen over"
       }
-    }
+    },
+    "disclaimer": "Alle plannen excl. BTW · Annuleer op elk moment"
+  },
+  "stats": {
+    "items": [
+      {
+        "num": "< 10 min",
+        "label": "Installatietijd",
+        "note": "Eén script-tag"
+      },
+      {
+        "num": "+34%",
+        "label": "Hogere conversie",
+        "note": "Industriegemiddelde"
+      },
+      {
+        "num": "−28%",
+        "label": "Minder retouren",
+        "note": "Industriegemiddelde"
+      },
+      {
+        "num": "99.9%",
+        "label": "Uptime SLA",
+        "note": "Enterprise plan"
+      }
+    ]
+  },
+  "how": {
+    "eyebrow": "HOE HET WERKT",
+    "title1": "Van installatie tot live",
+    "title2": "in drie stappen",
+    "steps": [
+      {
+        "title": "Script toevoegen",
+        "desc": "Kopieer één regel code vanuit je Drapit dashboard en plak het in de <head> van je webshop. Geen plugin, geen developer vereist. Klaar in 5 minuten.",
+        "tag": "< 5 minuten"
+      },
+      {
+        "title": "Widget verschijnt",
+        "desc": "De \"Virtueel passen\" knop verschijnt automatisch bij elk product met het juiste data-attribuut. Volledig aanpasbaar qua kleur en tekst via het dashboard.",
+        "tag": "Zero-code setup"
+      },
+      {
+        "title": "AI doet de rest",
+        "desc": "Klant uploadt een foto. Onze AI verwerkt het kledingstuk virtueel om het lichaam. Resultaat binnen seconden, directe koopknop inbegrepen.",
+        "tag": "Resultaat in seconden"
+      }
+    ]
+  },
+  "shopifyInstall": {
+    "badge": "SHOPIFY · NU LIVE IN DE APP STORE",
+    "title": "Shopify gebruiker?",
+    "titleAccent": "Nog makkelijker.",
+    "body": "Drapit staat live in de Shopify App Store. Installeer met één klik vanuit je Shopify-admin — geen code, geen thema-aanpassingen. Liever zelf plaatsen? De standalone widget blijft gewoon beschikbaar.",
+    "cta": "Meer over Shopify installatie →",
+    "steps": [
+      {
+        "title": "Installeer via de App Store",
+        "desc": "Zoek op “Drapit” in de Shopify App Store en installeer met één klik — automatische updates inbegrepen."
+      },
+      {
+        "title": "Of standalone widget",
+        "desc": "Ander platform of liever zelf plaatsen? Kopieer & plak de script-tag — klaar in 10 minuten."
+      },
+      {
+        "title": "Direct live",
+        "desc": "Je klanten kunnen meteen virtueel kleding passen op je webshop."
+      }
+    ]
+  },
+  "why": {
+    "eyebrow": "WAAROM DRAPIT",
+    "title1": "Gebouwd om te converteren.",
+    "title2": "Eenvoudig te installeren.",
+    "features": [
+      {
+        "title": "Platform-agnostisch",
+        "desc": "Shopify, WooCommerce, Magento of maatwerk — als het HTML accepteert, werkt Drapit direct."
+      },
+      {
+        "title": "Volledig aanpasbaar",
+        "desc": "Pas kleur, tekst en stijl van de widget aan je merk aan vanuit het dashboard. Geen code."
+      },
+      {
+        "title": "Real-time analytics",
+        "desc": "Hoeveel try-ons per product, conversie-impact en trends — alles in één overzichtelijk dashboard."
+      },
+      {
+        "title": "API-sleutels beheer",
+        "desc": "Meerdere keys per shop, direct activeren of deactiveren, met gebruik- en datum-tracking."
+      },
+      {
+        "title": "Privacy-first",
+        "desc": "Foto's worden na AI-verwerking niet opgeslagen. GDPR-compliant by design, geen datarisico."
+      },
+      {
+        "title": "Webhook integraties",
+        "desc": "Koppel try-on events aan je CRM, analytics of retargeting tool via webhooks."
+      },
+      {
+        "title": "Gratis mond-tot-mondreclame",
+        "desc": "Elke gedeelde try-on is een gratis advertentie voor jouw webshop. Shoppers delen hun resultaat met vrienden — zonder dat jij er iets voor hoeft te doen."
+      }
+    ]
+  },
+  "partner": {
+    "badge": "OFFICIAL PARTNER",
+    "title1": "Drapit & Shopify:",
+    "titleAccent": "E-commerce AI",
+    "title2": "perfected.",
+    "body": "Wij zijn trots officieel Shopify Partner te zijn — en sinds augustus 2026 vind je Drapit ook gewoon in de Shopify App Store. Eén klik en de virtuele paskamer staat live in je webshop, naadloos geïntegreerd met je Shopify-omgeving.",
+    "featureAppStoreTitle": "Shopify App Store",
+    "featureAppStoreDesc": "Live in de App Store — installeer Drapit met één klik vanuit je Shopify-admin, zonder code.",
+    "featureInstallTitle": "Naadloze installatie",
+    "featureInstallDesc": "Werkt met elk thema en updatet automatisch mee. Liever handmatig? De standalone widget blijft beschikbaar.",
+    "ctaGuide": "Bekijk de installatiehandleiding →",
+    "liveEyebrow": "NU LIVE IN DE",
+    "liveTitle": "Shopify App Store ↗",
+    "techEyebrow": "DRAPIT AI TECHNOLOGY",
+    "techTitle": "State-of-the-Art VTON",
+    "techBody": "Onze eigen IDM-VTON architectuur gebruikt geavanceerde diffusion models om kledingstukken fotorealistisch te transformeren naar het lichaam van de klant. In tegenstelling tot eenvoudige overlays, begrijpt Drapit textuur, schaduw en lichaamsvormen.",
+    "techFeatures": [
+      "Real-time textuur rendering",
+      "Automatische lichaamsdetectie",
+      "Dynamische belichting aanpassing",
+      "Support voor alle kledingtypes"
+    ],
+    "statConversion": "CONVERSIE",
+    "statReturns": "RETOUREN",
+    "ready": "SHOPIFY READY",
+    "live": "LIVE"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Veelgestelde vragen",
+    "items": [
+      {
+        "q": "Hoe snel is de integratie klaar?",
+        "a": "Minder dan 10 minuten. Kopieer één script-tag vanuit je dashboard, plak het in de <head> van je webshop — Shopify, WooCommerce of maatwerk — en de widget is live."
+      },
+      {
+        "q": "Wat als ik mijn maandlimiet bereik?",
+        "a": "De API weigert nieuwe verzoeken tot de volgende maand. Je kunt altijd direct upgraden via je dashboard om meer try-ons te activeren."
+      },
+      {
+        "q": "Werkt Drapit op Shopify?",
+        "a": "Ja. Drapit staat sinds augustus 2026 live in de Shopify App Store — installeren doe je met één klik, zonder code. Gebruik je een ander platform? Drapit werkt op elke webshop die custom scripts ondersteunt: WooCommerce, Magento of maatwerk."
+      },
+      {
+        "q": "Hoe werkt de AI onder de motorkap?",
+        "a": "We gebruiken IDM-VTON, een state-of-the-art diffusion model gespecialiseerd in virtual try-on. De klant uploadt een foto, wij verwerken beide afbeeldingen en leveren binnen seconden een realistisch resultaat."
+      },
+      {
+        "q": "Kan ik het abonnement op elk moment opzeggen?",
+        "a": "Ja, je houdt toegang tot het einde van je factureringsperiode. Geen verborgen kosten, geen contracten."
+      }
+    ]
+  },
+  "contactSection": {
+    "eyebrow": "CONTACT",
+    "title1": "Neem contact",
+    "title2": "met ons op",
+    "body": "Heb je een vraag, wil je een demo of ben je benieuwd of Drapit past bij jouw webshop? We reageren normaal gesproken binnen één werkdag.",
+    "response": "Reactie binnen 1 werkdag"
+  },
+  "finalCta": {
+    "eyebrow": "KLAAR OM TE BEGINNEN?",
+    "title1": "Zet virtual try-on live",
+    "title2": "in minder dan 10 minuten",
+    "body": "Op Shopify installeer je met één klik. Op elk ander platform maak je een account aan en plaats je de widget zelf — dezelfde prijzen, geen creditcard nodig.",
+    "ctaShopify": "INSTALLEREN VIA SHOPIFY",
+    "ctaDirect": "ACCOUNT AANMAKEN →"
+  },
+  "footer": {
+    "tagline": "AI-powered virtual try-on technologie. Wij transformeren webshops met intelligente automatisering en realistische pas-sessies.",
+    "product": "Product",
+    "company": "Bedrijf",
+    "contact": "Contact",
+    "howItWorks": "Hoe het werkt",
+    "shopifyIntegration": "Shopify Integratie",
+    "pricing": "Prijzen",
+    "requestDemo": "Demo aanvragen",
+    "about": "Over ons",
+    "faq": "FAQ",
+    "privacyPolicy": "Privacy Policy",
+    "cookies": "Cookie Beleid",
+    "rights": "© 2026 Drapit. Alle rechten voorbehouden.",
+    "privacy": "Privacy",
+    "terms": "Voorwaarden"
   }
 }

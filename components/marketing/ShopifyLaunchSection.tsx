@@ -60,7 +60,7 @@ export default function ShopifyLaunchSection({ showGuideLink = true }: { showGui
                     0%, 100% { box-shadow: 0 0 0 0 rgba(149,191,71,0.4); }
                     50%      { box-shadow: 0 0 0 8px rgba(149,191,71,0); }
                 }
-                .d-launch-section { padding: 112px 28px; }
+                .d-launch-section { padding: 72px 28px 96px; }
                 .d-launch-float { animation: drapit-launch-float 6s ease-in-out infinite; }
                 .d-launch-grid {
                     display: grid;
