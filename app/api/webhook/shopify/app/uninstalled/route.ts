@@ -57,6 +57,9 @@ export async function POST(request: NextRequest) {
         .update({
             shopify_app_installed: false,
             shopify_access_token: null,   // Token is revoked by Shopify on uninstall
+            shopify_token_expires_at: null,
+            shopify_refresh_token: null,
+            shopify_refresh_token_expires_at: null,
             plan: 'trial',
             monthly_tryon_limit: 20,
             shopify_charge_id: null,      // Billing is cancelled by Shopify automatically

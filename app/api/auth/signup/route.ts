@@ -106,12 +106,12 @@ export async function POST(request: Request) {
             );
         }
 
-        // 3. Stuur welkomstmail naar merchant via EmailJS
+        // 3. Stuur welkomstmail naar merchant via Resend (lib/email.ts)
         console.log(`[signup] Sending welcome email to ${user.email} for shop ${shopName.trim()}`);
         const welcomeSent = await sendWelcomeEmail(user.email!, shopName.trim());
         console.log(`[signup] Welcome email result: ${welcomeSent ? 'SUCCESS' : 'FAILED'}`);
 
-        // 4. Stuur admin notificatie via EmailJS (fire-and-forget)
+        // 4. Stuur admin notificatie via Resend (fire-and-forget)
         sendNewMerchantNotification({
             merchantEmail: email,
             merchantName: contactPerson || shopName,

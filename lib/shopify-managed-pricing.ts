@@ -14,6 +14,7 @@
 
 import type { Plan } from '@/lib/supabase/types';
 import { createClient } from '@supabase/supabase-js';
+import { getShopifyAccessToken } from '@/lib/shopify-token';
 
 const SHOPIFY_API_VERSION = '2026-01';
 
@@ -149,7 +150,9 @@ export async function syncShopifyPlan(
     }
 
     try {
-        const sub = await getActiveSubscription(shop.shopify_domain, shop.shopify_access_token);
+        const accessToken = await getShopifyAccessToken(shopId, admin);
+        if (!accessToken) return null;
+        const sub = await getActiveSubscription(shop.shopify_domain, accessToken);
         if (!sub) return null; // no active paid subscription (e.g. Free/trial)
 
         const limit = planLimitForKey(sub.plan);

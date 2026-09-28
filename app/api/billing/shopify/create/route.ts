@@ -13,6 +13,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { createSubscription } from '@/lib/shopify-billing';
 import type { Plan } from '@/lib/supabase/types';
+import { getShopifyAccessToken } from '@/lib/shopify-token';
 
 function getSupabaseAdmin() {
     return createClient(
@@ -69,9 +70,13 @@ export async function POST(request: NextRequest) {
         }
 
         // Create the RecurringApplicationCharge
+        const accessToken = await getShopifyAccessToken(shop.id, admin);
+        if (!accessToken) {
+            return NextResponse.json({ error: 'Shopify koppeling ontbreekt voor deze shop' }, { status: 400 });
+        }
         const { confirmation_url, charge_id } = await createSubscription(
             shop.shopify_domain,
-            shop.shopify_access_token,
+            accessToken,
             plan,
         );
 

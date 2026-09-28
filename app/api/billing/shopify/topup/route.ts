@@ -12,6 +12,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { createClient } from '@supabase/supabase-js';
 import { createOneTimeTryonPurchase, shopifyTryonPackByKey } from '@/lib/shopify-billing';
+import { getShopifyAccessToken } from '@/lib/shopify-token';
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://drapit.io';
 
@@ -82,9 +83,13 @@ export async function POST(request: NextRequest) {
         const returnUrl = `${APP_URL}/api/billing/shopify/topup/callback?tx=${tx.id}&shop=${encodeURIComponent(shop.shopify_domain)}`;
 
         // 5. Create the one-time purchase on Shopify
+        const accessToken = await getShopifyAccessToken(shop.id, admin);
+        if (!accessToken) {
+            return NextResponse.json({ error: 'Shopify koppeling ontbreekt voor deze shop' }, { status: 400 });
+        }
         const purchase = await createOneTimeTryonPurchase(
             shop.shopify_domain,
-            shop.shopify_access_token,
+            accessToken,
             pack,
             returnUrl,
         );

@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { sendWelcomeEmail } from '@/lib/email';
 import { ensureShopAuthUser, ensureWidgetKey, shopifyLoginEmail } from '@/lib/shopify-onboarding';
 import { syncShopifyPlan } from '@/lib/shopify-managed-pricing';
+import { exchangeAuthCodeForExpiringToken, tokenColumnsFromResponse, ShopifyTokenResponse } from '@/lib/shopify-token';
 
 const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -84,24 +85,16 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Invalid HMAC signature' }, { status: 401 });
     }
 
-    // 2. Exchange code for access token
-    const tokenResponse = await fetch(`https://${shop}/admin/oauth/access_token`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            client_id: process.env.SHOPIFY_API_KEY,
-            client_secret: process.env.SHOPIFY_API_SECRET,
-            code,
-        }),
-    });
-
-    const tokenData = await tokenResponse.json();
-    const { access_token } = tokenData;
-
-    if (!access_token) {
-        console.error('[shopify/callback] Failed to get access token:', tokenData);
+    // 2. Exchange code for an EXPIRING offline access token (+ refresh token).
+    //    Required for all public apps from 1 January 2027.
+    let tokenData: ShopifyTokenResponse;
+    try {
+        tokenData = await exchangeAuthCodeForExpiringToken(shop, code);
+    } catch (err) {
+        console.error('[shopify/callback] Failed to get access token:', err);
         return NextResponse.json({ error: 'Failed to retrieve access token' }, { status: 500 });
     }
+    const { access_token } = tokenData;
 
     // 3. Fetch shop email from Shopify API
     let shopEmail = `${shop.replace('.myshopify.com', '')}@shopify-placeholder.com`;
@@ -132,7 +125,7 @@ export async function GET(request: NextRequest) {
         .from('shops')
         .upsert({
             shopify_domain: shop,
-            shopify_access_token: access_token,
+            ...tokenColumnsFromResponse(tokenData),
             shopify_app_installed: true,
             billing_source: 'shopify',   // Shopify App Store installs always use Shopify billing
             name: shopDisplayName,

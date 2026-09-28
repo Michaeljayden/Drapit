@@ -1,115 +1,112 @@
 // =============================================================================
-// lib/email.ts — Drapit transactional email via EmailJS REST API
+// lib/email.ts — Drapit transactionele mail via Resend (REST, geen SDK nodig)
 // =============================================================================
-// EmailJS Pro (server-side) docs: https://www.emailjs.com/docs/rest-api/send/
-//
-// EmailJS service: gebruik Hostinger SMTP (smtp.hostinger.com:465 SSL)
-//   Sender-adres: info@drapit.io
+// Vervangt EmailJS sinds 2026-09-28. Zelfde publieke functies als voorheen,
+// zodat de aanroepende routes niet hoeven te veranderen.
 //
 // Required env vars:
-//   EMAILJS_SERVICE_ID        — EmailJS → Email Services → Service ID
-//   EMAILJS_PUBLIC_KEY        — EmailJS → Account → Public Key
-//   EMAILJS_PRIVATE_KEY       — EmailJS → Account → Private Key (Pro only)
-//   EMAILJS_TEMPLATE_WELCOME  — Template ID voor welcome email
-//   EMAILJS_TEMPLATE_USAGE    — Template ID voor usage alert email
-//   EMAILJS_TEMPLATE_CONTACT  — Template ID voor contact form notificatie
+//   RESEND_API_KEY   — Resend → API Keys (sending access is voldoende)
+//   RESEND_FROM      — bv. "Drapit <hello@drapit.io>" (domein moet geverifieerd zijn)
+// Optional:
+//   ADMIN_EMAIL      — ontvanger van admin-notificaties (default info@drapit.io)
+//
+// De onboardingreeks (dag 3 / 10 / 14) wordt NIET hier ingepland maar dagelijks
+// verstuurd door app/api/cron/trial-emails/route.ts, zodat de mails de actuele
+// try-on-cijfers bevatten en automatisch stoppen als een shop opzegt.
 // =============================================================================
 
-const EMAILJS_API_URL = 'https://api.emailjs.com/api/v1.0/email/send';
+import {
+    welcomeEmail, day3Email, day10Email, day14Email,
+    usageAlertEmail, newMerchantAdminEmail, contactFormEmail,
+    type EmailContent,
+} from '@/lib/email-templates';
 
-function getCredentials() {
-    return {
-        service_id: process.env.EMAILJS_SERVICE_ID,
-        user_id: process.env.EMAILJS_PUBLIC_KEY,
-        accessToken: process.env.EMAILJS_PRIVATE_KEY,
-    };
+const RESEND_API = 'https://api.resend.com/emails';
+const ADMIN_EMAIL = () => process.env.ADMIN_EMAIL || 'info@drapit.io';
+const FROM = () => process.env.RESEND_FROM || 'Drapit <hello@drapit.io>';
+const REPLY_TO = () => process.env.RESEND_REPLY_TO || 'info@drapit.io';
+
+export interface SendOptions {
+    to: string | string[];
+    content: EmailContent;
+    replyTo?: string;
+    tags?: Record<string, string>;
 }
 
 // ---------------------------------------------------------------------------
-// Internal: send a single email via EmailJS REST API
-// Returns true on success, false on failure (never throws)
+// Internal: één mail via Resend. Geeft het Resend-id terug, of null bij falen.
+// Gooit nooit — mail mag een request nooit laten crashen.
 // ---------------------------------------------------------------------------
-async function sendEmail(
-    templateId: string,
-    templateParams: Record<string, string | number>
-): Promise<boolean> {
-    const { service_id, user_id, accessToken } = getCredentials();
-
-    if (!service_id || !user_id || !accessToken) {
-        console.warn('[email] EmailJS credentials not configured — skipping email send');
-        return false;
+export async function sendViaResend(opts: SendOptions): Promise<string | null> {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+        console.warn('[email] RESEND_API_KEY ontbreekt — mail overgeslagen:', opts.content.subject);
+        return null;
     }
 
-    if (!templateId) {
-        console.warn('[email] No templateId provided — skipping email send');
-        return false;
-    }
-
-    const payload = {
-        service_id,
-        template_id: templateId,
-        user_id,
-        accessToken,
-        template_params: templateParams,
+    const body = {
+        from: FROM(),
+        to: Array.isArray(opts.to) ? opts.to : [opts.to],
+        reply_to: opts.replyTo || REPLY_TO(),
+        subject: opts.content.subject,
+        html: opts.content.html,
+        text: opts.content.text,
+        tags: opts.tags
+            ? Object.entries(opts.tags).map(([name, value]) => ({ name, value }))
+            : undefined,
     };
 
     try {
-        const res = await fetch(EMAILJS_API_URL, {
+        const res = await fetch(RESEND_API, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+            body: JSON.stringify(body),
         });
-
         if (!res.ok) {
-            const text = await res.text();
-            console.error(`[email] EmailJS error ${res.status}:`, text);
-            return false;
+            console.error(`[email] Resend error ${res.status}:`, await res.text());
+            return null;
         }
-
-        return true;
+        const data = (await res.json()) as { id?: string };
+        return data.id ?? null;
     } catch (err) {
-        console.error('[email] Failed to reach EmailJS API:', err);
-        return false;
+        console.error('[email] Resend niet bereikbaar:', err);
+        return null;
     }
 }
 
 // =============================================================================
-// PUBLIC EMAIL FUNCTIONS
+// PUBLIC EMAIL FUNCTIONS (zelfde signatures als het EmailJS-tijdperk)
 // =============================================================================
 
-// ---------------------------------------------------------------------------
-// 1. Welcome email — fired once when a new merchant installs Drapit
-// ---------------------------------------------------------------------------
-export async function sendWelcomeEmail(
-    toEmail: string,
-    shopName: string
-): Promise<boolean> {
-    const templateId = process.env.EMAILJS_TEMPLATE_WELCOME;
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://drapit.io';
-
-    console.log(`[email] Sending welcome email to ${toEmail} (${shopName}) with template ${templateId}`);
-
-    const sent = await sendEmail(templateId!, {
-        to_email: toEmail,
-        to_name: shopName,
-        shop_name: shopName,
-        dashboard_url: `${appUrl}/dashboard`,
-        docs_url: `${appUrl}/docs`,
-        support_email: 'support@drapit.io',
+// 1. Welkomstmail (dag 1) — bij eerste installatie / aanmelding
+export async function sendWelcomeEmail(toEmail: string, shopName: string): Promise<boolean> {
+    const id = await sendViaResend({
+        to: toEmail,
+        content: welcomeEmail(shopName),
+        tags: { type: 'welcome' },
     });
-
-    if (sent) {
-        console.log(`[email] Welcome email sent to ${toEmail} (${shopName})`);
-    } else {
-        console.error(`[email] Welcome email FAILED for ${toEmail} (${shopName})`);
-    }
-
-    return sent;
+    console.log(id
+        ? `[email] Welkomstmail verstuurd naar ${toEmail} (${shopName}) — ${id}`
+        : `[email] Welkomstmail MISLUKT voor ${toEmail} (${shopName})`);
+    return !!id;
 }
 
-// ---------------------------------------------------------------------------
-// 2. Usage alert — fired at 80% and 100% of monthly try-on limit
-// ---------------------------------------------------------------------------
+// 2. Onboardingreeks dag 3 / 10 / 14 — aangeroepen door de dagelijkse cron
+export async function sendTrialStepEmail(
+    step: 3 | 10 | 14,
+    toEmail: string,
+    shopName: string,
+    tryonsUsed: number
+): Promise<boolean> {
+    const content = step === 3 ? day3Email(shopName)
+        : step === 10 ? day10Email(shopName, tryonsUsed)
+        : day14Email(shopName, tryonsUsed);
+    const id = await sendViaResend({ to: toEmail, content, tags: { type: `trial_day_${step}` } });
+    if (id) console.log(`[email] Trial dag ${step} verstuurd naar ${toEmail} (${shopName})`);
+    return !!id;
+}
+
+// 3. Usage alert — bij 80% en 100% van de maandlimiet
 export async function sendUsageAlertEmail(
     toEmail: string,
     shopName: string,
@@ -117,36 +114,15 @@ export async function sendUsageAlertEmail(
     limit: number,
     percentage: 80 | 100
 ): Promise<void> {
-    const templateId = process.env.EMAILJS_TEMPLATE_USAGE;
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://drapit.io';
-
-    const isLimitReached = percentage === 100;
-    const subject = isLimitReached
-        ? `⚠️ Maandlimiet bereikt — ${shopName}`
-        : `Heads-up: ${shopName} is op ${percentage}% van de maandlimiet`;
-
-    const sent = await sendEmail(templateId!, {
-        to_email: toEmail,
-        to_name: shopName,
-        shop_name: shopName,
-        subject,
-        used_tryons: used,
-        monthly_limit: limit,
-        remaining: Math.max(0, limit - used),
-        percentage,
-        is_limit_reached: isLimitReached ? 'true' : 'false',
-        upgrade_url: `${appUrl}/dashboard/settings`,
-        support_email: 'support@drapit.io',
+    const id = await sendViaResend({
+        to: toEmail,
+        content: usageAlertEmail(shopName, used, limit, percentage),
+        tags: { type: `usage_${percentage}` },
     });
-
-    if (sent) {
-        console.log(`[email] Usage alert (${percentage}%) sent to ${toEmail} (${shopName}) — ${used}/${limit}`);
-    }
+    if (id) console.log(`[email] Usage alert (${percentage}%) naar ${toEmail} (${shopName}) — ${used}/${limit}`);
 }
 
-// ---------------------------------------------------------------------------
-// 3. New merchant signup — admin notificatie naar info@drapit.io
-// ---------------------------------------------------------------------------
+// 4. Nieuwe merchant — admin-notificatie
 export async function sendNewMerchantNotification(params: {
     merchantEmail: string;
     merchantName: string;
@@ -155,33 +131,16 @@ export async function sendNewMerchantNotification(params: {
     phone?: string;
     plan: string;
 }): Promise<void> {
-    const templateId = process.env.EMAILJS_TEMPLATE_SIGNUP_ADMIN;
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://drapit.io';
-
-    if (!templateId) {
-        console.warn('[email] EMAILJS_TEMPLATE_SIGNUP_ADMIN not configured — skipping admin signup notification');
-        return;
-    }
-
-    const sent = await sendEmail(templateId, {
-        to_email: 'info@drapit.io',
-        merchant_email: params.merchantEmail,
-        merchant_name: params.merchantName || params.merchantEmail,
-        shop_name: params.shopName,
-        domain: params.domain,
-        phone: params.phone || 'Niet opgegeven',
-        plan: params.plan,
-        admin_url: `${appUrl}/admin`,
+    const id = await sendViaResend({
+        to: ADMIN_EMAIL(),
+        content: newMerchantAdminEmail(params),
+        replyTo: params.merchantEmail,
+        tags: { type: 'admin_signup' },
     });
-
-    if (sent) {
-        console.log(`[email] Admin signup notification sent for ${params.merchantEmail} (${params.shopName})`);
-    }
+    if (id) console.log(`[email] Admin-notificatie voor ${params.merchantEmail} (${params.shopName})`);
 }
 
-// ---------------------------------------------------------------------------
-// 4. Contact form — melding naar info@drapit.io wanneer iemand het formulier stuurt
-// ---------------------------------------------------------------------------
+// 5. Contactformulier — melding naar admin, reply-to = afzender
 export async function sendContactEmail(params: {
     fromName: string;
     fromEmail: string;
@@ -191,23 +150,12 @@ export async function sendContactEmail(params: {
     subject: string;
     message: string;
 }): Promise<boolean> {
-    const templateId = process.env.EMAILJS_TEMPLATE_CONTACT;
-
-    const sent = await sendEmail(templateId!, {
-        to_email: 'info@drapit.io',
-        from_name: params.fromName,
-        from_email: params.fromEmail,
-        phone: params.phone || 'Niet opgegeven',
-        webshop_name: params.webshopName || 'Niet opgegeven',
-        brand_clothing: params.brandClothing || 'Niet opgegeven',
-        subject: params.subject,
-        message: params.message,
-        reply_to: params.fromEmail,
+    const id = await sendViaResend({
+        to: ADMIN_EMAIL(),
+        content: contactFormEmail(params),
+        replyTo: params.fromEmail,
+        tags: { type: 'contact' },
     });
-
-    if (sent) {
-        console.log(`[email] Contact form submission from ${params.fromEmail}`);
-    }
-
-    return sent;
+    if (id) console.log(`[email] Contactformulier van ${params.fromEmail}`);
+    return !!id;
 }

@@ -13,6 +13,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getOneTimePurchaseStatus } from '@/lib/shopify-billing';
+import { getShopifyAccessToken } from '@/lib/shopify-token';
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://drapit.io';
 const BILLING = `${APP_URL}/dashboard/billing`;
@@ -63,9 +64,11 @@ export async function GET(request: NextRequest) {
     }
 
     try {
+        const accessToken = await getShopifyAccessToken(shop.id, admin);
+        if (!accessToken) throw new Error('Shopify koppeling ontbreekt voor deze shop');
         const status = await getOneTimePurchaseStatus(
             shop.shopify_domain,
-            shop.shopify_access_token,
+            accessToken,
             tx.shopify_purchase_id,
         );
 

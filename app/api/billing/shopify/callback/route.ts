@@ -17,6 +17,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { activateSubscription, planLimitForShopifyPlan } from '@/lib/shopify-billing';
 import type { Plan } from '@/lib/supabase/types';
+import { getShopifyAccessToken } from '@/lib/shopify-token';
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://drapit.io';
 
@@ -56,9 +57,11 @@ export async function GET(request: NextRequest) {
 
     try {
         // Activate the charge (verifies it's in 'accepted' state first)
+        const accessToken = await getShopifyAccessToken(shop.id, admin);
+        if (!accessToken) throw new Error('Shopify koppeling ontbreekt voor deze shop');
         await activateSubscription(
             shopDomain,
-            shop.shopify_access_token,
+            accessToken,
             Number(chargeId),
         );
 
