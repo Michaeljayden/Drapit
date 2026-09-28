@@ -57,12 +57,12 @@ export function mapShopifyPlanNameToKey(name: string): Plan {
 export function planLimitForKey(plan: Plan): number {
     const map: Record<Plan, number> = {
         trial: 20,
-        starter: 500,
-        growth: 1500,
-        scale: 3000,
-        enterprise: 10000,
+        starter: 200,
+        growth: 800,
+        scale: 2000,
+        enterprise: 4000,
     };
-    return map[plan] ?? 500;
+    return map[plan] ?? 200;
 }
 
 // ---------------------------------------------------------------------------
