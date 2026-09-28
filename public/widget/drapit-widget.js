@@ -899,24 +899,55 @@
     // never loses round 1: the shopper is shown result 1 again with a note.
     const BOTTOM_RE = /jeans|broek|pant|trouser|chino|jogger|short|rok\b|skirt|legging/i;
 
+    function normalizeStorefrontProduct(p, base) {
+        const img = p.featured_image
+            || (Array.isArray(p.images) && p.images[0] && (p.images[0].src || p.images[0]))
+            || '';
+        const imgUrl = typeof img === 'string' ? img : '';
+        return {
+            id: String(p.id),
+            title: p.title || '',
+            type: p.type || p.product_type || '',
+            tags: Array.isArray(p.tags) ? p.tags.join(' ') : String(p.tags || ''),
+            image: imgUrl.startsWith('//') ? 'https:' + imgUrl : imgUrl,
+            url: p.url
+                ? (p.url.startsWith('/') ? base + p.url : p.url)
+                : (p.handle ? `${base}/products/${p.handle}` : ''),
+        };
+    }
+
     async function fetchOutfitCandidates(product) {
         if (!product.shopifyProductId) return [];
-        const url = `${window.location.origin}/recommendations/products.json?product_id=${encodeURIComponent(product.shopifyProductId)}&limit=10`;
-        const res = await fetch(url, { credentials: 'same-origin' });
-        if (!res.ok) throw new Error('RECS_' + res.status);
-        const data = await res.json();
-        const all = (data.products || [])
-            .filter((p) => String(p.id) !== String(product.shopifyProductId) && p.featured_image)
-            .map((p) => ({
-                id: String(p.id),
-                title: p.title || '',
-                type: p.type || '',
-                tags: Array.isArray(p.tags) ? p.tags.join(' ') : String(p.tags || ''),
-                image: p.featured_image.startsWith('//') ? 'https:' + p.featured_image : p.featured_image,
-                url: p.url ? (p.url.startsWith('/') ? window.location.origin + p.url : p.url) : '',
-            }));
-        const bottoms = all.filter((p) => BOTTOM_RE.test(`${p.type} ${p.title} ${p.tags}`));
-        return (bottoms.length ? bottoms : all).slice(0, 4);
+        const base = window.location.origin;
+        const own = String(product.shopifyProductId);
+
+        // 1. Shopify's own recommendations (uses sales data + collections/tags).
+        let items = [];
+        try {
+            const res = await fetch(`${base}/recommendations/products.json?product_id=${encodeURIComponent(own)}&limit=10`, { credentials: 'same-origin' });
+            if (res.ok) {
+                const data = await res.json();
+                items = (data.products || []).map((p) => normalizeStorefrontProduct(p, base));
+            }
+        } catch { /* fall through to catalogue */ }
+        items = items.filter((p) => p.id !== own && p.image);
+        let bottoms = items.filter((p) => BOTTOM_RE.test(`${p.type} ${p.title} ${p.tags}`));
+
+        // 2. Fallback: new/small shops often have no recommendations yet. Scan the
+        //    public catalogue for bottoms instead (works on every Shopify store).
+        if (!bottoms.length) {
+            try {
+                const res = await fetch(`${base}/collections/all/products.json?limit=250`, { credentials: 'same-origin' });
+                if (res.ok) {
+                    const data = await res.json();
+                    bottoms = (data.products || [])
+                        .map((p) => normalizeStorefrontProduct(p, base))
+                        .filter((p) => p.id !== own && p.image && BOTTOM_RE.test(`${p.type} ${p.title} ${p.tags}`));
+                }
+            } catch { /* nothing to offer */ }
+        }
+
+        return (bottoms.length ? bottoms : items).slice(0, 4);
     }
 
     function renderOutfitPicker(body, resultUrl, product, overlay, parentTryonId) {
