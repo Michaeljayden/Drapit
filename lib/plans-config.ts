@@ -15,10 +15,10 @@ export interface PlanInfo {
 // Limieten komen overeen met PLANS in lib/stripe.ts en planLimitForKey().
 export const PLAN_TIERS: PlanInfo[] = [
     { key: 'trial', limit: 20, price: 0, maxApiKeys: 1 },
-    { key: 'starter', limit: 500, price: 29, oldPrice: 49, maxApiKeys: 1 },
-    { key: 'growth', limit: 1_500, price: 89, oldPrice: 199, popular: true, maxApiKeys: 3 },
-    { key: 'scale', limit: 3_000, price: 169, oldPrice: 399, maxApiKeys: 10 },
-    { key: 'enterprise', limit: 10_000, price: 299, oldPrice: 799, maxApiKeys: 999 }, // effectively unlimited
+    { key: 'starter', limit: 200, price: 15, oldPrice: 29, maxApiKeys: 1 },
+    { key: 'growth', limit: 800, price: 49, oldPrice: 89, popular: true, maxApiKeys: 3 },
+    { key: 'scale', limit: 2_000, price: 119, oldPrice: 169, maxApiKeys: 10 },
+    { key: 'enterprise', limit: 4_000, price: 229, oldPrice: 299, maxApiKeys: 999 }, // effectively unlimited
 ];
 
 /**

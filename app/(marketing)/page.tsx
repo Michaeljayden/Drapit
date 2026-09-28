@@ -298,8 +298,8 @@ export default function LandingPage() {
         {
             key: 'starter',
             name: t('pricing.plans.starter.name'),
-            price: 29,
-            oldPrice: 49,
+            price: 15,
+            oldPrice: 29,
             limit: t('pricing.plans.starter.limit'),
             features: [
                 t('pricing.plans.starter.feature0'),
@@ -313,8 +313,8 @@ export default function LandingPage() {
         {
             key: 'pro',
             name: t('pricing.plans.pro.name'),
-            price: 89,
-            oldPrice: 199,
+            price: 49,
+            oldPrice: 89,
             limit: t('pricing.plans.pro.limit'),
             features: [
                 t('pricing.plans.pro.feature0'),
@@ -330,8 +330,8 @@ export default function LandingPage() {
         {
             key: 'scale',
             name: t('pricing.plans.scale.name'),
-            price: 169,
-            oldPrice: 399,
+            price: 119,
+            oldPrice: 169,
             limit: t('pricing.plans.scale.limit'),
             features: [
                 t('pricing.plans.scale.feature0'),
@@ -347,8 +347,8 @@ export default function LandingPage() {
         {
             key: 'business',
             name: t('pricing.plans.business.name'),
-            price: 299,
-            oldPrice: 799,
+            price: 229,
+            oldPrice: 299,
             limit: t('pricing.plans.business.limit'),
             features: [
                 t('pricing.plans.business.feature0'),

@@ -130,6 +130,8 @@ export async function POST(request: NextRequest) {
             customer: customerId,
             mode: 'subscription',
             payment_method_types: ['card', 'ideal'],
+            // Kortingscodes toestaan (o.a. PILOT9 voor de eerste 3 pilot-winkels)
+            allow_promotion_codes: true,
             line_items: [
                 {
                     price: planConfig.price_id,

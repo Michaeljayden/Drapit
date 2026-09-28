@@ -24,10 +24,12 @@ export function getStripe(): Stripe {
 // Raak dat pad niet aan — de app is daarop goedgekeurd.
 //
 // De bedragen hieronder zijn de introductieprijzen en zijn gelijkgetrokken met
-// de Shopify-plannen: Starter €29, Pro €89, Scale €169, Business €299.
-// `oldPrice` is de normale prijs die doorgestreept getoond wordt.
+// de Shopify-plannen. Actieprijzen sinds 2026-09-28: Starter €15, Pro €49,
+// Scale €119, Business €229 (limieten 200/800/2.000/4.000 zodat elk plan ook
+// bij volledig gebruik van de limiet boven de try-on-kostprijs blijft).
+// `oldPrice` is de normale prijs (€29/€89/€169/€299) die doorgestreept getoond wordt.
 //
-// De bijbehorende Stripe Prices zijn op 2026-08-09 live aangemaakt; hun IDs
+// De bijbehorende Stripe Prices zijn op 2026-09-28 live aangemaakt; hun IDs
 // staan hieronder als fallback en kunnen per omgeving overschreven worden met
 // de STRIPE_PRICE_*-variabelen. Stripe Prices zijn onwijzigbaar: een volgende
 // prijswijziging betekent altijd een NIEUWE Price aanmaken en de ID hier of in
@@ -64,29 +66,29 @@ export const PLANS: Record<Plan, PlanConfig> = {
         ],
     },
     starter: {
-        price_id: process.env.STRIPE_PRICE_STARTER || 'price_1U2VMVQf4cE06T91zazZKLX2',
-        legacy_price_ids: ['price_1T4eWrQf4cE06T91UECmF7rp'],
-        limit: 500,
-        price: 29,
-        oldPrice: 49,
+        price_id: process.env.STRIPE_PRICE_STARTER || 'price_1UKZ9zQf4cE06T91ywIcjIZw',
+        legacy_price_ids: ['price_1U2VMVQf4cE06T91zazZKLX2', 'price_1T4eWrQf4cE06T91UECmF7rp'],
+        limit: 200,
+        price: 15,
+        oldPrice: 29,
         name: 'Starter',
         features: [
-            '500 try-ons per maand',
+            '200 try-ons per maand',
             '1 API-sleutel',
             'E-mail support',
             'Widget personalisatie',
         ],
     },
     growth: {
-        price_id: process.env.STRIPE_PRICE_GROWTH || 'price_1U2VMdQf4cE06T91s0SKhoSN',
-        legacy_price_ids: ['price_1T90HkQf4cE06T91QKCF4E59', 'price_1T4eXjQf4cE06T91YwBQAUWT'],
-        limit: 1500,
-        price: 89,
-        oldPrice: 199,
+        price_id: process.env.STRIPE_PRICE_GROWTH || 'price_1UKZA3Qf4cE06T91d5XMz1J4',
+        legacy_price_ids: ['price_1U2VMdQf4cE06T91s0SKhoSN', 'price_1T90HkQf4cE06T91QKCF4E59', 'price_1T4eXjQf4cE06T91YwBQAUWT'],
+        limit: 800,
+        price: 49,
+        oldPrice: 89,
         name: 'Pro',
         popular: true,
         features: [
-            '1.500 try-ons per maand',
+            '800 try-ons per maand',
             'Onbeperkt API-sleutels',
             'Prioriteit support',
             'Widget personalisatie',
@@ -95,14 +97,14 @@ export const PLANS: Record<Plan, PlanConfig> = {
         ],
     },
     scale: {
-        price_id: process.env.STRIPE_PRICE_SCALE || 'price_1U2VMfQf4cE06T91hSMCP9Mn',
-        legacy_price_ids: ['price_1T90HmQf4cE06T91k24nRnII', 'price_1T4eYtQf4cE06T91fYyeFyil'],
-        limit: 3000,
-        price: 169,
-        oldPrice: 399,
+        price_id: process.env.STRIPE_PRICE_SCALE || 'price_1UKZA8Qf4cE06T91Gm52OdVI',
+        legacy_price_ids: ['price_1U2VMfQf4cE06T91hSMCP9Mn', 'price_1T90HmQf4cE06T91k24nRnII', 'price_1T4eYtQf4cE06T91fYyeFyil'],
+        limit: 2000,
+        price: 119,
+        oldPrice: 169,
         name: 'Scale',
         features: [
-            '3.000 try-ons per maand',
+            '2.000 try-ons per maand',
             '10 API-sleutels',
             'Prioriteit support',
             'Custom branding',
@@ -112,14 +114,14 @@ export const PLANS: Record<Plan, PlanConfig> = {
         ],
     },
     enterprise: {
-        price_id: process.env.STRIPE_PRICE_ENTERPRISE || 'price_1U2VMgQf4cE06T91ejGb80L3',
-        legacy_price_ids: ['price_1T90HnQf4cE06T919U4tZzbs', 'price_1T4eZtQf4cE06T919zzx0lVE'],
-        limit: 10_000,
-        price: 299,
-        oldPrice: 799,
+        price_id: process.env.STRIPE_PRICE_ENTERPRISE || 'price_1UKZADQf4cE06T91c1egfRsq',
+        legacy_price_ids: ['price_1U2VMgQf4cE06T91ejGb80L3', 'price_1T90HnQf4cE06T919U4tZzbs', 'price_1T4eZtQf4cE06T919zzx0lVE'],
+        limit: 4000,
+        price: 229,
+        oldPrice: 299,
         name: 'Business',
         features: [
-            '10.000 try-ons per maand',
+            '4.000 try-ons per maand',
             'Onbeperkt API-sleutels',
             'Dedicated support',
             'Custom branding',
