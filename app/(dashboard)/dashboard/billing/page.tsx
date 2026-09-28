@@ -5,6 +5,8 @@ import type { Plan, StudioPlan } from '@/lib/supabase/types';
 import BillingActions from '@/components/dashboard/BillingActions';
 import StudioBillingActions from '@/components/dashboard/StudioBillingActions';
 import AutoTopupSettings from '@/components/dashboard/AutoTopupSettings';
+import ShopifyTryonPacks from '@/components/dashboard/ShopifyTryonPacks';
+import { Suspense } from 'react';
 import { getManagedPricingUrl, syncShopifyPlan } from '@/lib/shopify-managed-pricing';
 
 const planOrder: Plan[] = ['trial', 'starter', 'growth', 'scale', 'enterprise'];
@@ -192,6 +194,17 @@ export default async function BillingPage() {
                         </a>
                     )}
                 </div>
+            )}
+
+            {/* Shopify merchants: one-time extra try-on packs via Shopify Billing */}
+            {isShopify && (
+                <Suspense fallback={null}>
+                    <ShopifyTryonPacks
+                        extraTryons={extraTryons}
+                        tryonsUsed={tryonsUsed}
+                        totalLimit={totalLimit}
+                    />
+                </Suspense>
             )}
 
             {/* VTON Plans grid (Stripe checkout — hidden for Shopify merchants) */}

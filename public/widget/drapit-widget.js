@@ -776,6 +776,10 @@
 
             if (!res.ok) {
                 const err = await res.json().catch(() => ({}));
+                // 429 = the store's monthly try-on bundle is used up. The merchant
+                // gets an e-mail + dashboard warning; the shopper just sees a
+                // friendly "temporarily unavailable" instead of a raw API error.
+                if (res.status === 429) throw new Error('LIMIT_REACHED');
                 throw new Error(err.detail || err.error || `HTTP ${res.status}`);
             }
 
@@ -821,6 +825,9 @@
                     + '| This try-on widget is not fully activated for this store yet.';
             case 'UPLOAD_FAILED':
                 return 'Foto uploaden mislukt. Probeer het opnieuw. | Photo upload failed. Please try again.';
+            case 'LIMIT_REACHED':
+                return 'Virtueel passen is tijdelijk niet beschikbaar in deze winkel. Probeer het later opnieuw. '
+                    + '| Virtual try-on is temporarily unavailable in this store. Please try again later.';
             default:
                 if (typeof message === 'string' && message.startsWith('CONFIG_')) {
                     return 'De try-on widget is nog niet volledig geactiveerd voor deze winkel. '
