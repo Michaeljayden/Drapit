@@ -402,8 +402,11 @@
         }
         .drapit-result-actions {
             display: flex;
+            flex-wrap: wrap;
             gap: 8px;
         }
+        .drapit-result-actions .drapit-result-buy { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .drapit-result-actions .drapit-result-buy.outfit { flex: 1 1 100%; }
         .drapit-result-buy {
             flex: 1;
             padding: 12px;
@@ -437,7 +440,7 @@
         .drapit-outfit { margin-top: 16px; padding-top: 14px; border-top: 1px solid #E2E8F0; text-align: left; }
         .drapit-outfit-title { font-size: 14px; font-weight: 600; color: #0F172A; }
         .drapit-outfit-sub { font-size: 12px; color: #94A3B8; margin-top: 2px; }
-        .drapit-outfit-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+        .drapit-outfit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 10px; }
         .drapit-outfit-item { border: 1px solid #E2E8F0; border-radius: 10px; padding: 6px; background: #fff; cursor: pointer; text-align: center; transition: border-color 0.15s, box-shadow 0.15s; }
         .drapit-outfit-item:hover { border-color: ${PRIMARY_COLOR}; box-shadow: 0 0 0 2px ${PRIMARY_COLOR}22; }
         .drapit-outfit-item img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 6px; background: #F8FAFC; }
@@ -1054,7 +1057,7 @@
         const outfitTag = isOutfit
             ? `<div class="drapit-outfit-tag">Complete outfit | Complete outfit</div>` : '';
         const secondBuy = isOutfit && opts.outfitProduct.url
-            ? `<a href="${opts.outfitProduct.url}" class="drapit-result-buy" target="_blank" rel="noopener" style="background:#0F172A">
+            ? `<a href="${opts.outfitProduct.url}" class="drapit-result-buy outfit" target="_blank" rel="noopener" style="background:#0F172A">
                     ${ICON_CART} ${escapeHtml(opts.outfitProduct.title)}
                </a>` : '';
         const shareLabel = hasNativeShare ? 'Delen | Share' : 'WhatsApp';
@@ -1067,7 +1070,7 @@
                 <img src="${resultUrl}" alt="Try-on resultaat" class="drapit-result-img" />
                 <div class="drapit-result-actions">
                     ${product.buyUrl
-                ? `<a href="${product.buyUrl}" class="drapit-result-buy" target="_blank" rel="noopener">
+                ? `<a href="${product.buyUrl}" class="drapit-result-buy${isOutfit ? ' outfit' : ''}" target="_blank" rel="noopener">
                             ${ICON_CART} ${isOutfit ? escapeHtml(product.productName) : 'Koop dit item | Buy this item'}
                            </a>${secondBuy}`
                 : `<button class="drapit-result-buy" onclick="this.closest('.drapit-overlay')?.remove()">
