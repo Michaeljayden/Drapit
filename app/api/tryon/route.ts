@@ -66,6 +66,8 @@ const tryOnRequestSchema = z.object({
     // Outfit/set flow only: "bottom" = second layer on top of a previous
     // try-on result (user_photo_url is then that result). Absent = normal try-on.
     layer: z.enum(['bottom']).optional(),
+    // Id of the round-1 try-on this bottom layer builds on (audit/analytics only).
+    parent_tryon_id: z.string().uuid().optional(),
 });
 
 // ---------------------------------------------------------------------------
@@ -159,7 +161,7 @@ export async function POST(request: NextRequest) {
         // ---------------------------------------------------------------
         const { data: shop, error: shopError } = await supabase
             .from('shops')
-            .select('id, tryons_this_month, monthly_tryon_limit, rollover_tryons, extra_tryons, email, name, auto_topup_enabled, auto_topup_threshold_pct, auto_topup_pack_index, auto_topup_monthly_cap, auto_topup_spent_this_month, stripe_customer_id, billing_source')
+            .select('id, tryons_this_month, monthly_tryon_limit, rollover_tryons, extra_tryons, email, name, auto_topup_enabled, auto_topup_threshold_pct, auto_topup_pack_index, auto_topup_monthly_cap, auto_topup_spent_this_month, stripe_customer_id, billing_source, outfits_enabled')
             .eq('id', shopId)
             .single();
 
@@ -214,8 +216,24 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const { product_image_url, user_photo_url, product_id, layer } =
+        const { product_image_url, user_photo_url, product_id, layer, parent_tryon_id } =
             parseResult.data;
+
+        // ---------------------------------------------------------------
+        // 3b. OUTFIT GATE — a second layer is only allowed for Shopify shops
+        //     that have outfits switched on server-side. The theme-block
+        //     checkbox alone is never enough.
+        // ---------------------------------------------------------------
+        if (layer) {
+            const outfitsEnabled = ((shop as Record<string, unknown>).outfits_enabled as boolean) ?? false;
+            const billingSource = (shop as Record<string, unknown>).billing_source as string | null;
+            if (!outfitsEnabled || billingSource !== 'shopify') {
+                return NextResponse.json(
+                    { error: 'Outfit try-on is not enabled for this shop' },
+                    { status: 403, headers: CORS_HEADERS }
+                );
+            }
+        }
 
         // ---------------------------------------------------------------
         // 5. DATABASE — create try-on record (status: 'pending')
@@ -231,6 +249,8 @@ export async function POST(request: NextRequest) {
                 status: 'pending',
                 replicate_prediction_id: null,
                 result_image_url: null,
+                layer: layer ?? null,
+                parent_tryon_id: layer ? (parent_tryon_id ?? null) : null,
             })
             .select('id')
             .single();

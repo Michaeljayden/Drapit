@@ -39,6 +39,10 @@
     ).trim();
     const PRIMARY_COLOR = SCRIPT_EL?.getAttribute('data-drapit-color') || '#1D6FD8';
     const CTA_TEXT = SCRIPT_EL?.getAttribute('data-drapit-cta') || 'Virtueel passen | Virtual try-on';
+    // Outfit/set flow: merchant checkbox in the theme block ("true"/"false").
+    // Only offered when the server ALSO reports outfits=true for this shop.
+    const OUTFITS_BLOCK = (SCRIPT_EL?.getAttribute('data-drapit-outfits') || '').trim().toLowerCase() === 'true';
+    let OUTFITS_SERVER = false;
     const API_BASE = SCRIPT_EL?.src
         ? new URL(SCRIPT_EL.src).origin
         : window.location.origin;
@@ -64,6 +68,7 @@
                     const data = await res.json();
                     if (!data.key) throw new Error('NO_KEY');
                     API_KEY = data.key;
+                    OUTFITS_SERVER = data.outfits === true;
                     return API_KEY;
                 })
                 .catch((err) => {
@@ -75,7 +80,7 @@
         return _keyResolution;
     }
 
-    console.log('[Drapit Widget] v1.1.0 (Bilingual) loaded — '
+    console.log('[Drapit Widget] v1.2.0 (Bilingual, outfits) loaded — '
         + (API_KEY ? 'key: ' + API_KEY.substring(0, 12) + '…' : 'auto-key via shop ' + SHOP_DOMAIN));
 
     // ── CSS ───────────────────────────────────────────────────────────────
@@ -429,6 +434,16 @@
             transition: background 0.15s;
         }
         .drapit-result-retry:hover { background: #F8FAFC; }
+        .drapit-outfit { margin-top: 16px; padding-top: 14px; border-top: 1px solid #E2E8F0; text-align: left; }
+        .drapit-outfit-title { font-size: 14px; font-weight: 600; color: #0F172A; }
+        .drapit-outfit-sub { font-size: 12px; color: #94A3B8; margin-top: 2px; }
+        .drapit-outfit-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+        .drapit-outfit-item { border: 1px solid #E2E8F0; border-radius: 10px; padding: 6px; background: #fff; cursor: pointer; text-align: center; transition: border-color 0.15s, box-shadow 0.15s; }
+        .drapit-outfit-item:hover { border-color: ${PRIMARY_COLOR}; box-shadow: 0 0 0 2px ${PRIMARY_COLOR}22; }
+        .drapit-outfit-item img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 6px; background: #F8FAFC; }
+        .drapit-outfit-name { font-size: 11px; color: #475569; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .drapit-outfit-note { font-size: 12px; color: #92400E; background: #FEF3C7; border-radius: 8px; padding: 8px 10px; margin-bottom: 10px; text-align: left; }
+        .drapit-outfit-tag { display: inline-block; font-size: 11px; font-weight: 600; color: ${PRIMARY_COLOR}; background: ${PRIMARY_COLOR}14; border-radius: 999px; padding: 3px 10px; margin-bottom: 10px; }
 
         .drapit-share-actions {
             display: flex;
@@ -522,6 +537,8 @@
         const productId = productEl.getAttribute('data-drapit-product-id') || 'unknown';
         const buyUrl = productEl.getAttribute('data-drapit-buy-url') || '';
         const productName = productEl.getAttribute('data-drapit-product-name') || productId;
+        const shopifyProductId = productEl.getAttribute('data-drapit-shopify-product-id') || '';
+        const productHandle = productEl.getAttribute('data-drapit-product-handle') || '';
 
         // Create Shadow DOM host
         const host = document.createElement('div');
@@ -539,7 +556,7 @@
         btn.className = 'drapit-btn';
         btn.innerHTML = `${ICON_TRYON} ${CTA_TEXT}`;
         btn.addEventListener('click', () => {
-            openModal(shadow, { productImg, productId, buyUrl, productName });
+            openModal(shadow, { productImg, productId, buyUrl, productName, shopifyProductId, productHandle });
         });
         shadow.appendChild(btn);
 
@@ -861,7 +878,7 @@
 
                     if (data.status === 'succeeded' && data.result_image_url) {
                         clearInterval(timer);
-                        showResult(body, data.result_image_url, product, overlay);
+                        showResult(body, data.result_image_url, product, overlay, { tryonId });
                         resolve();
                     } else if (data.status === 'failed') {
                         clearInterval(timer);
@@ -875,21 +892,153 @@
         });
     }
 
+    // ── Outfit / set flow ─────────────────────────────────────────────────
+    // After a successful round 1 (top), show bottoms from the same shop via
+    // Shopify's built-in recommendations endpoint and run a second layer
+    // (layer: "bottom") on top of the round-1 result. Failure of round 2
+    // never loses round 1: the shopper is shown result 1 again with a note.
+    const BOTTOM_RE = /jeans|broek|pant|trouser|chino|jogger|short|rok\b|skirt|legging/i;
+
+    async function fetchOutfitCandidates(product) {
+        if (!product.shopifyProductId) return [];
+        const url = `${window.location.origin}/recommendations/products.json?product_id=${encodeURIComponent(product.shopifyProductId)}&limit=10`;
+        const res = await fetch(url, { credentials: 'same-origin' });
+        if (!res.ok) throw new Error('RECS_' + res.status);
+        const data = await res.json();
+        const all = (data.products || [])
+            .filter((p) => String(p.id) !== String(product.shopifyProductId) && p.featured_image)
+            .map((p) => ({
+                id: String(p.id),
+                title: p.title || '',
+                type: p.type || '',
+                tags: Array.isArray(p.tags) ? p.tags.join(' ') : String(p.tags || ''),
+                image: p.featured_image.startsWith('//') ? 'https:' + p.featured_image : p.featured_image,
+                url: p.url ? (p.url.startsWith('/') ? window.location.origin + p.url : p.url) : '',
+            }));
+        const bottoms = all.filter((p) => BOTTOM_RE.test(`${p.type} ${p.title} ${p.tags}`));
+        return (bottoms.length ? bottoms : all).slice(0, 4);
+    }
+
+    function renderOutfitPicker(body, resultUrl, product, overlay, parentTryonId) {
+        const box = body.querySelector('#drapit-outfit');
+        if (!box) return;
+        fetchOutfitCandidates(product).then((items) => {
+            if (!items.length) return;
+            box.style.display = 'block';
+            box.innerHTML = `
+                <div class="drapit-outfit-title">Combineer met… | Combine with…</div>
+                <div class="drapit-outfit-sub">Kies een broek en zie de complete outfit | Pick bottoms to see the full outfit</div>
+                <div class="drapit-outfit-grid">
+                    ${items.map((p, i) => `
+                        <div class="drapit-outfit-item" data-idx="${i}">
+                            <img src="${p.image}" alt="" loading="lazy" />
+                            <div class="drapit-outfit-name" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</div>
+                        </div>`).join('')}
+                </div>
+            `;
+            box.querySelectorAll('.drapit-outfit-item').forEach((el) => {
+                el.addEventListener('click', () => {
+                    const pick = items[Number(el.getAttribute('data-idx'))];
+                    if (pick) startBottomLayer(overlay, body, resultUrl, product, parentTryonId, pick);
+                });
+            });
+        }).catch((err) => {
+            console.warn('[Drapit] Outfit candidates unavailable:', err);
+        });
+    }
+
+    async function startBottomLayer(overlay, body, resultUrl, product, parentTryonId, pick) {
+        body.innerHTML = `
+            <div class="drapit-product-info">
+                <img src="${pick.image}" alt="" class="drapit-product-thumb" />
+                <div>
+                    <div class="drapit-product-name">${escapeHtml(pick.title)}</div>
+                    <div class="drapit-product-id">Complete outfit | Complete outfit</div>
+                </div>
+            </div>
+            <div class="drapit-loading">
+                <div class="drapit-spinner"></div>
+                <div class="drapit-loading-text">Outfit wordt samengesteld… | Building your outfit…</div>
+                <div class="drapit-loading-sub">Dit duurt meestal 15–30 seconden | This usually takes 15–30 seconds</div>
+            </div>
+        `;
+
+        const restoreRoundOne = (note) => showResult(body, resultUrl, product, overlay, { tryonId: parentTryonId, note });
+
+        try {
+            const res = await fetch(`${API_BASE}/api/tryon`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Drapit-Key': API_KEY },
+                body: JSON.stringify({
+                    product_image_url: pick.image,
+                    user_photo_url: resultUrl,
+                    product_id: pick.id,
+                    buy_url: pick.url || window.location.href,
+                    layer: 'bottom',
+                    parent_tryon_id: parentTryonId,
+                }),
+            });
+            if (!res.ok) {
+                if (res.status === 429) throw new Error('LIMIT_REACHED');
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.error || `HTTP ${res.status}`);
+            }
+            const data = await res.json();
+
+            // Poll (same cadence as round 1)
+            let attempts = 0;
+            const finalUrl = await new Promise((resolve, reject) => {
+                const timer = setInterval(async () => {
+                    attempts++;
+                    if (attempts > MAX_POLLS) { clearInterval(timer); reject(new Error('TIMEOUT')); return; }
+                    try {
+                        const r = await fetch(`${API_BASE}/api/tryon/${data.tryon_id}`, { headers: { 'X-Drapit-Key': API_KEY } });
+                        if (!r.ok) return;
+                        const st = await r.json();
+                        if (st.status === 'succeeded' && st.result_image_url) { clearInterval(timer); resolve(st.result_image_url); }
+                        else if (st.status === 'failed') { clearInterval(timer); reject(new Error('FAILED')); }
+                    } catch { /* keep polling */ }
+                }, POLL_INTERVAL);
+            });
+
+            showResult(body, finalUrl, product, overlay, {
+                tryonId: data.tryon_id,
+                outfitProduct: { title: pick.title, url: pick.url },
+            });
+        } catch (err) {
+            console.error('[Drapit] Outfit layer error:', err);
+            const msg = err && err.message === 'LIMIT_REACHED'
+                ? 'De outfit kon niet worden gemaakt (limiet bereikt). Je eerste resultaat staat hieronder. | The outfit could not be created (limit reached). Your first result is below.'
+                : 'De outfit is niet gelukt, probeer een andere broek. Je eerste resultaat staat hieronder. | The outfit did not work out, try other bottoms. Your first result is below.';
+            restoreRoundOne(msg);
+        }
+    }
+
     // ── Show Result ───────────────────────────────────────────────────────
-    function showResult(body, resultUrl, product, overlay) {
+    function showResult(body, resultUrl, product, overlay, opts = {}) {
         const hasNativeShare = !!navigator.share;
+        const isOutfit = !!opts.outfitProduct;   // this result already has a bottom layer
+        const outfitNote = opts.note
+            ? `<div class="drapit-outfit-note">${escapeHtml(opts.note)}</div>` : '';
+        const outfitTag = isOutfit
+            ? `<div class="drapit-outfit-tag">Complete outfit | Complete outfit</div>` : '';
+        const secondBuy = isOutfit && opts.outfitProduct.url
+            ? `<a href="${opts.outfitProduct.url}" class="drapit-result-buy" target="_blank" rel="noopener" style="background:#0F172A">
+                    ${ICON_CART} ${escapeHtml(opts.outfitProduct.title)}
+               </a>` : '';
         const shareLabel = hasNativeShare ? 'Delen | Share' : 'WhatsApp';
         const shareIcon = hasNativeShare ? ICON_SHARE : ICON_WHATSAPP;
         const shareBtnClass = hasNativeShare ? '' : 'whatsapp';
 
         body.innerHTML = `
             <div class="drapit-result">
+                ${outfitNote}${outfitTag}
                 <img src="${resultUrl}" alt="Try-on resultaat" class="drapit-result-img" />
                 <div class="drapit-result-actions">
                     ${product.buyUrl
                 ? `<a href="${product.buyUrl}" class="drapit-result-buy" target="_blank" rel="noopener">
-                            ${ICON_CART} Koop dit item | Buy this item
-                           </a>`
+                            ${ICON_CART} ${isOutfit ? escapeHtml(product.productName) : 'Koop dit item | Buy this item'}
+                           </a>${secondBuy}`
                 : `<button class="drapit-result-buy" onclick="this.closest('.drapit-overlay')?.remove()">
                             Sluiten | Close
                            </button>`
@@ -904,8 +1053,14 @@
                         ${shareIcon} ${shareLabel}
                     </button>
                 </div>
+                <div class="drapit-outfit" id="drapit-outfit" style="display:none"></div>
             </div>
         `;
+
+        // Outfit/set flow: offer a bottom to combine with (round 1 results only).
+        if (!isOutfit && opts.tryonId && OUTFITS_BLOCK && OUTFITS_SERVER) {
+            renderOutfitPicker(body, resultUrl, product, overlay, opts.tryonId);
+        }
 
         body.querySelector('.drapit-result-retry')?.addEventListener('click', () => {
             openModal(overlay.getRootNode().host?.shadowRoot || overlay.parentNode, product);

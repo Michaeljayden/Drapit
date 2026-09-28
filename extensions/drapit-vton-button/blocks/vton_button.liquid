@@ -9,6 +9,7 @@
   data-drapit-shop="{{ shop.permanent_domain }}"
   data-drapit-color="{{ block.settings.button_color }}"
   data-drapit-cta="{{ block.settings.button_text }}"
+  data-drapit-outfits="{{ block.settings.enable_outfits }}"
   defer
 ></script>
 
@@ -17,6 +18,8 @@
   data-drapit-product-id="{{ product.variants.first.sku | default: product.id }}"
   data-drapit-product-name="{{ product.title }}"
   data-drapit-buy-url="{{ shop.url }}{{ product.url }}"
+  data-drapit-shopify-product-id="{{ product.id }}"
+  data-drapit-product-handle="{{ product.handle }}"
 ></div>
 
 {% schema %}
@@ -45,6 +48,13 @@
       "id": "button_text",
       "label": "Button Text",
       "default": "Virtueel passen"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_outfits",
+      "label": "Combinaties aanbieden na een try-on",
+      "info": "Toont na het resultaat 'Combineer met…' met een broek uit je shop. Een combinatie telt als 2 try-ons. Werkt alleen als Drapit dit voor je shop heeft ingeschakeld.",
+      "default": false
     }
   ]
 }

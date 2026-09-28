@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
         // Match on the Shopify permanent domain first, then on the custom domain.
         const { data: shop } = await supabase
             .from('shops')
-            .select('id, widget_public_key, shopify_domain, domain')
+            .select('id, widget_public_key, shopify_domain, domain, billing_source, outfits_enabled')
             .or(`shopify_domain.eq.${shopParam},domain.eq.${shopParam}`)
             .limit(1)
             .maybeSingle();
@@ -76,7 +76,13 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        return NextResponse.json({ key }, { status: 200, headers: CORS_HEADERS });
+        // Outfit/set flow is only offered when the shop has it switched on
+        // server-side AND is billed via Shopify (the theme block adds its own
+        // checkbox on top of this).
+        const outfits = !!(shop as Record<string, unknown>).outfits_enabled
+            && (shop as Record<string, unknown>).billing_source === 'shopify';
+
+        return NextResponse.json({ key, outfits }, { status: 200, headers: CORS_HEADERS });
     } catch (err) {
         console.error('[widget/config] Unexpected error:', err);
         return NextResponse.json(
