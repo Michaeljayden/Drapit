@@ -63,6 +63,9 @@ const tryOnRequestSchema = z.object({
     user_photo_url: z.string().url('user_photo_url must be a valid URL'),
     product_id: z.string().min(1, 'product_id is required'),
     buy_url: z.string().url('buy_url must be a valid URL'),
+    // Outfit/set flow only: "bottom" = second layer on top of a previous
+    // try-on result (user_photo_url is then that result). Absent = normal try-on.
+    layer: z.enum(['bottom']).optional(),
 });
 
 // ---------------------------------------------------------------------------
@@ -211,7 +214,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const { product_image_url, user_photo_url, product_id } =
+        const { product_image_url, user_photo_url, product_id, layer } =
             parseResult.data;
 
         // ---------------------------------------------------------------
@@ -305,6 +308,7 @@ export async function POST(request: NextRequest) {
                 human_image_url: storedUserUrl,
                 garment_image_url: storedProductUrl,
                 shop_id: shopId,
+                layer: layer ?? null,
             }),
         }).catch((err) => {
             console.error('[tryon] Failed to trigger process route:', err);

@@ -14,6 +14,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { generateVtonWithGemini } from '@/lib/gemini';
+import { generateBottomLayerWithGemini } from '@/lib/gemini-outfit';
 
 function getSupabaseAdmin() {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -35,14 +36,14 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    let body: { tryon_id: string; human_image_url: string; garment_image_url: string; shop_id: string };
+    let body: { tryon_id: string; human_image_url: string; garment_image_url: string; shop_id: string; layer?: 'bottom' | null };
     try {
         body = await request.json();
     } catch {
         return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
     }
 
-    const { tryon_id, human_image_url, garment_image_url, shop_id } = body;
+    const { tryon_id, human_image_url, garment_image_url, shop_id, layer } = body;
 
     if (!tryon_id || !human_image_url || !garment_image_url || !shop_id) {
         return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -55,7 +56,11 @@ export async function POST(request: NextRequest) {
         // -------------------------------------------------------------------
         // 2. Generate VTON image via Gemini
         // -------------------------------------------------------------------
-        const resultBuffer = await generateVtonWithGemini(human_image_url, garment_image_url);
+        // Outfit flow: second layer (bottom) uses its own prompt. Everything else
+        // goes through the unchanged single-garment generator.
+        const resultBuffer = layer === 'bottom'
+            ? await generateBottomLayerWithGemini(human_image_url, garment_image_url)
+            : await generateVtonWithGemini(human_image_url, garment_image_url);
 
         // -------------------------------------------------------------------
         // 3. Store result in Supabase Storage (bucket: results)
