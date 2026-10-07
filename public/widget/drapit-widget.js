@@ -155,7 +155,16 @@
         }
         return 'en';
     }
-    const LANG = resolveLang();
+    // The shopper can switch EN/NL in the widget header; that choice is
+    // remembered in this browser and wins over the merchant's default.
+    const LANG_KEY = 'drapit_lang';
+    let LANG = (() => {
+        try {
+            const saved = window.localStorage.getItem(LANG_KEY);
+            if (saved === 'en' || saved === 'nl') return saved;
+        } catch { /* storage blocked — use the merchant setting */ }
+        return resolveLang();
+    })();
 
     function t(key, vars) {
         let s = (STRINGS[LANG] && STRINGS[LANG][key]) || STRINGS.en[key] || key;
@@ -167,9 +176,43 @@
     // old built-in defaults — then use the default in the widget language.
     const RAW_CTA = (SCRIPT_EL?.getAttribute('data-drapit-cta') || '').trim();
     const DEFAULT_CTAS = ['virtueel passen', 'virtual try-on', 'virtueel passen | virtual try-on'];
-    const CTA_TEXT = (!RAW_CTA || DEFAULT_CTAS.includes(RAW_CTA.toLowerCase()))
-        ? t('cta')
-        : RAW_CTA;
+    const CTA_IS_DEFAULT = !RAW_CTA || DEFAULT_CTAS.includes(RAW_CTA.toLowerCase());
+    const CTA_TEXT = CTA_IS_DEFAULT ? t('cta') : RAW_CTA;
+
+    // Translatable text: <span data-i18n="key">…</span>, swapped live on a language switch.
+    function tx(key) {
+        return `<span data-i18n="${key}">${escapeHtml(t(key))}</span>`;
+    }
+    // Translatable attribute, e.g. ta('aria-label', 'close')
+    function ta(attr, key) {
+        return `${attr}="${escapeHtml(t(key))}" data-i18n-attr="${attr}:${key}"`;
+    }
+
+    const ctaLabels = [];          // default-text buttons on the product page
+    const langListeners = new Set(); // live views (e.g. progress steps) that re-render
+
+    function applyLang(root) {
+        if (!root) return;
+        root.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.getAttribute('data-i18n')); });
+        root.querySelectorAll('[data-i18n-attr]').forEach((el) => {
+            const [attr, key] = el.getAttribute('data-i18n-attr').split(':');
+            el.setAttribute(attr, t(key));
+        });
+        root.querySelectorAll('.drapit-lang-btn').forEach((b) => {
+            const on = b.getAttribute('data-lang') === LANG;
+            b.classList.toggle('active', on);
+            b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+    }
+
+    function setLang(lang, root) {
+        if (lang !== 'en' && lang !== 'nl') return;
+        LANG = lang;
+        try { window.localStorage.setItem(LANG_KEY, lang); } catch { /* ignore */ }
+        applyLang(root);
+        ctaLabels.forEach((el) => { el.textContent = t('cta'); });
+        langListeners.forEach((fn) => { try { fn(); } catch { /* ignore */ } });
+    }
     // Outfit/set flow: merchant checkbox in the theme block ("true"/"false").
     // Only offered when the server ALSO reports outfits=true for this shop.
     const OUTFITS_BLOCK = (SCRIPT_EL?.getAttribute('data-drapit-outfits') || '').trim().toLowerCase() === 'true';
@@ -300,6 +343,28 @@
             transition: background 0.15s;
         }
         .drapit-close:hover { background: #E2E8F0; }
+        .drapit-header-actions { display: flex; align-items: center; gap: 8px; }
+        .drapit-lang {
+            display: inline-flex;
+            background: #F1F5F9;
+            border-radius: 8px;
+            padding: 3px;
+            gap: 2px;
+        }
+        .drapit-lang-btn {
+            border: none;
+            background: transparent;
+            color: #64748B;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            padding: 5px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+        .drapit-lang-btn:hover { color: #0F172A; }
+        .drapit-lang-btn.active { background: #fff; color: #0F172A; box-shadow: 0 1px 2px rgba(15,23,42,0.12); }
 
         .drapit-modal-body { padding: 20px 24px 24px; }
 
@@ -859,7 +924,8 @@
         // Create button
         const btn = document.createElement('button');
         btn.className = 'drapit-btn';
-        btn.innerHTML = `${ICON_TRYON} ${escapeHtml(CTA_TEXT)}`;
+        btn.innerHTML = `${ICON_TRYON} <span class="drapit-btn-label">${escapeHtml(CTA_IS_DEFAULT ? t('cta') : CTA_TEXT)}</span>`;
+        if (CTA_IS_DEFAULT) ctaLabels.push(btn.querySelector('.drapit-btn-label'));
         // Variant images (Shopify theme block): [{ id, img, sku }]
         let variants = [];
         try {
@@ -913,8 +979,14 @@
         overlay.innerHTML = `
             <div class="drapit-modal">
                 <div class="drapit-modal-header">
-                    <span class="drapit-modal-title">${escapeHtml(t('title'))}</span>
-                    <button class="drapit-close" aria-label="${escapeHtml(t('close'))}">${ICON_CLOSE}</button>
+                    <span class="drapit-modal-title">${tx('title')}</span>
+                    <div class="drapit-header-actions">
+                        <div class="drapit-lang" role="group" aria-label="Language / Taal">
+                            <button type="button" class="drapit-lang-btn${LANG === 'en' ? ' active' : ''}" data-lang="en" aria-pressed="${LANG === 'en'}">EN</button>
+                            <button type="button" class="drapit-lang-btn${LANG === 'nl' ? ' active' : ''}" data-lang="nl" aria-pressed="${LANG === 'nl'}">NL</button>
+                        </div>
+                        <button class="drapit-close" ${ta('aria-label', 'close')}>${ICON_CLOSE}</button>
+                    </div>
                 </div>
                 <div class="drapit-modal-body">
                     <div class="drapit-product-info">
@@ -927,34 +999,34 @@
                     <div class="drapit-upload-section">
                         <div class="drapit-upload" id="drapit-dropzone">
                             <div class="drapit-upload-icon">${ICON_UPLOAD}</div>
-                            <div class="drapit-upload-title">${t('uploadTitle')}</div>
-                            <div class="drapit-upload-hint">${t('uploadHint')}</div>
+                            <div class="drapit-upload-title">${tx('uploadTitle')}</div>
+                            <div class="drapit-upload-hint">${tx('uploadHint')}</div>
                             <input type="file" accept="image/*" id="drapit-file-input" />
                         </div>
                         <div class="drapit-tips-bar">
                             <span class="drapit-tips-bar-text">
-                                ${ICON_BULB} ${t('tipsBar')}
+                                ${ICON_BULB} ${tx('tipsBar')}
                             </span>
                             <button class="drapit-tips-toggle" id="drapit-tips-toggle">
-                                ${t('tips')} ${ICON_CHEVRON}
+                                ${tx('tips')} ${ICON_CHEVRON}
                             </button>
                         </div>
                         <div class="drapit-tips-panel" id="drapit-tips-panel">
                             <div class="drapit-tips-grid">
-                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> ${t('tipDo1')}</div>
-                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> ${t('tipDont1')}</div>
-                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> ${t('tipDo2')}</div>
-                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> ${t('tipDont2')}</div>
-                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> ${t('tipDo3')}</div>
-                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> ${t('tipDont3')}</div>
-                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> ${t('tipDo4')}</div>
-                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> ${t('tipDont4')}</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> ${tx('tipDo1')}</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> ${tx('tipDont1')}</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> ${tx('tipDo2')}</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> ${tx('tipDont2')}</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> ${tx('tipDo3')}</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> ${tx('tipDont3')}</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> ${tx('tipDo4')}</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> ${tx('tipDont4')}</div>
                             </div>
                         </div>
                     </div>
                     <div class="drapit-preview-section" style="display:none"></div>
                     <button class="drapit-submit" style="display:none;margin-top:16px">
-                        ${ICON_TRYON} ${t('submit')}
+                        ${ICON_TRYON} ${tx('submit')}
                     </button>
                 </div>
                 <div class="drapit-powered">Powered by <a href="https://drapit.io" target="_blank" rel="noopener">Drapit</a></div>
@@ -969,6 +1041,10 @@
         });
 
         // ── Event listeners ─────────────────────────────
+        overlay.querySelectorAll('.drapit-lang-btn').forEach((b) => {
+            b.addEventListener('click', () => setLang(b.getAttribute('data-lang'), overlay));
+        });
+
         const close = overlay.querySelector('.drapit-close');
         close.addEventListener('click', () => closeModal(overlay));
         overlay.addEventListener('click', (e) => {
@@ -1019,8 +1095,8 @@
             previewSection.style.display = 'block';
             previewSection.innerHTML = `
                 <div class="drapit-preview-wrap">
-                    <img src="${userPhotoDataUrl}" class="drapit-preview-img" alt="${escapeHtml(t('yourPhoto'))}" />
-                    <button class="drapit-preview-remove" aria-label="${escapeHtml(t('removePhoto'))}">✕</button>
+                    <img src="${userPhotoDataUrl}" class="drapit-preview-img" ${ta('alt', 'yourPhoto')} />
+                    <button class="drapit-preview-remove" ${ta('aria-label', 'removePhoto')}>✕</button>
                 </div>
             `;
             submitBtn.style.display = 'flex';
@@ -1054,13 +1130,13 @@
     }
 
     // ── Progress (loading steps) ──────────────────────────────────────────
-    function loadingMarkup(title) {
+    function loadingMarkup(titleKey) {
         return `
             <div class="drapit-loading">
-                <div class="drapit-loading-text">${escapeHtml(title)}</div>
+                <div class="drapit-loading-text">${tx(titleKey)}</div>
                 <div class="drapit-progress"><div class="drapit-progress-bar"></div></div>
                 <ul class="drapit-steps"></ul>
-                <div class="drapit-loading-sub">${escapeHtml(t('loadingSub'))}</div>
+                <div class="drapit-loading-sub">${tx('loadingSub')}</div>
             </div>`;
     }
 
@@ -1096,15 +1172,17 @@
                 for (let i = 0; i < keys.length; i++) if (phase >= offsets[i]) idx = i;
             }
             render(idx);
-            if (!slowShown && secs > 45 && sub) { sub.textContent = t('stepSlow'); slowShown = true; }
+            if (!slowShown && secs > 45 && sub) { sub.setAttribute('data-i18n', 'stepSlow'); sub.textContent = t('stepSlow'); slowShown = true; }
         }
 
         tick();
         const timer = setInterval(tick, 500);
+        const onLang = () => { const i = active; active = -1; render(i); };
+        langListeners.add(onLang);
         return {
             release() { if (phaseStart === null) { phaseStart = Date.now(); tick(); } },
             finish() { if (bar) bar.style.width = '100%'; render(keys.length); },
-            stop() { clearInterval(timer); },
+            stop() { clearInterval(timer); langListeners.delete(onLang); },
         };
     }
 
@@ -1121,7 +1199,7 @@
                     <div class="drapit-product-id">${escapeHtml(product.productId)}</div>
                 </div>
             </div>
-            ${loadingMarkup(t('loadingTitle'))}
+            ${loadingMarkup('loadingTitle')}
         `;
 
         // Step 1 (upload) waits for the real upload; the rest is time-based.
@@ -1247,28 +1325,28 @@
         return data.url;
     }
 
-    // Map internal error codes to friendly messages in the widget language.
+    // Map internal error codes to message keys (translated when shown).
     function friendlyError(message) {
         switch (message) {
             case 'NO_KEY':
             case 'AUTH':
-                return t('errNotActive');
+                return 'errNotActive';
             case 'UPLOAD_FAILED':
-                return t('errUpload');
+                return 'errUpload';
             case 'TOO_LARGE':
-                return t('errTooLarge');
+                return 'errTooLarge';
             case 'Failed to fetch':
             case 'Load failed':
-                return t('errNetwork');
+                return 'errNetwork';
             case 'LIMIT_REACHED':
-                return t('errLimit');
+                return 'errLimit';
             case 'AI_FAILED':
-                return t('errAiFailed');
+                return 'errAiFailed';
             case 'TIMEOUT':
-                return t('errTimeout');
+                return 'errTimeout';
             default:
-                if (typeof message === 'string' && message.startsWith('CONFIG_')) return t('errNotActive');
-                return t('errGeneric');
+                if (typeof message === 'string' && message.startsWith('CONFIG_')) return 'errNotActive';
+                return 'errGeneric';
         }
     }
 
@@ -1301,7 +1379,7 @@
                         resolve();
                     } else if (data.status === 'failed') {
                         clearInterval(timer);
-                        showError(body, t('errAiFailed'), product, overlay);
+                        showError(body, 'errAiFailed', product, overlay);
                         resolve();
                     }
                 } catch {
@@ -1376,8 +1454,8 @@
             if (!items.length) return;
             box.style.display = 'block';
             box.innerHTML = `
-                <div class="drapit-outfit-title">${escapeHtml(t('combineTitle'))}</div>
-                <div class="drapit-outfit-sub">${escapeHtml(t('combineSub'))}</div>
+                <div class="drapit-outfit-title">${tx('combineTitle')}</div>
+                <div class="drapit-outfit-sub">${tx('combineSub')}</div>
                 <div class="drapit-outfit-grid">
                     ${items.map((p, i) => `
                         <div class="drapit-outfit-item" data-idx="${i}">
@@ -1403,10 +1481,10 @@
                 <img src="${pick.image}" alt="" class="drapit-product-thumb" />
                 <div>
                     <div class="drapit-product-name">${escapeHtml(pick.title)}</div>
-                    <div class="drapit-product-id">${escapeHtml(t('completeOutfit'))}</div>
+                    <div class="drapit-product-id">${tx('completeOutfit')}</div>
                 </div>
             </div>
-            ${loadingMarkup(t('outfitBuilding'))}
+            ${loadingMarkup('outfitBuilding')}
         `;
         const progress = startProgress(body, ['stepAnalyse', 'stepFit', 'stepFinish'], [0, 6, 18], false);
 
@@ -1457,7 +1535,7 @@
         } catch (err) {
             progress.stop();
             console.error('[Drapit] Outfit layer error:', err);
-            const msg = err && err.message === 'LIMIT_REACHED' ? t('outfitLimit') : t('outfitFailed');
+            const msg = err && err.message === 'LIMIT_REACHED' ? 'outfitLimit' : 'outfitFailed';
             restoreRoundOne(msg);
         }
     }
@@ -1511,14 +1589,14 @@
         const hasNativeShare = !!navigator.share;
         const isOutfit = !!opts.outfitProduct;   // this result already has a bottom layer
         const outfitNote = opts.note
-            ? `<div class="drapit-outfit-note">${escapeHtml(opts.note)}</div>` : '';
+            ? `<div class="drapit-outfit-note">${tx(opts.note)}</div>` : '';
         const outfitTag = isOutfit
-            ? `<div class="drapit-outfit-tag">${escapeHtml(t('completeOutfit'))}</div>` : '';
+            ? `<div class="drapit-outfit-tag">${tx('completeOutfit')}</div>` : '';
         const secondBuy = isOutfit && opts.outfitProduct.url
             ? `<a href="${opts.outfitProduct.url}" class="drapit-result-buy outfit" target="_blank" rel="noopener" style="background:#0F172A">
                     ${ICON_CART} ${escapeHtml(opts.outfitProduct.title)}
                </a>` : '';
-        const shareLabel = hasNativeShare ? escapeHtml(t('share')) : 'WhatsApp';
+        const shareLabel = hasNativeShare ? tx('share') : 'WhatsApp';
         const shareIcon = hasNativeShare ? ICON_SHARE : ICON_WHATSAPP;
         const shareBtnClass = hasNativeShare ? '' : 'whatsapp';
 
@@ -1527,30 +1605,30 @@
                 ${outfitNote}${outfitTag}
                 ${opts.beforeUrl
                 ? `<div class="drapit-compare" id="drapit-compare" style="--pos:50%">
-                        <img src="${resultUrl}" class="drapit-compare-after" alt="${escapeHtml(t('resultAlt'))}" draggable="false" />
+                        <img src="${resultUrl}" class="drapit-compare-after" ${ta('alt', 'resultAlt')} draggable="false" />
                         <img src="${opts.beforeUrl}" class="drapit-compare-before" alt="" draggable="false" />
-                        <span class="drapit-compare-label before">${escapeHtml(t('before'))}</span>
-                        <span class="drapit-compare-label after">${escapeHtml(t('after'))}</span>
+                        <span class="drapit-compare-label before">${tx('before')}</span>
+                        <span class="drapit-compare-label after">${tx('after')}</span>
                         <div class="drapit-compare-line">
-                            <button class="drapit-compare-handle" type="button" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-label="${escapeHtml(t('compareHint'))}">${ICON_COMPARE}</button>
+                            <button class="drapit-compare-handle" type="button" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" ${ta('aria-label', 'compareHint')}>${ICON_COMPARE}</button>
                         </div>
                    </div>
-                   <div class="drapit-compare-hint">${escapeHtml(t('compareHint'))}</div>`
-                : `<img src="${resultUrl}" alt="${escapeHtml(t('resultAlt'))}" class="drapit-result-img" />`}
+                   <div class="drapit-compare-hint">${tx('compareHint')}</div>`
+                : `<img src="${resultUrl}" ${ta('alt', 'resultAlt')} class="drapit-result-img" />`}
                 <div class="drapit-result-actions">
                     ${product.buyUrl
                 ? `<a href="${product.buyUrl}" class="drapit-result-buy${isOutfit ? ' outfit' : ''}" target="_blank" rel="noopener">
-                            ${ICON_CART} ${isOutfit ? escapeHtml(product.productName) : escapeHtml(t('buy'))}
+                            ${ICON_CART} ${isOutfit ? escapeHtml(product.productName) : tx('buy')}
                            </a>${secondBuy}`
                 : `<button class="drapit-result-buy" onclick="this.closest('.drapit-overlay')?.remove()">
-                            ${escapeHtml(t('close'))}
+                            ${tx('close')}
                            </button>`
             }
-                    <button class="drapit-result-retry">${escapeHtml(t('retry'))}</button>
+                    <button class="drapit-result-retry">${tx('retry')}</button>
                 </div>
                 <div class="drapit-share-actions">
                     <button class="drapit-share-btn save" id="drapit-save-btn">
-                        ${ICON_DOWNLOAD} ${escapeHtml(t('save'))}
+                        ${ICON_DOWNLOAD} ${tx('save')}
                     </button>
                     <button class="drapit-share-btn ${shareBtnClass}" id="drapit-share-btn">
                         ${shareIcon} ${shareLabel}
@@ -1624,10 +1702,10 @@
         body.innerHTML = `
             <div class="drapit-error">
                 <div class="drapit-error-icon">${ICON_ERROR}</div>
-                <div class="drapit-error-text">${escapeHtml(t('errTitle'))}</div>
-                <div class="drapit-error-sub">${escapeHtml(message)}</div>
+                <div class="drapit-error-text">${tx('errTitle')}</div>
+                <div class="drapit-error-sub">${tx(message)}</div>
             </div>
-            <button class="drapit-submit" style="margin-top:16px">${escapeHtml(t('tryAgain'))}</button>
+            <button class="drapit-submit" style="margin-top:16px">${tx('tryAgain')}</button>
         `;
 
         body.querySelector('.drapit-submit')?.addEventListener('click', () => {
