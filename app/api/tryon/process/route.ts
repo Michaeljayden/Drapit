@@ -16,6 +16,21 @@ import { createClient } from '@supabase/supabase-js';
 import { generateVtonWithGemini } from '@/lib/gemini';
 import { generateBottomLayerWithGemini } from '@/lib/gemini-outfit';
 
+// Gemini usually needs 15–30 s. Netlify allows this function 60 s (netlify.toml);
+// declare it here too so the Next.js runtime never cuts it off earlier.
+export const maxDuration = 60;
+
+// One automatic retry when Gemini returns no image or a transient API error,
+// but only if the first attempt left enough time for a second one.
+const RETRY_BUDGET_MS = 25_000;
+
+function isRetryable(err: unknown): boolean {
+    const msg = err instanceof Error ? err.message : String(err);
+    if (msg.startsWith('Missing GEMINI_API_KEY')) return false;
+    if (msg.startsWith('Failed to fetch human image') || msg.startsWith('Failed to fetch garment image')) return false;
+    return true;
+}
+
 function getSupabaseAdmin() {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -58,9 +73,20 @@ export async function POST(request: NextRequest) {
         // -------------------------------------------------------------------
         // Outfit flow: second layer (bottom) uses its own prompt. Everything else
         // goes through the unchanged single-garment generator.
-        const resultBuffer = layer === 'bottom'
-            ? await generateBottomLayerWithGemini(human_image_url, garment_image_url)
-            : await generateVtonWithGemini(human_image_url, garment_image_url);
+        const generate = () => layer === 'bottom'
+            ? generateBottomLayerWithGemini(human_image_url, garment_image_url)
+            : generateVtonWithGemini(human_image_url, garment_image_url);
+
+        const startedAt = Date.now();
+        let resultBuffer: Buffer;
+        try {
+            resultBuffer = await generate();
+        } catch (firstErr) {
+            const elapsed = Date.now() - startedAt;
+            if (!isRetryable(firstErr) || elapsed > RETRY_BUDGET_MS) throw firstErr;
+            console.warn(`[tryon/process] Attempt 1 failed after ${elapsed} ms for ${tryon_id}, retrying once:`, firstErr);
+            resultBuffer = await generate();
+        }
 
         // -------------------------------------------------------------------
         // 3. Store result in Supabase Storage (bucket: results)

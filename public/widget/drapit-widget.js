@@ -1,12 +1,13 @@
 // =============================================================================
-// Drapit Widget v1.1.0 — Embeddable Virtual Try-On
+// Drapit Widget v1.3.0 — Embeddable Virtual Try-On
 // =============================================================================
 // Usage:
 //   <script
 //     src="https://drapit.io/widget/drapit-widget.js"
 //     data-drapit-key="dk_live_xxx"
 //     data-drapit-color="#1D6FD8"
-//     data-drapit-cta="Virtueel passen"
+//     data-drapit-cta="Virtual try-on"
+//     data-drapit-lang="en"            (en | nl | auto — default en)
 //     defer
 //   ></script>
 //
@@ -38,7 +39,137 @@
         || ''
     ).trim();
     const PRIMARY_COLOR = SCRIPT_EL?.getAttribute('data-drapit-color') || '#1D6FD8';
-    const CTA_TEXT = SCRIPT_EL?.getAttribute('data-drapit-cta') || 'Virtueel passen | Virtual try-on';
+
+    // ── Language ──────────────────────────────────────────────────────────
+    // One language per shop. English is the default; Dutch only when the
+    // merchant picks it in the theme block, or picks "auto" on a Dutch store.
+    const STRINGS = {
+        en: {
+            cta: 'Virtual try-on',
+            title: 'Virtual fitting',
+            uploadTitle: 'Upload your photo',
+            uploadHint: 'Drag a photo here or tap to upload',
+            tipsBar: 'A full-body photo gives the best result',
+            tips: 'Tips',
+            tipDo1: 'Full body visible', tipDont1: 'Only head or upper body',
+            tipDo2: 'Plain, neutral background', tipDont2: 'Busy or dark background',
+            tipDo3: 'Good, soft lighting', tipDont3: 'Backlight or harsh shadows',
+            tipDo4: 'Standing straight, facing forward', tipDont4: 'Side-on or tilted pose',
+            yourPhoto: 'Your photo',
+            removePhoto: 'Remove photo',
+            submit: 'Try on this item',
+            close: 'Close',
+            loadingTitle: 'Creating your look…',
+            loadingSub: 'This usually takes 15–30 seconds',
+            stepUpload: 'Uploading your photo',
+            stepAnalyse: 'Analysing the garment',
+            stepFit: 'Fitting it to your photo',
+            stepFinish: 'Adding the finishing touches',
+            stepSlow: 'Almost there — this one is taking a little longer',
+            outfitBuilding: 'Building your outfit…',
+            completeOutfit: 'Complete outfit',
+            combineTitle: 'Combine with…',
+            combineSub: 'Pick bottoms to see the full outfit',
+            outfitLimit: 'The outfit could not be created (limit reached). Your first result is below.',
+            outfitFailed: 'The outfit did not work out, try other bottoms. Your first result is below.',
+            buy: 'Buy this item',
+            retry: 'New photo',
+            save: 'Save',
+            share: 'Share',
+            before: 'Before',
+            after: 'After',
+            compareHint: 'Drag to compare',
+            resultAlt: 'Try-on result',
+            shareTitle: 'My virtual try-on',
+            shareText: 'See how I look in {name}!',
+            errTitle: 'Something went wrong',
+            tryAgain: 'Try again',
+            errNotActive: 'This try-on widget is not fully activated for this store yet.',
+            errUpload: 'Photo upload failed. Please try again.',
+            errTooLarge: 'This photo is too large (max. 4 MB). Please choose a smaller one.',
+            errNetwork: 'Could not reach the try-on server. Check your connection and try again.',
+            errLimit: 'Virtual try-on is temporarily unavailable in this store. Please try again later.',
+            errGeneric: 'Something went wrong. Please try again.',
+            errAiFailed: 'We could not create a result from this photo. Please try again with a different photo.',
+            errTimeout: 'This is taking too long. Please try again.',
+        },
+        nl: {
+            cta: 'Virtueel passen',
+            title: 'Virtueel passen',
+            uploadTitle: 'Upload je foto',
+            uploadHint: 'Sleep een foto hierheen of tik om te uploaden',
+            tipsBar: 'Een foto van je hele lichaam geeft het beste resultaat',
+            tips: 'Tips',
+            tipDo1: 'Volledig lichaam zichtbaar', tipDont1: 'Alleen hoofd of bovenlichaam',
+            tipDo2: 'Neutrale, egale achtergrond', tipDont2: 'Drukke of donkere achtergrond',
+            tipDo3: 'Goede, zachte belichting', tipDont3: 'Tegenlicht of harde schaduwen',
+            tipDo4: 'Rechtop, naar voren gericht', tipDont4: 'Zijwaartse of scheve pose',
+            yourPhoto: 'Jouw foto',
+            removePhoto: 'Foto verwijderen',
+            submit: 'Pas dit item',
+            close: 'Sluiten',
+            loadingTitle: 'Je look wordt gemaakt…',
+            loadingSub: 'Dit duurt meestal 15–30 seconden',
+            stepUpload: 'Je foto uploaden',
+            stepAnalyse: 'Kledingstuk analyseren',
+            stepFit: 'Passen op jouw foto',
+            stepFinish: 'Laatste details afwerken',
+            stepSlow: 'Bijna klaar — deze duurt iets langer',
+            outfitBuilding: 'Outfit wordt samengesteld…',
+            completeOutfit: 'Complete outfit',
+            combineTitle: 'Combineer met…',
+            combineSub: 'Kies een broek en zie de complete outfit',
+            outfitLimit: 'De outfit kon niet worden gemaakt (limiet bereikt). Je eerste resultaat staat hieronder.',
+            outfitFailed: 'De outfit is niet gelukt, probeer een andere broek. Je eerste resultaat staat hieronder.',
+            buy: 'Koop dit item',
+            retry: 'Nieuwe foto',
+            save: 'Opslaan',
+            share: 'Delen',
+            before: 'Voor',
+            after: 'Na',
+            compareHint: 'Sleep om te vergelijken',
+            resultAlt: 'Try-on resultaat',
+            shareTitle: 'Mijn virtual try-on',
+            shareText: 'Kijk hoe ik eruitzie in {name}!',
+            errTitle: 'Er ging iets mis',
+            tryAgain: 'Opnieuw proberen',
+            errNotActive: 'De try-on widget is nog niet volledig geactiveerd voor deze winkel.',
+            errUpload: 'Foto uploaden mislukt. Probeer het opnieuw.',
+            errTooLarge: 'Deze foto is te groot (max. 4 MB). Kies een kleinere foto.',
+            errNetwork: 'Verbinding met de try-on server mislukt. Controleer je internet en probeer het opnieuw.',
+            errLimit: 'Virtueel passen is tijdelijk niet beschikbaar in deze winkel. Probeer het later opnieuw.',
+            errGeneric: 'Er ging iets mis. Probeer het opnieuw.',
+            errAiFailed: 'Het is niet gelukt een resultaat te maken van deze foto. Probeer het opnieuw met een andere foto.',
+            errTimeout: 'Dit duurt te lang. Probeer het opnieuw.',
+        },
+    };
+
+    function resolveLang() {
+        const setting = (SCRIPT_EL?.getAttribute('data-drapit-lang') || 'en').trim().toLowerCase();
+        if (setting === 'nl' || setting === 'en') return setting;
+        if (setting === 'auto') {
+            const loc = String(
+                (window.Shopify && window.Shopify.locale) || document.documentElement.lang || ''
+            ).toLowerCase();
+            return loc.startsWith('nl') ? 'nl' : 'en';
+        }
+        return 'en';
+    }
+    const LANG = resolveLang();
+
+    function t(key, vars) {
+        let s = (STRINGS[LANG] && STRINGS[LANG][key]) || STRINGS.en[key] || key;
+        if (vars) Object.keys(vars).forEach((k) => { s = s.replace(`{${k}}`, vars[k]); });
+        return s;
+    }
+
+    // Button text: the merchant's own text wins, unless it is still one of the
+    // old built-in defaults — then use the default in the widget language.
+    const RAW_CTA = (SCRIPT_EL?.getAttribute('data-drapit-cta') || '').trim();
+    const DEFAULT_CTAS = ['virtueel passen', 'virtual try-on', 'virtueel passen | virtual try-on'];
+    const CTA_TEXT = (!RAW_CTA || DEFAULT_CTAS.includes(RAW_CTA.toLowerCase()))
+        ? t('cta')
+        : RAW_CTA;
     // Outfit/set flow: merchant checkbox in the theme block ("true"/"false").
     // Only offered when the server ALSO reports outfits=true for this shop.
     const OUTFITS_BLOCK = (SCRIPT_EL?.getAttribute('data-drapit-outfits') || '').trim().toLowerCase() === 'true';
@@ -80,7 +211,7 @@
         return _keyResolution;
     }
 
-    console.log('[Drapit Widget] v1.2.1 (Bilingual, outfits, client-side compression) loaded — '
+    console.log('[Drapit Widget] v1.3.0 (' + LANG + ', variants, progress steps, compare slider) loaded — '
         + (API_KEY ? 'key: ' + API_KEY.substring(0, 12) + '…' : 'auto-key via shop ' + SHOP_DOMAIN));
 
     // ── CSS ───────────────────────────────────────────────────────────────
@@ -387,7 +518,129 @@
         .drapit-loading-sub {
             font-size: 12px;
             color: #94A3B8;
-            margin-top: 4px;
+            margin-top: 14px;
+        }
+        .drapit-progress {
+            height: 4px;
+            max-width: 260px;
+            margin: 14px auto 0;
+            background: #E2E8F0;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .drapit-progress-bar {
+            height: 100%;
+            width: 0;
+            background: ${PRIMARY_COLOR};
+            border-radius: 999px;
+            transition: width 0.5s ease;
+        }
+        .drapit-steps {
+            list-style: none;
+            display: inline-flex;
+            flex-direction: column;
+            gap: 9px;
+            margin-top: 18px;
+            text-align: left;
+        }
+        .drapit-steps li {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 13px;
+            color: #94A3B8;
+            transition: color 0.2s;
+        }
+        .drapit-steps li.active { color: #0F172A; font-weight: 600; }
+        .drapit-steps li.done { color: #475569; }
+        .drapit-step-dot {
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            border: 2px solid #CBD5E1;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 800;
+        }
+        .drapit-steps li.active .drapit-step-dot {
+            border-color: ${PRIMARY_COLOR};
+            border-top-color: transparent;
+            animation: drapit-spin 0.8s linear infinite;
+        }
+        .drapit-steps li.done .drapit-step-dot { background: #DCFCE7; border-color: #DCFCE7; color: #16A34A; }
+
+        /* ── Before/after compare ──────────────────────── */
+        .drapit-compare {
+            --pos: 50%;
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            max-height: 500px;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #F8FAFC;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            cursor: ew-resize;
+            touch-action: pan-y;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .drapit-compare img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+            -webkit-user-drag: none;
+        }
+        .drapit-compare-before { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+        .drapit-compare-line {
+            position: absolute;
+            top: 0; bottom: 0;
+            left: var(--pos);
+            width: 2px;
+            margin-left: -1px;
+            background: #fff;
+            box-shadow: 0 0 6px rgba(15,23,42,0.35);
+            pointer-events: none;
+        }
+        .drapit-compare-handle {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            border: none;
+            background: #fff;
+            color: #0F172A;
+            box-shadow: 0 2px 10px rgba(15,23,42,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: ew-resize;
+            pointer-events: auto;
+        }
+        .drapit-compare-handle:focus-visible { outline: 2px solid ${PRIMARY_COLOR}; outline-offset: 2px; }
+        .drapit-compare-label {
+            position: absolute;
+            top: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #fff;
+            background: rgba(15,23,42,0.6);
+            padding: 3px 9px;
+            border-radius: 999px;
+            pointer-events: none;
+        }
+        .drapit-compare-label.before { left: 10px; }
+        .drapit-compare-label.after { right: 10px; }
+        .drapit-compare-hint {
+            font-size: 11px;
+            color: #94A3B8;
+            margin: 8px 0 14px;
         }
 
         .drapit-result { text-align: center; }
@@ -517,6 +770,7 @@
     const ICON_BULB = `<svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.4-1.4 4.5-3 5.7V17a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2.3C7.4 13.5 6 11.4 6 9a6 6 0 0 1 6-6z"/></svg>`;
     const ICON_CHEVRON = `<svg viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
     const ICON_WHATSAPP = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.09.539 4.06 1.486 5.775L.057 23.07a.75.75 0 00.914.914l5.308-1.428A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22.5c-1.98 0-3.838-.538-5.435-1.479l-.39-.23-4.034 1.085 1.086-4.02-.24-.4A10.454 10.454 0 011.5 12C1.5 6.201 6.201 1.5 12 1.5S22.5 6.201 22.5 12 17.799 22.5 12 22.5z"/></svg>`;
+    const ICON_COMPARE = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6"/><path d="M15 6l6 6-6 6"/></svg>`;
     const ICON_SHARE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`;
 
     // ── State ─────────────────────────────────────────────────────────────
@@ -532,6 +786,54 @@
             reader.onerror = reject;
             reader.readAsDataURL(file);
         });
+    }
+
+    // ── Variant handling ──────────────────────────────────────────────────
+    // Read the variant the shopper has selected *right now* (at click time),
+    // so it works with every theme without listening to theme-specific events.
+    function currentVariantId(productEl, known) {
+        const isKnown = (id) => !!id && known.some((v) => String(v.id) === String(id));
+        const fromForm = (root) => {
+            if (!root) return '';
+            const forms = root.querySelectorAll('form[action*="/cart/add"]');
+            for (const f of forms) {
+                const el = f.querySelector('[name="id"]');
+                if (el && isKnown(el.value)) return String(el.value);
+            }
+            return '';
+        };
+        // 1. The product form in the same section as the button, then anywhere.
+        const section = productEl.closest('.shopify-section, section, main');
+        let id = fromForm(section) || fromForm(document);
+        // 2. ?variant= in the URL (most themes update it on change).
+        if (!id) {
+            try {
+                const q = new URL(window.location.href).searchParams.get('variant');
+                if (isKnown(q)) id = q;
+            } catch { /* ignore */ }
+        }
+        return id;
+    }
+
+    function applySelectedVariant(base, productEl, variants, initialVariantId) {
+        if (!variants.length) return base;
+        const id = currentVariantId(productEl, variants) || initialVariantId;
+        const v = variants.find((x) => String(x.id) === String(id));
+        if (!v) return base;
+        let buyUrl = base.buyUrl;
+        if (buyUrl) {
+            try {
+                const u = new URL(buyUrl, window.location.origin);
+                u.searchParams.set('variant', String(v.id));
+                buyUrl = u.toString();
+            } catch { /* keep original */ }
+        }
+        return {
+            ...base,
+            productImg: v.img || base.productImg,
+            productId: v.sku || base.productId,
+            buyUrl,
+        };
     }
 
     // ── Create Widget ─────────────────────────────────────────────────────
@@ -557,9 +859,20 @@
         // Create button
         const btn = document.createElement('button');
         btn.className = 'drapit-btn';
-        btn.innerHTML = `${ICON_TRYON} ${CTA_TEXT}`;
+        btn.innerHTML = `${ICON_TRYON} ${escapeHtml(CTA_TEXT)}`;
+        // Variant images (Shopify theme block): [{ id, img, sku }]
+        let variants = [];
+        try {
+            const raw = productEl.getAttribute('data-drapit-variants');
+            if (raw) variants = JSON.parse(raw).filter((v) => v && v.id && v.img);
+        } catch (err) {
+            console.warn('[Drapit] Could not read variant images:', err);
+        }
+        const initialVariantId = productEl.getAttribute('data-drapit-variant-id') || '';
+
         btn.addEventListener('click', () => {
-            openModal(shadow, { productImg, productId, buyUrl, productName, shopifyProductId, productHandle });
+            const base = { productImg, productId, buyUrl, productName, shopifyProductId, productHandle };
+            openModal(shadow, applySelectedVariant(base, productEl, variants, initialVariantId));
         });
         shadow.appendChild(btn);
 
@@ -600,8 +913,8 @@
         overlay.innerHTML = `
             <div class="drapit-modal">
                 <div class="drapit-modal-header">
-                    <span class="drapit-modal-title">Virtueel passen | Virtual Fitting</span>
-                    <button class="drapit-close">${ICON_CLOSE}</button>
+                    <span class="drapit-modal-title">${escapeHtml(t('title'))}</span>
+                    <button class="drapit-close" aria-label="${escapeHtml(t('close'))}">${ICON_CLOSE}</button>
                 </div>
                 <div class="drapit-modal-body">
                     <div class="drapit-product-info">
@@ -614,34 +927,34 @@
                     <div class="drapit-upload-section">
                         <div class="drapit-upload" id="drapit-dropzone">
                             <div class="drapit-upload-icon">${ICON_UPLOAD}</div>
-                            <div class="drapit-upload-title">Upload je foto | Upload your photo</div>
-                            <div class="drapit-upload-hint">Sleep een foto hierheen of klik om te uploaden | Drag a photo here or click to upload</div>
+                            <div class="drapit-upload-title">${t('uploadTitle')}</div>
+                            <div class="drapit-upload-hint">${t('uploadHint')}</div>
                             <input type="file" accept="image/*" id="drapit-file-input" />
                         </div>
                         <div class="drapit-tips-bar">
                             <span class="drapit-tips-bar-text">
-                                ${ICON_BULB} Volledige lichaamsfoto geeft het beste resultaat
+                                ${ICON_BULB} ${t('tipsBar')}
                             </span>
                             <button class="drapit-tips-toggle" id="drapit-tips-toggle">
-                                Tips ${ICON_CHEVRON}
+                                ${t('tips')} ${ICON_CHEVRON}
                             </button>
                         </div>
                         <div class="drapit-tips-panel" id="drapit-tips-panel">
                             <div class="drapit-tips-grid">
-                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> Volledig lichaam zichtbaar</div>
-                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> Alleen hoofd of bovenlichaam</div>
-                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> Neutrale, egale achtergrond</div>
-                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> Drukke of donkere achtergrond</div>
-                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> Goede, zachte belichting</div>
-                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> Tegenlicht of harde schaduwen</div>
-                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> Rechtopstaand, naar voren</div>
-                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> Zijwaartse of scheve pose</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> ${t('tipDo1')}</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> ${t('tipDont1')}</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> ${t('tipDo2')}</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> ${t('tipDont2')}</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> ${t('tipDo3')}</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> ${t('tipDont3')}</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-check">✓</span> ${t('tipDo4')}</div>
+                                <div class="drapit-tip-item"><span class="drapit-tip-cross">✗</span> ${t('tipDont4')}</div>
                             </div>
                         </div>
                     </div>
                     <div class="drapit-preview-section" style="display:none"></div>
                     <button class="drapit-submit" style="display:none;margin-top:16px">
-                        ${ICON_TRYON} Pas dit item | Try on this item
+                        ${ICON_TRYON} ${t('submit')}
                     </button>
                 </div>
                 <div class="drapit-powered">Powered by <a href="https://drapit.io" target="_blank" rel="noopener">Drapit</a></div>
@@ -706,8 +1019,8 @@
             previewSection.style.display = 'block';
             previewSection.innerHTML = `
                 <div class="drapit-preview-wrap">
-                    <img src="${userPhotoDataUrl}" class="drapit-preview-img" alt="Jouw foto" />
-                    <button class="drapit-preview-remove">✕</button>
+                    <img src="${userPhotoDataUrl}" class="drapit-preview-img" alt="${escapeHtml(t('yourPhoto'))}" />
+                    <button class="drapit-preview-remove" aria-label="${escapeHtml(t('removePhoto'))}">✕</button>
                 </div>
             `;
             submitBtn.style.display = 'flex';
@@ -740,11 +1053,66 @@
         return div.innerHTML;
     }
 
+    // ── Progress (loading steps) ──────────────────────────────────────────
+    function loadingMarkup(title) {
+        return `
+            <div class="drapit-loading">
+                <div class="drapit-loading-text">${escapeHtml(title)}</div>
+                <div class="drapit-progress"><div class="drapit-progress-bar"></div></div>
+                <ul class="drapit-steps"></ul>
+                <div class="drapit-loading-sub">${escapeHtml(t('loadingSub'))}</div>
+            </div>`;
+    }
+
+    // keys:    step label keys, in order
+    // offsets: seconds after the phase starts at which each step becomes active
+    // waitFirst: keep step 0 active until release() is called (e.g. real upload)
+    function startProgress(root, keys, offsets, waitFirst) {
+        const list = root.querySelector('.drapit-steps');
+        const bar = root.querySelector('.drapit-progress-bar');
+        const sub = root.querySelector('.drapit-loading-sub');
+        const t0 = Date.now();
+        let phaseStart = waitFirst ? null : t0;
+        let active = -1;
+        let slowShown = false;
+
+        function render(idx) {
+            if (!list || idx === active) return;
+            active = idx;
+            list.innerHTML = keys.map((k, i) => {
+                const cls = i < idx ? 'done' : (i === idx ? 'active' : '');
+                return `<li class="${cls}"><span class="drapit-step-dot">${i < idx ? '✓' : ''}</span>${escapeHtml(t(k))}</li>`;
+            }).join('');
+        }
+
+        function tick() {
+            const now = Date.now();
+            const secs = (now - t0) / 1000;
+            // Eases towards ~92%; only jumps to 100% when the result is in.
+            if (bar) bar.style.width = (92 * (1 - Math.exp(-secs / 14))).toFixed(1) + '%';
+            let idx = 0;
+            if (phaseStart !== null) {
+                const phase = (now - phaseStart) / 1000;
+                for (let i = 0; i < keys.length; i++) if (phase >= offsets[i]) idx = i;
+            }
+            render(idx);
+            if (!slowShown && secs > 45 && sub) { sub.textContent = t('stepSlow'); slowShown = true; }
+        }
+
+        tick();
+        const timer = setInterval(tick, 500);
+        return {
+            release() { if (phaseStart === null) { phaseStart = Date.now(); tick(); } },
+            finish() { if (bar) bar.style.width = '100%'; render(keys.length); },
+            stop() { clearInterval(timer); },
+        };
+    }
+
     // ── Try-On Flow ───────────────────────────────────────────────────────
     async function startTryOn(overlay, product) {
         const body = overlay.querySelector('.drapit-modal-body');
 
-        // Show loading state
+        // Show loading state with visible steps + progress bar
         body.innerHTML = `
             <div class="drapit-product-info">
                 <img src="${product.productImg}" alt="" class="drapit-product-thumb" />
@@ -753,31 +1121,18 @@
                     <div class="drapit-product-id">${escapeHtml(product.productId)}</div>
                 </div>
             </div>
-            <div class="drapit-loading">
-                <div class="drapit-spinner"></div>
-                <div class="drapit-loading-text" id="drapit-loading-msg">Bezig met virtueel passen…</div>
-                <div class="drapit-loading-sub" id="drapit-loading-sub">Dit duurt meestal 15–30 seconden</div>
-            </div>
+            ${loadingMarkup(t('loadingTitle'))}
         `;
 
-        const loadingMsg = body.querySelector('#drapit-loading-msg');
-        const loadingSub = body.querySelector('#drapit-loading-sub');
-        const messages = [
-            { main: 'Bezig met virtueel passen…', sub: 'Dit duurt meestal 15–30 seconden' },
-            { main: 'Virtually trying on…', sub: 'This usually takes 15–30 seconds' }
-        ];
-        let msgIndex = 0;
-        const msgInterval = setInterval(() => {
-            msgIndex = (msgIndex + 1) % messages.length;
-            if (loadingMsg) loadingMsg.textContent = messages[msgIndex].main;
-            if (loadingSub) loadingSub.textContent = messages[msgIndex].sub;
-        }, 3500);
+        // Step 1 (upload) waits for the real upload; the rest is time-based.
+        const progress = startProgress(body, ['stepUpload', 'stepAnalyse', 'stepFit', 'stepFinish'], [0, 0, 6, 18], true);
 
         try {
             // Make sure we have a valid key before doing any work.
             await ensureApiKey();
 
             const uploadUrl = await uploadUserPhoto(userPhotoFile);
+            progress.release();
 
             const res = await fetch(`${API_BASE}/api/tryon`, {
                 method: 'POST',
@@ -810,12 +1165,12 @@
             const data = await res.json();
             const tryonId = data.tryon_id;
 
-            await pollForResult(overlay, body, tryonId, product);
+            await pollForResult(overlay, body, tryonId, product, progress);
         } catch (err) {
             console.error('[Drapit] Try-on error:', err);
             showError(body, friendlyError(err.message), product, overlay);
         } finally {
-            clearInterval(msgInterval);
+            progress.stop();
         }
     }
 
@@ -892,35 +1247,33 @@
         return data.url;
     }
 
-    // Map internal error codes to friendly bilingual messages.
+    // Map internal error codes to friendly messages in the widget language.
     function friendlyError(message) {
         switch (message) {
             case 'NO_KEY':
             case 'AUTH':
-                return 'De try-on widget is nog niet volledig geactiveerd voor deze winkel. '
-                    + '| This try-on widget is not fully activated for this store yet.';
+                return t('errNotActive');
             case 'UPLOAD_FAILED':
-                return 'Foto uploaden mislukt. Probeer het opnieuw. | Photo upload failed. Please try again.';
+                return t('errUpload');
             case 'TOO_LARGE':
-                return 'Deze foto is te groot (max. 4 MB). Kies een kleinere foto. | This photo is too large (max. 4 MB). Please choose a smaller one.';
+                return t('errTooLarge');
             case 'Failed to fetch':
             case 'Load failed':
-                return 'Verbinding met de try-on server mislukt. Controleer je internet en probeer het opnieuw. '
-                    + '| Could not reach the try-on server. Check your connection and try again.';
+                return t('errNetwork');
             case 'LIMIT_REACHED':
-                return 'Virtueel passen is tijdelijk niet beschikbaar in deze winkel. Probeer het later opnieuw. '
-                    + '| Virtual try-on is temporarily unavailable in this store. Please try again later.';
+                return t('errLimit');
+            case 'AI_FAILED':
+                return t('errAiFailed');
+            case 'TIMEOUT':
+                return t('errTimeout');
             default:
-                if (typeof message === 'string' && message.startsWith('CONFIG_')) {
-                    return 'De try-on widget is nog niet volledig geactiveerd voor deze winkel. '
-                        + '| This try-on widget is not fully activated for this store yet.';
-                }
-                return message || 'Er ging iets mis. Probeer het opnieuw. | Something went wrong. Please try again.';
+                if (typeof message === 'string' && message.startsWith('CONFIG_')) return t('errNotActive');
+                return t('errGeneric');
         }
     }
 
     // ── Poll for result ───────────────────────────────────────────────────
-    async function pollForResult(overlay, body, tryonId, product) {
+    async function pollForResult(overlay, body, tryonId, product, progress) {
         let attempts = 0;
 
         return new Promise((resolve, reject) => {
@@ -928,7 +1281,7 @@
                 attempts++;
                 if (attempts > MAX_POLLS) {
                     clearInterval(timer);
-                    reject(new Error('Timeout — probeer het opnieuw'));
+                    reject(new Error('TIMEOUT'));
                     return;
                 }
 
@@ -943,11 +1296,12 @@
 
                     if (data.status === 'succeeded' && data.result_image_url) {
                         clearInterval(timer);
-                        showResult(body, data.result_image_url, product, overlay, { tryonId });
+                        if (progress) progress.finish();
+                        showResult(body, data.result_image_url, product, overlay, { tryonId, beforeUrl: userPhotoDataUrl });
                         resolve();
                     } else if (data.status === 'failed') {
                         clearInterval(timer);
-                        showError(body, 'De AI-verwerking is mislukt. Probeer het opnieuw met een andere foto.', product, overlay);
+                        showError(body, t('errAiFailed'), product, overlay);
                         resolve();
                     }
                 } catch {
@@ -1022,8 +1376,8 @@
             if (!items.length) return;
             box.style.display = 'block';
             box.innerHTML = `
-                <div class="drapit-outfit-title">Combineer met… | Combine with…</div>
-                <div class="drapit-outfit-sub">Kies een broek en zie de complete outfit | Pick bottoms to see the full outfit</div>
+                <div class="drapit-outfit-title">${escapeHtml(t('combineTitle'))}</div>
+                <div class="drapit-outfit-sub">${escapeHtml(t('combineSub'))}</div>
                 <div class="drapit-outfit-grid">
                     ${items.map((p, i) => `
                         <div class="drapit-outfit-item" data-idx="${i}">
@@ -1049,17 +1403,14 @@
                 <img src="${pick.image}" alt="" class="drapit-product-thumb" />
                 <div>
                     <div class="drapit-product-name">${escapeHtml(pick.title)}</div>
-                    <div class="drapit-product-id">Complete outfit | Complete outfit</div>
+                    <div class="drapit-product-id">${escapeHtml(t('completeOutfit'))}</div>
                 </div>
             </div>
-            <div class="drapit-loading">
-                <div class="drapit-spinner"></div>
-                <div class="drapit-loading-text">Outfit wordt samengesteld… | Building your outfit…</div>
-                <div class="drapit-loading-sub">Dit duurt meestal 15–30 seconden | This usually takes 15–30 seconds</div>
-            </div>
+            ${loadingMarkup(t('outfitBuilding'))}
         `;
+        const progress = startProgress(body, ['stepAnalyse', 'stepFit', 'stepFinish'], [0, 6, 18], false);
 
-        const restoreRoundOne = (note) => showResult(body, resultUrl, product, overlay, { tryonId: parentTryonId, note });
+        const restoreRoundOne = (note) => showResult(body, resultUrl, product, overlay, { tryonId: parentTryonId, note, beforeUrl: userPhotoDataUrl });
 
         try {
             const res = await fetch(`${API_BASE}/api/tryon`, {
@@ -1097,17 +1448,62 @@
                 }, POLL_INTERVAL);
             });
 
+            progress.stop();
             showResult(body, finalUrl, product, overlay, {
                 tryonId: data.tryon_id,
                 outfitProduct: { title: pick.title, url: pick.url },
+                beforeUrl: userPhotoDataUrl,
             });
         } catch (err) {
+            progress.stop();
             console.error('[Drapit] Outfit layer error:', err);
-            const msg = err && err.message === 'LIMIT_REACHED'
-                ? 'De outfit kon niet worden gemaakt (limiet bereikt). Je eerste resultaat staat hieronder. | The outfit could not be created (limit reached). Your first result is below.'
-                : 'De outfit is niet gelukt, probeer een andere broek. Je eerste resultaat staat hieronder. | The outfit did not work out, try other bottoms. Your first result is below.';
+            const msg = err && err.message === 'LIMIT_REACHED' ? t('outfitLimit') : t('outfitFailed');
             restoreRoundOne(msg);
         }
+    }
+
+    // ── Before/after compare slider ───────────────────────────────────────
+    // Pointer events (mouse + touch) on the whole image; touch-action: pan-y
+    // keeps vertical scrolling in the modal working. Arrow keys on the handle.
+    function setupCompare(box, resultUrl) {
+        if (!box) return;
+        const handle = box.querySelector('.drapit-compare-handle');
+        const afterImg = box.querySelector('.drapit-compare-after');
+        let pos = 50;
+        let dragging = false;
+
+        // Match the box to the result's aspect ratio so both images line up.
+        const fit = () => {
+            if (afterImg && afterImg.naturalWidth && afterImg.naturalHeight) {
+                box.style.aspectRatio = `${afterImg.naturalWidth} / ${afterImg.naturalHeight}`;
+            }
+        };
+        if (afterImg) { if (afterImg.complete) fit(); else afterImg.addEventListener('load', fit); }
+
+        const set = (p) => {
+            pos = Math.max(0, Math.min(100, p));
+            box.style.setProperty('--pos', pos + '%');
+            handle?.setAttribute('aria-valuenow', String(Math.round(pos)));
+        };
+        const fromEvent = (e) => {
+            const r = box.getBoundingClientRect();
+            if (r.width) set(((e.clientX - r.left) / r.width) * 100);
+        };
+
+        box.addEventListener('pointerdown', (e) => {
+            dragging = true;
+            try { box.setPointerCapture(e.pointerId); } catch { /* ignore */ }
+            fromEvent(e);
+        });
+        box.addEventListener('pointermove', (e) => { if (dragging) fromEvent(e); });
+        const end = () => { dragging = false; };
+        box.addEventListener('pointerup', end);
+        box.addEventListener('pointercancel', end);
+
+        handle?.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') { set(pos - 5); e.preventDefault(); }
+            else if (e.key === 'ArrowRight') { set(pos + 5); e.preventDefault(); }
+        });
     }
 
     // ── Show Result ───────────────────────────────────────────────────────
@@ -1117,33 +1513,44 @@
         const outfitNote = opts.note
             ? `<div class="drapit-outfit-note">${escapeHtml(opts.note)}</div>` : '';
         const outfitTag = isOutfit
-            ? `<div class="drapit-outfit-tag">Complete outfit | Complete outfit</div>` : '';
+            ? `<div class="drapit-outfit-tag">${escapeHtml(t('completeOutfit'))}</div>` : '';
         const secondBuy = isOutfit && opts.outfitProduct.url
             ? `<a href="${opts.outfitProduct.url}" class="drapit-result-buy outfit" target="_blank" rel="noopener" style="background:#0F172A">
                     ${ICON_CART} ${escapeHtml(opts.outfitProduct.title)}
                </a>` : '';
-        const shareLabel = hasNativeShare ? 'Delen | Share' : 'WhatsApp';
+        const shareLabel = hasNativeShare ? escapeHtml(t('share')) : 'WhatsApp';
         const shareIcon = hasNativeShare ? ICON_SHARE : ICON_WHATSAPP;
         const shareBtnClass = hasNativeShare ? '' : 'whatsapp';
 
         body.innerHTML = `
             <div class="drapit-result">
                 ${outfitNote}${outfitTag}
-                <img src="${resultUrl}" alt="Try-on resultaat" class="drapit-result-img" />
+                ${opts.beforeUrl
+                ? `<div class="drapit-compare" id="drapit-compare" style="--pos:50%">
+                        <img src="${resultUrl}" class="drapit-compare-after" alt="${escapeHtml(t('resultAlt'))}" draggable="false" />
+                        <img src="${opts.beforeUrl}" class="drapit-compare-before" alt="" draggable="false" />
+                        <span class="drapit-compare-label before">${escapeHtml(t('before'))}</span>
+                        <span class="drapit-compare-label after">${escapeHtml(t('after'))}</span>
+                        <div class="drapit-compare-line">
+                            <button class="drapit-compare-handle" type="button" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-label="${escapeHtml(t('compareHint'))}">${ICON_COMPARE}</button>
+                        </div>
+                   </div>
+                   <div class="drapit-compare-hint">${escapeHtml(t('compareHint'))}</div>`
+                : `<img src="${resultUrl}" alt="${escapeHtml(t('resultAlt'))}" class="drapit-result-img" />`}
                 <div class="drapit-result-actions">
                     ${product.buyUrl
                 ? `<a href="${product.buyUrl}" class="drapit-result-buy${isOutfit ? ' outfit' : ''}" target="_blank" rel="noopener">
-                            ${ICON_CART} ${isOutfit ? escapeHtml(product.productName) : 'Koop dit item | Buy this item'}
+                            ${ICON_CART} ${isOutfit ? escapeHtml(product.productName) : escapeHtml(t('buy'))}
                            </a>${secondBuy}`
                 : `<button class="drapit-result-buy" onclick="this.closest('.drapit-overlay')?.remove()">
-                            Sluiten | Close
+                            ${escapeHtml(t('close'))}
                            </button>`
             }
-                    <button class="drapit-result-retry">Opnieuw | Retry</button>
+                    <button class="drapit-result-retry">${escapeHtml(t('retry'))}</button>
                 </div>
                 <div class="drapit-share-actions">
                     <button class="drapit-share-btn save" id="drapit-save-btn">
-                        ${ICON_DOWNLOAD} Opslaan | Save
+                        ${ICON_DOWNLOAD} ${escapeHtml(t('save'))}
                     </button>
                     <button class="drapit-share-btn ${shareBtnClass}" id="drapit-share-btn">
                         ${shareIcon} ${shareLabel}
@@ -1157,6 +1564,8 @@
         if (!isOutfit && opts.tryonId && OUTFITS_BLOCK && OUTFITS_SERVER) {
             renderOutfitPicker(body, resultUrl, product, overlay, opts.tryonId);
         }
+
+        setupCompare(body.querySelector('#drapit-compare'), resultUrl);
 
         body.querySelector('.drapit-result-retry')?.addEventListener('click', () => {
             openModal(overlay.getRootNode().host?.shadowRoot || overlay.parentNode, product);
@@ -1183,19 +1592,19 @@
 
         // ── Share ────────────────────────────────────────
         body.querySelector('#drapit-share-btn')?.addEventListener('click', async () => {
-            const shareText = `Kijk hoe ik er uitzie in ${product.productName}! 👕`;
+            const shareText = t('shareText', { name: product.productName }) + ' 👕';
             const shareUrl = product.buyUrl || window.location.href;
 
             if (navigator.share) {
                 try {
                     // Try to share the actual image file if fetch works
-                    let shareData = { title: 'Mijn virtual try-on', text: shareText, url: shareUrl };
+                    let shareData = { title: t('shareTitle'), text: shareText, url: shareUrl };
                     try {
                         const imgRes = await fetch(resultUrl);
                         const imgBlob = await imgRes.blob();
                         const imgFile = new File([imgBlob], 'drapit-tryon.jpg', { type: 'image/jpeg' });
                         if (navigator.canShare && navigator.canShare({ files: [imgFile] })) {
-                            shareData = { title: 'Mijn virtual try-on', text: shareText, files: [imgFile] };
+                            shareData = { title: t('shareTitle'), text: shareText, files: [imgFile] };
                         }
                     } catch { /* image fetch failed, share URL only */ }
                     await navigator.share(shareData);
@@ -1215,10 +1624,10 @@
         body.innerHTML = `
             <div class="drapit-error">
                 <div class="drapit-error-icon">${ICON_ERROR}</div>
-                <div class="drapit-error-text">Er ging iets mis | Something went wrong</div>
+                <div class="drapit-error-text">${escapeHtml(t('errTitle'))}</div>
                 <div class="drapit-error-sub">${escapeHtml(message)}</div>
             </div>
-            <button class="drapit-submit" style="margin-top:16px">Opnieuw proberen | Try again</button>
+            <button class="drapit-submit" style="margin-top:16px">${escapeHtml(t('tryAgain'))}</button>
         `;
 
         body.querySelector('.drapit-submit')?.addEventListener('click', () => {
