@@ -80,7 +80,7 @@
         return _keyResolution;
     }
 
-    console.log('[Drapit Widget] v1.2.0 (Bilingual, outfits) loaded — '
+    console.log('[Drapit Widget] v1.2.1 (Bilingual, outfits, client-side compression) loaded — '
         + (API_KEY ? 'key: ' + API_KEY.substring(0, 12) + '…' : 'auto-key via shop ' + SHOP_DOMAIN));
 
     // ── CSS ───────────────────────────────────────────────────────────────
@@ -696,6 +696,10 @@
         });
 
         async function handleFileSelected(file) {
+            // Phone photos are 4–12 MB; the upload endpoint (serverless) rejects
+            // bodies above ~4.5 MB before our code runs → bare "Failed to fetch".
+            // Resize + compress client-side first (also makes uploads much faster).
+            file = await compressImage(file);
             userPhotoFile = file;
             userPhotoDataUrl = await fileToDataUrl(file);
             uploadSection.style.display = 'none';
@@ -815,8 +819,60 @@
         }
     }
 
+    // ── Client-side image compression ─────────────────────────────────────
+    // Downscale to max 1600px on the longest side and re-encode as JPEG.
+    // Falls back to the original file if the browser can't decode it.
+    const MAX_UPLOAD_BYTES = 3.5 * 1024 * 1024;
+    async function compressImage(file) {
+        try {
+            const MAX_DIM = 1600;
+            let bitmap;
+            try {
+                bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
+            } catch {
+                bitmap = await new Promise((resolve, reject) => {
+                    const url = URL.createObjectURL(file);
+                    const img = new Image();
+                    img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+                    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('decode')); };
+                    img.src = url;
+                });
+            }
+            const w = bitmap.width, h = bitmap.height;
+            if (!w || !h) throw new Error('nodim');
+            const scale = Math.min(1, MAX_DIM / Math.max(w, h));
+            // Small enough already and no downscale needed → keep original.
+            if (scale === 1 && file.size <= 1.5 * 1024 * 1024 && /^image\/(jpe?g|png|webp)$/i.test(file.type)) {
+                if (bitmap.close) bitmap.close();
+                return file;
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.round(w * scale);
+            canvas.height = Math.round(h * scale);
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+            if (bitmap.close) bitmap.close();
+            let quality = 0.86;
+            let blob = await new Promise((r) => canvas.toBlob(r, 'image/jpeg', quality));
+            while (blob && blob.size > MAX_UPLOAD_BYTES && quality > 0.5) {
+                quality -= 0.1;
+                blob = await new Promise((r) => canvas.toBlob(r, 'image/jpeg', quality));
+            }
+            if (!blob) throw new Error('encode');
+            const name = (file.name || 'photo').replace(/\.[^.]+$/, '') + '.jpg';
+            console.log(`[Drapit] Foto verkleind: ${(file.size / 1048576).toFixed(1)} MB → ${(blob.size / 1048576).toFixed(2)} MB (${canvas.width}×${canvas.height})`);
+            return new File([blob], name, { type: 'image/jpeg', lastModified: Date.now() });
+        } catch (err) {
+            console.warn('[Drapit] Compressie mislukt, origineel wordt gebruikt:', err);
+            return file;
+        }
+    }
+
     // ── Upload user photo ─────────────────────────────────────────────────
     async function uploadUserPhoto(file) {
+        if (file.size > 4.5 * 1024 * 1024) throw new Error('TOO_LARGE');
         const formData = new FormData();
         formData.append('file', file);
 
@@ -845,6 +901,12 @@
                     + '| This try-on widget is not fully activated for this store yet.';
             case 'UPLOAD_FAILED':
                 return 'Foto uploaden mislukt. Probeer het opnieuw. | Photo upload failed. Please try again.';
+            case 'TOO_LARGE':
+                return 'Deze foto is te groot (max. 4 MB). Kies een kleinere foto. | This photo is too large (max. 4 MB). Please choose a smaller one.';
+            case 'Failed to fetch':
+            case 'Load failed':
+                return 'Verbinding met de try-on server mislukt. Controleer je internet en probeer het opnieuw. '
+                    + '| Could not reach the try-on server. Check your connection and try again.';
             case 'LIMIT_REACHED':
                 return 'Virtueel passen is tijdelijk niet beschikbaar in deze winkel. Probeer het later opnieuw. '
                     + '| Virtual try-on is temporarily unavailable in this store. Please try again later.';
