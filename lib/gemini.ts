@@ -89,6 +89,7 @@ GARMENT — must be reproduced exactly from IMAGE 2:
 - DO NOT simplify the design, merge patterns into solid colors, or invent details not present in IMAGE 2.
 - Fit the garment naturally to the person's body pose — show realistic fabric draping, gravity-affected folds, and wrinkles.
 - The garment's lighting and shadows must match the light source in IMAGE 1.
+- If the garment is a LOWER-BODY item (trousers, jeans, shorts, skirt): render the crotch / fly area FLAT and neutral like a standard e-commerce catalogue photo, with only soft natural fabric folds. Absolutely NO bulge, protrusion, emphasised or suggestive anatomy — this is a family-friendly retail product image. Do not add a belt or other accessories unless they are visibly part of the product in IMAGE 2.
 
 OUTPUT:
 - Photorealistic fashion photo quality — indistinguishable from a real photograph.

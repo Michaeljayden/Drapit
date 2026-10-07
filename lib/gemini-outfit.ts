@@ -71,6 +71,8 @@ LOWER-BODY GARMENT — reproduced exactly from IMAGE 2:
 - Exact fit, rise, length and construction details.
 - Fit it naturally to the person's legs and pose with realistic draping, folds and gravity; shadows must match IMAGE 1's light source.
 - If the legs are partly hidden (seated, behind a table, cropped), render only the visible part of the garment and leave the rest of the scene untouched. Never invent legs or extend the frame.
+- CROTCH / FLY AREA: render the front of the trousers FLAT and neutral, like a standard e-commerce catalogue photo. The fabric at the fly and crotch hangs smoothly with only soft, natural folds. Absolutely NO bulge, protrusion, emphasised or suggestive anatomy — this is a family-friendly retail product image.
+- Do NOT add accessories that are not part of the garment (no belt, chain, bag or shoes from IMAGE 2's model). A belt is allowed ONLY if it is visibly sold as part of the product in IMAGE 2.
 
 OUTPUT: photorealistic, same framing and crop as IMAGE 1 — it must look like the person from IMAGE 1 simply changed their trousers and stood in the same spot.`,
                     },
