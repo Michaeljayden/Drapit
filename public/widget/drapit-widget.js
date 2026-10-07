@@ -306,6 +306,9 @@
         .drapit-overlay.active { opacity: 1; }
 
         .drapit-modal {
+            /* Space left for the photo after header, buttons and footer. */
+            --drapit-media-h: clamp(220px, calc(min(90vh, 900px) - 290px), 560px);
+            --drapit-media-h-preview: clamp(200px, calc(min(90vh, 900px) - 330px), 520px);
             background: #fff;
             border-radius: 20px;
             box-shadow: 0 24px 48px rgba(15, 39, 68, 0.18);
@@ -366,7 +369,7 @@
         .drapit-lang-btn:hover { color: #0F172A; }
         .drapit-lang-btn.active { background: #fff; color: #0F172A; box-shadow: 0 1px 2px rgba(15,23,42,0.12); }
 
-        .drapit-modal-body { padding: 20px 24px 24px; }
+        .drapit-modal-body { padding: 20px 24px 24px; container-type: inline-size; }
 
         /* ── Product Info ──────────────────────────────── */
         .drapit-product-info {
@@ -433,13 +436,17 @@
         /* ── Preview ───────────────────────────────────── */
         .drapit-preview-wrap {
             position: relative;
-            margin-bottom: 16px;
+            width: fit-content;
+            max-width: 100%;
+            margin: 0 auto 16px;
         }
         .drapit-preview-img {
-            width: 100%;
+            display: block;
+            max-width: 100%;
+            margin: 0 auto;
             border-radius: 12px;
             object-fit: contain;
-            max-height: 500px;
+            max-height: var(--drapit-media-h-preview);
             background: #F8FAFC;
         }
         .drapit-preview-remove {
@@ -640,9 +647,14 @@
         .drapit-compare {
             --pos: 50%;
             position: relative;
-            width: 100%;
+            /* Height follows the viewport so the image + buttons always fit
+               without scrolling; width follows the image's aspect ratio. */
+            --ar-inv: 1.3333;
+            height: var(--drapit-media-h);
+            height: min(var(--drapit-media-h), calc(100cqw * var(--ar-inv)));
             aspect-ratio: 3 / 4;
-            max-height: 500px;
+            max-width: 100%;
+            margin: 0 auto;
             border-radius: 14px;
             overflow: hidden;
             background: #F8FAFC;
@@ -705,17 +717,24 @@
         .drapit-compare-hint {
             font-size: 11px;
             color: #94A3B8;
-            margin: 8px 0 14px;
+            margin: 6px 0 12px;
+        }
+        @media (max-height: 760px) {
+            .drapit-modal-header { padding-top: 14px; }
+            .drapit-modal-body { padding: 14px 20px 16px; }
+            .drapit-powered { padding: 8px 24px 10px; }
+            .drapit-share-actions { margin-top: 6px; }
         }
 
         .drapit-result { text-align: center; }
         .drapit-result-img {
-            width: 100%;
+            display: block;
+            max-width: 100%;
+            margin: 0 auto 16px;
             border-radius: 14px;
-            margin-bottom: 16px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             object-fit: contain;
-            max-height: 500px;
+            max-height: var(--drapit-media-h);
             background: #F8FAFC;
         }
         .drapit-result-actions {
@@ -1554,6 +1573,7 @@
         const fit = () => {
             if (afterImg && afterImg.naturalWidth && afterImg.naturalHeight) {
                 box.style.aspectRatio = `${afterImg.naturalWidth} / ${afterImg.naturalHeight}`;
+                box.style.setProperty('--ar-inv', String(afterImg.naturalHeight / afterImg.naturalWidth));
             }
         };
         if (afterImg) { if (afterImg.complete) fit(); else afterImg.addEventListener('load', fit); }
