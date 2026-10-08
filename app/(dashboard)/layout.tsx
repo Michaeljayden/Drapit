@@ -28,7 +28,7 @@ export default async function DashboardLayout({
         if (shop) {
             shopName = shop.name || 'Mijn Shop';
             tryonsUsed = shop.tryons_this_month ?? 0;
-            tryonsLimit = shop.monthly_tryon_limit ?? 500;
+            tryonsLimit = shop.monthly_tryon_limit ?? 150;
             studioCreditsUsed = shop.studio_credits_used ?? 0;
             studioCreditsLimit = shop.studio_credits_limit ?? 20;
             studioExtraCredits = shop.studio_extra_credits ?? 0;

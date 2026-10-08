@@ -56,7 +56,7 @@ export default async function DashboardPage() {
 
     const shopId = shop?.id;
     const tryonsUsed = shop?.tryons_this_month ?? 0;
-    const tryonsLimit = shop?.monthly_tryon_limit ?? 500;
+    const tryonsLimit = shop?.monthly_tryon_limit ?? 150;
     const usagePercent = tryonsLimit > 0 ? ((tryonsUsed / tryonsLimit) * 100).toFixed(1) : '0';
     const planName = shop?.plan === 'pro' ? 'Pro' : shop?.plan === 'business' ? 'Business' : 'Starter';
 

@@ -16,6 +16,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { sendUsageAlertEmail } from '@/lib/email';
 import { maybeAutoTopup } from '@/lib/auto-topup';
+import { syncShopifyPlan } from '@/lib/shopify-managed-pricing';
 
 // ---------------------------------------------------------------------------
 // CORS helpers — widget runs on external domains (Shopify, WooCommerce, etc.)
@@ -161,7 +162,7 @@ export async function POST(request: NextRequest) {
         // ---------------------------------------------------------------
         const { data: shop, error: shopError } = await supabase
             .from('shops')
-            .select('id, tryons_this_month, monthly_tryon_limit, rollover_tryons, extra_tryons, email, name, auto_topup_enabled, auto_topup_threshold_pct, auto_topup_pack_index, auto_topup_monthly_cap, auto_topup_spent_this_month, stripe_customer_id, billing_source, outfits_enabled')
+            .select('id, tryons_this_month, monthly_tryon_limit, rollover_tryons, extra_tryons, email, name, auto_topup_enabled, auto_topup_threshold_pct, auto_topup_pack_index, auto_topup_monthly_cap, auto_topup_spent_this_month, stripe_customer_id, billing_source, outfits_enabled, plan, usage_reset_at')
             .eq('id', shopId)
             .single();
 
@@ -170,6 +171,25 @@ export async function POST(request: NextRequest) {
                 { error: 'Shop not found' },
                 { status: 404, headers: CORS_HEADERS }
             );
+        }
+
+        // 2a. SHOPIFY-FACTUURPERIODE — de teller loopt per Shopify-factuurperiode
+        //     (en tijdens de gratis trial met 20 try-ons). Is de periode voorbij,
+        //     of is er nog geen periode bekend voor een betalende shop, dan het
+        //     abonnement opnieuw uitlezen: dat zet limiet + volgende resetdatum
+        //     en zet de teller op 0 als er een nieuwe periode is begonnen.
+        if ((shop as Record<string, unknown>).billing_source === 'shopify') {
+            const resetAt = (shop as Record<string, unknown>).usage_reset_at as string | null;
+            const due = resetAt
+                ? Date.parse(resetAt) <= Date.now()
+                : (shop as Record<string, unknown>).plan !== 'trial';
+            if (due) {
+                const synced = await syncShopifyPlan(shopId);
+                if (synced) {
+                    shop.monthly_tryon_limit = synced.monthly_tryon_limit;
+                    if (synced.reset) shop.tryons_this_month = 0;
+                }
+            }
         }
 
         // Effective limit = plan limit + rollover + extra purchased try-ons

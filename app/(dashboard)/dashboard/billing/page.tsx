@@ -42,7 +42,7 @@ export default async function BillingPage() {
     const shopifyDomain = (shop?.shopify_domain as string | null) ?? null;
     const managedPricingUrl = isShopify && shopifyDomain ? getManagedPricingUrl(shopifyDomain) : null;
     const tryonsUsed = (shop?.tryons_this_month as number) ?? 0;
-    const tryonsLimit = (shop?.monthly_tryon_limit as number) ?? 500;
+    const tryonsLimit = (shop?.monthly_tryon_limit as number) ?? 150;
     const rolloverTryons = (shop?.rollover_tryons as number) ?? 0;
     const extraTryons = (shop?.extra_tryons as number) ?? 0;
     const effectivePlanLimit = tryonsLimit + rolloverTryons;

@@ -31,11 +31,18 @@ Deno.serve(async (req: Request) => {
             auth: { autoRefreshToken: false, persistSession: false },
         });
 
-        // ── Reset all shops ─────────────────────────────────────────────
+        // ── Reset alleen shops zonder eigen factuurperiode ───────────────
+        // Betalende shops resetten per factuurperiode, niet op de 1e van de maand
+        // (anders krijgt een winkel die op de 25e start twee limieten in één
+        // betaalde periode):
+        //   • Stripe-abonnement  → reset in de Stripe-webhook (invoice.payment_succeeded)
+        //   • Shopify-abonnement → reset via usage_reset_at (syncShopifyPlan)
         const { data, error } = await supabase
             .from("shops")
             .update({ tryons_this_month: 0 })
             .neq("tryons_this_month", 0) // Only update shops that have usage
+            .is("stripe_subscription_id", null)
+            .is("usage_reset_at", null)
             .select("id");
 
         if (error) {

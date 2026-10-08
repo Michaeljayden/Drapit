@@ -109,6 +109,7 @@ export type Database = {
           stripe_customer_id: string | null
           stripe_subscription_id: string | null
           rollover_tryons: number
+          usage_reset_at: string | null
           tryons_this_month: number
           extra_tryons: number
           auto_topup_enabled: boolean
@@ -132,6 +133,7 @@ export type Database = {
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
           rollover_tryons?: number
+          usage_reset_at?: string | null
           tryons_this_month?: number
           extra_tryons?: number
           auto_topup_enabled?: boolean
@@ -155,6 +157,7 @@ export type Database = {
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
           rollover_tryons?: number
+          usage_reset_at?: string | null
           tryons_this_month?: number
           extra_tryons?: number
           auto_topup_enabled?: boolean

@@ -15,7 +15,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { verifyShopifyWebhookHmac } from '@/lib/shopify-webhook';
-import { mapShopifyPlanNameToKey, planLimitForKey } from '@/lib/shopify-managed-pricing';
+import { mapShopifyPlanNameToKey, syncShopifyPlan, SHOPIFY_TRIAL_TRYON_LIMIT } from '@/lib/shopify-managed-pricing';
 
 function getSupabaseAdmin() {
     return createClient(
@@ -55,9 +55,12 @@ export async function POST(request: NextRequest) {
     let update: Record<string, unknown>;
     if (status === 'ACTIVE') {
         const plan = mapShopifyPlanNameToKey(sub.name || '');
+        // Eerst het lage trial-limiet; syncShopifyPlan hieronder leest het
+        // abonnement uit (trial? pilot? factuurperiode?) en zet het juiste limiet.
+        // Lukt dat niet, dan herstelt /api/tryon het bij de volgende try-on.
         update = {
             plan,
-            monthly_tryon_limit: planLimitForKey(plan),
+            monthly_tryon_limit: SHOPIFY_TRIAL_TRYON_LIMIT,
             billing_source: 'shopify',
         };
     } else {
@@ -65,10 +68,22 @@ export async function POST(request: NextRequest) {
         update = { plan: 'trial', monthly_tryon_limit: 20 };
     }
 
-    const { error } = await admin.from('shops').update(update).eq('shopify_domain', shopDomain);
+    const { data: updatedShops, error } = await admin
+        .from('shops')
+        .update(update)
+        .eq('shopify_domain', shopDomain)
+        .select('id');
     if (error) {
         console.error('[app_subscriptions/update] DB update failed:', error.message);
         // Return 200 anyway so Shopify doesn't hammer retries; logged for follow-up.
+    }
+
+    if (status === 'ACTIVE' && updatedShops?.length) {
+        for (const row of updatedShops) {
+            await syncShopifyPlan(row.id as string).catch((err) =>
+                console.error('[app_subscriptions/update] sync failed:', err),
+            );
+        }
     }
 
     console.log(`[app_subscriptions/update] ${shopDomain} → ${status} (${sub.name})`);

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { getStripe, PLANS, planByPriceId, STUDIO_PLANS, studioPlanByPriceId, creditPackByPriceId } from '@/lib/stripe';
+import { getStripe, PLANS, planByPriceId, STUDIO_PLANS, studioPlanByPriceId, creditPackByPriceId, subscriptionHasPilotDiscount, tryonLimitFor } from '@/lib/stripe';
 import type { Plan, StudioPlan } from '@/lib/supabase/types';
 import Stripe from 'stripe';
 
@@ -162,13 +162,14 @@ export async function POST(request: NextRequest) {
                     break;
                 }
 
-                const planConfig = PLANS[planKey];
+                // Pilotkorting (PILOT9) → lager limiet zolang de korting loopt
+                const isPilot = await subscriptionHasPilotDiscount(subscriptionId);
 
                 await updateShopById(shopId, {
                     plan: planKey,
                     stripe_customer_id: customerId,
                     stripe_subscription_id: subscriptionId,
-                    monthly_tryon_limit: planConfig.limit,
+                    monthly_tryon_limit: tryonLimitFor(planKey, isPilot),
                     tryons_this_month: 0,  // Reset on new subscription
                     rollover_tryons: 0,    // No rollover for brand-new subscriptions
                 });
@@ -213,11 +214,12 @@ export async function POST(request: NextRequest) {
                     break;
                 }
 
-                const planConfig = PLANS[newPlan];
+                // Pilotkorting nog actief? Zo niet (bv. na 3 maanden) → gewoon planlimiet
+                const isPilotNow = await subscriptionHasPilotDiscount(subscription.id);
 
                 await updateShopByCustomer(customerId, {
                     plan: newPlan,
-                    monthly_tryon_limit: planConfig.limit,
+                    monthly_tryon_limit: tryonLimitFor(newPlan, isPilotNow),
                     stripe_subscription_id: subscription.id,
                 });
 
@@ -324,7 +326,7 @@ export async function POST(request: NextRequest) {
                 // Fetch current shop state
                 const { data: shop, error: shopErr } = await admin
                     .from('shops')
-                    .select('monthly_tryon_limit, tryons_this_month, rollover_tryons, studio_credits_limit, studio_credits_used, studio_plan')
+                    .select('plan, stripe_subscription_id, monthly_tryon_limit, tryons_this_month, rollover_tryons, studio_credits_limit, studio_credits_used, studio_plan')
                     .eq('stripe_customer_id', customerId)
                     .single();
 
@@ -358,11 +360,20 @@ export async function POST(request: NextRequest) {
                     // Cap rollover at 1× the plan's monthly limit
                     const newRollover = Math.min(unused, currentLimit);
 
-                    await updateShopByCustomer(customerId, {
+                    // Limiet bij elke verlenging opnieuw bepalen, zodat een
+                    // afgelopen pilotkorting altijd terug naar het gewone limiet gaat.
+                    const renewalPlan = shop.plan as Plan;
+                    const renewalUpdates: Record<string, unknown> = {
                         tryons_this_month: 0,
                         rollover_tryons: newRollover,
                         auto_topup_spent_this_month: 0,
-                    });
+                    };
+                    if (renewalPlan && renewalPlan !== 'trial' && PLANS[renewalPlan]) {
+                        const pilot = await subscriptionHasPilotDiscount(shop.stripe_subscription_id as string | null);
+                        renewalUpdates.monthly_tryon_limit = tryonLimitFor(renewalPlan, pilot);
+                    }
+
+                    await updateShopByCustomer(customerId, renewalUpdates);
 
                     console.log(
                         `[stripe/webhook] ✅ VTON monthly reset for ${customerId}: ` +
