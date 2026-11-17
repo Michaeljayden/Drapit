@@ -508,6 +508,18 @@ export default function LandingPage() {
                     .d-in { opacity: 1 !important; animation: none !important; transform: none !important; }
                 }
 
+                /* Hero video (underlayer + kaart) */
+                .d-hero-underlayer { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+                .d-hero-underlayer video { width: 100%; height: 100%; object-fit: cover; opacity: 0.22; }
+                .d-hero-underlayer::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6,9,15,0.82) 0%, rgba(6,9,15,0.58) 45%, rgba(6,9,15,0.94) 100%); }
+                .d-hero-video-fallback { display: none; }
+                @media (max-width: 960px) { .d-hero-underlayer { display: none; } }
+                @media (prefers-reduced-motion: reduce) {
+                    .d-hero-underlayer { display: none; }
+                    .d-hero-video { display: none !important; }
+                    .d-hero-video-fallback { display: block !important; }
+                }
+
                 .d-float { animation: drapit-float 6s ease-in-out infinite; }
 
                 .d-shimmer {
@@ -998,11 +1010,19 @@ export default function LandingPage() {
 
                 {/* ─── HERO ───────────────────────────────────────────── */}
                 <section className="drapit-grid-bg d-hero-section" style={{ paddingTop: 'calc(148px + var(--drapit-bar-h, 0px))', paddingBottom: 128, position: 'relative', overflow: 'hidden' }}>
+                    {/* Video-underlayer: dezelfde hero-video, sterk gedimd, blijvend doorlopend */}
+                    <div className="d-hero-underlayer" aria-hidden="true">
+                        <video autoPlay muted loop playsInline poster="/hero/drapit-hero-poster.jpg">
+                            <source src="/hero/drapit-hero.webm" type="video/webm" />
+                            <source src="/hero/drapit-hero.mp4" type="video/mp4" />
+                        </video>
+                    </div>
+
                     {/* Ambient orbs */}
                     <div style={{ position: 'absolute', top: '5%', left: '-5%', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(29,111,216,0.14) 0%, transparent 68%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
                     <div style={{ position: 'absolute', bottom: '-10%', right: '-5%', width: 480, height: 480, borderRadius: '50%', background: 'radial-gradient(circle, rgba(34,211,238,0.07) 0%, transparent 65%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
 
-                    <div ref={hero.ref} style={{ maxWidth: 1200, margin: '0 auto', padding: '0 28px' }}>
+                    <div ref={hero.ref} style={{ maxWidth: 1200, margin: '0 auto', padding: '0 28px', position: 'relative', zIndex: 1 }}>
                         <div className="d-hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }}>
 
                             {/* Left copy */}
@@ -1106,11 +1126,31 @@ export default function LandingPage() {
                                         background: 'radial-gradient(ellipse at center, rgba(29,111,216,0.18) 0%, transparent 70%)',
                                         filter: 'blur(40px)', pointerEvents: 'none', zIndex: 0,
                                     }} />
-                                    <img
-                                        src="/images/VTON process.png"
-                                        alt="Drapit Virtueel Passen Proces"
+                                    <video
+                                        className="d-hero-video"
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                        poster="/hero/drapit-hero-poster.jpg"
                                         style={{
                                             display: 'block',
+                                            width: '100%',
+                                            maxWidth: 560,
+                                            height: 'auto',
+                                            borderRadius: 24,
+                                            position: 'relative',
+                                            zIndex: 1,
+                                        }}
+                                    >
+                                        <source src="/hero/drapit-hero.webm" type="video/webm" />
+                                        <source src="/hero/drapit-hero.mp4" type="video/mp4" />
+                                    </video>
+                                    <img
+                                        className="d-hero-video-fallback"
+                                        src="/hero/drapit-hero-poster.jpg"
+                                        alt="Drapit Virtueel Passen Proces"
+                                        style={{
                                             width: '100%',
                                             maxWidth: 560,
                                             height: 'auto',
